@@ -1,0 +1,3901 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>SVG App — Text + Preview (Light Theme)</title>
+	<style>
+
+	:root {
+		color-scheme: light dark;
+
+		/* user editable */
+		--zoom:			1.0;
+		--lineheight:	1.4;
+		--fontsize:		1.1;
+		--fill:			Canvas;
+		--text:			CanvasText;
+		--bold:			400;
+		--fontfamily:				system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+		--fontfamily-texteditor:	ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+		/* calculated */
+		--px-base-unit:		12px;
+		--px-line-height:	calc(var(--px-base-unit) * var(--zoom) * var(--lineheight));
+		--px-font-size:		calc(var(--px-base-unit) * var(--zoom) * var(--fontsize));
+
+		/* will be overwritten in code by updateCssFromLookupConstants */
+		--px-line-height-svg:	20px;
+		--px-font-size-svg:		16px;
+		--px-header-height-svg:	50px;
+		--count-lines-svg:		4;
+
+		/* other */
+		--ms-transition: 0.4s;
+		--ms-transition-quick: 0.15s;
+
+		--px-sidebar-size: 500px;
+		--px-sidebar-min: 200px;
+	}
+
+
+	:root.theme-dark {
+		color-scheme: dark;
+
+		--fill-section-odd-chapter-rect-fill:  #80808026;
+		--fill-section-even-chapter-rect-fill: #8080801f;
+		--fill-chapter-rect-stroke: var(--fill);
+
+		--rect-opacity: 1;
+		--fill-fallback: #888888;	/* nb: must be without alpha! used in color-mix in .tagblock-label-rect */
+		--fill-tagblock-bg-rect-stroke: #52525280;
+		--fill-tagblock-label-stroke: #52525280;
+		--fill-tagblock-label-text-fill: #ffffff;
+
+		--fill-part-rect-stroke: #787878;
+		--fill-part-rect-stroke-hover: #ffffff;
+		--fill-part-rect-fill-mix: #656565;
+		/* --fill-tagblock-part-rect-drop-shadow: #97aebd88; */
+	}
+
+	:root.theme-light {
+		color-scheme: light;
+
+		--fill-section-odd-chapter-rect-fill:  #8080802b;
+		--fill-section-even-chapter-rect-fill: #8080801f;
+		--fill-chapter-rect-stroke: var(--fill);
+
+		--rect-opacity: 1;
+		--fill-fallback: #cccccc;	/* nb: must be without alpha! used in color-mix in .tagblock-label-rect */
+		--fill-tagblock-bg-rect-stroke: #aaaaaa80;
+		--fill-tagblock-label-stroke: #52525280;
+		--fill-tagblock-label-text-fill: #000000;
+
+		--fill-part-rect-stroke: #a1a1a1;
+		--fill-part-rect-stroke-hover: #3a3a3a;
+		--fill-part-rect-fill-mix: #ffffff;
+		/* --fill-tagblock-part-rect-drop-shadow: #97aebd88; */ 
+	}
+
+	:root.theme-dark #workspace {--XXXfill: #333333; /* default tag bg color */ }
+
+	:root.theme-light #workspace {--XXXfill: #ffffff; /* default tag bg color */ }
+
+
+
+	html, body {height: 100%; margin: 0; overflow: hidden; background: var(--fill);  font-family: var(--fontfamily); font-size: var(--px-font-size); font-weight: var(--bold); color: var(--text); }
+
+	body.no-select, body.no-select * {user-select: none; -webkit-user-select: none; }
+	body.no-select .texteditor {pointer-events: none; }
+
+
+/* app */
+	#app {display: grid; grid-template-rows: auto 1fr; height: 100vh; }
+
+	/* Existing 3-column layout lives here */
+	#layout {display: grid; height:100vh;  min-height: 0; /* important for overflow handling */ }
+
+	/* Optional: allow workspace/sidebar to scroll correctly */
+	.sidebar,
+	.workspace {min-height: 0; }
+
+	#app.sidebar-layout-left 	#layout {grid-template-columns:	minmax(var(--px-sidebar-min), var(--px-sidebar-size)) 6px 1fr; grid-template-areas: "sidebar splitter workspace"; }
+	#app.sidebar-layout-right 	#layout {grid-template-columns:	1fr 6px minmax(var(--px-sidebar-min), var(--px-sidebar-size)); grid-template-areas: "workspace splitter sidebar"; }
+	#app.sidebar-layout-top 	#layout {grid-template-rows:	minmax(var(--px-sidebar-min), var(--px-sidebar-size)) 6px 1fr; grid-template-areas: "sidebar" "splitter" "workspace"; }
+	#app.sidebar-layout-bottom 	#layout {grid-template-rows:	1fr 6px minmax(var(--px-sidebar-min), var(--px-sidebar-size)); grid-template-areas: "workspace" "splitter" "sidebar"; }
+
+	#app.sidebar-visible-no 	#layout {grid-template-columns: 1fr !important; grid-template-rows: 1fr !important; grid-template-areas: "workspace" !important; }	/* Force single-pane layout regardless of current side */
+	
+/* layout - sidebar */
+							.sidebar {grid-area: sidebar; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+	#app.sidebar-visible-no .sidebar {display: none; }
+
+		/* sidebar - sidebar__main */
+		.sidebar__main {flex: 1 1 auto; overflow: auto; display: flex; flex-direction: column;   padding-top: var(--px-header-height-svg); }
+
+			/* sidebar__main - textarea */
+			.texteditor {flex: 1 1 50%; display:inline-flex; box-sizing: border-box; width: 100%; height: 100%; resize: none; padding: 8px; font-family: var(--fontfamily-texteditor); font-size: var(--px-font-size); font-weight: var(--bold); line-height: var(--px-line-height);  outline: none; /* white-space: pre;*/ tab-size: 3; border: none;  caret-color: #1976d2; overflow: auto;  background: color-mix(in srgb, var(--fill) 97%, var(--text)); color: color-mix(in srgb, var(--text) 90%, var(--fill)); }
+
+/* layout - splitter */
+								.splitter {grid-area: splitter; position: relative; cursor: col-resize; z-index: 10; }
+	#app.sidebar-visible-no		.splitter {display: none; }
+	#app.sidebar-layout-top 	.splitter,
+	#app.sidebar-layout-bottom	.splitter {cursor: row-resize; }
+
+/* layout - workspace */
+
+	#workspace {grid-area: workspace; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+
+
+/* Prevent selection in the workspace */
+#workspace * {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+
+
+
+/* toolbar */
+						.toolbar 		{position: relative; overflow: auto hidden; }
+						.toolbarTags 	{--bold-button: var(--bold); /* --bold-button is a 'hack' to use toolbarTags's (aka :root) --bold, so buttons don't use individual tag's --bold */ height: calc(var(--px-line-height) + 7px); max-width: calc(100% - (var(--px-line-height) + 60px)); padding: 7px; margin-top: calc((var(--px-line-height) + 34px) * -1); margin-left: 10px; background: #eee; border: 1px solid #ccc; border-radius: 5px; }
+	.toolbar-visible-no	.toolbarTags 	{display: none; }
+
+		.toolbar__button 	{position: absolute; transform: translateX(var(--pxX)); border: 1px solid var(--fill-part-rect-stroke); border-radius: 5px; font-family: var(--fontfamily); font-size: var(--px-font-size); line-height: var(--px-line-height); color: var(--text); white-space: nowrap; cursor: pointer; transition: opacity 120ms ease; }
+		.button--inactive	{opacity: 0.33; }
+		.button-draggable 	{cursor: grab; touch-action: none; }
+
+		.toolbarTags 	.toolbar__button 			{background: color-mix(in srgb, var(--fill) 30%, var(--fill-part-rect-fill-mix)); font-weight: var(--bold-button); }
+		.toolbarTags 	.toolbar__button.is-hover 	{background: color-mix(in srgb, var(--fill) 15%, var(--fill-part-rect-fill-mix)); outline: 1.5px solid black; z-index: 2; border-width: 0px; }
+
+
+		.popup-btn {
+			position: absolute;
+			right: 10px;
+			margin-top: calc((var(--px-line-height) + 34px) * -1);
+			width: calc(var(--px-line-height) + 7px);
+			height: calc(var(--px-line-height) + 7px);
+			border-radius: 5px;
+			border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+			background: color-mix(in srgb, var(--fill) 92%, black);
+			color: var(--text);
+			cursor: pointer;
+			box-sizing: content-box;
+			font-size: calc(var(--px-font-size) * 2);
+			line-height: 0.15;
+			padding: 0px; 
+		}
+
+		.popup-btn:hover{
+			background: color-mix(in srgb, var(--fill) 86%, white); 
+		}
+
+
+/* workspace-main */
+
+	.workspace__main {		/* class used here, not id, since font-width logic with hidden dom-elements use this class too */
+		--fill-header-section-text-fill: color-mix(in srgb, var(--text) 40%, transparent);
+		--fill-header-chapter-text-fill: color-mix(in srgb, var(--text) 60%, transparent);
+
+		flex: 1 1 auto;
+		overflow: auto;
+		line-height: var(--px-line-height-svg);		/* probably not used - but for completeness */
+		font-size: var(--px-font-size-svg);
+		font-family: var(--fontfamily);
+		font-weight: var(--bold);
+		background: var(--fill);
+		fill: var(--text);
+	}
+
+
+	/* workspace-panel */
+	#workspace-panel	{position: relative; flex: 0 0 auto; height: 0px; /* NB: height 0px is part of making the toolbar float, while maintaining the structure (could be setting at some point) */ }
+
+
+
+
+
+
+/*** svg#stage (svg from here) ***/
+
+	svg#stage {display: block;  user-select: none; }
+
+	/* header */
+	.header							{}
+
+	.header__rect					{fill: transparent; stroke-width: 0; }
+	.header__rect:hover				{fill: color-mix(in srgb, var(--fill) 30%, #eee); } 
+	.header__text					{pointer-events: none; dominant-baseline: middle; }
+
+	.header__rect--section			{y: 0; height: calc(var(--px-line-height-svg) * 1.5); }
+	.header__text--section			{transform: translate(5px, calc(var(--px-line-height-svg) * 1.0)); fill: var(--fill-header-section-text-fill); font-size: calc(var(--px-font-size-svg) * 1.25); font-weight: var(--bold); }
+
+	.header__rect--chapter			{y: calc(var(--px-line-height-svg) * 1.5); height: var(--px-line-height-svg); }
+	.header__text--chapter			{transform: translate(5px, calc(var(--px-line-height-svg) * 2)); fill: var(--fill-header-chapter-text-fill); font-size: calc(var(--px-font-size-svg) * 1.00); font-weight: var(--bold); }
+
+	/* chapter */
+	.chapter__rect					{stroke: var(--fill-chapter-rect-stroke); stroke-width: 1; }
+	.chapter__rect--section-odd  	{fill: var(--fill-section-odd-chapter-rect-fill); }
+	.chapter__rect--section-even 	{fill: var(--fill-section-even-chapter-rect-fill); }
+
+	/* tagblock */
+	.tagblocks			{}
+
+					.tagblock			{--fill: Canvas; transition: transform var(--ms-transition) ease-out, opacity var(--ms-transition-quick) ease-out; }
+	.chart-viewb	.tagblock			{transform: translate(0px, var(--yb)) }
+	.chart-viewa	.tagblock			{transform: translate(0px, var(--ya)) }
+					.tagblock--inactive	{opacity: 0.33; }
+
+	/* tagblock - bg rect */
+											.tagblock__bg-rect {fill: color-mix(in srgb, var(--fill) 5%, transparent); vector-effect: non-scaling-stroke; pointer-events: none; transition: opacity var(--ms-transition) ease-out, height var(--ms-transition) ease-out }
+	.chart-viewa       						.tagblock__bg-rect {height: 0px; opacity: 0; pointer-events: none; /* needed since pointer-events are still active in the not-scaled area. this is an error in the browser-engine */ }
+	.chart-viewb  		.tagblock--active   .tagblock__bg-rect {height: calc((var(--px-line-height-svg) * var(--count-lines)) + 10px); }
+	.chart-viewb  		.tagblock--inactive	.tagblock__bg-rect {height: calc((var(--px-line-height-svg) * 1) + 10px); }
+						.tagblock.is-hover	.tagblock__bg-rect {fill: color-mix(in srgb, var(--fill) 10%, #fff3); stroke: #77777730; }
+
+	/* part */
+	.tagblock__parts	{}
+										.tagblock__part, 
+										.tb-part 	{transition: var(--ms-transition) ease-out; } 
+	.chart-viewa						.tb-part 	{transform: translate(var(--x), var(--ya)) }
+	.chart-viewb						.tb-part 	{transform: translate(var(--x), var(--yb)) }
+	.chart-viewb	.tagblock--inactive	.tb-part 	{transform: translate(var(--x), 5px); }
+
+					.tb-part__rect	{opacity: var(--rect-opacity); fill: color-mix(in srgb, var(--fill) 30%, var(--fill-part-rect-fill-mix)); stroke: var(--fill-part-rect-stroke); stroke-width: 1; rx: 4px; /* filter: drop-shadow(3px 4px 6px var(--fill-tagblock-part-rect-drop-shadow));*/ }
+	.chart-viewa 	.tb-part__rect	{height: var(--px-line-height-svg); transform: scaleY(var(--count-lines-svg)); transition: transform var(--ms-transition) ease-out; vector-effect: non-scaling-stroke; }
+	.chart-viewb 	.tb-part__rect	{height: var(--px-line-height-svg); /*?transition: transform var(--ms-transition) ease-out;*/ vector-effect: non-scaling-stroke; }
+
+					.tb-part__text						{font-size: var(--px-font-size-svg);  pointer-events: none; transform: scaleY(1); opacity: 1; transition: transform var(--ms-transition) ease-out, opacity var(--ms-transition) ease-out; }
+					.tb-part__text--chart-viewa tspan	{dominant-baseline: middle; fill: var(--text); font-weight: var(--bold); }
+					.tb-part__text--chart-viewb			{dominant-baseline: middle; fill: var(--text); font-weight: var(--bold); } 
+
+	.chart-viewa	.tb-part__text--chart-viewb	{transform: scaleY(0); opacity: 0; }
+	.chart-viewb	.tb-part__text--chart-viewa	{transform: scaleY(0); opacity: 0; }
+
+	.chart-viewa	.tb-part--special	.line1 {font-size: 75%; fill: #777; }
+	.chart-viewa	.tb-part--special	.line2 {font-size: 150%; }
+
+					.tb-part__symbol	{text-anchor: end; transition: var(--ms-transition) ease-out; }
+	.chart-viewa	.tb-part__symbol	{transform: translate(var(--x), var(--y));  					font-size: calc(var(--px-line-height-svg) * 1.5);	dominant-baseline: auto;  }
+	.chart-viewb	.tb-part__symbol	{transform: translate(10px, calc(var(--px-line-height-svg) * 0.5)); font-size: calc(var(--px-line-height-svg) * 1.0); 	dominant-baseline: central; }
+
+	/* hover tagblock--active */
+	.chart-viewa	.tagblock--active.is-hover .tb-part {/* transform: translate(calc(var(--x) - 8px), calc(var(--ya) - 4px)) scale(1.127); */ }
+					.tagblock--active.is-hover .tb-part__rect	{fill: color-mix(in srgb, var(--fill) 20%, var(--fill-part-rect-fill-mix)); stroke: #333; stroke-width: 1.5; }
+
+					.tagblock--active.is-hover .tagblock-circle,
+					.tagblock--active.is-hover .tagblock-polyline {stroke-width: 2px !important; }
+
+	/* hover tb-part */
+					.tagblock--active 	.tb-part.is-hover 	.tb-part__rect {fill: color-mix(in srgb, var(--fill) 5%, #fff) !important; }
+
+	/* hover circle */
+					.tagblock--active 	.tagblock-circle.is-hover 			{fill: color-mix(in srgb, var(--fill) 10%, #fff) !important; r: 12px;}
+
+	/* graphs */
+											.tagblock-graphs 	{opacity: 1;	transition: opacity var(--ms-transition-quick) ease-out; }
+	.chart-viewa	.tagblock--inactive		.tagblock-graphs 	{opacity: 0.4;	pointer-events: none; }
+	.chart-viewb	.tagblock--inactive		.tagblock-graphs 	{opacity: 0;	pointer-events: none; }
+
+	.tagblock-polyline		{fill: none; stroke: color-mix(in srgb, var(--fill) 70%, #000); stroke-width: 1.25; /* filter: url(#glow); */ pointer-events: none; }
+	.tagblock-circle 		{fill: color-mix(in srgb, var(--fill) 25%, #fff); stroke: color-mix(in srgb, var(--fill) 70%, #000); stroke-width: 1.5; /* filter: url(#glow); */ }
+	
+	.tagblock-circle-text 			{opacity: 0; transform: translate(16px, 1px); pointer-events: none;  dominant-baseline: middle; }
+	.tagblock-circle-text.is-hover 	{opacity: 1; }
+
+	/* .tagblock--inactive		.graph	{opacity: 0.5; pointer-events: none; } */
+
+	.tagblock-circle		{transition: r var(--ms-transition) ease-out, opacity var(--ms-transition-quick) ease-out; }
+	.tagblock-circle-text	{transition: opacity var(--ms-transition-quick) ease-out; }
+
+	</style>
+
+	<style>
+
+
+	/* css for popup */
+	:root {
+		color-scheme: light dark;
+		--bg: var(--fill);
+		--fg: var(--text);
+		--border: color-mix(in srgb, var(--text) 14%, transparent);
+		--popup-bg: color-mix(in srgb, var(--fill) 92%, black);
+		--shadow: 0 18px 50px rgba(0,0,0,.25);
+		--btn-bg: color-mix(in srgb, var(--fill) 92%, black);
+		--btn-hover: color-mix(in srgb, var(--fill) 86%, black);
+		--radius: 14px;
+		--focus: color-mix(in srgb, Highlight 55%, transparent);
+	}
+	:root.theme-light {color-scheme: light; }
+	:root.theme-dark { color-scheme: dark;  }
+
+	button.btn, button.pill, button.tablist__btn, button.close__btn, button.unpin__btn {font-family: var(--fontfamily); font-size: var(--px-font-size); font-weight: var(--bold); }
+	
+	.popup-overlay {position: fixed; inset:0; background: rgba(0,0,0,.28); display:flex; align-items:center; justify-content:center; padding:18px; z-index: 10; overscroll-behavior: contain; touch-action: none; }
+	
+	.popup {width: min(780px, 100%); max-height: min(78vh, 760px); background: var(--popup-bg); border:1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; display:flex; flex-direction: column; touch-action: auto; }
+	
+	.popup__panel {display:flex; align-items:center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-bottom:1px solid var(--border); }
+	.popup__title {font-weight:650; letter-spacing:.2px; white-space: nowrap; }
+	.close__btn {border:1px solid var(--border); background: transparent; color: var(--fg); border-radius: 10px; padding: 6px 10px; cursor:pointer; flex: 0 0 auto; }
+	.close__btn:hover {background: color-mix(in srgb, var(--text) 7%, transparent); }
+	
+	.popup__tablist {margin-left: auto; display:flex; border:1px solid var(--border); border-radius: 999px; overflow: hidden; background: color-mix(in srgb, var(--text) 6%, transparent); }
+	.tablist__btn {border:0; background: transparent; color: var(--fg); padding: 7px 12px; cursor:pointer; user-select:none; -webkit-user-select:none; display:flex; gap:8px; align-items:center; font-weight: 600; }
+	.tablist__btn:hover {background: color-mix(in srgb, var(--text) 8%, transparent); }
+	.tablist__btn-selected {background: color-mix(in srgb, Highlight 18%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, Highlight 45%, transparent); }
+	
+	.popup__main {padding: 14px; overflow: auto; min-height: 0; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; touch-action: pan-y; }
+
+	.main__content {display: grid; gap: 14px; }
+	
+	.kbd {font-size: 12px; border: 1px solid var(--border); border-bottom-width: 2px; padding: 1px 6px; border-radius: 8px; opacity: .85; white-space: nowrap; }
+	.kbd.is-label {pointer-events:none; }
+	
+	.content__section {border:1px solid var(--border); border-radius: 12px; overflow:hidden; background: color-mix(in srgb, var(--text) 5%, transparent); }
+	.section__head {padding: 10px 12px; font-weight: 600; display:flex; align-items:center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+	.section__body {padding: 10px 12px; display:grid; gap: 10px; }
+	.hint {opacity:.75; font-size: 12px; }
+	
+	.pillbar {display:flex; gap: 8px; flex-wrap: wrap; }
+	.pill {border: 1px solid var(--border); background: transparent; color: var(--fg); border-radius: 999px; padding: 7px 10px; cursor:pointer; user-select:none; -webkit-user-select:none; display:inline-flex; align-items:center; gap:8px; }
+	.pill:hover 	 {background: color-mix(in srgb, var(--text) 7%, transparent); }
+	.pill-selected 	 {border-color: color-mix(in srgb, Highlight 55%, var(--border)); background: color-mix(in srgb, Highlight 18%, transparent); }
+	
+	.body__item {display:grid; grid-template-columns: auto 1fr auto; align-items:center; column-gap: 12px; border: 1px solid var(--border); background: var(--btn-bg); border-radius: 12px; padding: 10px 12px; cursor: pointer; user-select:none; -webkit-user-select:none; touch-action: none; }
+	.body__item:hover {background: var(--btn-hover); }
+	.item__meta {display:grid; gap:2px; min-width:0; }
+	.item__name {font-weight:600; white-space:nowrap; overflow:hidden; text-overflow: ellipsis; }
+	.item__desc {opacity:.72; font-size:12px; white-space:nowrap; overflow:hidden; text-overflow: ellipsis; }
+	.item__right {display:inline-flex; align-items:center; gap:10px; justify-self:end; }
+
+	.body__itemP {}
+	.item__header {display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:8px;}
+	.header__title {font-weight: 600;}
+
+	.switch {width:44px; height:26px; border-radius: 999px; border:1px solid var(--border); background: color-mix(in srgb, var(--text) 10%, transparent); position: relative; cursor:pointer; }
+	.switch::after {content:""; position:absolute; top:3px; left:3px; width:20px; height:20px; border-radius: 999px; background: var(--bg); border:1px solid var(--border); transition: transform 120ms ease; }
+
+	.toggle-on .switch {background: color-mix(in srgb, Highlight 35%, transparent); border-color: color-mix(in srgb, Highlight 55%, var(--border)); }
+	.toggle-on .switch::after {transform: translateX(18px); }
+	.switch:focus-visible {outline: 2px solid var(--focus); outline-offset: 2px; }
+	
+	.draggable-list.is-reordering .body__item:hover {background: var(--btn-bg); }
+	
+	.unpin__btn {border:1px solid var(--border); background: transparent; color: var(--fg); border-radius: 10px; padding: 6px 8px; cursor:pointer; }
+	.unpin__btn:hover {background: color-mix(in srgb, var(--text) 7%, transparent); }
+	
+	.body__item.is-active {border-color: color-mix(in srgb, Highlight 45%, var(--border)); background: color-mix(in srgb, Highlight 12%, var(--btn-bg)); box-shadow: inset 4px 0 0 0 Highlight; }
+	.body__item.is-active .item__name {font-weight:700; }
+	.body__item.is-dragging {opacity: 0; }
+	
+	.ghost {position: fixed; left:0; top:0; z-index: 9999; pointer-events: none; border: 1px solid color-mix(in srgb, Highlight 50%, var(--border)); background: color-mix(in srgb, Highlight 14%, var(--btn-bg)); border-radius: 12px; box-shadow: 0 12px 28px rgba(0,0,0,.28); padding: 10px 10px; width: var(--ghost-w, 320px); }
+
+	.content__actions {display:flex; gap:10px; flex-wrap: wrap; }
+	.btn {border: 1px solid var(--border); background: var(--btn-bg); color: var(--fg); border-radius: 12px; padding: 10px 12px; cursor:pointer; user-select:none; -webkit-user-select:none; display:inline-flex; align-items:center; gap:10px; }
+	.btn:hover {background: var(--btn-hover); }
+
+	.texteditor-globalcss {width: 100%; min-height: 320px; border-radius: 10px; }
+
+	</style>
+
+	<style id="style-from-settings"></style>
+	<style id="style-from-doc"></style>
+</head>
+
+<body>
+	<div id="app" class="toolbar-visible-yes sidebar-visible-yes sidebar-layout-left chart-viewa">
+
+		<div id="layout" class="layout">
+
+			<aside id="sidebar" class="sidebar">
+				<div id="sidebar-main" class="sidebar__main">
+
+				</div>
+			</aside>
+
+			<div id="splitter" class="splitter"></div>
+
+			<main id="workspace" class="workspace">
+				<div id="workspace-main" class="workspace__main">
+
+				</div>
+
+				<div id="workspace-panel" class="workspace__panel">
+					<button id="btn-popup" class="popup-btn" type="button" title="Settings">⚙︎</button>
+				</div>
+			</main>
+
+		</div>
+	</div>
+
+	<div id="popup-mount"></div>
+
+
+	<svg class="" style="visibility:hidden; height:0; width:0;">
+		<text id="font-sample-toolbar" 	class="toolbar__button" 		 style="font-size: var(--px-font-size);  font-weight: var(--bold); ">M</text>
+	</svg>
+
+	<svg class="workspace__main" style="visibility:hidden; height:0; width:0;">
+		<text id="font-sample-section" 	class="header__text--section" 	 style="font-size: var(--px-font-size-svg); font-weight: var(--bold); ">M</text>
+		<text id="font-sample-chapter" 	class="header__text--chapter" 	 style="font-size: var(--px-font-size-svg); font-weight: var(--bold); ">M</text>
+		<text id="font-sample-part" 	class="tb-part__text" 			 style="font-size: var(--px-font-size-svg); font-weight: var(--bold); ">M</text>
+	</svg>
+
+
+	<script type="module">
+		import { html, svg, render } from './assets/uhtml/+esm.js';			// keep: import { html, svg, render } from 'https://esm.run/uhtml';		// https://github.com/WebReflection/uhtml
+
+//:::📙 CONSTANTS
+
+const STANDALONE = false;
+const TEXT_STANDALONE = ``;
+
+const LOGGING = true, DETAILS = false;
+const LOGARGS = false;
+const LOG_RED = 'color:#933;', LOG_GREY = 'color:#777; background-color:#fff0da; font-weight:300 !important;', LOG_BLUE = 'color:#337;', LOG_GREEN = 'color:#7a7;';
+const LOG_BOLD = 'font-weight:700;';
+
+
+//::	☐ ui
+const PX_MARGIN_LEFT_W = 35;
+const PX_MARGIN_RIGHT_W = 35;
+
+const VIEWA = 0;
+const VIEWB = 1;
+
+const [ZOOM_ALL, ZOOM_HORIZONTAL, ZOOM_LINECOUNT] = [0, 1, 2];
+
+const SVG_UPDATE_FULL_RENDER = 0;
+const SVG_UPDATE_RESIZE_ONLY = 1;
+
+//::	☐ general layout
+const PX_PADDING_NORMAL = 10;
+const PX_PADDING_SMALL = 5;
+
+
+const PX_VIEVBOX_MIN_H = 400;
+
+//::	☐ chapter columns
+const PX_COL_MIN_W = 50;
+const PX_COL_MAX_W = 1000;
+const PX_COL_W_INITIAL = 120;
+const COUNT_LINES_INITIAL = 4;
+const F_ZOOM_SVG_INITIAL = 1;
+
+let PX_COL_WIDTH_SVG = PX_COL_W_INITIAL;
+let F_ZOOM_SVG = F_ZOOM_SVG_INITIAL;
+let F_LINE_HEIGHT_SVG = 1.4;
+
+let PX_HEADER_HEIGHT_SVG = 0;
+let PX_LINE_HEIGHT_SVG = 0;
+let PX_FONT_SIZE_SVG = 0;
+let COUNT_LINES_SVG = COUNT_LINES_INITIAL;
+
+//::	☐ tagblock
+		const COUNT_ROWS_FOR_GRAPH_HEIGHT = 10;
+		const PX_GRAPH_VIEWA_H = 300;
+
+//::	☐ canvas - for measuring and splitting text
+const CANVAS_FOR_TEXT_MEASURE = document.createElement('canvas');
+const CTX_FOR_TEXT_MEASURE = CANVAS_FOR_TEXT_MEASURE.getContext('2d');
+
+let FONTS_SIZE_REF = {};
+
+//:::
+//:::📙 const CUtil
+const CUtil = {
+
+	//:::	🔹 roundN
+	roundN(x, n = 2) {
+		const f = 10 ** n;
+		return Math.round((x + Number.EPSILON) * f) / f;
+	},
+
+	//:::	🔹 clamp
+	clamp(v, lo, hi) {
+		return Math.min(Math.max(v, lo), hi);
+	},
+
+}
+
+
+
+//:::
+//:::📙 const CModel
+const CModel = {
+	appstate: null,
+	docstate: null,
+	docdata: null,
+
+	STORAGE_KEY: "appstate",		// defined as 'namespace' before 'appstate'. Should probably be changed when final name of app is found
+
+	//:::	🔹 init
+	init() {
+		if (LOGGING) console.group('%c CModel %c init', LOG_GREY, LOG_RED);
+
+		// load appstate from localStorage with defined this.appstate as default structure
+		//: 		→ this: loadAppstate
+		this.appstate = this.loadAppstate();
+
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::
+	//:::	🔹 loadAppstate
+	loadAppstate() {
+		if (LOGGING) console.group('%c CModel %c loadAppstate', LOG_GREY, LOG_BLUE, LOG_GREEN);
+
+		const appstateDefault = {
+			isPopupOpen: false,
+			idTab: 'files',
+			idxView: VIEWA,						// VIEWA = 0 = 'structure', VIEWB = 1 = 'tags'
+			idTheme: 'system',
+			idSidebarPosition: 'sidebar-layout-left',
+			isSidebarVisible: true,
+			isToolbarVisible: true,
+			pathFileOpen: '',
+			arrPathFilePinned: [],
+			txtGlobalCss: ``,
+		};
+
+		try {
+			const raw = localStorage.getItem(CModel.STORAGE_KEY);
+			if (LOGGING) console.groupEnd();
+			if (!raw) return appstateDefault;
+			return { ...appstateDefault, ...JSON.parse(raw) };	// enables updating default appstate with new fields, and still allowing user's appstate to be loaded
+		}
+		catch (e) {
+			console.warn("Appstate load failed, using defaults", e);
+			if (LOGGING) console.groupEnd();
+			return appstateDefault;
+		}
+	},
+
+	//:::	🔹 updateAppstate
+	updateAppstate(args) {
+		if (LOGGING) console.group('%c CModel %c updateAppstate', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(args);
+
+		Object.assign(this.appstate, args);	// goes thru each key in args, and updates the matching key in this.appstate with the value from args
+
+		//: 		→ this: saveAppstate
+		this.saveAppstate();
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹	saveAppstate
+	saveAppstate() {
+		if (LOGGING) console.group('%c CModel %c saveAppstate', LOG_GREY, LOG_BLUE, LOG_GREEN);
+
+		try {
+			localStorage.setItem(CModel.STORAGE_KEY, JSON.stringify(this.appstate));
+		}
+		catch (e) {
+			console.warn("Save appstate to localStorage failed", e);
+		}
+
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::
+	//:::	🔹 loadDocstate
+	loadDocstate(args) {
+		if (LOGGING) console.group('%c CModel %c loadDocstate', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(args);
+
+		const docstateDefault = {
+			oTagblockState: {},
+			arrTagOrder: [],
+			pxWorkspaceScrollLeft: 0,
+			pxTexteditorScrollTop: 0,
+			idxView: VIEWA,
+			fZoom: F_ZOOM_SVG_INITIAL,
+			pxColWidth: PX_COL_W_INITIAL,
+			linecount: COUNT_LINES_INITIAL,
+		};
+
+		try {
+			const key = "docstate:" + encodeURIComponent(args.path);
+			const raw = localStorage.getItem(key);
+			if (LOGGING) console.groupEnd();
+			if (!raw) return docstateDefault;
+			return { ...docstateDefault, ...JSON.parse(raw) };	// enables updating default appstate with new fields, and still allowing user's appstate to be loaded
+		}
+		catch (e) {
+			console.warn("Docstate load failed, using default", e);
+			if (LOGGING) console.groupEnd();
+			return docstateDefault;
+		}
+	},
+
+	//:::	🔹 updateDocstate
+	updateDocstate(args) {
+		if (LOGGING) console.group('%c CModel %c updateDocstate', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (!LOGARGS) console.log(args);
+
+		Object.assign(this.docstate, args);			// goes thru each key in args, and updates the matching key in this.docstate with the value from args
+		if (LOGARGS) console.log(this.docstate);
+
+		//: 		→ this: saveDocstate
+		this.saveDocstate();
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹	saveDocstate
+	saveDocstate() {
+		if (LOGGING) console.group('%c CModel %c saveDocstate', LOG_GREY, LOG_BLUE, LOG_GREEN);
+
+		try {
+			const path = this.appstate.pathFileOpen;
+			console.log('this.appstate', this.appstate);
+			const key = "docstate:" + encodeURIComponent(path);
+			if (LOGARGS) console.log({path, key, docstate: this.docstate});
+
+			localStorage.setItem(key, JSON.stringify(this.docstate));
+		}
+		catch (e) {
+			console.warn("CModel: saveDocstate(): Save docstate to localStorage failed", e);
+		}
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::
+	//:::	🔹 extractFirstCssBlockFromText
+	extractFirstCssBlockFromText(args) {
+		if (LOGGING) console.group('%c CModel %c extractFirstCssBlockFromText', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(args);
+
+		const text = String(args.text ?? "");
+		const re = /(?:^|\n)```css[^\n]*\n([\s\S]*?)\n```/i;
+		const m = text.match(re);
+		
+		if (LOGGING) console.groupEnd();
+		return m ? m[1] : "";
+	},
+
+	//:::	🔹 buildDocdataFromText
+	buildDocdataFromText(args) {
+		if (LOGGING) console.group('%c CModel %c buildDocdataFromText', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(args);
+
+		const NOTAG = 'notag';
+		const txtMarkdown = args.text;
+
+		// :		(→ ☐ countLeadingTabs)
+		const countLeadingTabs = (line) => {
+			let count = 0;
+			while (count < line.length && line[count] === '\t') count += 1;
+			return count;
+		};
+
+		// :		(→ ☐ stripBulletPrefix)
+		const stripBulletPrefix = (text) => text.replace(/^\s*-\s*/, '');
+
+		// :		(→ ☐ parseTagAndCaption)
+		const parseTagAndCaption = (text) => {
+			const trimmed = text.trim();
+			const match = trimmed.match(/^#([A-Za-z0-9_-]+)(.*)$/);
+			if (!match){
+				return { tag: null, caption: trimmed };
+			}
+			const [, tag, rest] = match;
+			return {
+				tag,
+				caption: rest.replace(/^\s+/, '')
+			};
+		};
+
+		// :		(→ ☐ ensureTagblock)
+		const ensureTagblock = (map, tagId) => {
+			if (!map.has(tagId)){
+				map.set(tagId, { id: tagId, arrPart: [], isActive: true});
+			}
+			return map.get(tagId);
+		};
+
+		const sections = [];
+		const arrChapter = [];
+		const tagblockMap = new Map();
+		const partOrderByChapter = new Map();
+
+		let currentSectionIdx = -1;
+		let currentChapterIdx = -1;
+		let idxTextareaLine = -1;
+
+		let inYamlFrontMatter = false;
+		let yamlDone = false;          // only allow YAML block at top
+		let inFence = false;
+
+		const linesParsed = txtMarkdown.split(/\r?\n/);
+
+		for (const rawLine of linesParsed) {
+			idxTextareaLine++;
+
+
+			const lineTrim = rawLine.trim();
+
+			// --- YAML FRONT MATTER (only allowed at very top) ---
+			if (!yamlDone && idxTextareaLine === 0 && lineTrim === '---') {
+				inYamlFrontMatter = true;
+				continue;
+			}
+
+			if (inYamlFrontMatter) {
+				if (lineTrim === '---') {
+					inYamlFrontMatter = false;
+					yamlDone = true;
+				}
+				continue; // skip parsing but keep line count
+			}
+
+			// --- FENCED CODE BLOCKS (``` … ```) ---
+			if (lineTrim.startsWith('```')) {
+				inFence = !inFence;
+
+				continue; // skip fence lines themselves
+			}
+
+			if (inFence) continue; // skip fenced content
+
+
+
+			if (!rawLine.trim()) continue;
+
+			const depth = countLeadingTabs(rawLine);
+			if (depth >= 3) continue;
+
+			const contentAfterTabs = rawLine.slice(depth);
+			const stripped = stripBulletPrefix(contentAfterTabs);
+			if (!stripped.trim()) continue;
+
+			const { tag: tagRaw, caption } = parseTagAndCaption(stripped);
+			const tagNormalized = tagRaw ? tagRaw.toLowerCase() : null;
+			const trimmedCaption = caption.trim();
+			const trimmedContent = stripped.trim();
+
+			if (depth === 0){
+				const captionValue = trimmedCaption || (tagRaw ? tagRaw : trimmedContent);
+				const sectionTag = tagNormalized || NOTAG;
+				currentSectionIdx = sections.length;
+				sections.push({
+					caption: captionValue,
+					tag: sectionTag,
+					chapterIndices: [],
+					idxTextareaLine
+				});
+				currentChapterIdx = -1;
+				continue;
+			}
+
+			if (depth === 1){
+				if (currentSectionIdx === -1){
+					currentSectionIdx = sections.length;
+					sections.push({
+						caption: 'Untitled section',
+						tag: NOTAG,
+						chapterIndices: []
+					});
+				}
+
+				const captionValue = trimmedCaption || (tagRaw ? tagRaw : trimmedContent);
+				const chapterTag = tagNormalized || NOTAG;
+				currentChapterIdx = arrChapter.length;
+
+				arrChapter.push({
+					caption: captionValue,
+					idxSection: currentSectionIdx,
+					tag: chapterTag,
+					idxTextareaLine
+				});
+
+				sections[currentSectionIdx].chapterIndices.push(currentChapterIdx);
+				partOrderByChapter.set(currentChapterIdx, 0);
+				continue;
+			}
+
+			if (depth === 2) {
+				if (currentChapterIdx === -1 || currentSectionIdx === -1) continue;
+
+				const partTag = tagNormalized || NOTAG;
+				const partCaption = trimmedCaption;
+				const idxOrder = partOrderByChapter.get(currentChapterIdx) || 0;
+
+				const part = {
+					idxTextareaLine,
+					idxSection: currentSectionIdx,
+					idxChapter: currentChapterIdx,
+					idxOrderInChapter: idxOrder,
+					caption: partCaption.split(' //')[0].trim(),  // strip metadata block
+				};
+
+				//: 		→ this: getPartMetadataFromTextline
+				part.metadata = this.getPartMetadataFromTextline({trimmedContent});
+				
+				partOrderByChapter.set(currentChapterIdx, idxOrder + 1);
+
+				const tagblock = ensureTagblock(tagblockMap, partTag);
+				tagblock.arrPart.push(part);
+			}
+		}
+
+		const sectionIndexMap = new Map();
+		const arrSection = [];
+
+		sections.forEach((section, originalIdx) => {
+			const { chapterIndices } = section;
+			if (!chapterIndices.length) return;
+
+			const newIdx = arrSection.length;
+			sectionIndexMap.set(originalIdx, newIdx);
+
+			arrSection.push({
+				caption: section.caption,
+				rangeChapters: [chapterIndices[0], chapterIndices[chapterIndices.length - 1]],
+				tag: section.tag,
+				idxTextareaLine: section.idxTextareaLine
+			});
+		});
+
+		arrChapter.forEach((chapter) => {
+			const mappedIdx = sectionIndexMap.get(chapter.idxSection);
+			if (mappedIdx != null) chapter.idxSection = mappedIdx;
+		});
+
+		tagblockMap.forEach((tagblock) => {
+			tagblock.arrPart.forEach((part) => {
+				const mappedIdx = sectionIndexMap.get(part.idxSection);
+				if (mappedIdx != null) part.idxSection = mappedIdx;
+			});
+		});
+
+		const arrTagblock = Array.from(tagblockMap.values()).sort((a, b) => {
+			if (a.id === NOTAG && b.id !== NOTAG) return -1;
+			if (b.id === NOTAG && a.id !== NOTAG) return 1;
+			return a.id.localeCompare(b.id);
+		});
+
+		arrTagblock.forEach((tagblock) => {
+			let idxRowCurrent = -1;
+			let idxSectionCurrent = -1;
+
+			tagblock.arrPart.forEach((part) => {
+
+				// Set idxRow on each part, resetting to 0 for each new section
+				if (part.idxSection !== idxSectionCurrent) {
+					idxSectionCurrent = part.idxSection;
+					idxRowCurrent = 0;
+				}
+				part.idxRow = idxRowCurrent;
+				idxRowCurrent++;
+
+				// --- NEW GRAPH LOGIC USING part.metadata ---
+				const metadata = part.metadata;
+				if (!metadata) return;
+
+				// Extract numeric metadata keys
+				const numericEntries = Object.entries(metadata)
+					.filter(([key, value]) => typeof value === 'number');
+
+				if (!numericEntries.length) return;
+
+				if (!tagblock.graphtags) tagblock.graphtags = {};
+
+				numericEntries.forEach(([key, value]) => {
+					if (!tagblock.graphtags[key]) {
+						tagblock.graphtags[key] = [];
+					}
+					tagblock.graphtags[key].push({
+						idxChapter: part.idxChapter,
+						value,
+						idxTextareaLine: part.idxTextareaLine,
+					});
+				});
+			});
+
+			const countRowsRequiredForParts = Math.max(...tagblock.arrPart.map(p => p.idxRow)) + 1;
+			const countRowsRequiredForGraph = tagblock.graphtags ? COUNT_ROWS_FOR_GRAPH_HEIGHT : 0;
+
+			tagblock.countRows = Math.max(countRowsRequiredForParts, countRowsRequiredForGraph);
+		});
+
+		this.docdata = {
+			arrChapter,
+			arrSection,
+			arrTagblock,
+		};
+
+		if (LOGGING) console.groupEnd();
+	},
+
+	// Parses inline metadata like:
+	// "@weight 65.5kg", "@bmi: 21,", "@color #ff0", "@code🥇", "@code:🥇"
+	//:::	🔹	getPartMetadataFromTextline
+	getPartMetadataFromTextline(args) {
+		if (LOGGING) console.log('%c CModel %c getPartMetadataFromTextline', LOG_GREY, LOG_BLUE);
+
+		const metadata = {};
+		
+		// Matches:
+		//   @key value
+		//   @key: value
+		//   @key:value
+		//   @keyvalue   (no separator)  -> optional support (for @code🥇)
+		//
+		// key:  [A-Za-z0-9_-]+
+		// value: next non-space token (one "word")
+		//
+		// Group 1 = key
+		// Group 2 = value (if separated by space/colon)
+		// Group 3 = value (if immediately attached: @code🥇)
+		const re = /@([A-Za-z0-9_-]+)(?:(?:\s*:\s*|\s+)(\S+)|(\S+))/g;
+		
+		let m;
+		while ((m = re.exec(args.trimmedContent)) !== null) {
+			const key = m[1];
+			const rawToken = (m[2] ?? m[3] ?? "").trim();
+			if (!key || !rawToken) continue;
+			
+			// Strip common trailing punctuation from the token (so "21," -> "21")
+			const token = rawToken.replace(/[),.;!?]+$/g, "");
+			
+			// If token begins with a number, parse that numeric prefix.
+			// Supports:
+			//   65
+			//   65.5
+			//   65,5   (decimal comma)
+			//   -3.2
+			//   65.5kg
+			//   21%
+			const numMatch = token.match(/^-?\d+(?:[.,]\d+)?/);
+			if (numMatch) {
+				const numStr = numMatch[0].replace(",", ".");
+				metadata[key] = Number(numStr);
+			}
+			else {
+				metadata[key] = token;
+			}
+		}
+		
+		return metadata;
+	},
+
+	//:::	🔹 setTagblockMetadataFromCss
+	setTagblockMetadataFromCss(args) {
+		if (LOGGING) console.group('%c CModel %c setTagblockMetadataFromCss', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(args);
+
+		// add metadata for each tagblock
+		for (const tagblock of this.docdata.arrTagblock) {
+			const selector = '.' + tagblock.id;			// eg. '.gitte'
+
+			//: 		→ this: getTagblockMetadataFromCss * 2
+			const metadataForSelectorFromGlobalCss		= this.getTagblockMetadataFromCss({txtCss: args.txtGlobalCss,   selector: selector}, 'global');
+			const metadataForSelectorFromDocumentCss	= this.getTagblockMetadataFromCss({txtCss: args.txtDocumentCss, selector: selector}, 'doc');
+
+			tagblock.metadata = {
+				...metadataForSelectorFromGlobalCss,
+				...metadataForSelectorFromDocumentCss,	// overrides keys set from ...globalDefinitions with same name
+			};
+		}
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹	getTagblockMetadataFromCss
+	getTagblockMetadataFromCss(args, info) {
+		if (LOGGING) console.log('%c CModel %c getTagblockMetadataFromCss %c (' + args.selector + ', ' + info + ')', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		//if (LOGARGS) console.log(args);
+		
+		const escapedSelector = args.selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');	// Escape selector for use in RegExp (e.g. ".gitte" → "\.gitte")
+		const re = new RegExp(`^\\s*${escapedSelector}\\s*\\{([^}]*)\\}`, 'm');		// Match: optional spaces + selector + optional spaces + { ... }. // [^}]* grabs everything until the first closing brace (including newlines)
+		const match = args.txtCss.match(re);
+		if (!match) return {};
+
+		const inside = match[1].trim();
+		if (!inside) return {};
+
+		const obj = {};
+
+		inside.split(';').forEach(entry => {
+			const pair = entry.trim();
+			if (!pair) return;
+
+			const [rawKey, rawVal] = pair.split(':').map(s => s.trim());
+			if (!rawKey || rawVal === undefined) return;
+
+			if (!rawKey.startsWith('--')) return;		// Only care about CSS custom properties, e.g. --fill
+
+			const key = rawKey.slice(2);		// Remove leading "--"
+			const camelKey = key.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());		// kebab-case → camelCase (color-tag → colorTag)
+
+			let value = rawVal;
+
+			if (rawVal === 'true') {		// Convert booleans
+				value = true;
+			} else if (rawVal === 'false') {
+				value = false;
+			}
+			
+			else if (/^-?\d+(\.\d+)?$/.test(rawVal)) {		// Convert numbers (integer or float)
+				value = Number(rawVal);
+			}
+			// Else keep as string
+
+			obj[camelKey] = value;
+		});
+
+		return obj;
+	},
+
+	//:::	🔹 setDocdataDefinitionsFromCss
+	setDocdataDefinitionsFromCss(args) {
+		if (LOGGING) console.group('%c CModel %c setDocdataDefinitionsFromCss', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(args);
+
+		//: 		→ this: getDocdataDefinitionsFromCss * 2
+		const globalDefinitions = this.getDocdataDefinitionsFromCss({txtCss: args.txtGlobalCss},	'(globalDefinitions)');
+		const docDefinitions    = this.getDocdataDefinitionsFromCss({txtCss: args.txtDocumentCss},	'(docDefinitions)');
+
+		this.docdata.definitions = {
+			...globalDefinitions,
+			...docDefinitions   		// overrides keys set from ...globalDefinitions with same name
+		};
+	
+		if (LOGGING) console.groupEnd();
+	},
+
+	/**
+	 * Parse "#def {key: ...; unit: ...; min: ...; max: ...; target: ...}" lines
+	 * from a settings text blob (optionally containing a ```css fenced block).
+	 *
+	 * Returns an object like:
+	 * {
+	 *   weight: { unit: 'kg', min: 40, max: 140, target: 65 },
+	 *   bmi:    { unit: 'bmi', min: 15, max: 30, target: 21 }
+	 * }
+	 */
+	//:::	🔹	getDocdataDefinitionsFromCss
+	getDocdataDefinitionsFromCss(args, info) {
+		if (LOGGING) console.group('%c CModel %c getDocdataDefinitionsFromCss %c' + info, LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(args);
+
+		const defs = {};
+		
+		// 1) If a ```css (or any) fenced block exists, parse only inside it.
+		//    Otherwise, parse the whole text.
+		const fenceMatch = args.txtCss.match(/```(?:css|obx|txt)?\s*\n([\s\S]*?)\n```/i);
+		const src = fenceMatch ? fenceMatch[1] : args.txtCss;
+		
+		// 2) Find all #def { ... } lines (tolerant with whitespace)
+		//    Works even if there are multiple defs per file.
+		const defMatches = src.matchAll(/^\s*#def\s*\{([^}]*)\}\s*;?\s*$/gmi);
+		
+		for (const m of defMatches) {
+			const inside = (m[1] || "").trim();
+			if (!inside) continue;
+			
+			// Split on semicolons into "key: value" tokens
+			const pairs = inside
+				.split(";")
+				.map(s => s.trim())
+				.filter(Boolean);
+			
+			const obj = {};
+			for (const pair of pairs) {
+				// allow "key: value" with arbitrary whitespace
+				const mm = pair.match(/^([a-zA-Z_][\w-]*)\s*:\s*(.+)$/);
+				if (!mm) continue;
+				
+				const k = mm[1];
+				let v = mm[2].trim();
+				
+				// Strip optional trailing comma (user might type it)
+				v = v.replace(/,\s*$/, "");
+				
+				// Strip optional wrapping quotes (single or double)
+				if (
+				(v.startsWith('"') && v.endsWith('"')) ||
+				(v.startsWith("'") && v.endsWith("'"))
+				) {
+					v = v.slice(1, -1);
+				}
+				
+				// Convert numeric values when they look like numbers
+				// (supports ints and decimals, incl. negative)
+				if (/^-?\d+(?:\.\d+)?$/.test(v)) {
+					obj[k] = Number(v);
+				} else {
+					obj[k] = v;
+				}
+			}
+			
+			// Require a "key" field to register the definition
+			const defKey = typeof obj.key === "string" ? obj.key.trim() : "";
+			if (!defKey) continue;
+			
+			// Remove "key" from stored fields
+			delete obj.key;
+			
+			// Store: later defs with same key override earlier ones
+			defs[defKey] = obj;
+		}
+		
+		if (LOGGING) console.groupEnd();
+		return defs;
+	},
+
+	//:::	🔹 reapplyDocstate
+	reapplyDocstate() {
+		if (LOGGING) console.group('%c CModel %c reapplyDocstate', LOG_GREY, LOG_BLUE, LOG_GREEN);
+
+		if (LOGARGS) console.log(this.docstate);
+
+		// set isActive on each tagblock
+		for (const tagblock of this.docdata.arrTagblock) {
+			tagblock.isActive = this.docstate.oTagblockState[tagblock.id]?.isActive ?? tagblock.isActive;
+		}
+
+		// reorder tagblocks
+		this.docdata.arrTagblock.sort((a, b) => this.docstate.arrTagOrder.indexOf(a.id) - this.docstate.arrTagOrder.indexOf(b.id));
+		if (LOGGING) console.groupEnd();
+	},
+};
+
+
+//:::
+//:::📙 const CWrapper
+const CWrapper = {
+	reloadTimer: null,		// debounce bursty save events (VS Code / Obsidian often save in quick bursts)
+	msTimestampWriteFileContent: 0,
+
+	//:::	🔹 init()
+	init() {
+		if (LOGGING) console.group('%c CWrapper %c init', LOG_GREY, LOG_RED);
+
+		// listen for menu events from Rust
+		window.__TAURI__.event.listen('menu', (e) => {
+			if (LOGGING) console.group('%c CWrapper %c window.__TAURI__.event.listen(menu)', LOG_GREY, LOG_BLUE, LOG_GREEN);
+			if (LOGARGS) console.log(e);
+
+			this.onMenuEvent(e);
+			if (LOGGING) console.groupEnd();
+		});
+
+		// listen for file-changed events from Rust
+		window.__TAURI__.event.listen('file-changed', (e) => {
+			if (LOGGING) console.group('%c CWrapper %c window.__TAURI__.event.listen(file-changed)', LOG_GREY, LOG_BLUE, LOG_GREEN);
+			if (LOGARGS) console.log(e);
+
+			this.onFileChangedEvent(e);
+			if (LOGGING) console.groupEnd();
+		});		
+
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 onMenuEvent
+	onMenuEvent: (e) => {
+		if (LOGGING) console.group('%c CWrapper %c onMenuEvent %c [type: ' + e.payload + ']', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(e);
+
+		const sender = 'CWrapper: onMenuEvent: ' + e.payload;
+
+		// menu: App (Mac only)
+		//::		🔻 app.settings
+		//:			→ App: dispatch:				popup.settings.open
+		if (e.payload === 'app.settings') 			App.dispatch({type: 'popup.settings.open', sender});
+		//::		🔻 app.exit
+		//:			→ App: dispatch:				COMING...
+		if (e.payload === 'app.exit') 				App.dispatch({type: 'COMING...', sender});
+
+		// menu: File
+		//::		🔻 file.new
+		//:			→ App: dispatch:				COMING...
+		if (e.payload === 'file.new') 				App.dispatch({type: 'COMING...', sender});
+		//::		🔻 file.open
+		//:			→ App: dispatch:				wrapper.dialog.open.show
+		if (e.payload === 'file.open') 				App.dispatch({type: 'wrapper.dialog.open.show', sender});
+		//::		🔻 file.saveas
+		//:			→ App: dispatch:				COMING...
+		if (e.payload === 'file.saveas') 			App.dispatch({type: 'COMING...', sender});
+		//::		🔻 file.pincurrent
+		//:			→ App: dispatch:				model.filepath.pin
+		if (e.payload === 'file.pincurrent') 		App.dispatch({type: 'model.filepath.pin', sender});
+		//::		🔻 file.settings
+		//:			→ App: dispatch:				popup.settings.open
+		if (e.payload === 'file.settings') 			App.dispatch({type: 'popup.settings.open', sender});
+		//::		🔻 file.exit
+		//:			→ App: dispatch:				COMING...
+		if (e.payload === 'file.exit') 				App.dispatch({type: 'COMING...', sender});
+
+		// menu: View
+		//::		🔻 view.sidebar.toggle
+		//:			→ App: dispatch:				framework.sidebar.visibility.set:	!isSidebarVisible
+		if (e.payload === 'view.sidebar.toggle')	App.dispatch({type: 'framework.sidebar.visibility.set', isSidebarVisible: !CModel.appstate.isSidebarVisible, sender});
+		//::		🔻 view.toolbar.toggle
+		//:			→ App: dispatch:				framework.toolbar.visibility.set	!isToolbarVisible
+		if (e.payload === 'view.toolbar.toggle')	App.dispatch({type: 'framework.toolbar.visibility.set', isToolbarVisible: !CModel.appstate.isToolbarVisible, sender});
+
+		//::		🔻 view.chart.viewa
+		//:			→ App: dispatch:				chart.view.select:				idxView: VIEWA
+		if (e.payload === 'view.chart.viewa')		App.dispatch({type: 'chart.view.select', idxView: VIEWA, sender});
+		//::		🔻 view.chart.viewb
+		//:			→ App: dispatch:				chart.view.select				idxView: VIEWB
+		if (e.payload === 'view.chart.viewb')		App.dispatch({type: 'chart.view.select', idxView: VIEWB, sender});
+
+		//::		🔻 view.zoom.normal.in
+		//:			→ App: dispatch:				chart.zoom:					typeZoom: 0, isIn
+		if (e.payload === 'view.zoom.normal.in')	App.dispatch({type: 'chart.zoom', typeZoom: 0, isIn: true, isOut:  false, isReset: false, sender});
+		//::		🔻 view.zoom.normal.out
+		//:			→ App: dispatch:				chart.zoom:					typeZoom: 0, isOut
+		if (e.payload === 'view.zoom.normal.out')	App.dispatch({type: 'chart.zoom', typeZoom: 0, isIn: false, isOut: true,  isReset: false, sender});
+		//::		🔻 view.zoom.normal.reset
+		//:			→ App: dispatch:				chart.zoom:					typeZoom: 0, isReset
+		if (e.payload === 'view.zoom.normal.reset')	App.dispatch({type: 'chart.zoom', typeZoom: 0, isIn: false, isOut: false, isReset: true, sender});		// jk: delete ?
+
+		//::		🔻 view.zoom.width.in
+		//:			→ App: dispatch:				chart.zoom:					typeZoom: 1, isIn
+		if (e.payload === 'view.zoom.width.in')		App.dispatch({type: 'chart.zoom', typeZoom: 1, isIn: true, isOut:  false, isReset: false, sender});
+		//::		🔻 view.zoom.width.out
+		//:			→ App: dispatch:				chart.zoom:					typeZoom: 1, isOut
+		if (e.payload === 'view.zoom.width.out')	App.dispatch({type: 'chart.zoom', typeZoom: 1, isIn: false, isOut: true,  isReset: false, sender});
+
+		//::		🔻 view.zoom.lines.in
+		//:			→ App: dispatch:				chart.zoom:					typeZoom: 2, isIn
+		if (e.payload === 'view.zoom.lines.in')		App.dispatch({type: 'chart.zoom', typeZoom: 2, isIn: true, isOut:  false, isReset: false, sender});
+		//::		🔻 view.zoom.lines.out
+		//:			→ App: dispatch:				chart.zoom:					typeZoom: 2, isOut
+		if (e.payload === 'view.zoom.lines.out')	App.dispatch({type: 'chart.zoom', typeZoom: 2, isIn: false, isOut: true,  isReset: false, sender});
+
+		//::		🔻 view.sidebar.layout.left
+		//:			→ App: dispatch:				framework.sidebar.layout.set:	sidebar-layout-left
+		if (e.payload === 'view.sidebar.layout.left')	App.dispatch({type: 'framework.sidebar.layout.set', idSidebarLayout: 'sidebar-layout-left' , sender});
+		//::		🔻 view.sidebar.layout.right
+		//:			→ App: dispatch:				framework.sidebar.layout.set:	sidebar-layout-right
+		if (e.payload === 'view.sidebar.layout.right')	App.dispatch({type: 'framework.sidebar.layout.set', idSidebarLayout: 'sidebar-layout-right' , sender});
+		//::		🔻 view.sidebar.layout.top
+		//:			→ App: dispatch:				framework.sidebar.layout.set:	sidebar-layout-top
+		if (e.payload === 'view.sidebar.layout.top')	App.dispatch({type: 'framework.sidebar.layout.set', idSidebarLayout: 'sidebar-layout-top' , sender});
+		//::		🔻 view.sidebar.layout.bottom
+		//:			→ App: dispatch:				framework.sidebar.layout.set:	sidebar-layout-bottom
+		if (e.payload === 'view.sidebar.layout.bottom') App.dispatch({type: 'framework.sidebar.layout.set', idSidebarLayout: 'sidebar-layout-bottom' , sender});
+
+		//::		🔻 view.theme.system
+		//:			→ App: dispatch:				wrapper.theme.set:			system
+		if (e.payload === 'view.theme.system')		App.dispatch({type: 'wrapper.theme.set', idTheme: 'system', sender});
+		//::		🔻 view.theme.light
+		//:			→ App: dispatch:				wrapper.theme.set:			light
+		if (e.payload === 'view.theme.light')		App.dispatch({type: 'wrapper.theme.set', idTheme: 'light', sender});
+		//::		🔻 view.theme.dark
+		//:			→ App: dispatch:				wrapper.theme.set:			dark
+		if (e.payload === 'view.theme.dark')		App.dispatch({type: 'wrapper.theme.set', idTheme: 'dark', sender});
+
+		//::		🔻 help.docs
+		//:			→ App: dispatch:				COMING...
+		if (e.payload === 'help.docs') 				App.dispatch({type: 'COMING...', sender});
+		//::		🔻 help.website
+		//:			→ App: dispatch:				COMING...
+		if (e.payload === 'help.website') 			App.dispatch({type: 'COMING...', sender});
+
+
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 onFileChangedEvent
+	onFileChangedEvent(e) {
+		if (LOGGING) console.group('%c CWrapper %c onFileChangedEvent', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(e);
+
+		const msBufferToPreventOpen = 400;
+		const msTimestampFileChanged = Date.now();
+		const msSinceWriteFileContent = msTimestampFileChanged - CWrapper.msTimestampWriteFileContent;
+		const isFileShouldReload = msSinceWriteFileContent > msBufferToPreventOpen;
+		if (LOGGING) console.group('%c CModel %c onFileChangedEvent %c (Reload: ' + (isFileShouldReload ? 'YES: ' : 'NO: ') + msSinceWriteFileContent + ' ms)', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		
+		if (isFileShouldReload) {
+			const changedPath = e.payload;
+			if (!CModel.appstate.pathFileOpen || changedPath !== CModel.appstate.pathFileOpen) return;
+			
+			// debounce and add a small delay (helps with atomic saves: replace-then-write)
+			if (CWrapper.reloadTimer) clearTimeout(CWrapper.reloadTimer);
+			CWrapper.reloadTimer = setTimeout(() => {
+				if (LOGGING) console.group('%c CModel %c window.__TAURI__.event.listen: setTimeout: call App.dispatch(type: model.filepath.open)', LOG_GREY, LOG_BLUE, LOG_GREEN);
+
+				//:		→ App: dispatch:					model.filepath.open
+				App.dispatch({type: 'model.filepath.open', path: CModel.appstate.pathFileOpen, caller: 'window.__TAURI__.event.listen(file-changed)'});
+				if (LOGGING) console.groupEnd();
+			}, 100);
+		}
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 selectFileUsingSystemDialog()
+	async selectFileUsingSystemDialog() {
+		if (LOGGING) console.group('%c CWrapper %c selectFileUsingSystemDialog', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		
+		//: 		→ window.__TAURI__.dialog:			open
+		const path = await window.__TAURI__.dialog.open({
+			multiple: false,
+			directory: false,
+			filters: [{ name: "Text", extensions: ["md", "txt", "json"] }],
+		});
+
+		const resFileDialog = {
+			path: path,
+			isCancelled: path === null
+		};
+
+		if (LOGGING) console.groupEnd();
+		return resFileDialog;
+	},
+
+	//:::	🔹 loadFileText
+	async loadFileText(args) {
+		if (LOGGING) console.group('%c CWrapper %c loadFileText', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(args);
+
+		if (STANDALONE) {
+			if (LOGGING) console.groupEnd();
+			return {text: TEXT_STANDALONE, err: null};
+		}
+		
+		// retry a couple of times to survive "atomic save" moments where the file is briefly unavailable (common in editors)
+		let lastErr = null;
+		for (let attempt = 0; attempt < 3; attempt++) {
+			try {
+				//: 		→ window.__TAURI__.fs:			readTextFile
+				const text = await window.__TAURI__.fs.readTextFile(args.path);
+				
+				if (LOGGING) console.groupEnd();
+				return {text: text, err: null};
+			}
+			catch (err) {
+				lastErr = err;
+				await new Promise((r) => setTimeout(r, 60));
+			}
+		}
+
+		// jk: warn user somehow - system dialog using Tauri?
+		if (LOGGING) console.log('ERR: loadFileText:', lastErr);
+		if (LOGGING) console.groupEnd();
+		return {err: lastErr};
+	},
+
+	//:::	🔹 saveFileText
+	async saveFileText(args) {
+		if (LOGGING) console.group('%c CWrapper %c saveFileText', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(args);
+		
+		try {
+			//: 		→ window.__TAURI__.fs:			writeTextFile
+			await window.__TAURI__.fs.writeTextFile(args.path, args.text);
+
+			CWrapper.msTimestampWriteFileContent = Date.now();
+			if (LOGGING) console.groupEnd();
+			return {err: null};
+		}
+		catch (err) {
+			if (LOGGING) console.log("ERR: saveFileText:", err);
+			if (LOGGING) console.groupEnd();
+			return {err};
+		}
+	},
+
+	//:::	🔹 set_menu_checks(args)
+	set_menu_checks: async (args) => {
+		if (LOGGING) console.group('%c CWrapper %c set_menu_checks', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(args);
+
+		// args.arrUpdate example:
+		//	[
+		//		['view.theme.system',	args.idTheme === 'system'],
+		//		['view.theme.light',	args.idTheme === 'light'],
+		//		['view.theme.dark',		args.idTheme === 'dark'],
+		//	]
+
+		//: 		→ window.__TAURI__.core.invoke:	set_menu_checks
+		await window.__TAURI__.core.invoke('set_menu_checks', {updates: args.arrUpdate});
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 startWatchFile(args)
+	startWatchFile: async (args) => {
+		if (LOGGING) console.group('%c CWrapper %c startWatchFile', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(args);
+		
+		// start watcher (Rust) — single watcher slot in Rust will replace any previous watcher
+		//: 		→ window.__TAURI__.core.invoke:	start_watch_file
+		await window.__TAURI__.core.invoke("start_watch_file", {path: CModel.appstate.pathFileOpen});
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 setWindowTitle(args)
+	setWindowTitle: async (args) => {	
+		if (LOGGING) console.group('%c CWrapper %c setWindowTitle', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(args);
+		
+		//: 		→  window.__TAURI__.window:		setTitle
+		await window.__TAURI__.window.getCurrentWindow().setTitle(args.path.split(/[\\/]/).pop());	
+		if (LOGGING) console.groupEnd();
+	},
+
+	/* keep: code for enabling/disabling menu items
+			try {
+				// :		→ window.__TAURI__.core.invoke		set_menu_item_enabled
+				await window.__TAURI__.core.invoke('set_menu_item_enabled', {
+					window: 'main',
+					id: 'file.saveas',
+					enabled: false
+				});
+				console.log('disabled ok');
+			}
+			catch (e) {
+				console.error('disable failed', e);
+			}
+	*/
+};
+
+
+//:::
+//:::📙 const CFramework
+const CFramework = {
+	elApp: null,
+	elSplitter: null,
+	dragging: false,
+	startCoord: 0,
+	startSize: 0,
+	mql: null,
+
+	//:::	🔹 init()
+	init() {
+		if (LOGGING) console.group('%c CFramework %c init', LOG_GREY, LOG_RED);
+
+		this.elApp = document.getElementById('app');
+		this.elSplitter = document.getElementById('splitter');
+
+		document.getElementById("btn-popup").addEventListener("click", (e) => {
+			e.preventDefault();
+			app.dispatch({type: 'popup.settings.open'});
+		});
+
+		window.addEventListener('keydown', e => {this.onKeydown(e)}, {capture: true});
+		window.addEventListener('resize', e => this.onWindowResize(e));
+
+		// splitter drag
+		this.elSplitter.addEventListener('mousedown', e => this.onSplitterMousedown(e));
+		window.addEventListener('mousemove', e => this.onSplitterMousemove(e));
+		window.addEventListener('mouseup', () => this.onSplitterMouseup());
+
+		this.mql = window.matchMedia('(prefers-color-scheme: dark)');
+
+		//: 		→ this: setTheme
+		this.setTheme({mode: CModel.appstate.idTheme});
+
+		//: 		→ this: setAppUiClasses
+		this.setAppUiClasses({appstate: CModel.appstate});
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 onSplitterMousedown(e)
+	onSplitterMousedown(e) {
+		if (LOGGING) console.group('%c CFramework %c onSplitterMousedown', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(e);
+		this.dragging = true;
+		const isVert = this.elApp.classList.contains('sidebar-layout-top') || this.elApp.classList.contains('sidebar-layout-bottom');
+		const point = e.touches ? e.touches[0] : e;
+
+		this.startCoord = isVert ? point.clientY : point.clientX;
+
+		this.startSize = parseFloat(
+			getComputedStyle(document.documentElement).getPropertyValue('--px-sidebar-size')
+		) || 340;
+
+		document.body.classList.add('no-select');
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 onSplitterMousemove(e)
+	onSplitterMousemove(e) {
+		if (!this.dragging) return;
+		if (LOGGING) console.group('%c CFramework %c onSplitterMousemove', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(e);
+
+		const isVert = this.elApp.classList.contains('sidebar-layout-top') || this.elApp.classList.contains('sidebar-layout-bottom');
+		const point = e.touches ? e.touches[0] : e;
+		const pos = isVert ? point.clientY : point.clientX;
+		let delta = pos - this.startCoord;
+
+		if (this.elApp.classList.contains('sidebar-layout-right') || this.elApp.classList.contains('sidebar-layout-bottom')) {
+			delta = -delta;
+		}
+
+		const newSize = CUtil.clamp(this.startSize + delta, 160, window.innerWidth * 0.8);
+
+		document.documentElement.style.setProperty('--px-sidebar-size', newSize + 'px');
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 onSplitterMouseup
+	onSplitterMouseup(e) {
+		if (!this.dragging) return;
+		if (LOGGING) console.group('%c CFramework %c onSplitterMouseup', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(e);
+		this.dragging = false;
+		document.body.classList.remove('no-select');
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 applyThemeClass
+	applyThemeClass(args) {
+		if (LOGGING) console.group('%c CFramework %c applyThemeClass', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log('args, mql', args, this.mql);		
+		const root = document.documentElement;
+
+		root.classList.remove('theme-light', 'theme-dark');
+		
+		if (args.mode === 'light')
+			root.classList.add('theme-light');
+
+		else if (args.mode === 'dark')
+			root.classList.add('theme-dark');
+
+		else if (args.mode === 'system') {
+			root.classList.add(this.mql.matches === true ? 'theme-dark' : 'theme-light');
+		}
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 setTheme
+	setTheme(args) {
+		if (LOGGING) console.group('%c CFramework %c setTheme', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(args);
+
+		this.applyThemeClass(args);
+		
+		// listen for OS changes only in system mode
+		if (args.mode === 'system') {
+			this.mql.onchange = () => this.applyThemeClass({mode: 'system'});
+		}
+		
+		else {
+			this.mql.onchange = null;
+		}
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 setAppUiClasses
+	setAppUiClasses(args) {
+		if (LOGGING) console.group('%c CFramework %c setAppUiClasses', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(args);
+
+		document.querySelector('#app').classList.toggle('sidebar-visible-yes', args.appstate.isSidebarVisible === true);
+		document.querySelector('#app').classList.toggle('sidebar-visible-no',  args.appstate.isSidebarVisible === false);
+
+		document.querySelector('#app').classList.toggle('toolbar-visible-yes', args.appstate.isToolbarVisible === true);
+		document.querySelector('#app').classList.toggle('toolbar-visible-no',  args.appstate.isToolbarVisible === false);
+
+		document.querySelector('#app').classList.remove(...['sidebar-layout-left', 'sidebar-layout-right', 'sidebar-layout-top', 'sidebar-layout-bottom']);
+		document.querySelector('#app').classList.add(args.appstate.idSidebarPosition);
+
+		document.querySelector('#app').classList.toggle('chart-viewa', args.appstate.idxView === VIEWA);
+		document.querySelector('#app').classList.toggle('chart-viewb', args.appstate.idxView === VIEWB);
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 setCustomCss
+	setCustomCss(args, info) {
+		if (LOGGING) console.group('%c CFramework %c setCustomCss %c' + info, LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(args);
+
+		// strip #def Lines
+  		const textContent = args.txtCustomCss.replace(/^\s*#def\s*\{[^}]*\}\s*;?\s*$/gmi, '').trim();
+
+		// set custom css
+		const elStyleSettings = document.getElementById(args.idElStyle);
+		elStyleSettings.textContent = textContent;
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 updateLookupConstants
+	updateLookupConstants(args) {
+		if (LOGGING) console.group('%c CFramework %c updateLookupConstants', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(args);
+
+		const px_ui_base_unit = 15;
+		const ui_font_size_factor = 1.0;		// nb: do not control from user css! user can zoom to wished size using Cmd + +/-
+
+		F_ZOOM_SVG			= args.fZoom ?? F_ZOOM_SVG;
+		F_LINE_HEIGHT_SVG	= args.fLineheightFromCss ?? F_LINE_HEIGHT_SVG;
+		PX_COL_WIDTH_SVG	= args.pxColWidth ?? PX_COL_WIDTH_SVG;
+		COUNT_LINES_SVG 	= args.linecount ?? COUNT_LINES_SVG;
+
+		PX_LINE_HEIGHT_SVG 	= Math.round(px_ui_base_unit * F_LINE_HEIGHT_SVG * F_ZOOM_SVG);
+		PX_FONT_SIZE_SVG 	= Math.round(px_ui_base_unit * ui_font_size_factor * F_ZOOM_SVG);
+		PX_HEADER_HEIGHT_SVG = Math.round(PX_LINE_HEIGHT_SVG * 2.5);									// jk: make constant or rule for '2.5'
+		if (LOGARGS) console.log({F_ZOOM_SVG, PX_COL_WIDTH_SVG, COUNT_LINES_SVG, F_LINE_HEIGHT_SVG,  PX_LINE_HEIGHT_SVG, PX_FONT_SIZE_SVG, PX_HEADER_HEIGHT_SVG});
+
+		//: 		→ updateCssFromLookupConstants
+		this.updateCssFromLookupConstants();
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹	updateCssFromLookupConstants
+	updateCssFromLookupConstants() {
+		if (LOGGING) console.group('%c CFramework %c updateCssFromLookupConstants', LOG_GREY, LOG_BLUE, LOG_GREEN);
+
+		const root = document.documentElement;
+
+		root.style.setProperty('--px-line-height-svg', PX_LINE_HEIGHT_SVG.toString() + 'px');
+		root.style.setProperty('--px-font-size-svg', PX_FONT_SIZE_SVG.toString() + 'px');
+		root.style.setProperty('--px-header-height-svg', PX_HEADER_HEIGHT_SVG.toString() + 'px');
+		root.style.setProperty('--count-lines-svg', COUNT_LINES_SVG.toString());
+
+		// setup fonts for text measuring
+		const arrProbe = [
+			{name: "section", 	elText: document.getElementById("font-sample-section")},
+			{name: "chapter", 	elText: document.getElementById("font-sample-chapter")},
+			{name: "part", 		elText: document.getElementById("font-sample-part")},
+			{name: "toolbar", 	elText: document.getElementById("font-sample-toolbar")},
+		];
+
+		for (const probe of arrProbe) {
+			const style = window.getComputedStyle(probe.elText);
+			const font = `${style.fontStyle} ${style.fontVariant} ${style.fontWeight} ${style.fontSize} / ${style.lineHeight} ${style.fontFamily}`;
+			FONTS_SIZE_REF[probe.name] = font;
+		}
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 measurePartTextWidth2
+	measurePartTextWidth2 (args) {
+		if (LOGGING) console.log('%c CFramework %c measurePartTextWidth2', LOG_GREY, LOG_BLUE);
+		CTX_FOR_TEXT_MEASURE.font = args.fontForMeasuring;
+		return CTX_FOR_TEXT_MEASURE.measureText(args.text).width;
+	},
+
+	//:::	🔹 onKeydown
+	onKeydown: async (e) => {
+		if (LOGGING) console.group('%c CFramework %c onKeydown %c [callback]', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(e);
+
+		const isMac = navigator.platform.toUpperCase().includes('MAC');
+		const isMetaKey = isMac ? e.metaKey : e.ctrlKey;
+		const isAltKey = e.altKey;
+		const isShiftKey = e.shiftKey;
+		const isCtrlKey = e.ctrlKey;
+		const arrNumberKey = ['Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9'];
+
+		//::		🔻 Escape
+		if (CModel.appstate.isPopupOpen && e.key === 'Escape') {
+
+			//:			→ App: dispatch:			popup.settings.close
+			App.dispatch({type: 'popup.settings.close'});
+		}
+
+		//::		🔻 Cmd + Shift + E
+		else if (e.key.toLowerCase() === 'e' && isMetaKey && isShiftKey) {
+			if (e.preventDefault) e.preventDefault();
+
+			const arrSidebarPosition = ['sidebar-layout-left', 'sidebar-layout-right', 'sidebar-layout-top', 'sidebar-layout-bottom'];
+			const idxSidebarPosition = arrSidebarPosition.indexOf(CModel.appstate.idSidebarPosition);
+			const idxSidebarPositionNew = (idxSidebarPosition + 1) % 4;
+			const idSidebarLayoutNew = arrSidebarPosition[idxSidebarPositionNew];
+
+			//:			→ App: dispatch:			framework.sidebar.layout.set (cycle thru 4 options)
+			App.dispatch({type: 'framework.sidebar.layout.set', idSidebarLayout: idSidebarLayoutNew});
+		}
+
+		//::		🔻 Cmd + Shift + 1 - 9
+		else if (isMetaKey && isShiftKey && arrNumberKey.includes(e.code)) {		// NB: using e.code instead of e.key
+			if (e.preventDefault) e.preventDefault();
+			const idx = Number(e.code.replace("Digit", "")) - 1;
+			const path = CModel.appstate.arrPathFilePinned[idx];
+
+			if (path)
+				//:			→ App: dispatch:			model.filepath.open (pinned path)
+				App.dispatch({type: 'model.filepath.open', path: path});
+		}
+
+		//::		🔻 Ctrl + Tab, Ctrl + Shift + Tab
+		else if (isCtrlKey && e.key === 'Tab') {
+			if (e.preventDefault) e.preventDefault();
+
+								function getNextPinnedPath(arr, currentPath, direction) {
+									if (!Array.isArray(arr) || arr.length === 0) return null;
+
+									const idx = arr.indexOf(currentPath);
+
+									// If current file is not pinned → choose entry based on direction
+									if (idx === -1) return direction < 0 ? arr[arr.length - 1] : arr[0];
+
+									const len = arr.length;
+									const nextIdx = (idx + direction + len) % len;
+
+									return arr[nextIdx];
+								}
+
+			const pathToOpen = getNextPinnedPath(CModel.appstate.arrPathFilePinned, CModel.appstate.pathFileOpen, isShiftKey ? -1 : 1);
+
+			if (pathToOpen)
+				//:			→ App: dispatch:			model.filepath.open (next/prev tabbed pinned path)
+				App.dispatch({type: 'model.filepath.open', path: pathToOpen, caller: 'onKeydown: Ctrl+Tab, Ctrl+Shift+Tab'});
+		}
+
+		//::		🔻 Cmd + '+', Cmd + '-', Cmd + 0
+		else if ((isMetaKey || isAltKey) && (e.key === '+' || e.key === '-' || e.key === '_' || e.key === '=' || e.key === '0' || e.key === '±' || e.key === '–' || e.code === 'NumpadAdd' || e.code === 'NumpadSubtract' || e.code === 'Numpad0')) {
+			if (e.preventDefault) e.preventDefault();
+
+			const typeZoom = (isMetaKey && isAltKey) ? ZOOM_LINECOUNT : isAltKey ? ZOOM_HORIZONTAL : ZOOM_ALL;
+			const isReset = (e.key === '0' || e.code === 'Numpad0');
+			const isIn = (e.key === '+' || e.key === '=' || e.key === '±' || e.code === 'NumpadAdd');
+			const isOut = !(isReset || isIn);
+
+			//:			→ App: dispatch:			chart.zoom ('all', 'width', 'lines')
+			App.dispatch({type: 'chart.zoom', typeZoom, isIn, isOut, isReset});
+		}
+
+		//::		🔻 Cmd/Alt + 1 - 9
+		else if ((isMetaKey || isAltKey) && !e.shiftKey && arrNumberKey.includes(e.code)) {		// NB: using e.code instead of e.key
+			if (e.preventDefault) e.preventDefault();
+
+			const idxTagblock = arrNumberKey.indexOf(e.code);
+			const tagblock = CModel.docdata.arrTagblock[idxTagblock] || null;
+
+			if (tagblock)
+				//:			→ App: dispatch:			model.tagblock.active.set
+				App.dispatch({type: 'model.tagblock.active.set', tagblock: tagblock, isActive: tagblock.isActive, isAltKey: isAltKey});
+		}
+
+		//::		🔻 Cmd + ArrowLeft/ArrowRight
+		else if (CModel.appstate.isPopupOpen && isMetaKey && ['ArrowLeft', 'ArrowRight'].includes(e.key)) {
+			if (e.preventDefault) e.preventDefault();
+
+			//:			→ App: dispatch:			popup.tab.select ('files', 'ui', 'css')
+			if (e.key === 'ArrowLeft' && CModel.appstate.idTab === 'ui')
+				App.dispatch({type: 'popup.tab.select', idTab: 'files'});
+
+			else if ((e.key === 'ArrowRight' && CModel.appstate.idTab === 'files') || (e.key === 'ArrowLeft' && CModel.appstate.idTab === 'css'))
+				App.dispatch({type: 'popup.tab.select', idTab: 'ui'});
+			
+			else if (e.key === 'ArrowRight' && CModel.appstate.idTab === 'ui')
+				App.dispatch({type: 'popup.tab.select', idTab: 'css'});
+		}
+
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 onWindowResize
+	onWindowResize: (e) => {
+		if (LOGGING) console.group('%c CFramework %c onWindowResize %c [callback]', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(e);
+
+		//: 		→ App: dispatch				chart.render
+		App.dispatch({type: 'chart.render', typeSvgUpdate: SVG_UPDATE_RESIZE_ONLY});
+
+		if (LOGGING) console.groupEnd();
+	},
+
+};
+
+
+//:::
+//:::📙 const CChart
+const CChart = {
+	//-?- id: 'chart',
+	elParent: null,
+	pxHeightSvgContainer: 0,
+	pxWidthViewbox: 0,
+	pxHeightViewbox: 0,
+	idxView: VIEWA,
+
+	//:::  📗 Templates
+	Templates: {
+		
+		//::		☐ Stage(docdata)
+		Stage(docdata) {
+			if (LOGGING) console.log('%c CChart %c Template: %c Stage %c (docdata)', LOG_GREY, LOG_RED, LOG_BLUE+LOG_BOLD, LOG_GREEN);
+			if (LOGARGS) console.log(docdata);
+
+			return svg`
+		<svg id="stage" viewBox=${`0 0 ${CChart.pxWidthViewbox} ${CChart.pxHeightViewbox}`} width=${CChart.pxWidthViewbox} height=${CChart.pxHeightViewbox} aria-label="Novel arcs" role="img">
+			<g class="header">
+				${CChart.Templates.Header(docdata.arrSection, docdata.arrChapter)}
+			</g>
+			<g class="chapters">
+				${docdata.arrChapter.map(CChart.Templates.Chapter)}
+			</g>
+			<g class="tagblocks">
+				${docdata.arrTagblock.map(CChart.Templates.Tagblock)}
+			</g>
+		</svg>`;
+		},
+
+		//::		☐ Header(arrSection, arrChapter)
+		//:			→ @click: this.onClick
+		Header(arrSection, arrChapter) {
+			if (LOGGING) console.log('%c CChart %c Template: %c Header %c (arrSection, arrChapter)', LOG_GREY, LOG_RED, LOG_BLUE+LOG_BOLD, LOG_GREEN);
+			if (LOGARGS) console.log(arrSection, arrChapter);
+
+			return [
+				...arrSection.map(function(section, idx) {
+					const ellipsis = '…';
+					const pxX = PX_MARGIN_LEFT_W + (PX_COL_WIDTH_SVG * section.rangeChapters[0]);
+					const countChapters = (section.rangeChapters[1] - section.rangeChapters[0]) + 1;
+					const pxWidth = PX_COL_WIDTH_SVG * countChapters;
+					const arrCaptionSplit = CChart.splitString(section.caption, pxWidth - (PX_PADDING_NORMAL*2), FONTS_SIZE_REF.section);
+					const strCaption = arrCaptionSplit[0] + (arrCaptionSplit.length > 1 ? ellipsis : '');
+
+					return svg`	<rect class="header__rect header__rect--section" x=${pxX} width=${pxWidth} @click=${e => CChart.onClick({src: 'section', e, idxTextareaLine: section.idxTextareaLine})} />
+								<text class="header__text header__text--section" x=${pxX}>${strCaption}</text>`;
+				}),
+				
+				...arrChapter.map((chapter, idx) => {
+					const ellipsis = '…';
+					const pxX = PX_MARGIN_LEFT_W + (PX_COL_WIDTH_SVG * idx);
+					const arrCaptionSplit = CChart.splitString(chapter.caption, PX_COL_WIDTH_SVG - (PX_PADDING_NORMAL*1), FONTS_SIZE_REF.chapter);
+					const strCaption = arrCaptionSplit[0] + (arrCaptionSplit.length > 1 ? ellipsis : '');
+
+					return svg` <rect class="header__rect header__rect--chapter" x=${pxX} width=${PX_COL_WIDTH_SVG}  @click=${e => CChart.onClick({src: 'chapter', e, idxTextareaLine: chapter.idxTextareaLine})} />
+								<text class="header__text header__text--chapter" x=${pxX}>${strCaption}</text>`;
+				})
+			];
+		},
+
+		//::		☐ Chapter(chapter, idx)
+		Chapter(chapter, idx) {
+			if (LOGGING) console.log('%c CChart %c Template: %c Chapter %c (chapter, idx)', LOG_GREY, LOG_RED, LOG_BLUE+LOG_BOLD, LOG_GREEN);
+			if (LOGARGS) console.log(chapter, idx);
+			const strClasses = 'chapter__rect ' + ((chapter.idxSection % 2) ? 'chapter__rect--section-even' : 'chapter__rect--section-odd');
+			const pxX = PX_MARGIN_LEFT_W + (PX_COL_WIDTH_SVG * idx);
+
+			return svg`<rect class=${strClasses} x=${pxX} y=${PX_HEADER_HEIGHT_SVG} width=${PX_COL_WIDTH_SVG} height=${CChart.pxHeightViewbox - PX_HEADER_HEIGHT_SVG} @click=${e => CChart.onClick({src: 'chapter', e, idxTextareaLine: chapter.idxTextareaLine})} />`;
+		},
+
+		//::		☐ Tagblock(tagblock, idx)
+		//:			→ @click: this: onClick
+		Tagblock(tagblock, idx) { 
+			if (LOGGING) console.log('%c CChart %c Template: %c Tagblock %c (tagblock, idx)', LOG_GREY, LOG_RED, LOG_BLUE+LOG_BOLD, LOG_GREEN);
+			if (LOGARGS) console.log(tagblock, idx);
+			const strClasses = ['tagblock', tagblock.id].join(' ');
+			const pxWidthTagblock = CChart.pxWidthViewbox - PX_MARGIN_LEFT_W - PX_MARGIN_RIGHT_W;
+			const fBgRectScaleY = tagblock.countRows;		// 1.33 +++++
+			const pxYa = PX_HEADER_HEIGHT_SVG + 'px';
+
+			return svg`
+		<g class=${strClasses} style=${`--yr: 0px; --ya:${pxYa}; --count-lines:${tagblock.countRows}`} data-id=${tagblock.id} @click=${e => CChart.onClick({src: 'tagblock', e, tagblock})}>
+			<rect class="tagblock__bg-rect" x=${PX_MARGIN_LEFT_W} y="0" width=${pxWidthTagblock} rx=${PX_PADDING_SMALL} />
+
+			<g class="tagblock__parts">
+				${tagblock.arrPart.map(part => CChart.Templates.Tagblock_Part(part, tagblock))}
+			</g>
+
+			${tagblock.graphtags
+				? svg`
+					<g class="tagblock-graphs">
+						${Object.entries(tagblock.graphtags).map(([keyMeta, arrValueMeta]) => CChart.Templates.Graphtag(tagblock, keyMeta, arrValueMeta))}
+					</g>
+				`
+				: null}
+		</g>`;
+		},
+
+		//::		☐ Tagblock_Part(part, tagblock)
+		//:			→ @click: this.onClick
+		Tagblock_Part(part, tagblock) {
+			if (LOGGING) console.log('%c CChart %c Template: %c Tagblock_Part %c (part, tagblock)', LOG_GREY, LOG_RED, LOG_BLUE+LOG_BOLD, LOG_GREEN);
+			if (LOGARGS) console.log(part, tagblock);
+			const pxWidthRect = PX_COL_WIDTH_SVG - (PX_PADDING_SMALL * 2);
+			const pxX = PX_MARGIN_LEFT_W + (PX_COL_WIDTH_SVG * part.idxChapter);
+			const pxYa = (((PX_LINE_HEIGHT_SVG * COUNT_LINES_SVG) + PX_PADDING_NORMAL) * part.idxOrderInChapter) + 5;
+			const pxYb = (PX_LINE_HEIGHT_SVG * part.idxRow) + 5;		 1.33  
+			const symbolString = part.metadata?.code;
+			const show = part.metadata?.show ?? tagblock.metadata?.show ?? 'normal';
+			const baseStyle = `--x:${pxX}px; --ya:${pxYa}px; --yb:${pxYb}px; `;
+			const extraStyle = CChart.getStyleFromMetadata(part.metadata);
+			const strClasses = ['tagblock__part', 'tb-part', show === 'normal' ? 'tb-part--normal' : 'tb-part--special'].join(' ');
+
+			let arrTextlines = [];
+
+			if (show === 'normal') {
+				arrTextlines = CChart.splitString(part.caption, pxWidthRect - PX_PADDING_SMALL, FONTS_SIZE_REF.part); 
+			}
+
+			else {
+				const definition = CModel.docdata.definitions?.[show];
+				const strLine0 = `${show} (${definition ? definition.unit : '?'})`;
+				const strLine1 = part.metadata?.[show] ?? '—';
+
+				arrTextlines = [strLine0, strLine1];
+			}
+
+			return svg`
+		<g class=${strClasses} style=${baseStyle + extraStyle}  data-idxline=${'x' + part.idxTextareaLine} @click=${e => CChart.onClick({src: 'part', e, idxTextareaLine: part.idxTextareaLine})} >
+			<rect class="tb-part__rect" x=${PX_PADDING_SMALL} y="0" width=${pxWidthRect} />
+			<text class="tb-part__text tb-part__text--chart-viewa">
+				${arrTextlines.map((textline, idx) => svg`
+					<tspan class="${'line' + (idx+1)}" x=${PX_PADDING_SMALL * 2} dy=${idx === 0 ? PX_LINE_HEIGHT_SVG * 0.5 : PX_LINE_HEIGHT_SVG}>${textline}</tspan>
+				`)}
+			</text>
+			<text class="tb-part__text tb-part__text--chart-viewb" x=${PX_PADDING_NORMAL} y=${PX_LINE_HEIGHT_SVG * 0.5}>${part.caption}</text> 
+
+			${symbolString ? svg`<text class="tb-part__symbol" style=${`--x:${pxWidthRect + PX_PADDING_NORMAL}px; --y:${PX_LINE_HEIGHT_SVG * COUNT_LINES_SVG}px;`} x="0" y="0">${symbolString}</text>` : ''}
+		</g>`;
+		},
+
+		//::		☐ Graphtag(tagblock, keyMeta, arrValueMeta) 😃
+		//:			→ @click: this.onClick
+		Graphtag(tagblock, keyMeta, arrValueMeta) {
+			if (LOGGING) console.log('%c CChart %c Template: %c Graphtag %c (tagblock, keyMeta, arrValueMeta)', LOG_GREY, LOG_RED, LOG_BLUE+LOG_BOLD, LOG_GREEN);
+			if (LOGARGS) console.log(tagblock, keyMeta, arrValueMeta);
+			const definition = CModel.docdata.definitions[keyMeta] ?? {unit: '', min: 0, max: 100 };
+			const unit = definition.unit ?? '?';
+
+			return svg`
+			<g class=${`graph ${tagblock.id} ${keyMeta}`}>
+				<polyline
+					class="tagblock-polyline"
+					fill="none"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				></polyline>
+
+				${arrValueMeta.map(graphvalue => svg`
+					<circle
+						class="tagblock-circle"
+						r="7.5"
+						stroke-width="2"
+						@click=${e => CChart.onClick({src: 'graph', e, idxTextareaLine: graphvalue.idxTextareaLine})}
+						data-idxline=${'x' + graphvalue.idxTextareaLine}
+					>
+					</circle>
+					<text 
+						class="tagblock-circle-text"
+						data-idxline=${'x' + graphvalue.idxTextareaLine}
+					>${`${tagblock.id}: ${keyMeta} (${unit}): ${graphvalue.value}`}</text>
+				`)}
+			</g>`;
+		},
+	},
+
+	//:::	🔹 init()
+	init() {
+		if (LOGGING) console.group('%c CChart %c init', LOG_GREY, LOG_RED);
+
+		this.elParent = document.querySelector('#workspace-main');	
+
+		this.elParent.addEventListener('pointerover', (e) => {CChart.onHover({e, isOn: true});});
+		this.elParent.addEventListener('pointerout',  (e) => {CChart.onHover({e, isOn: false});});
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 renderSvg(args)
+	renderSvg(args) {				// typeSvgUpdate can be SVG_UPDATE_FULL_RENDER or SVG_UPDATE_RESIZE_ONLY
+		if (LOGGING) console.group('%c CChart %c renderSvg', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(args);
+
+		CChart.idxView = args.idxView;
+
+		//: 		→ this: calculateRequiredViewboxSize
+		CChart.calculateRequiredViewboxSize(args.docdata);
+
+		if (args.typeSvgUpdate === SVG_UPDATE_FULL_RENDER) {
+			//: 		→ [uhtml].render
+			render(CChart.elParent, CChart.Templates.Stage(args.docdata));
+		}
+
+		else if (args.typeSvgUpdate === SVG_UPDATE_RESIZE_ONLY) {
+			const elSvg = document.getElementById('stage');
+			
+			elSvg.setAttribute('viewBox', `0 0 ${CChart.pxWidthViewbox} ${CChart.pxHeightViewbox}`);
+			elSvg.setAttribute('width', String(CChart.pxWidthViewbox));
+			elSvg.setAttribute('height', String(CChart.pxHeightViewbox));
+
+			// set height of chapter rects
+			const arrElChapterRect = elSvg.querySelectorAll('.chapter__rect');
+			for (const elChapterRect of arrElChapterRect) {
+				elChapterRect.setAttribute('height', String(CChart.pxHeightViewbox - PX_HEADER_HEIGHT_SVG));
+			}
+		}
+
+		//: 		→ this: reflowAllTagblocks
+		CChart.reflowAllTagblocks(args.docdata);
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹	calculateRequiredViewboxSize()
+	calculateRequiredViewboxSize(docdata) {
+		if (LOGGING) console.group('%c CChart %c calculateRequiredViewboxSize', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(docdata);
+
+		let pxHeightRequired = 0;
+
+		if (CChart.idxView === VIEWA) {
+			const idxOrderInChapterMax = Math.max( ...docdata.arrTagblock.flatMap(tb => tb.arrPart.map(p => p.idxOrderInChapter)) );
+			const pxPartHeight = PX_LINE_HEIGHT_SVG * COUNT_LINES_SVG;
+
+			pxHeightRequired = PX_HEADER_HEIGHT_SVG + PX_GRAPH_VIEWA_H + PX_PADDING_NORMAL + ((pxPartHeight + PX_PADDING_NORMAL) * (idxOrderInChapterMax + 1));		// jk: what if no graphs in txt? then space set off none the less
+		}
+		else if (CChart.idxView === VIEWB) {
+			pxHeightRequired = PX_HEADER_HEIGHT_SVG;
+
+			for (const tagblock of docdata.arrTagblock) {
+				const pxTagblockHeight = (PX_LINE_HEIGHT_SVG * (tagblock.isActive ? tagblock.countRows : 1)) + 10;		// 1.33
+
+				pxHeightRequired += pxTagblockHeight; 
+			}
+		}
+
+		// set ui values
+		CChart.pxHeightSvgContainer = CChart.elParent.clientHeight;
+		CChart.pxWidthViewbox = PX_MARGIN_LEFT_W + PX_MARGIN_RIGHT_W + (PX_COL_WIDTH_SVG * docdata.arrChapter.length);
+		CChart.pxHeightViewbox = Math.max(pxHeightRequired, CChart.pxHeightSvgContainer, PX_VIEVBOX_MIN_H);
+
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹	reflowAllTagblocks(docdata)
+	reflowAllTagblocks(docdata) {
+		if (LOGGING) console.group('%c CChart %c reflowAllTagblocks', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(docdata);
+
+		let pxTagblockTop = PX_HEADER_HEIGHT_SVG;
+
+		const arrElTagblock = CChart.elParent.querySelectorAll('#stage .tagblock');
+
+		for (const [idxTagblock, tagblock] of docdata.arrTagblock.entries()) {
+			const pxYb = pxTagblockTop + 'px';
+			const pxTagblockHeight = (PX_LINE_HEIGHT_SVG * (tagblock.isActive ? tagblock.countRows : 1)) + 10;		// 1.33
+
+			arrElTagblock[idxTagblock].classList.toggle('tagblock--active', tagblock.isActive);
+			arrElTagblock[idxTagblock].classList.toggle('tagblock--inactive', !tagblock.isActive);
+			arrElTagblock[idxTagblock].style.setProperty('--yb', pxYb);
+
+			pxTagblockTop += pxTagblockHeight;
+
+			//:			→ this: updateTagblockGraphs
+			CChart.updateTagblockGraphs(tagblock, docdata.definitions);
+		};
+
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹		updateTagblockGraphs(tagblock)
+	updateTagblockGraphs(tagblock, definitions) {		// jk: maybe make this function 'safer'
+		if (LOGGING) console.group('%c CChart %c updateTagblockGraphs %c (' + tagblock.id + ')', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(tagblock, definitions);
+
+		const elTagblock = CChart.elParent.querySelector(`#stage .tagblock.${tagblock.id}`);
+
+		const elGroupGraphs = elTagblock.querySelector('.tagblock-graphs');
+		if (!elGroupGraphs) {
+			if (LOGGING) console.groupEnd();
+			return;
+		}
+
+		const pxGraphHeight = (CChart.idxView === VIEWA) ? PX_GRAPH_VIEWA_H : (PX_LINE_HEIGHT_SVG * tagblock.countRows);
+
+		Object.entries(tagblock.graphtags).forEach(([keyMeta, arrValueMeta]) => {					// Loop over graph tags: "future", "action", etc.
+		
+			const graphGroup = elGroupGraphs.querySelector(`.graph.${tagblock.id}.${keyMeta}`);		// Find this particular graph group: <g class="graph gitte future">
+			if (!graphGroup) return;
+
+			const polyline = graphGroup.querySelector('.tagblock-polyline');
+			const circles  = graphGroup.querySelectorAll('.tagblock-circle');
+			const circletexts  = graphGroup.querySelectorAll('.tagblock-circle-text');
+			if (!polyline) return;
+
+			// check if definition exists for keyMeta (eg. 'weight') - else use default range 0 - 100
+			const definition = definitions[keyMeta] ?? {unit: '', min: 0, max: 100 };
+
+			// make array of coords
+			const arrCoord = [];
+
+			arrValueMeta.forEach(({ idxChapter, value }) => {
+				const pxX = PX_MARGIN_LEFT_W + (idxChapter * PX_COL_WIDTH_SVG) + (PX_COL_WIDTH_SVG / 2);
+				const pctValue = ((value - definition.min) / (definition.max - definition.min)) * 100;		// calculate percent value inside range definition
+				const pxYBase = pxGraphHeight - (pxGraphHeight * (pctValue / 100));
+
+				let pxY;
+				if (CChart.idxView === VIEWA) {
+					const pxGraphTop = CChart.pxHeightViewbox - (PX_HEADER_HEIGHT_SVG + PX_PADDING_NORMAL + pxGraphHeight);
+					pxY = pxGraphTop + pxYBase;
+				} else {
+					pxY = pxYBase;
+				}
+
+				arrCoord.push({pxX, pxY});
+			});
+
+			polyline.setAttribute('points', arrCoord.map(pt => `${pt.pxX},${pt.pxY}`).join(' '));		// Set polyline points
+			polyline.style.display = '';
+
+			circles.forEach((circle, idx) => {			// Set circle positions
+				const point = arrCoord[idx];
+				circle.setAttribute('cx', point.pxX);
+				circle.setAttribute('cy', point.pxY);
+				circle.style.display = '';
+
+				circletexts[idx].setAttribute('x', point.pxX);	// jk: could be 'safer' here?
+				circletexts[idx].setAttribute('y', point.pxY);
+			});			
+		});
+
+		if (LOGGING) console.groupEnd();
+	},
+
+
+	//:::	🔹 getStyleFromMetadata() 				- better placement?
+	getStyleFromMetadata(obj) { 
+		if (!obj) return "";
+
+		//?if (LOGGING) console.log('%c CChart %c getStyleFromMetadata', LOG_GREY, LOG_BLUE);
+
+		const arrAllowedKey = ['fill', 'text', 'bold', 'fontsize'];
+		
+		return Object.entries(obj)
+			.filter(([, v]) => v !== null && v !== undefined && v !== "")
+			.filter(([k, v]) => arrAllowedKey.includes(k)) 
+			.map(([k, v]) => `--${k}: ${v};`)
+			.join(" ");
+	},
+
+
+	//:::	🔹 splitString (*args*)
+	splitString(text, pxWidthMax, fontForMeasuring) {
+		const VIEWA_MAX_LINES = COUNT_LINES_SVG;
+		const content = (text || '').trim();
+		if (!content) return [''];
+		const tokens = content.split(/\s+/);
+		const lines = [];
+		let index = 0;
+
+		//?if (LOGGING) console.log('%c CChart %c splitString', LOG_GREY, LOG_BLUE);
+
+		// :		(→ ☐ measurePartTextWidth)
+		const measurePartTextWidth = (text) => {
+			CTX_FOR_TEXT_MEASURE.font = fontForMeasuring;
+			return CTX_FOR_TEXT_MEASURE.measureText(text).width;
+		};
+
+		// :		(→ ☐ splitTokenToFit)
+		const splitTokenToFit = (token, pxWidthMax) => {
+			if (!token) return { fit: '', rest: '' };
+			if (pxWidthMax <= 0) return { fit: '', rest: token };
+			let fit = '';
+			for (let i = 0; i < token.length; i++) {
+				const candidate = fit + token[i];
+				if (measurePartTextWidth(candidate) <= pxWidthMax || fit === '') {
+					fit = candidate;
+				} else {
+					break;
+				}
+			}
+			if (!fit) fit = token[0] || '';
+			const rest = token.slice(fit.length);
+			return { fit, rest };
+		};
+
+		// :		(→ ☐ appendEllipsis)
+		const appendEllipsis = (line, pxWidthMax) => {
+			const ellipsis = '…';
+			if (!line) return ellipsis;
+			if (pxWidthMax <= 0) return ellipsis;
+			let trimmed = line.replace(/\s+$/, '');
+			while (trimmed && measurePartTextWidth(trimmed + ellipsis) > pxWidthMax) {
+				trimmed = trimmed.slice(0, -1);
+			}
+			if (!trimmed) return ellipsis;
+			return trimmed + ellipsis;
+		};
+
+		while (index < tokens.length && lines.length < VIEWA_MAX_LINES) {
+			let line = '';
+			while (index < tokens.length) {
+				let token = tokens[index];
+				const candidate = line ? `${line} ${token}` : token;
+				if (measurePartTextWidth(candidate) <= pxWidthMax) {
+					line = candidate;
+					index += 1;
+				} else {
+					if (!line) {
+						const { fit, rest } = splitTokenToFit(token, pxWidthMax);
+						line = fit;
+						if (rest) {
+							tokens[index] = rest;
+						} else {
+							index += 1;
+						}
+					}
+					break;
+				}
+			}
+			if (!line && index < tokens.length) {
+				line = tokens[index];
+				index += 1;
+			}
+			lines.push(line || '');
+		}
+
+		if (index < tokens.length && lines.length) {
+			lines[lines.length - 1] = appendEllipsis(lines[lines.length - 1], pxWidthMax);
+		}
+
+		return lines;
+	},
+
+	//:::	🔹 onHover(args)
+	onHover: (args) => {
+		if (LOGGING && DETAILS) console.group('%c CChart %c onHover %c [callback]', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(args);
+
+		const elPartOrCircle = args.e.target.closest('[data-idxline]');
+		const elTagblock = args.e.target.closest('.tagblock');
+
+		if (elTagblock) {
+			elTagblock.classList.toggle('is-hover', args.isOn);
+			CToolbar.elParent.querySelector('.' + elTagblock.dataset.id).classList.toggle('is-hover', args.isOn);
+
+			if (elPartOrCircle)
+				elTagblock.querySelectorAll(`[data-idxline="${elPartOrCircle.dataset.idxline}"]`).forEach(el => el.classList.toggle('is-hover', args.isOn));
+		}
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 onClick(args)
+	onClick: (args) => {
+		if (LOGGING) console.group('%c CChart %c onClick %c [callback]', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(args);
+
+		const e = args.e;
+		const isMac = navigator.platform.toUpperCase().includes('MAC');
+		const isMetaKey = isMac ? e.metaKey : e.ctrlKey;
+		const isAltKey = e.altKey;
+		const isShiftKey = e.shiftKey;
+		const isCtrlKey = e.ctrlKey;
+
+		switch (args.src) {
+
+			case 'section':
+			case 'chapter':
+			case 'part':
+			case 'graph':
+
+				//: 		→ App: dispatch: 				selectLine
+				if (!isMetaKey && !isAltKey)
+					App.dispatch({type: 'texteditor.line.select', idxLine: args.idxTextareaLine, isSelectWholeTextbloc: isShiftKey});
+				break;
+
+			case 'tagblock':
+
+				//: 		→ App: dispatch:				model.tagblock.active.set
+				if (isMetaKey || isAltKey)
+					App.dispatch({type: 'model.tagblock.active.set', tagblock: args.tagblock, isActive: args.tagblock.isActive, isAltKey: isAltKey});
+				break;
+		}
+		if (LOGGING) console.groupEnd();
+	},
+	
+};
+
+
+//:::
+//:::📙 const CTexteditor
+const CTexteditor = {
+	elParent: null,
+	elTextarea: null,
+	value: '',
+
+	//:::	🔹 init()
+	init() {
+		if (LOGGING) console.group('%c CTexteditor %c init', LOG_GREY, LOG_RED);
+
+		this.elParent = document.querySelector("#sidebar-main");
+		this.value = '';
+
+		const elTextarea = document.createElement('textarea');
+		elTextarea.id = 'texteditorDoc';
+		elTextarea.value = '';
+		elTextarea.className = ['texteditor', 'texteditor-doc'].join(' ');
+		elTextarea.setAttribute('spellcheck', 'false');
+		elTextarea.setAttribute('autocomplete', 'off');
+		elTextarea.setAttribute('autocorrect', 'off');
+		elTextarea.setAttribute('autocapitalize', 'off');
+		elTextarea.setAttribute('wrap', 'off');
+
+		this.onInputDebounced = this.debounce(() => this.onInput(), 400);
+
+		elTextarea.addEventListener('input', this.onInputDebounced);
+		elTextarea.addEventListener('keydown', e => this.onKeydown(e));
+
+		this.elTextarea = elTextarea;
+		this.elParent.appendChild(this.elTextarea);
+
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 onKeydown(e)
+	onKeydown(e) {
+		if (LOGGING) console.group("%c CTexteditor %c event %c onKeydown %c '" + e.key + "'", LOG_GREY, LOG_RED, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(e);
+
+		//:  		☐ getLineStartPos(text, pos)
+		const getLineStartPos = (text, pos) => {
+			let i = pos;
+			while (i > 0 && text[i - 1] !== '\n') i--;
+			return i;
+		};
+
+		//:  		☐ etSelection()
+		const getSelection = () => {
+			const ta = this.elTextarea;
+			return { start: ta.selectionStart, end: ta.selectionEnd };
+		};
+
+		//:  		☐ setSelection(start, end)
+		const setSelection = (start, end) => {
+			const ta = this.elTextarea;
+			ta.selectionStart = start;
+			ta.selectionEnd = end;
+		};
+
+		//::  		☐ getLineEndPos(start, end)
+		const getLineEndPos = (text, pos) => {
+			let i = pos;
+			while (i < text.length && text[i] !== '\n') i++;
+			return i;
+		};
+
+		const ta = this.elTextarea;
+		let { start, end } = getSelection();
+		const value = ta.value;
+
+		if (e.key === 'Tab') {
+			e.preventDefault();
+			const tab = '\t';
+
+			// If selection ends at start of next line, don't include that next line
+			if (end > start && value[end - 1] === '\n') end -= 1;
+
+			const sel = value.slice(start, end);
+			const isMultiLine = sel.includes('\n');
+
+			if (!e.shiftKey) {
+				if (isMultiLine) {
+					const blockStart = getLineStartPos(value, start);
+					const blockEnd   = getLineEndPos(value, end);
+
+					const before = value.slice(0, blockStart);
+					const srcBlock = value.slice(blockStart, blockEnd);
+					const indentedBlock = srcBlock.replace(/^/gm, tab);
+					const after = value.slice(blockEnd);
+
+					ta.value = before + indentedBlock + after;
+					setSelection(blockStart, blockStart + indentedBlock.length);
+				}
+				else {
+					ta.value = value.slice(0, start) + tab + value.slice(end);
+					const caret = start + tab.length;
+					setSelection(caret, caret);
+				}
+			}
+			else {
+				if (isMultiLine) {
+					const blockStart = getLineStartPos(value, start);
+					const blockEnd   = getLineEndPos(value, end);
+
+					const before = value.slice(0, blockStart);
+					const srcBlock = value.slice(blockStart, blockEnd);
+					const outdentedBlock = srcBlock.replace(/^(\t| {1,4})/gm, '');
+					const after = value.slice(blockEnd);
+
+					ta.value = before + outdentedBlock + after;
+					setSelection(blockStart, blockStart + outdentedBlock.length);
+				}
+				else {
+					const lineStartPos = getLineStartPos(value, start);
+					const lineStartText = value.slice(lineStartPos, start);
+					const m = lineStartText.match(/(\t| {1,4})$/);
+					if (m) {
+						const cut = m[0].length;
+						ta.value = value.slice(0, start - cut) + value.slice(end);
+						const caret = start - cut;
+						setSelection(caret, caret);
+					}
+				}
+			}
+
+			this.onInputDebounced();
+		}
+
+		else if (e.key === 'Enter') {
+			e.preventDefault();
+			const lineStart = getLineStartPos(value, start);
+			const currentIndent = (value.slice(lineStart).match(/^[\t ]+/) || [''])[0];
+			const insert = '\n' + currentIndent;
+
+			ta.value = value.slice(0, start) + insert + value.slice(end);
+			const caret = start + insert.length;
+			setSelection(caret, caret);
+
+			this.onInputDebounced();
+		}
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 debounce(fn, ms = 150)
+	debounce (fn, ms = 150) {
+		// NB: Don't LOG here: will not be shown in console
+		let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
+	},
+
+	//:::	🔹 setText(args)
+	setText(args) {		// nb: can be filename or stuff later
+		if (LOGGING) console.group('%c CTexteditor %c setText', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(args);
+
+		this.value = args.txt;
+		this.elTextarea.value = this.value;
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 selectLine(args)
+	selectLine(args) {
+		if (LOGGING) console.group('%c CTexteditor %c selectLine', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(args);
+
+		const ta = this.elTextarea;
+		const text = ta.value;
+		const lines = text.split('\n');
+		const N = lines.length;
+		if (args.idxLine < 0 || args.idxLine >= N) return;
+
+		// Count leading tabs
+		function leadingTabs(s) {
+			let i = 0;
+			while (i < s.length && s[i] === '\t') i++;
+			return i;
+		}
+
+		// --- Determine start and end line of selection ---
+		let startLine = args.idxLine;
+		let endLine = args.idxLine;
+
+		if (args.isSelectWholeTextbloc) {
+			const baseTabs = leadingTabs(lines[args.idxLine]);
+
+			// Select all following deeper-indented lines
+			for (let i = args.idxLine + 1; i < N; i++) {
+				if (leadingTabs(lines[i]) > baseTabs) {
+					endLine = i;
+				} else {
+					break;
+				}
+			}
+		}
+
+		// --- Convert line numbers into text offsets ---
+		let start = 0;
+		for (let i = 0; i < startLine; i++)
+			start += lines[i].length + 1; // +1 for '\n'
+
+		let end = 0;
+		for (let i = 0; i < endLine; i++)
+			end += lines[i].length + 1;
+
+		end += lines[endLine].length;
+
+		// Include trailing newline if not last line
+		if (endLine < N - 1) end += 1;
+
+		// --- Apply selection ---
+		ta.focus();
+		ta.setSelectionRange(start, end);
+
+
+		// scroll textarea so line is centered (vertically)
+		const strTextareaheight = getComputedStyle(document.querySelector('#texteditorDoc')).getPropertyValue('height');
+		const strLineheight = getComputedStyle(document.querySelector('#texteditorDoc')).getPropertyValue('line-height');
+		const pxTextareaheight = parseInt(strTextareaheight);
+		const pxLineheight = parseInt(strLineheight);
+
+		ta.scrollTop = Math.max(0, (pxLineheight * args.idxLine) - (pxTextareaheight / 2));
+
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 onInput()
+	async onInput () {
+		if (LOGGING) console.group('%c CTexteditor %c onInput', LOG_GREY, LOG_BLUE, LOG_GREEN);
+
+		this.value = this.elTextarea.value;
+
+		//:		→ App: dispatch				model.build.and.augment
+		App.dispatch({type: 'model.build.and.augment', text: this.value});
+
+		//:		→ App: dispatch				chart.render
+		App.dispatch({type: 'chart.render', typeSvgUpdate: SVG_UPDATE_FULL_RENDER});
+
+		//:		→ App: dispatch				toolbar.buttons.recreate
+		App.dispatch({type: 'toolbar.buttons.recreate'});
+
+		//:		→ App: dispatch				wrapper.save.file
+		App.dispatch({type: 'wrapper.save.file', path: CModel.appstate.pathFileOpen, text: this.value});
+		if (LOGGING) console.groupEnd();
+	},
+};
+
+
+//:::
+//:::📙 const CToolbar
+const CToolbar = {
+	elParent: null,
+	elToolbar: null,
+	draginfo: null,          // { el, startX, startY, pxOffset, wasDragging, pointerId }
+	DRAG_THRESHOLD: 6,	
+
+	//:::	🔹 init()
+	init() {
+		if (LOGGING) console.group('%c CToolbar %c init', LOG_GREY, LOG_RED);
+
+		this.elParent = document.querySelector("#workspace-panel");
+
+		const elDiv = document.createElement('div');
+		elDiv.className = ['toolbar', 'toolbarTags'].join(' ');
+
+		elDiv.addEventListener('pointerover', (e) => {this.onHover.bind(this)(e, true);});
+		elDiv.addEventListener('pointerout',  (e) => {this.onHover.bind(this)(e, false);});
+		elDiv.addEventListener('pointerdown', this.onPointerdown.bind(this), { passive: false });	// e.preventDefault allowed only if passive:false
+
+		this.elToolbar = elDiv;
+
+		//?if (args.arrButtons !== undefined)
+		//?	this.createButtons(args.arrButtons);
+
+		this.elParent.appendChild(this.elToolbar);
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 onPointerdown(e)
+	onPointerdown(e) {
+		if (LOGGING) console.group('%c CToolbar %c onPointerdown', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(e);
+		console.log(this);
+
+		const elBtn = e.target.closest('button.button-draggable');
+		if (elBtn) {
+
+			const pxX = Number(elBtn.dataset.pxx) || 0;		// record intent, but DO NOT start dragging yet
+
+			CToolbar.draginfo = {
+				elBtn: elBtn,
+				pointerId: e.pointerId,
+				startX: e.clientX,
+				startY: e.clientY,
+				pxOffset: e.clientX - pxX,
+				wasDragging: false,
+			};
+
+			window.addEventListener('pointermove', CToolbar.onPointermove.bind(this), { passive: false });
+			window.addEventListener('pointerup', CToolbar.onPointerup.bind(this), { passive: false });
+			window.addEventListener('pointercancel', CToolbar.onPointerup.bind(this), { passive: false });
+		}
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 onPointermove(e)
+	onPointermove(e) {
+		if (!CToolbar.draginfo) return;
+		if (e.pointerId !== CToolbar.draginfo.pointerId) return;
+
+		const dx = e.clientX - CToolbar.draginfo.startX;
+		const dy = e.clientY - CToolbar.draginfo.startY;
+
+		// Only start "real drag" after threshold
+		if (!CToolbar.draginfo.wasDragging) {
+			if (Math.hypot(dx, dy) < this.DRAG_THRESHOLD) return;
+
+			CToolbar.draginfo.wasDragging = true;
+
+			CToolbar.draginfo.elBtn.style.setProperty('z-index', 10);
+
+			// Optional but helps with losing pointer outside the window
+			CToolbar.draginfo.elBtn.setPointerCapture?.(e.pointerId);
+		}
+
+		if (LOGGING) console.group('%c CToolbar %c onPointermove', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(e);
+
+		// Now we are dragging -> prevent browser from turning this into selection/scroll
+		e.preventDefault();
+
+		// move the selected button
+		const pxButtonDragNewX = e.clientX - CToolbar.draginfo.pxOffset;
+		CToolbar.draginfo.elBtn.style.setProperty('--pxX', pxButtonDragNewX + 'px');
+
+		// push relevant other buttons to give space
+		const pxButtonDragWidth = CToolbar.draginfo.elBtn.offsetWidth; //? + PX_PADDING_SMALL;
+		const pxButtonDragOrigX = Number(CToolbar.draginfo.elBtn.dataset.pxx) || 0;
+		const arrElButtons = this.elToolbar.querySelectorAll('button.button-draggable');
+
+		for (const elButton of arrElButtons) {
+			const pxButtonOrigX = Number(elButton.dataset.pxx) || 0;
+			const doPushRight = (pxButtonOrigX > pxButtonDragNewX - 30) && (pxButtonOrigX < pxButtonDragOrigX);
+			const doPushLeft  = (pxButtonOrigX < pxButtonDragNewX + 30) && (pxButtonOrigX > pxButtonDragOrigX);
+			const pxTemp = pxButtonOrigX + (doPushRight ? pxButtonDragWidth : doPushLeft ? -pxButtonDragWidth : 0);
+
+			if (elButton !== CToolbar.draginfo.elBtn)
+				elButton.style.setProperty('--pxX', pxTemp + 'px');
+		}
+
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 onPointerup(e)
+	onPointerup(e) {
+		if (!CToolbar.draginfo) return;
+		if (LOGGING) console.group('%c CToolbar %c onPointerup', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(e);
+
+		window.removeEventListener('pointermove', this.onPointermove);
+		window.removeEventListener('pointerup', this.onPointerup);
+		window.removeEventListener('pointercancel', this.onPointerup);
+
+		const wasDragging = CToolbar.draginfo.wasDragging;
+
+		if (wasDragging && CToolbar.draginfo.elBtn) {
+			// suppress any "click-after-drag" weirdness
+			e.preventDefault();
+
+			CToolbar.draginfo.elBtn.style.removeProperty('z-index');
+			CToolbar.draginfo.elBtn.releasePointerCapture?.(CToolbar.draginfo.pointerId);
+			CToolbar.draginfo.elBtn = null;
+
+			// return array of dataset in new order, to let app react to this
+			const arrDataset = Array.from(this.elToolbar.querySelectorAll('button.button-draggable'))
+				.map(elBtn => ({
+					id: elBtn.dataset.id,
+					x: parseFloat(getComputedStyle(elBtn).getPropertyValue('--pxX')) || 0
+				}))
+				.sort((a, b) => a.x - b.x);
+
+				this.onDragend(arrDataset);
+		}
+
+		// clear draginfo either way
+		CToolbar.draginfo = null;
+
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 createButtons(arrButtons)
+	createButtons(arrButtons) {
+		if (LOGGING) console.group('%c CToolbar %c createButtons', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(arrButtons);
+
+		let pxX = 0;
+
+		const arrElButtonNew = arrButtons.map(btn => {
+			const pxTextWidth = parseInt(CFramework.measurePartTextWidth2({fontForMeasuring: FONTS_SIZE_REF.toolbar, text: btn.label + '    '}));
+			const elButton = document.createElement('button');
+
+			elButton.textContent = btn.label;
+			elButton.className = ['toolbar__button', ...btn.classes, (btn.draggable ? 'button-draggable' : '')].join(' ').trim();
+			elButton.style.setProperty('--pxX', pxX + 'px');
+			elButton.style.setProperty('width', pxTextWidth + 'px');
+			elButton.dataset['pxx'] = pxX;
+			if (btn.tooltip) elButton.title = btn.tooltip;
+			if (btn.dataset) Object.entries(btn.dataset).forEach(([key, value]) => {elButton.dataset[key] = value;});
+			if (btn.onClick) elButton.addEventListener('click', btn.onClick);
+
+			pxX += pxTextWidth;
+
+			return elButton;
+		});
+
+		this.elToolbar.replaceChildren(...arrElButtonNew);
+		this.elToolbar.style.width = pxX + 'px';
+
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 onHover()
+	onHover(e, isOn) {
+		if (LOGGING) console.group('%c CToolbar %c onHover %c [callback]', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(e);
+
+		const elButton = e.target.closest('.toolbar__button');
+
+		if (elButton) {
+			const cssSelect = '.' + elButton.dataset.id;
+			document.querySelectorAll(cssSelect).forEach(el => el.classList.toggle('is-hover', isOn));
+		}
+
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 onDragend
+	onDragend(arrDataset) {
+		if (LOGGING) console.group('%c CToolbar %c onDragend %c [callback]', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(arrDataset);
+
+		const arrTagOrderNew = arrDataset.map(dataset => dataset.id);
+
+		App.dispatch({type: 'model.tagblock.reorder', arrTagOrderNew: arrTagOrderNew});
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 recreateButtons()
+	recreateButtons() {
+		if (LOGGING) console.group('%c CToolbar %c recreateButtons %c', LOG_GREY, LOG_BLUE, LOG_GREEN);
+
+		const arrButtons = CModel.docdata.arrTagblock.map((tagblock, idx) => ({
+			label: (idx+1).toString() + ': #' + tagblock.id,
+			tooltip: `Set active/passive.\nHold Alt to solo / restore all.\nDrag to change order in Tags chart.\n${idx < 9 ? ('(⌘ ' + String(idx+1) + ' -> Activate / deactivate)\n(⌥ ' + String(idx+1) + ' -> Solo / restore all)') : '(No keyboard shortcut)'}`,
+			classes: [tagblock.id, (tagblock.isActive ? 'button--active' : 'button--inactive')],
+			draggable: true,
+			dataset: {id: tagblock.id},		// can have several data fields
+			//::		 ☐ onClick
+			//:			→ App: dispatch:			model.tagblock.active.set
+			onClick: (e) => {e.stopPropagation(); App.dispatch({type: 'model.tagblock.active.set', tagblock: tagblock, isActive: tagblock.isActive, isAltKey: e.altKey})}
+		}));
+		
+		this.createButtons(arrButtons);
+
+		if (LOGGING) console.groupEnd();
+	},
+};
+
+
+//:::
+//:::📙 const CPopup
+const CPopup = {
+	elTextarea: null,
+	draginfo: null,
+
+	//:::	📗 Templates
+	Templates: {
+
+		//::		☐ Popup()
+		//:			→ @click: this.onClick
+		Popup(appstate) {
+			if (LOGGING) console.log('%c CPopup %c Template: %c Popup %c (appstate)', LOG_GREY, LOG_RED, LOG_BLUE+LOG_BOLD, LOG_GREEN);
+			return html`
+				<div class="popup-overlay" id="popup-overlay" @pointerdown=${e => {if (e.target === e.currentTarget) CPopup.onClick({src: '@pointerdown: overlay', e})}}>
+					<div class="popup" role="popup">
+						<div class="popup__panel">
+							<div class="popup__title">Settings</div>
+
+							<div class="popup__tablist" role="tablist">
+								<button class=${['tablist__btn', appstate.idTab === 'files' ? 'tablist__btn-selected' : ''].join(' ')} role="tab"
+									@click=${e => CPopup.onClick({src: '@click: btn.tab.select', e, idTab: 'files'})}
+									title="Select tab: Files\n(⌘ ←)"
+								>Files</button>
+
+								<button class=${['tablist__btn', appstate.idTab === 'ui' ? 'tablist__btn-selected' : ''].join(' ')} role="tab"
+									@click=${e => CPopup.onClick({src: '@click: btn.tab.select', e, idTab: 'ui'})}
+									title="Select tab: UI\n(⌘ →)"
+								>UI</button>
+
+								<button class=${['tablist__btn', appstate.idTab === 'css' ? 'tablist__btn-selected' : ''].join(' ')} role="tab"
+									@click=${e => CPopup.onClick({src: '@click: btn.tab.select', e, idTab: 'css'})}
+									title="Select tab: CSS\n(⌘ →)"
+								>CSS</button>
+							</div>
+							
+							<button class="close__btn" @click=${e => {e.stopPropagation(); CPopup.onClick({src: '@click: btn.close.popup', e});}} title="Close\n(Esc)">Esc</button>
+						</div>
+						
+						<div class="popup__main">
+							<div class="main__content">
+								${appstate.idTab === "files" ? CPopup.Templates.TabFiles(appstate) : appstate.idTab === "ui" ? CPopup.Templates.TabUI(appstate) : CPopup.Templates.TabCSS() }
+							</div>
+						</div>
+					</div>
+				</div>
+			`;
+		},
+
+		//::		☐ TabFiles(appstate)
+		//:			→ @click: this.onClick
+		TabFiles(appstate) {
+			if (LOGGING) console.log('%c CPopup %c Template: %c TabFiles %c ()', LOG_GREY, LOG_RED, LOG_BLUE+LOG_BOLD, LOG_GREEN);
+			return html`
+				<div class="content__actions">
+					<button class="btn" @click=${e => CPopup.onClick({src: '@click: btn.open.file'})} title="Open file\n(⌘ O)">
+						<span class="kbd">⌘ O</span>
+						<span class="btn__label">Open file…</span>
+					</button>
+
+					<button class="btn" @click=${e => CPopup.onClick({src: '@click: btn.pin.current.file'})} title="Pin current file\n(⌘ D)">
+						<span class="kbd">⌘ D</span>
+						<span class="btn__label">Pin current file</span>
+					</button>
+				</div>
+
+				<div class="content__section">
+					<div class="section__head">
+						<span>Pinned files</span>
+						<span class="hint">Drag to reorder · Click to load · Unpin to remove</span>
+					</div>
+					<div class="section__body draggable-list">
+						${appstate.arrPathFilePinned.map((path, idx) => CPopup.Templates.BodyItem_PinnedFile(appstate, path, idx))}
+					</div>
+				</div>
+			`;
+		},
+		
+		//::		☐ TabUI()
+		//:			→ @click: this.onClick
+		TabUI(appstate) {
+			if (LOGGING) console.log('%c CPopup %c Template: %c TabUI %c ()', LOG_GREY, LOG_RED, LOG_BLUE+LOG_BOLD, LOG_GREEN);
+			return html`
+				<div class="content__section">
+					<div class="section__head">
+						<span>Mode</span>
+						<span class="hint">Select chart view and color theme</span>
+					</div>
+					<div class="section__body">
+
+						<div class="body__itemP">
+							<div class="item__header">
+								<span class="header__title">Chart view</span>
+								<span class="hint"></span>
+							</div>
+							<div class="pillbar">
+								<button class=${['pill', appstate.idxView === VIEWA ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.view.chart', idxView: VIEWA})} title="View chart as Structure\n(F1)">
+									<span class="kbd">F1</span>
+									<span class="btn__label">Structure</span>
+								</button>
+								<button class=${['pill', appstate.idxView === VIEWB ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.view.chart', idxView: VIEWB})} title="View chart grouped by Tags\n(F2)">
+									<span class="kbd">F2</span>
+									<span class="btn__label">Tags</span>
+								</button>
+							</div>
+						</div>
+
+						<div class="body__itemP">
+							<div class="item__header">
+								<span class="header__title">Color theme</span>
+								<span class="hint"></span>
+							</div>
+							<div class="pillbar">
+								<button class=${['pill', appstate.idTheme === 'system' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.theme.set', idTheme: 'system'})} title="Select color theme System: Colors follows system theme\n(⌘ ⇧ F1)">
+									<span class="kbd">⌘ ⇧ F1</span>
+									<span class="btn__label">System</span>
+								</button>
+								<button class=${['pill', appstate.idTheme === 'light' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.theme.set', idTheme: 'light'})} title="Select color theme Light\n(⌘ ⇧ F2)">
+									<span class="kbd">⌘ ⇧ F2</span>
+									<span class="btn__label">Light</span>
+								</button>
+								<button class=${['pill', appstate.idTheme === 'dark' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.theme.set', idTheme: 'dark'})} title="Select color theme Dark\n(⌘ ⇧ F3)">
+									<span class="kbd">⌘ ⇧ F3</span>
+									<span class="btn__label">Dark</span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="content__section">
+					<div class="section__head">
+						<span>Visibility</span>
+						<span class="hint">Visibility settings for Editor and UI Elements</span>
+					</div>
+
+					<div class="section__body">
+						${CPopup.Templates.BodyItem_ToggleSetting(appstate, {idField: "isSidebarVisible", title: "Toggle Editor visibility\n(⌘ E)", name: 'Editor', desc: "Text editor in sidebar. Placement: View → Editor Position or ⌘⇧E", shortcut: "⌘ E", argsDispatch: {type: 'framework.sidebar.visibility.set', isSidebarVisible: !appstate.isSidebarVisible, sender: 'Toggle'}})}
+					</div>
+
+					<div class="section__body">
+						${CPopup.Templates.BodyItem_ToggleSetting(appstate, {idField: "isToolbarVisible", title: "Toggle UI elements visibility\n(⌘ R)", name: 'UI elements', desc: "Tag buttons toolbar", shortcut: "⌘ R", argsDispatch: {type: 'framework.toolbar.visibility.set', isToolbarVisible: !appstate.isToolbarVisible, sender: 'Toggle'}})}
+					</div>
+
+				</div>
+			`;
+		},
+
+		//::		☐ TabCSS()
+		//:			→ (textarea)
+		TabCSS() {
+			if (LOGGING) console.log('%c CPopup %c Template: %c TabCSS %c ()', LOG_GREY, LOG_RED, LOG_BLUE+LOG_BOLD, LOG_GREEN);
+			return html`
+				<div class="content__section">
+					<div class="section__head">
+						<span>Global CSS</span>
+						<span class="hint">Edits apply immediately (no OK/Cancel)</span>
+					</div>
+
+					<div class="section__body">
+						<textarea id="texteditorGlobalcss" class="texteditor texteditor-globalcss"></textarea>
+					</div>
+				</div>
+			`;
+		},
+
+		//::		☐ BodyItem_PinnedFile(appstate, path, idx)
+		//:			→ @click: this.onClick
+		BodyItem_PinnedFile(appstate, path, idx) {
+			if (LOGGING) console.log('%c CPopup %c Template: %c BodyItem_PinnedFile %c ()', LOG_GREY, LOG_RED, LOG_BLUE+LOG_BOLD, LOG_GREEN);
+			const isActive = path === appstate.pathFileOpen;
+			const filenameShort = path.split(/[\\/]/).pop();
+			const kbd = idx < 9 ? `⌘ ⇧ ${idx + 1}` : "—";
+			const shortcut = idx < 9 ? kbd : 'No keyboard shortcut';
+
+			return html`
+				<div
+					class=${isActive ? "body__item is-active" : "body__item"}
+					data-path=${path}
+					title=${`Open pinned file: ${filenameShort}\n(${shortcut})`}
+					@click=${e => CPopup.onClick({src: '@click: item.open.pinned.file', path: path})}
+				>
+					<span class="kbd is-label">${kbd}</span>
+					<div class="item__meta">
+						<div class="item__name">${filenameShort}</div>
+						<div class="item__desc">${path}</div>
+					</div>
+					<div class="item__right">
+						<button class="unpin__btn" @click=${e => {e.stopPropagation(); CPopup.onClick({src: '@click: btn.unpin.file', path: path});}} title="Unpin this file\n(No keyboard shortcut)">Unpin</button>
+					</div>
+				</div>
+			`;
+		},
+
+		//::		☐ BodyItem_ToggleSetting(appstate, args})
+		//:			→ @click: this.onClick
+		BodyItem_ToggleSetting(appstate, args) {
+			if (LOGGING) console.log('%c CPopup %c Template: %c BodyItem_ToggleSetting %c ()', LOG_GREY, LOG_RED, LOG_BLUE+LOG_BOLD, LOG_GREEN);
+			const checked = !!appstate[args.idField];
+			const strClasses = ['body__item', checked ? 'toggle-on' : 'toggle-off'].join(' ');
+
+			return html`
+				<div class=${strClasses} title=${args.title} @click=${e => CPopup.onClick({src: '@click: item.toggle.setting', argsDispatch: args.argsDispatch})} >
+					<span class="kbd is-label">${args.shortcut}</span>
+					<div class="item__meta">
+						<div class="item__name">${args.name}</div>
+						<div class="item__desc">${args.desc}</div>
+					</div>
+					<div class="item__right">
+						<div
+							class="switch"
+							role="switch"
+							tabindex="0"
+							aria-checked=${checked ? "true" : "false"}
+							@keydown=${(e) => {
+								if (e.key === " " || e.key === "Enter") {
+									e.preventDefault();
+									CPopup.onClick({src: '@click: item.toggle.setting', argsDispatch: args.argsDispatch});
+								}
+							}}
+							></div>
+					</div>
+				</div>
+			`;
+		}
+	},
+
+	//:::	🔹 init()
+	init() {
+		if (LOGGING) console.group('%c CPopup %c init', LOG_GREY, LOG_RED);
+
+		this.elParent = document.querySelector("#popup-mount");
+
+		this.elParent.addEventListener("pointerdown", CPopup.onPointerDown);
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 renderPopup()
+	renderPopup() {
+		if (LOGGING) console.group('%c CPopup %c renderPopup', LOG_GREY, LOG_BLUE, LOG_GREEN);
+
+		//--const elParent = document.getElementById("popup-mount");
+		const popupOpen = CModel.appstate.isPopupOpen;
+		const cssTabActive = popupOpen && CModel.appstate.idTab === "css";
+		const editorAlive = !!CPopup.elTextarea;
+
+		// If popup is closed, always render empty and destroy editor.
+		if (!popupOpen) {
+			this.destroyCssEditor();
+			render(CPopup.elParent, html``);
+			if (LOGGING) console.groupEnd();
+			return;
+		}
+
+		// If CSS tab is active AND editor already exists, freeze DOM (don’t re-render).
+		if (cssTabActive && editorAlive) {
+			if (LOGGING) console.groupEnd();
+			return;
+		}
+
+		// Otherwise, do declarative render (tab switches etc.)
+		render(CPopup.elParent, this.Templates.Popup(CModel.appstate));
+
+		// After render, wire up / tear down the editor island as needed.
+		if (cssTabActive)
+			this.ensureCssEditor();
+
+		else
+			this.destroyCssEditor();
+
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 	ensureCssEditor()
+	ensureCssEditor() {
+		if (LOGGING) console.group('%c CPopup %c ensureCssEditor', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (CPopup.elTextarea) return
+
+		const elTextarea = document.getElementById('texteditorGlobalcss');
+		if (!elTextarea) return;
+
+		elTextarea.value = CModel.appstate.txtGlobalCss ?? '';
+
+		elTextarea.setAttribute('spellcheck', 'false');
+		elTextarea.setAttribute('autocomplete', 'off');
+		elTextarea.setAttribute('autocorrect', 'off');
+		elTextarea.setAttribute('autocapitalize', 'off');
+		elTextarea.setAttribute('wrap', 'off');
+
+		CPopup.onInputDebounced = CPopup.debounce(() => CPopup.onInput(), 400);		// jk: define on const?
+		CPopup.onKeydownHandler = (e) => CPopup.onKeydown(e);
+
+		elTextarea.addEventListener('input', 	CPopup.onInputDebounced);
+		elTextarea.addEventListener('keydown', 	CPopup.onKeydownHandler);
+
+		CPopup.elTextarea = elTextarea;
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 	destroyCssEditor()
+	destroyCssEditor() {
+		if (LOGGING) console.group('%c CPopup %c destroyCssEditor', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		
+		const el = CPopup.elTextarea;
+		if (!el) return;
+
+		el.removeEventListener('input', CPopup.onInputDebounced);
+		el.removeEventListener('keydown', CPopup.onKeydownHandler);
+
+		CPopup.elTextarea = null;
+		CPopup.onInputDebounced = null;
+		CPopup.onKeydownHandler = null;
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 onKeydown(e)
+	onKeydown(e) {
+		if (LOGGING) console.group("%c CPopup %c event %c onKeydown %c '" + e.key + "'", LOG_GREY, LOG_RED, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(e);
+
+		//:  		☐ getLineStartPos(text, pos)
+		const getLineStartPos = (text, pos) => {
+			let i = pos;
+			while (i > 0 && text[i - 1] !== '\n') i--;
+			return i;
+		};
+
+		//:  		☐ etSelection()
+		const getSelection = () => {
+			const ta = this.elTextarea;
+			return { start: ta.selectionStart, end: ta.selectionEnd };
+		};
+
+		//:  		☐ setSelection(start, end)
+		const setSelection = (start, end) => {
+			const ta = this.elTextarea;
+			ta.selectionStart = start;
+			ta.selectionEnd = end;
+		};
+
+		//::  		☐ getLineEndPos(start, end)
+		const getLineEndPos = (text, pos) => {
+			let i = pos;
+			while (i < text.length && text[i] !== '\n') i++;
+			return i;
+		};
+
+		const ta = this.elTextarea;
+		let { start, end } = getSelection();
+		const value = ta.value;
+
+		if (e.key === 'Tab') {
+			e.preventDefault();
+			const tab = '\t';
+
+			// If selection ends at start of next line, don't include that next line
+			if (end > start && value[end - 1] === '\n') end -= 1;
+
+			const sel = value.slice(start, end);
+			const isMultiLine = sel.includes('\n');
+
+			if (!e.shiftKey) {
+				if (isMultiLine) {
+					const blockStart = getLineStartPos(value, start);
+					const blockEnd   = getLineEndPos(value, end);
+
+					const before = value.slice(0, blockStart);
+					const srcBlock = value.slice(blockStart, blockEnd);
+					const indentedBlock = srcBlock.replace(/^/gm, tab);
+					const after = value.slice(blockEnd);
+
+					ta.value = before + indentedBlock + after;
+					setSelection(blockStart, blockStart + indentedBlock.length);
+				}
+				else {
+					ta.value = value.slice(0, start) + tab + value.slice(end);
+					const caret = start + tab.length;
+					setSelection(caret, caret);
+				}
+			}
+			else {
+				if (isMultiLine) {
+					const blockStart = getLineStartPos(value, start);
+					const blockEnd   = getLineEndPos(value, end);
+
+					const before = value.slice(0, blockStart);
+					const srcBlock = value.slice(blockStart, blockEnd);
+					const outdentedBlock = srcBlock.replace(/^(\t| {1,4})/gm, '');
+					const after = value.slice(blockEnd);
+
+					ta.value = before + outdentedBlock + after;
+					setSelection(blockStart, blockStart + outdentedBlock.length);
+				}
+				else {
+					const lineStartPos = getLineStartPos(value, start);
+					const lineStartText = value.slice(lineStartPos, start);
+					const m = lineStartText.match(/(\t| {1,4})$/);
+					if (m) {
+						const cut = m[0].length;
+						ta.value = value.slice(0, start - cut) + value.slice(end);
+						const caret = start - cut;
+						setSelection(caret, caret);
+					}
+				}
+			}
+
+			this.onInputDebounced();
+		}
+
+		else if (e.key === 'Enter') {
+			e.preventDefault();
+			const lineStart = getLineStartPos(value, start);
+			const currentIndent = (value.slice(lineStart).match(/^[\t ]+/) || [''])[0];
+			const insert = '\n' + currentIndent;
+
+			ta.value = value.slice(0, start) + insert + value.slice(end);
+			const caret = start + insert.length;
+			setSelection(caret, caret);
+
+			this.onInputDebounced();
+		}
+		if (LOGGING) console.groupEnd();
+	},	
+
+	//:::	🔹 debounce(fn, ms = 150)
+	debounce (fn, ms = 150) {
+		// NB: Don't LOG here: will not be shown in console
+		let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
+	},
+
+	//:::	🔹 onInput()
+	onInput () {
+		if (LOGGING) console.group('%c CPopup %c onInput', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		//if (LOGARGS) console.log(CPopup.elTextarea.value);
+
+		//:		→ App: dispatch				model.appstate.update: arrPathFilePinned
+		App.dispatch({type: 'model.appstate.update', oUpdate: {txtGlobalCss: CPopup.elTextarea.value}});
+
+		//:		→ App: dispatch				model.build.and.augment
+		App.dispatch({type: 'model.build.and.augment', text: CTexteditor.value});
+
+		//:		→ App: dispatch				chart.render
+		App.dispatch({type: 'chart.render', typeSvgUpdate: SVG_UPDATE_FULL_RENDER});
+
+		//:		→ App: dispatch				toolbar.buttons.recreate
+		App.dispatch({type: 'toolbar.buttons.recreate'});
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 onPointerDown()
+	onPointerDown(e) {
+		if (LOGGING) console.group('%c CPopup %c onPointerDown', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(e);
+		const elBodyItem = e.target.closest(".body__item");
+		const elDraggableList = e.target.closest(".draggable-list");
+		const elUnpinBtn = e.target.closest(".unpin__btn");
+		const isDragOk = 
+			elBodyItem !== null &&
+			elDraggableList !== null &&
+			elUnpinBtn === null;
+
+		if (!isDragOk) return;
+
+		elBodyItem.setPointerCapture?.(e.pointerId);
+
+		CPopup.draginfo = {
+			pointerId: e.pointerId,
+			elBodyItem,
+			pxStartX: e.clientX,
+			pxStartY: e.clientY,
+			isStarted: false,
+			elGhost: null,
+			pxOffsetX: 0,
+			pxOffsetY: 0,
+			bounds: null,
+		};
+
+		window.addEventListener("pointermove", CPopup.onDragMove, { passive: false });
+		window.addEventListener("pointerup", CPopup.onDragUp, { passive: false });
+		window.addEventListener("pointercancel", CPopup.onDragUp, { passive: false });
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 onDragMove(e)
+	onDragMove(e) {
+		if (LOGGING) console.group('%c CPopup %c onDragMove', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(e);
+
+		const DRAG_THRESHOLD_PX = 8;
+
+		if (!CPopup.draginfo || e.pointerId !== CPopup.draginfo.pointerId) {
+			if (LOGGING) console.groupEnd();
+			return;
+		}
+
+		const pxDeltaX = e.clientX - CPopup.draginfo.pxStartX;
+		const pxDeltaY = e.clientY - CPopup.draginfo.pxStartY;
+		
+		if (!CPopup.draginfo.isStarted) {
+			if (Math.hypot(pxDeltaX, pxDeltaY) < DRAG_THRESHOLD_PX) {
+				if (LOGGING) console.groupEnd();
+				return;
+			}
+			CPopup.startDrag(e);
+		}
+		
+		e.preventDefault();
+		CPopup.positionGhost(e.clientX, e.clientY);
+		
+		const list = CPopup.draginfo.elBodyItem.parentElement;
+		const rows = Array.from(list.querySelectorAll(".body__item:not(.is-dragging)"));
+		const y = e.clientY;
+		
+		let insertBefore = null;
+		for (const r of rows) {
+			const rect = r.getBoundingClientRect();
+			const mid = rect.top + rect.height / 2;
+			if (y < mid) {insertBefore = r; break; }
+		}
+		
+		if (insertBefore)
+			list.insertBefore(CPopup.draginfo.elBodyItem, insertBefore);
+
+		else
+			list.appendChild(CPopup.draginfo.elBodyItem);
+		if (LOGGING) console.groupEnd();
+	},
+	
+	//:::	🔹	startDrag(e)
+	startDrag: (e) => {
+		if (LOGGING) console.group('%c CPopup %c startDrag', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(e);
+
+		CPopup.draginfo.isStarted = true;
+		const list = CPopup.draginfo.elBodyItem.parentElement;
+		list.classList.add("is-reordering");
+		
+		const rect = CPopup.draginfo.elBodyItem.getBoundingClientRect();
+		const listRect = list.getBoundingClientRect();
+		
+		CPopup.draginfo.pxOffsetX = e.clientX - rect.left;
+		CPopup.draginfo.pxOffsetY = e.clientY - rect.top;
+		CPopup.draginfo.bounds = {
+			left: listRect.left,
+			right: listRect.right,
+			top: listRect.top,
+			bottom: listRect.bottom,
+		};
+		
+		const elGhost = CPopup.draginfo.elBodyItem.cloneNode(true);
+		elGhost.classList.add("ghost");
+		elGhost.style.setProperty("--ghost-w", rect.width + "px");
+		elGhost.querySelector(".item__right")?.remove();
+		document.body.appendChild(elGhost);
+		
+		CPopup.draginfo.elGhost = elGhost;
+		CPopup.draginfo.elBodyItem.classList.add("is-dragging");
+		
+		CPopup.positionGhost(e.clientX, e.clientY);
+		if (LOGGING) console.groupEnd();
+	},
+	
+	//:::	🔹 	positionGhost(x, y)
+	positionGhost: (x, y) => {
+		if (LOGGING) console.group('%c CPopup %c positionGhost', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(x, y);
+
+		if (!CPopup.draginfo?.elGhost || !CPopup.draginfo.bounds) {
+			if (LOGGING) console.groupEnd();
+			return;
+		}
+
+		const {left, right, top, bottom} = CPopup.draginfo.bounds;
+		const w = CPopup.draginfo.elGhost.offsetWidth;
+		const h = CPopup.draginfo.elGhost.offsetHeight;
+		
+		const gx = CUtil.clamp(x - CPopup.draginfo.pxOffsetX, left, right - w);
+		const gy = CUtil.clamp(y - CPopup.draginfo.pxOffsetY, top, bottom - h);
+		
+		CPopup.draginfo.elGhost.style.transform = `translate(${gx}px, ${gy}px)`;
+		if (LOGGING) console.groupEnd();
+	},
+	
+	//:::	🔹 onDragUp(e)
+	onDragUp: (e) => {
+		if (LOGGING) console.group('%c CPopup %c onDragUp', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(e);
+
+		if (!CPopup.draginfo) {
+			if (LOGGING) console.groupEnd();
+			return;
+		}
+
+		if (e.type !== "pointercancel" && e.pointerId !== CPopup.draginfo.pointerId) {
+			if (LOGGING) console.groupEnd();
+			return;
+		}
+
+		if (!CPopup.draginfo.isStarted) {
+			CPopup.cleanupDrag();
+			if (LOGGING) console.groupEnd();
+			return;
+		}
+		
+		e.preventDefault();
+		
+		// Commit order by reading DOM order, then map to appstate.arrPathFilePinned
+		const list = CPopup.draginfo.elBodyItem.parentElement;
+		const arrPathFilePinnedNew = Array.from(list.querySelectorAll(".body__item")).map(el => el.dataset.path)
+		
+		//: 		→ CPopup: cleanupDrag
+		CPopup.cleanupDrag();
+
+		//: 		→ App: dispatch				model.appstate.update: arrPathFilePinned
+		App.dispatch({type: 'model.appstate.update', oUpdate: {arrPathFilePinned: arrPathFilePinnedNew}});
+		if (LOGGING) console.groupEnd();
+	},
+	
+	//:::	🔹 cleanupDrag()
+	cleanupDrag: () => {
+		if (LOGGING) console.group('%c CPopup %c cleanupDrag', LOG_GREY, LOG_BLUE, LOG_GREEN);
+
+		window.removeEventListener("pointermove", CPopup.onDragMove, {passive:false});
+		window.removeEventListener("pointerup", CPopup.onDragUp, {passive:false});
+		window.removeEventListener("pointercancel", CPopup.onDragUp, {passive:false});
+		
+		const list = CPopup.draginfo?.elBodyItem?.parentElement;
+		list?.classList.remove("is-reordering");
+		
+		CPopup.draginfo?.elBodyItem?.classList.remove("is-dragging");
+		CPopup.draginfo?.elGhost?.remove();
+		CPopup.draginfo = null;
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 onClick()
+	onClick: (args) => {
+		if (LOGGING) console.group('%c CPopup %c onClick %c [callback]', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (LOGARGS) console.log(args);
+
+		switch (args.src) {
+
+			//::		🔻 @click: btn.close.popup, @pointerdown: overlay
+			case '@click: btn.close.popup': 
+			case '@pointerdown: overlay':
+				//:			→ App: dispatch:			popup.settings.close
+				App.dispatch({type: 'popup.settings.close'});
+				break;
+
+			//::		🔻 @click: btn.tab.select
+			case '@click: btn.tab.select':
+				//:			→ App: dispatch:			popup.tab.select
+				App.dispatch({type: 'popup.tab.select', idTab: args.idTab});
+				break;
+
+			//::		🔻 @click: btn.open.file
+			case '@click: btn.open.file':
+				//:			→ App: dispatch:			wrapper.dialog.open.show
+				App.dispatch({type: 'wrapper.dialog.open.show'});
+				break;
+
+			//::		🔻 @click: item.open.pinned.file
+			case '@click: item.open.pinned.file':
+				//:			→ App: dispatch:			model.filepath.open
+				App.dispatch({type: 'model.filepath.open', path: args.path, caller: '@click: item.open.pinned.file'});
+				break;
+
+			//::		🔻 @click: btn.pin.current.file
+			case '@click: btn.pin.current.file':
+				//:			→ App: dispatch:			model.filepath.pin
+				App.dispatch({type: 'model.filepath.pin'});
+				break;
+
+			//::		🔻 @click: btn.unpin.file
+			case '@click: btn.unpin.file':
+				//:			→ App: dispatch:			model.filepath.unpin
+				App.dispatch({type: 'model.filepath.unpin', path: args.path});
+				break;					
+
+			//::		🔻 @click: btn.view.chart
+			case '@click: btn.view.chart':
+				//:			→ App: dispatch:			chart.view.select
+				App.dispatch({type: 'chart.view.select', idxView: args.idxView});
+				break;
+
+			//::		🔻 @click: btn.theme.set
+			case '@click: btn.theme.set':
+				//:			→ App: dispatch:			wrapper.theme.set
+				App.dispatch({type: 'wrapper.theme.set', idTheme: args.idTheme});
+				break;
+
+			//::		🔻 @click: item.toggle.setting
+			case '@click: item.toggle.setting':
+				//:			→ App: dispatch:			args.argsDispatch
+				App.dispatch(args.argsDispatch);
+				break;
+
+
+		}
+		if (LOGGING) console.groupEnd();
+	},	
+
+};
+
+
+//:::
+//:::📙 const App
+const App = {
+
+	//:::	🔹 init ()
+	init() {
+		if (LOGGING) console.group('%c App.init', LOG_BLUE, LOG_GREY);
+
+		//: 		→ CModel: init
+		CModel.init();
+
+		//: 		→ CWrapper: init
+		CWrapper.init();
+
+		//: 		→ CFramework: init
+		CFramework.init();
+
+		//: 		→ CChart: init
+		CChart.init();
+
+		//: 		→ CTexteditor: init
+		CTexteditor.init();
+
+		//: 		→ CToolbar: init
+		CToolbar.init();
+
+		//: 		→ CPopup: init
+		CPopup.init();
+
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 dispatch ()
+	async dispatch(args) {
+		if (LOGGING) console.group('%c App %c dispatch %c [' + args.type + ']', LOG_GREY, LOG_BLUE, LOG_GREEN);
+		if (!LOGARGS) console.log(args);
+
+		switch (args.type) {
+
+			//::		🔻 model.filepath.open
+			case 'model.filepath.open':
+
+				if (args.path === '') {
+					if (LOGGING) console.log("args.path = '' (not loading a file)");
+					if (LOGGING) console.groupEnd();
+					return;
+				}
+
+				// save Docstate of current doc, before loading new doc
+				if (CModel.docstate !== null) {
+					//:			→ CModel: updateDocstate					[save Docstate for current doc, before loading new doc]
+					CModel.updateDocstate({
+						pxWorkspaceScrollLeft: document.querySelector('#workspace-main')?.scrollLeft ?? 0,
+						pxTexteditorScrollTop: document.querySelector('#texteditorDoc')?.scrollTop ?? 0,
+					});
+				}
+
+				//:			→ CWrapper: loadFileText
+				const resLoadFileContent = await CWrapper.loadFileText({path: args.path});
+				if (resLoadFileContent.err) {
+					if (LOGGING) console.groupEnd();
+					return;
+				}
+
+				//:				→ CTexteditor: setText
+				CTexteditor.setText({txt: resLoadFileContent.text});
+
+				//:			→ CModel: loadDocstate
+				CModel.docstate = CModel.loadDocstate({path: args.path});
+				delete CModel.docstate.stateUi;		// jk: TEMP!
+
+				//:				→ CFramework: updateLookupConstants	[fZoom, pxColWidth, linecount]
+				CFramework.updateLookupConstants({
+					fZoom: CModel.docstate.fZoom,
+					pxColWidth: CModel.docstate.pxColWidth,
+					linecount: CModel.docstate.linecount,
+				});
+
+				//:				→ CModel: updateAppstate					[idxView, pathFileOpen]
+				CModel.updateAppstate({
+					idxView: CModel.docstate.idxView ?? VIEWA,
+					pathFileOpen: args.path,
+				});
+
+				//:					→ CFramework: setAppUiClasses
+				CFramework.setAppUiClasses({appstate: CModel.appstate});
+
+				//:				→ App: dispatch:							model.build.and.augment
+				App.dispatch({type: 'model.build.and.augment', text: resLoadFileContent.text});
+
+				//:			→ CChart: renderSvg
+				CChart.renderSvg({docdata: CModel.docdata, typeSvgUpdate: SVG_UPDATE_FULL_RENDER, idxView: CModel.appstate.idxView});
+
+				//:			→ CToolbar: recreateButtons
+				CToolbar.recreateButtons();
+
+				//:		?	→ [UI updates: #workspace-main.scrollLeft), #texteditorDoc.scrollTop]
+				document.querySelector('#workspace-main').scrollLeft = CModel.docstate.pxWorkspaceScrollLeft ?? 0;		// these 2 lines must be *after* renderSvg, and only here in model.filepath.open since it will not change on same doc edits
+				document.querySelector('#texteditorDoc').scrollTop   = CModel.docstate.pxTexteditorScrollTop ?? 0;
+
+
+				if (!STANDALONE) {
+					//:			→ CWrapper: startWatchFile
+					CWrapper.startWatchFile({path: CModel.appstate.pathFileOpen});
+
+					//:			→ CWrapper: setWindowTitle
+					CWrapper.setWindowTitle({path: CModel.appstate.pathFileOpen});
+				}
+				break;
+
+			//::		🔻 model.filepath.pin
+			case 'model.filepath.pin':
+
+				const pathToPin = CModel.appstate.pathFileOpen;
+
+				if (pathToPin === '' || CModel.appstate.arrPathFilePinned.includes(pathToPin))
+					return;
+
+				//:			→ CModel: updateAppstate:		arrPathFilePinned
+				CModel.updateAppstate({arrPathFilePinned: [...CModel.appstate.arrPathFilePinned, pathToPin]});	// update array with copy plus added string 
+				break;	
+
+			//::		🔻 model.filepath.unpin
+			case 'model.filepath.unpin':
+			
+				//:			→ CModel: updateAppstate:		arrPathFilePinned
+				CModel.updateAppstate({arrPathFilePinned: CModel.appstate.arrPathFilePinned.filter(path => path !== args.path)});
+				break;
+
+			//::		🔻 model.build.and.augment
+			case 'model.build.and.augment':
+
+				//:			→ CModel: extractFirstCssBlockFromText
+				const txtGlobalCss = CModel.appstate.txtGlobalCss;
+				const txtDocumentCss = CModel.extractFirstCssBlockFromText(args);
+				
+				//:				→ CFramework: setCustomCss * 2			[txtGlobalCss, txtDocumentCss]
+				CFramework.setCustomCss({txtCustomCss: txtGlobalCss,   idElStyle: 'style-from-settings'}, 	'(txtGlobalCss)');		// jk: not all the time - just here for testing logic and flow
+				CFramework.setCustomCss({txtCustomCss: txtDocumentCss, idElStyle: 'style-from-doc'},			'(txtDocumentCss)');	// jk: maybe only if css part has changed?
+
+				//:					→ (get css value '--lineheight' after css set) 	[fLineheightFromCss]
+				const fLineheightFromCss = parseFloat( getComputedStyle(document.querySelector('#workspace-main')).getPropertyValue('--lineheight') );
+
+				//:					→ CFramework: updateLookupConstants	[fLineheightFromCss]
+				CFramework.updateLookupConstants({fLineheightFromCss});
+
+				//:			→ CModel: buildDocdataFromText
+				CModel.buildDocdataFromText(args);
+
+				//:				→ CModel: setTagblockMetadataFromCss
+				CModel.setTagblockMetadataFromCss({txtGlobalCss, txtDocumentCss});
+
+				//:				→ CModel: setDocdataDefinitionsFromCss
+				CModel.setDocdataDefinitionsFromCss({txtGlobalCss, txtDocumentCss});
+
+				//:				→ CModel: reapplyDocstate
+				CModel.reapplyDocstate();
+				break;
+
+			//::		🔻 model.appstate.update
+			case 'model.appstate.update':
+			
+				//:			→ CModel: updateAppstate:			args.oUpdate
+				CModel.updateAppstate(args.oUpdate);
+				break;			
+
+			//::		🔻 model.tagblock.active.set
+			case 'model.tagblock.active.set':
+
+				if (args.isAltKey) {
+
+					// see if all other tagblocks have isActive == false 
+					const activeCount = CModel.docdata.arrTagblock.filter(tb => tb.isActive).length;
+					const isAlreadySolo = args.tagblock.isActive && activeCount === 1;
+
+					for (const tagblock of CModel.docdata.arrTagblock) {
+						tagblock.isActive = (tagblock === args.tagblock) || isAlreadySolo;
+					}
+				}
+
+				else {
+
+					args.tagblock.isActive = !args.tagblock.isActive;
+				}
+
+				//:			→ CModel: updateDocstate
+				CModel.updateDocstate({oTagblockState: Object.fromEntries(CModel.docdata.arrTagblock.map(tagblock => [tagblock.id, {isActive: tagblock.isActive}]))});
+
+				//:			→ CChart: renderSvg
+				CChart.renderSvg({docdata: CModel.docdata, typeSvgUpdate: SVG_UPDATE_RESIZE_ONLY, idxView: CModel.appstate.idxView});
+
+				//:			→ CToolbar: recreateButtons
+				CToolbar.recreateButtons();
+				break;
+
+			//::		🔻 model.tagblock.reorder
+			case 'model.tagblock.reorder':
+
+				// reorder tagblocks in docdata and render svg
+				CModel.docdata.arrTagblock.sort((a, b) => args.arrTagOrderNew.indexOf(a.id) - args.arrTagOrderNew.indexOf(b.id));
+
+				//:			→ CChart: renderSvg
+				CChart.renderSvg({docdata: CModel.docdata, typeSvgUpdate: SVG_UPDATE_FULL_RENDER, idxView: CModel.appstate.idxView});
+
+				//:			→ CToolbar: recreateButtons
+				CToolbar.recreateButtons();
+
+				//:			→ CModel: updateDocstate				[arrTagOrder]
+				CModel.updateDocstate({arrTagOrder: CModel.docdata.arrTagblock.map(tb => tb.id)});
+
+				// jk: fix: CChart.onTagblockHover(strTagDragged, true);
+				break;				
+
+			//::		🔻 wrapper.dialog.open.show
+			case 'wrapper.dialog.open.show':
+				//:			→ CWrapper: selectFileUsingSystemDialog
+				const resFileDialog = await CWrapper.selectFileUsingSystemDialog();
+				//if (LOGGING) console.log('resSelectFile:', resFileDialog);
+
+				if (resFileDialog.isCancelled)
+					return;
+
+				//:			→ App: dispatch: 		model.filepath.open
+				App.dispatch({type: 'model.filepath.open', path: resFileDialog.path, caller: 'App.dispatch: wrapper.dialog.open.show'});
+				break;
+
+			//::		🔻 wrapper.file.save
+			case 'wrapper.file.save':
+
+				//:			→ CWrapper: saveFileText
+				const resWriteFileContent = await CWrapper.saveFileText({path: args.path, text: args.text});
+
+				if (resWriteFileContent.err)
+					console.warn('ERROR: CWrapper: saveFileText:', resWriteFileContent.err);
+				break;
+
+			//::		🔻 wrapper.theme.set
+			case 'wrapper.theme.set':
+
+				//:			→ CModel: updateAppstate 
+				CModel.updateAppstate({idTheme: args.idTheme});
+
+				//:			→ CFramework: setTheme
+				CFramework.setTheme({mode: args.idTheme}); 			//??? CModel.appstate.idTheme});
+
+				//:			→ CWrapper: set_menu_checks
+				CWrapper.set_menu_checks({
+					arrUpdate: [
+						['view.theme.system',	args.idTheme === 'system'],
+						['view.theme.light',	args.idTheme === 'light'],
+						['view.theme.dark',		args.idTheme === 'dark'],
+					],
+				});
+				break;				
+
+			//::		🔻 framework.sidebar.layout.set
+			case 'framework.sidebar.layout.set':
+
+				//:			→ CModel: updateAppstate
+				CModel.updateAppstate({
+					idSidebarPosition: args.idSidebarLayout,
+					isSidebarVisible: true,
+				});
+
+				//:			→ CFramework: setAppUiClasses
+				CFramework.setAppUiClasses({appstate: CModel.appstate});
+
+				//:			→ CWrapper: set_menu_checks
+				CWrapper.set_menu_checks({
+					arrUpdate: [
+						['view.sidebar.layout.left', 	args.idSidebarLayout === 'sidebar-layout-left'],
+						['view.sidebar.layout.right',	args.idSidebarLayout === 'sidebar-layout-right'],
+						['view.sidebar.layout.top', 	args.idSidebarLayout === 'sidebar-layout-top'],
+						['view.sidebar.layout.bottom',	args.idSidebarLayout === 'sidebar-layout-bottom'],
+					],
+				});
+				break;
+
+			//::		🔻 framework.sidebar.visibility.set
+			case 'framework.sidebar.visibility.set':
+
+				//:			→ CModel: updateAppstate
+				CModel.updateAppstate({isSidebarVisible: args.isSidebarVisible});
+
+				//:			→ CFramework: setAppUiClasses
+				CFramework.setAppUiClasses({appstate: CModel.appstate});
+
+				//:			→ CWrapper: set_menu_checks
+				CWrapper.set_menu_checks({
+					arrUpdate: [
+						['view.sidebar.toggle', args.isSidebarVisible],
+					],
+				});
+				break;
+
+			//::		🔻 framework.toolbar.visibility.set
+			case 'framework.toolbar.visibility.set':
+
+				//:			→ CModel: updateAppstate
+				CModel.updateAppstate({isToolbarVisible: args.isToolbarVisible});
+
+				//:			→ CFramework: setAppUiClasses
+				CFramework.setAppUiClasses({appstate: CModel.appstate});
+
+				//:			→ CWrapper: set_menu_checks
+				CWrapper.set_menu_checks({
+					arrUpdate: [
+						['view.toolbar.toggle', args.isToolbarVisible],
+					],
+				});
+				break;
+
+			//::		🔻 chart.render
+			case 'chart.render':
+				//:			→ CChart: renderSvg:	typeSvgUpdate
+				CChart.renderSvg({docdata: CModel.docdata, typeSvgUpdate: args.typeSvgUpdate, idxView: CModel.appstate.idxView});
+				break;
+
+			//::		🔻 chart.zoom
+			case 'chart.zoom':
+
+				const fZoomNew			= (args.typeZoom === ZOOM_ALL) ? (args.isIn ? (F_ZOOM_SVG * 1.1) : args.isOut ? (F_ZOOM_SVG * 0.9) : 1) : F_ZOOM_SVG;
+				const pxColWidthNew		= (args.typeZoom === ZOOM_ALL || args.typeZoom === ZOOM_HORIZONTAL) ? (args.isIn ? (PX_COL_WIDTH_SVG * 1.1) : args.isOut ? (PX_COL_WIDTH_SVG * 0.9) : PX_COL_W_INITIAL) : PX_COL_WIDTH_SVG;
+				const linecountNew		= (args.typeZoom === ZOOM_LINECOUNT) ? (args.isIn ? (COUNT_LINES_SVG + 1) : args.isOut ? (COUNT_LINES_SVG - 1) : COUNT_LINES_INITIAL) : COUNT_LINES_SVG;
+
+				const oZoomValuesNew = {
+					fZoom: 		CUtil.clamp(CUtil.roundN(fZoomNew, 2), 0.25, 4.5),
+					pxColWidth:	CUtil.clamp(parseInt(pxColWidthNew), PX_COL_MIN_W, PX_COL_MAX_W), 
+					linecount:	CUtil.clamp(linecountNew, 1, 20),
+				};
+
+				// calculate factor of zoom before setting PX_COL_WIDTH_SVG to new value (below)
+				const zoomFactor 		= oZoomValuesNew.pxColWidth / PX_COL_WIDTH_SVG
+				const pxWorldCenterXOld	= CChart.elParent.scrollLeft + (CChart.elParent.clientWidth / 2);
+				const pxWorldCenterXNew	= pxWorldCenterXOld	* zoomFactor;
+
+				//:			→ CModel: updateDocstate
+				CModel.updateDocstate(oZoomValuesNew);
+
+				//:			→ CFramework: updateLookupConstants
+				CFramework.updateLookupConstants(oZoomValuesNew);
+
+				//:			→ CChart: renderSvg
+				CChart.renderSvg({docdata: CModel.docdata, typeSvgUpdate: SVG_UPDATE_FULL_RENDER, idxView: CChart.idxView});
+
+				// update scrollLeft - must be after renderSvg!
+				CChart.elParent.scrollLeft = pxWorldCenterXNew - (CChart.elParent.clientWidth / 2);
+				break;
+				
+			//::		🔻 chart.view.select
+			case 'chart.view.select':
+				//:			→ CModel: updateAppstate
+				CModel.updateAppstate({idxView: args.idxView});
+
+				//:			→ CModel: updateDocstate
+				CModel.updateDocstate({idxView: args.idxView});
+
+				//:			→ CFramework: setAppUiClasses
+				CFramework.setAppUiClasses({appstate: CModel.appstate});
+
+				//:			→ CChart: renderSvg:		SVG_UPDATE_RESIZE_ONLY
+				CChart.renderSvg({docdata: CModel.docdata, typeSvgUpdate: SVG_UPDATE_RESIZE_ONLY, idxView: CModel.appstate.idxView});
+
+				//:			→ CWrapper: set_menu_checks
+				CWrapper.set_menu_checks({
+					arrUpdate: [
+						['view.chart.viewa',	args.idxView === VIEWA],
+						['view.chart.viewb',	args.idxView === VIEWB],
+					],
+				});
+				break;
+
+			//::		🔻 texteditor.line.select
+			case 'texteditor.line.select':
+				//:			→ CTexteditor: selectLine
+				CTexteditor.selectLine({idxLine: args.idxLine, isSelectWholeTextbloc: args.isSelectWholeTextbloc});
+				break;
+
+			//::		🔻 toolbar.buttons.recreate
+			case 'toolbar.buttons.recreate':
+				//:			→ CToolbar: recreateButtons
+				CToolbar.recreateButtons();	
+				break;
+
+
+
+			//::		🔻 popup.settings.open
+			case 'popup.settings.open':
+				
+				//:			→ CModel: updateAppstate
+				CModel.updateAppstate({isPopupOpen: true});		// maybe make function - also to avoid all the calls to renderPopup()
+				break;
+			
+			//::		🔻 popup.settings.close
+			case 'popup.settings.close':
+
+				//:			→ CModel: cleanupDrag
+				if (CPopup.draginfo)
+					CPopup.cleanupDrag();
+
+				//:			→ CModel: updateAppstate		isPopupOpen: false
+				CModel.updateAppstate({isPopupOpen: false});
+
+				//:			→ CPopup: renderPopup
+				CPopup.renderPopup();
+				break;
+
+			//::		🔻 popup.tab.select
+			case 'popup.tab.select':
+
+				//:			→ CModel: updateAppstate:		idTab
+				CModel.updateAppstate({idTab: args.idTab});
+				break;				
+				
+		}
+
+		//:
+		//:		→ CPopup: renderPopup
+		if (CModel.appstate.isPopupOpen)
+			CPopup.renderPopup();
+
+		if (LOGGING) console.groupEnd();
+	},
+
+};
+
+
+//:::
+//:::📙 START
+
+//:::	🔹 (function () { 
+(function () { 
+
+	//:		→ App: init
+	App.init();
+
+	if (STANDALONE)
+		CModel.appstate.pathFileOpen = 'TEST';
+
+	//:		→ App: dispatch:			model.filepath.open
+	App.dispatch({type: 'model.filepath.open', path: CModel.appstate.pathFileOpen, caller: 'App start'});
+	if (LOGGING) console.log(App);
+})();
+
+	</script>
+</body>
+</html>
