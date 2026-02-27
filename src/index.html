@@ -612,7 +612,7 @@ const CModel = {
 	//:::	🔹 updateDocstate
 	updateDocstate(args) {
 		if (LOGGING) console.group('%c CModel %c updateDocstate', LOG_GREY, LOG_BLUE, LOG_GREEN);
-		if (!LOGARGS) console.log(args);
+		if (LOGARGS) console.log(args);
 
 		Object.assign(this.docstate, args);			// goes thru each key in args, and updates the matching key in this.docstate with the value from args
 		if (LOGARGS) console.log(this.docstate);
@@ -2519,8 +2519,8 @@ const CTexteditor = {
 		//:		→ App: dispatch				toolbar.buttons.recreate
 		App.dispatch({type: 'toolbar.buttons.recreate'});
 
-		//:		→ App: dispatch				wrapper.save.file
-		App.dispatch({type: 'wrapper.save.file', path: CModel.appstate.pathFileOpen, text: this.value});
+		//:		→ App: dispatch				wrapper.file.save
+		App.dispatch({type: 'wrapper.file.save', path: CModel.appstate.pathFileOpen, text: this.value});
 		if (LOGGING) console.groupEnd();
 	},
 };
@@ -3487,7 +3487,7 @@ const App = {
 	//:::	🔹 dispatch ()
 	async dispatch(args) {
 		if (LOGGING) console.group('%c App %c dispatch %c [' + args.type + ']', LOG_GREY, LOG_BLUE, LOG_GREEN);
-		if (!LOGARGS) console.log(args);
+		if (LOGARGS) console.log(args);
 
 		switch (args.type) {
 
