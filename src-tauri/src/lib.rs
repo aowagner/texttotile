@@ -15,7 +15,7 @@ use tauri::{AppHandle, Emitter, Runtime, State, Manager};
 
 use tauri::menu::{MenuId, MenuItemKind, CheckMenuItem};
 
-
+use tauri_plugin_dialog::DialogExt;
 
 
 fn find_menu_item_recursive<R: Runtime>(
@@ -435,19 +435,25 @@ pub fn run() {
 			let _ = handle.emit("menu", id.to_string());
 		});--*/
 
-		app.on_menu_event(move |app_handle, event| {
-			let id = event.id().as_ref();
+app.on_menu_event(move |app_handle, event| {
+    let id = event.id().as_ref();
 
-			// 🔎 Debug: log every menu event in Rust
-			println!("MENU EVENT (Rust): {}", id);
+    // Get the main window
+    if let Some(win) = app_handle.get_webview_window("main") {
+        // Show a message dialog (non-blocking)
+        win.dialog()
+            .message(format!("MENU EVENT: {}", id))
+            .title("Menu Debug")
+            .show(|_| {});
+    }
 
-			if id == "app.quit" {
-				app_handle.exit(0);
-				return;
-			}
+    if id == "app.quit" {
+        app_handle.exit(0);
+        return;
+    }
 
-			let _ = handle.emit("menu", id.to_string());
-		});
+    let _ = handle.emit("menu", id.to_string());
+});
 
 		
 		Ok(())
