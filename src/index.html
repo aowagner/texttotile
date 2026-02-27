@@ -1458,7 +1458,7 @@ const CFramework = {
 			app.dispatch({type: 'popup.settings.open'});
 		});
 
-		window.addEventListener('keydown', e => {this.onKeydown(e)}, {capture: true});
+		//+window.addEventListener('keydown', e => {this.onKeydown(e)}, {capture: true});
 		window.addEventListener('resize', e => this.onWindowResize(e));
 
 		// splitter drag
