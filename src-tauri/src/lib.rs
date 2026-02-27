@@ -374,6 +374,12 @@ pub fn run() {
 	.manage(WatcherState(Mutex::new(None)))
 	.invoke_handler(tauri::generate_handler![greet, start_watch_file, set_menu_item_enabled, set_menu_checks])
 	.setup(|app| {
+
+		if let Some(win) = app.get_webview_window("main") {
+			win.open_devtools();
+			// win.set_focus().ok(); // optional
+		}
+
 		// Set the menu
 		let menu = build_app_menu(app.handle())?;
 		app.set_menu(menu)?;
@@ -397,11 +403,6 @@ pub fn run() {
 	.run(tauri::generate_context!())
 	.expect("error while running tauri application");
 }
-
-
-
-
-
 
 
 
@@ -547,3 +548,7 @@ fn set_menu_checks<R: Runtime>(
 
   Ok(())
 }
+
+
+
+
