@@ -1458,7 +1458,7 @@ const CFramework = {
 			app.dispatch({type: 'popup.settings.open'});
 		});
 
-		//+window.addEventListener('keydown', e => {this.onKeydown(e)}, {capture: true});
+		window.addEventListener('keydown', e => {this.onKeydown(e)}, {capture: true});
 		window.addEventListener('resize', e => this.onWindowResize(e));
 
 		// splitter drag
@@ -1658,11 +1658,17 @@ const CFramework = {
 		if (LOGGING) console.group('%c CFramework %c onKeydown %c [callback]', LOG_GREY, LOG_BLUE, LOG_GREEN);
 		if (LOGARGS) console.log(e);
 
-		const isMac = navigator.platform.toUpperCase().includes('MAC');
+		const ua = navigator.userAgent.toUpperCase();
+		const isMac = ua.includes('MAC');
+		const isWindows = ua.includes('WINDOWS');
+		const isLinux = ua.includes('LINUX');
+		//--const isMac = navigator.platform.toUpperCase().includes('MAC');
+
 		const isMetaKey = isMac ? e.metaKey : e.ctrlKey;
 		const isAltKey = e.altKey;
 		const isShiftKey = e.shiftKey;
 		const isCtrlKey = e.ctrlKey;
+
 		const arrNumberKey = ['Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9'];
 
 		//::		🔻 Escape
@@ -1759,6 +1765,21 @@ const CFramework = {
 			
 			else if (e.key === 'ArrowRight' && CModel.appstate.idTab === 'ui')
 				App.dispatch({type: 'popup.tab.select', idTab: 'css'});
+		}
+
+		//:: 		Windows 'accelerator' keys: fix for missing feature in Tauri
+		else if (isWindows) {
+
+			if (isMetaKey && e.key.toLowerCase() === 'o') {
+				if (e.preventDefault) e.preventDefault();
+
+				CWrapper.onMenuEvent({payload: 'file.open'});
+			}
+
+			// other 'accelerator' shortcuts here....
+
+
+
 		}
 
 		if (LOGGING) console.groupEnd();
@@ -2248,7 +2269,13 @@ const CChart = {
 		if (LOGARGS) console.log(args);
 
 		const e = args.e;
-		const isMac = navigator.platform.toUpperCase().includes('MAC');
+
+		const ua = navigator.userAgent.toUpperCase();
+		const isMac = ua.includes('MAC');
+		const isWindows = ua.includes('WINDOWS');
+		const isLinux = ua.includes('LINUX');
+		//--const isMac = navigator.platform.toUpperCase().includes('MAC');
+
 		const isMetaKey = isMac ? e.metaKey : e.ctrlKey;
 		const isAltKey = e.altKey;
 		const isShiftKey = e.shiftKey;

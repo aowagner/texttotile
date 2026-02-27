@@ -23,10 +23,10 @@ jobs:
         run: npm install
 
       - name: Build Tauri app
-        run: npm run tauri build -- --debug
+        run: npm run tauri build
 
       - name: Upload Windows installer
         uses: actions/upload-artifact@v4
         with:
           name: windows-installer
-          path: src-tauri/target/debug/bundle/msi/*.msi
+          path: src-tauri/target/release/bundle/msi/*.msi

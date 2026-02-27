@@ -424,7 +424,7 @@ pub fn run() {
 		
 		// Menu events -> frontend
 		let handle = app.handle().clone();
-		/*--app.on_menu_event(move |app_handle, event| {
+		app.on_menu_event(move |app_handle, event| {
 			let id = event.id().as_ref();
 			
 			if id == "app.quit" {
@@ -433,9 +433,9 @@ pub fn run() {
 			}
 			
 			let _ = handle.emit("menu", id.to_string());
-		});--*/
+		});
 
-app.on_menu_event(move |app_handle, event| {
+/*--app.on_menu_event(move |app_handle, event| {
     let id = event.id().as_ref();
 
     // Get the main window
@@ -453,7 +453,7 @@ app.on_menu_event(move |app_handle, event| {
     }
 
     let _ = handle.emit("menu", id.to_string());
-});
+});--*/
 
 		
 		Ok(())
