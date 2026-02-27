@@ -373,7 +373,7 @@ pub fn run() {
 	.plugin(tauri_plugin_persisted_scope::init())
 	.manage(WatcherState(Mutex::new(None)))
 	.invoke_handler(tauri::generate_handler![greet, start_watch_file, set_menu_item_enabled, set_menu_checks])
-	
+
 	/*-.setup(|app| {
 
 		if let Some(win) = app.get_webview_window("main") {
@@ -424,7 +424,7 @@ pub fn run() {
 		
 		// Menu events -> frontend
 		let handle = app.handle().clone();
-		app.on_menu_event(move |app_handle, event| {
+		/*--app.on_menu_event(move |app_handle, event| {
 			let id = event.id().as_ref();
 			
 			if id == "app.quit" {
@@ -433,7 +433,22 @@ pub fn run() {
 			}
 			
 			let _ = handle.emit("menu", id.to_string());
+		});--*/
+
+		app.on_menu_event(move |app_handle, event| {
+			let id = event.id().as_ref();
+
+			// 🔎 Debug: log every menu event in Rust
+			println!("MENU EVENT (Rust): {}", id);
+
+			if id == "app.quit" {
+				app_handle.exit(0);
+				return;
+			}
+
+			let _ = handle.emit("menu", id.to_string());
 		});
+
 		
 		Ok(())
 	})
