@@ -1767,16 +1767,79 @@ const CFramework = {
 				App.dispatch({type: 'popup.tab.select', idTab: 'css'});
 		}
 
-		//:: 		Windows 'accelerator' keys: fix for missing feature in Tauri
+		//:: 			Windows 'accelerator' keys: fix for missing feature in Tauri
 		else if (isWindows) {
 
-			if (isMetaKey && e.key.toLowerCase() === 'o') {
+			//::			🔻 Cmd + N
+			if (isMetaKey && e.key.toLowerCase() === 'n') {
+				if (e.preventDefault) e.preventDefault();
+
+				CWrapper.onMenuEvent({payload: 'file.new'});
+			}
+
+			//::			🔻 Cmd + O
+			else if (isMetaKey && e.key.toLowerCase() === 'o') {
 				if (e.preventDefault) e.preventDefault();
 
 				CWrapper.onMenuEvent({payload: 'file.open'});
 			}
 
-			// other 'accelerator' shortcuts here....
+			//::			🔻 Cmd + 
+			else if (isMetaKey && e.key.toLowerCase() === '') {
+				if (e.preventDefault) e.preventDefault();
+
+				CWrapper.onMenuEvent({payload: ''});
+			}
+
+			//::			🔻 Cmd + 
+			else if (isMetaKey && e.key.toLowerCase() === '') {
+				if (e.preventDefault) e.preventDefault();
+
+				CWrapper.onMenuEvent({payload: ''});
+			}
+
+			//::			🔻 Cmd + 
+			else if (isMetaKey && e.key.toLowerCase() === '') {
+				if (e.preventDefault) e.preventDefault();
+
+				CWrapper.onMenuEvent({payload: ''});
+			}
+
+			//::			🔻 Cmd + 
+			else if (isMetaKey && e.key.toLowerCase() === '') {
+				if (e.preventDefault) e.preventDefault();
+
+				CWrapper.onMenuEvent({payload: ''});
+			}
+
+			//::			🔻 Cmd + 
+			else if (isMetaKey && e.key.toLowerCase() === '') {
+				if (e.preventDefault) e.preventDefault();
+
+				CWrapper.onMenuEvent({payload: ''});
+			}
+
+			//::			🔻 Cmd + 
+			else if (isMetaKey && e.key.toLowerCase() === '') {
+				if (e.preventDefault) e.preventDefault();
+
+				CWrapper.onMenuEvent({payload: ''});
+			}
+
+			//::			🔻 Cmd + 
+			else if (isMetaKey && e.key.toLowerCase() === '') {
+				if (e.preventDefault) e.preventDefault();
+
+				CWrapper.onMenuEvent({payload: ''});
+			}
+
+			//::			🔻 Cmd + 
+			else if (isMetaKey && e.key.toLowerCase() === '') {
+				if (e.preventDefault) e.preventDefault();
+
+				CWrapper.onMenuEvent({payload: ''});
+			}
+
 
 
 
