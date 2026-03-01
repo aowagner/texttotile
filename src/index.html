@@ -1157,7 +1157,7 @@ const CWrapper = {
 			if (LOGGING) console.group('%c CWrapper %c window.__TAURI__.event.listen(menu)', LOG_GREY, LOG_BLUE, LOG_GREEN);
 			if (LOGARGS) console.log(e);
 
-			this.onMenuEvent(e);
+			this.onMenuEvent({...e, sender: 'window.__TAURI__.event.listen(menu)'});
 			if (LOGGING) console.groupEnd();
 		});
 
@@ -1178,7 +1178,9 @@ const CWrapper = {
 		if (LOGGING) console.group('%c CWrapper %c onMenuEvent %c [type: ' + e.payload + ']', LOG_GREY, LOG_BLUE, LOG_GREEN);
 		if (LOGARGS) console.log(e);
 
-		const sender = 'CWrapper: onMenuEvent: ' + e.payload;
+		//--const sender = 'CWrapper: onMenuEvent: ' + e.payload;
+		//--const sender = 'CWrapper: onMenuEvent: ' + e.payload + (e.sender ?? '');	// e.sender is set if called from CFramework.onKeydown (Windows 'accelerator' simulation)
+		const sender = 'CWrapper: onMenuEvent: ' + e.payload + ' (' + e.sender + ')';	// e.sender is set if called from CFramework.onKeydown (Windows 'accelerator' simulation)
 
 		// menu: App (Mac only)
 		//::		🔻 app.settings
@@ -1774,91 +1776,91 @@ const CFramework = {
 			if (isMetaKey && e.key.toLowerCase() === 'n') {
 				if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: 'file.new'});
+				CWrapper.onMenuEvent({payload: 'file.new', sender: 'CFramework.onKeydown'});
 			}
 
 			//::			🔻 Cmd + O
 			else if (isMetaKey && e.key.toLowerCase() === 'o') {
 				if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: 'file.open'});
+				CWrapper.onMenuEvent({payload: 'file.open', sender: 'CFramework.onKeydown'});
 			}
 
 			//::			🔻 Cmd + Shift + S
 			else if (isMetaKey && isShiftKey && e.key.toLowerCase() === 's') {
 				if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: 'file.saveas'});
+				CWrapper.onMenuEvent({payload: 'file.saveas', sender: 'CFramework.onKeydown'});
 			}
 
 			//::			🔻 Cmd + D
 			else if (isMetaKey && e.key.toLowerCase() === 'd') {
 				if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: 'file.pincurrent'});
+				CWrapper.onMenuEvent({payload: 'file.pincurrent', sender: 'CFramework.onKeydown'});
 			}
 
 			//::			🔻 Alt + ,
 			else if (isMetaKey && e.key.toLowerCase() === ',') {
 				if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: 'file.settings'});
+				CWrapper.onMenuEvent({payload: 'file.settings', sender: 'CFramework.onKeydown'});
 			}
 
 			//::			🔻 Alt + F4
 			else if (isAltKey && e.key === 'F4') {
 				if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: 'file.exit'});
+				CWrapper.onMenuEvent({payload: 'file.exit', sender: 'CFramework.onKeydown'});
 			}
 
 			//::			🔻 Cmd + E
 			else if (isMetaKey && e.key.toLowerCase() === 'e') {
 				if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: 'view.sidebar.toggle'});
+				CWrapper.onMenuEvent({payload: 'view.sidebar.toggle', sender: 'CFramework.onKeydown'});
 			}
 
 			//::			🔻 Cmd + R
 			else if (isMetaKey && e.key.toLowerCase() === 'r') {
 				if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: 'view.toolbar.toggle'});
+				CWrapper.onMenuEvent({payload: 'view.toolbar.toggle', sender: 'CFramework.onKeydown'});
 			}
 
 			//::			🔻 F1
-			else if (e.key === 'F1') {
+			else if (!isMetaKey && !isShiftKey && e.key === 'F1') {
 				if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: 'view.chart.viewa'});
+				CWrapper.onMenuEvent({payload: 'view.chart.viewa', sender: 'CFramework.onKeydown'});
 			}
 
 			//::			🔻 F2
-			else if (e.key === 'F2') {
+			else if (!isMetaKey && !isShiftKey && e.key === 'F2') {
 				if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: 'view.chart.viewb'});
+				CWrapper.onMenuEvent({payload: 'view.chart.viewb', sender: 'CFramework.onKeydown'});
 			}
 
 			//::			🔻 Cmd + Shift + F1
 			else if (isMetaKey && isShiftKey && e.key === 'F1') {
 				if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: 'view.theme.system'});
+				CWrapper.onMenuEvent({payload: 'view.theme.system', sender: 'CFramework.onKeydown'});
 			}
 
 			//::			🔻 Cmd + Shift + F2
 			else if (isMetaKey && isShiftKey && e.key === 'F2') {
 				if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: 'view.theme.light'});
+				CWrapper.onMenuEvent({payload: 'view.theme.light', sender: 'CFramework.onKeydown'});
 			}
 
 			//::			🔻 Cmd + Shift + F3 
 			else if (isMetaKey && isShiftKey && e.key === 'F3') {
 				if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: 'view.theme.dark'});
+				CWrapper.onMenuEvent({payload: 'view.theme.dark', sender: 'CFramework.onKeydown'});
 			}
 		}
 
