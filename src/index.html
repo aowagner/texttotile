@@ -1784,65 +1784,82 @@ const CFramework = {
 				CWrapper.onMenuEvent({payload: 'file.open'});
 			}
 
-			//::			🔻 Cmd + 
-			else if (isMetaKey && e.key.toLowerCase() === '') {
+			//::			🔻 Cmd + Shift + S
+			else if (isMetaKey && isShiftKey && e.key.toLowerCase() === 's') {
 				if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: ''});
+				CWrapper.onMenuEvent({payload: 'file.saveas'});
 			}
 
-			//::			🔻 Cmd + 
-			else if (isMetaKey && e.key.toLowerCase() === '') {
+			//::			🔻 Cmd + D
+			else if (isMetaKey && e.key.toLowerCase() === 'd') {
 				if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: ''});
+				CWrapper.onMenuEvent({payload: 'file.pincurrent'});
 			}
 
-			//::			🔻 Cmd + 
-			else if (isMetaKey && e.key.toLowerCase() === '') {
+			//::			🔻 Alt + ,
+			else if (isMetaKey && e.key.toLowerCase() === ',') {
 				if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: ''});
+				CWrapper.onMenuEvent({payload: 'file.settings'});
 			}
 
-			//::			🔻 Cmd + 
-			else if (isMetaKey && e.key.toLowerCase() === '') {
+			//::			🔻 Alt + F4
+			else if (isAltKey && e.key === 'F4') {
 				if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: ''});
+				CWrapper.onMenuEvent({payload: 'file.exit'});
 			}
 
-			//::			🔻 Cmd + 
-			else if (isMetaKey && e.key.toLowerCase() === '') {
+			//::			🔻 Cmd + E
+			else if (isMetaKey && e.key.toLowerCase() === 'e') {
 				if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: ''});
+				CWrapper.onMenuEvent({payload: 'view.sidebar.toggle'});
 			}
 
-			//::			🔻 Cmd + 
-			else if (isMetaKey && e.key.toLowerCase() === '') {
+			//::			🔻 Cmd + R
+			else if (isMetaKey && e.key.toLowerCase() === 'r') {
 				if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: ''});
+				CWrapper.onMenuEvent({payload: 'view.toolbar.toggle'});
 			}
 
-			//::			🔻 Cmd + 
-			else if (isMetaKey && e.key.toLowerCase() === '') {
+			//::			🔻 F1
+			else if (e.key === 'F1') {
 				if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: ''});
+				CWrapper.onMenuEvent({payload: 'view.chart.viewa'});
 			}
 
-			//::			🔻 Cmd + 
-			else if (isMetaKey && e.key.toLowerCase() === '') {
+			//::			🔻 F2
+			else if (e.key === 'F2') {
 				if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: ''});
+				CWrapper.onMenuEvent({payload: 'view.chart.viewb'});
 			}
 
+			//::			🔻 Cmd + Shift + F1
+			else if (isMetaKey && isShiftKey && e.key === 'F1') {
+				if (e.preventDefault) e.preventDefault();
 
+				CWrapper.onMenuEvent({payload: 'view.theme.system'});
+			}
 
+			//::			🔻 Cmd + Shift + F2
+			else if (isMetaKey && isShiftKey && e.key === 'F2') {
+				if (e.preventDefault) e.preventDefault();
 
+				CWrapper.onMenuEvent({payload: 'view.theme.light'});
+			}
+
+			//::			🔻 Cmd + Shift + F3 
+			else if (isMetaKey && isShiftKey && e.key === 'F3') {
+				if (e.preventDefault) e.preventDefault();
+
+				CWrapper.onMenuEvent({payload: 'view.theme.dark'});
+			}
 		}
 
 		if (LOGGING) console.groupEnd();

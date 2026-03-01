@@ -1,5 +1,6 @@
 ---
-title: "Documentation"
+date: '2026-02-28T11:09:50+01:00'
+draft: true
+title: 'Docs'
 ---
-
-Start here.
+Here is some text

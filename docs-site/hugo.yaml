@@ -18,3 +18,24 @@ params:
 
   theme:
     default: system
+
+  css:
+    - css/custom.css
+
+menu:
+  main:
+    - name: "Docs"
+      pageRef: "/docs"
+      weight: 10
+
+    - name: "Download"
+      url: "https://github.com/aowagner/<your-repo>/releases/latest"
+      weight: 20
+
+    - name: "Discussions"
+      url: "https://github.com/aowagner/<your-repo>/discussions"
+      weight: 30
+
+    - name: "GitHub"
+      url: "https://github.com/aowagner/<your-repo>"
+      weight: 40

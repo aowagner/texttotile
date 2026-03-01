@@ -1,0 +1,45 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Owl – Settings</title>
+    <link>http://localhost:1313/docs/settings/</link>
+    <description>Recent content in Settings on Owl</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 28 Feb 2026 11:09:51 +0100</lastBuildDate>
+    
+	  <atom:link href="http://localhost:1313/docs/settings/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+      
+        
+      
+    
+    
+    <item>
+      <title>Appearance</title>
+      <link>http://localhost:1313/docs/settings/appearance/</link>
+      <pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate>
+      
+      <guid>http://localhost:1313/docs/settings/appearance/</guid>
+      <description>
+        
+        
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Behavior</title>
+      <link>http://localhost:1313/docs/settings/behavior/</link>
+      <pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate>
+      
+      <guid>http://localhost:1313/docs/settings/behavior/</guid>
+      <description>
+        
+        
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>
