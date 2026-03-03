@@ -137,8 +137,8 @@
 
 
 /* toolbar */
-						.toolbar 		{position: relative; overflow: auto hidden; }
-						.toolbarTags 	{--bold-button: var(--bold); /* --bold-button is a 'hack' to use toolbarTags's (aka :root) --bold, so buttons don't use individual tag's --bold */ height: calc(var(--px-line-height) + 7px); max-width: calc(100% - (var(--px-line-height) + 60px)); padding: 7px; margin-top: calc((var(--px-line-height) + 34px) * -1); margin-left: 10px; background: #eee; border: 1px solid #ccc; border-radius: 5px; }
+						.toolbar 		{position: absolute; overflow: auto hidden; background: var(--fill); border: 1px solid color-mix(in srgb, var(--text) 11%, transparent); border-radius: 5px; }
+						.toolbarTags 	{--bold-button: var(--bold); /* --bold-button is a 'hack' to use toolbarTags's (aka :root) --bold, so buttons don't use individual tag's --bold */ height: calc(var(--px-line-height) + 7px); max-width: calc(100% - (var(--px-line-height) + 68px)); padding: 7px; margin-top: calc((var(--px-line-height) + 40px) * -1); margin-left: 10px; }
 	.toolbar-visible-no	.toolbarTags 	{display: none; }
 
 		.toolbar__button 	{position: absolute; transform: translateX(var(--pxX)); border: 1px solid var(--fill-part-rect-stroke); border-radius: 5px; font-family: var(--fontfamily); font-size: var(--px-font-size); line-height: var(--px-line-height); color: var(--text); white-space: nowrap; cursor: pointer; transition: opacity 120ms ease; }
@@ -152,22 +152,22 @@
 		.popup-btn {
 			position: absolute;
 			right: 10px;
-			margin-top: calc((var(--px-line-height) + 34px) * -1);
-			width: calc(var(--px-line-height) + 7px);
-			height: calc(var(--px-line-height) + 7px);
+			margin-top: calc((var(--px-line-height) + 40px) * -1);
+			width: calc(var(--px-line-height) + 21px);
+			height: calc(var(--px-line-height) + 21px);
+			line-height: calc(var(--px-line-height) + 21px);
 			border-radius: 5px;
-			border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
-			background: color-mix(in srgb, var(--fill) 92%, black);
+			border: 1px solid color-mix(in srgb, var(--text) 11%, transparent);
+			background: var(--fill);	/*- color-mix(in srgb, var(--fill) 92%, black);-*/
 			color: var(--text);
 			cursor: pointer;
-			box-sizing: content-box;
-			font-size: calc(var(--px-font-size) * 2);
-			line-height: 0.15;
-			padding: 0px; 
+			/* box-sizing: border-box; */
+			font-size: calc(var(--px-font-size) * 1.25);
+			text-align: center;
 		}
 
 		.popup-btn:hover{
-			background: color-mix(in srgb, var(--fill) 86%, white); 
+			background: color-mix(in srgb, var(--fill) 86%, var(--text)); 
 		}
 
 
@@ -208,7 +208,7 @@
 	.header__text					{pointer-events: none; dominant-baseline: middle; }
 
 	.header__rect--section			{y: 0; height: calc(var(--px-line-height-svg) * 1.5); }
-	.header__text--section			{transform: translate(5px, calc(var(--px-line-height-svg) * 1.0)); fill: var(--fill-header-section-text-fill); font-size: calc(var(--px-font-size-svg) * 1.25); font-weight: var(--bold); }
+	.header__text--section			{transform: translate(5px, calc(var(--px-line-height-svg) * 1.0)); fill: var(--fill-header-section-text-fill); font-size: calc(var(--px-font-size-svg) * 1.5); font-weight: var(--bold); }
 
 	.header__rect--chapter			{y: calc(var(--px-line-height-svg) * 1.5); height: var(--px-line-height-svg); }
 	.header__text--chapter			{transform: translate(5px, calc(var(--px-line-height-svg) * 2)); fill: var(--fill-header-chapter-text-fill); font-size: calc(var(--px-font-size-svg) * 1.00); font-weight: var(--bold); }
@@ -402,7 +402,8 @@
 				</div>
 
 				<div id="workspace-panel" class="workspace__panel">
-					<button id="btn-popup" class="popup-btn" type="button" title="Settings">⚙︎</button>
+					<!--button id="btn-popup" class="popup-btn" type="button" title="Settings"><span>⚙︎</span></button-->
+					<div id="btn-popup" class="popup-btn" type="button" title="Settings">⚙️</div>
 				</div>
 			</main>
 
@@ -417,22 +418,22 @@
 	</svg>
 
 	<svg class="workspace__main" style="visibility:hidden; height:0; width:0;">
-		<text id="font-sample-section" 	class="header__text--section" 	 style="font-size: var(--px-font-size-svg); font-weight: var(--bold); ">M</text>
-		<text id="font-sample-chapter" 	class="header__text--chapter" 	 style="font-size: var(--px-font-size-svg); font-weight: var(--bold); ">M</text>
-		<text id="font-sample-part" 	class="tb-part__text" 			 style="font-size: var(--px-font-size-svg); font-weight: var(--bold); ">M</text>
+		<text id="font-sample-section" 	class="header__text--section" 	 xxxstyle="font-size: var(--px-font-size-svg); font-weight: var(--bold); ">M</text>
+		<text id="font-sample-chapter" 	class="header__text--chapter" 	 xxxstyle="font-size: var(--px-font-size-svg); font-weight: var(--bold); ">M</text>
+		<text id="font-sample-part" 	class="tb-part__text" 			 xxxstyle="font-size: var(--px-font-size-svg); font-weight: var(--bold); ">M</text>
 	</svg>
 
 
 	<script type="module">
 		import { html, svg, render } from './assets/uhtml/+esm.js';			// keep: import { html, svg, render } from 'https://esm.run/uhtml';		// https://github.com/WebReflection/uhtml
 
-//:::📙 CONSTANTS
+//:::📙 CONSTANTS ⚙︎ ⚙️ ⚙️ ✇ ⚙
 
 const STANDALONE = false;
 const TEXT_STANDALONE = ``;
 
-const LOGGING = true, DETAILS = true;
-const LOGARGS = true;
+const LOGGING = true, DETAILS = false;
+const LOGARGS = false;
 const LOG_RED = 'color:#933;', LOG_GREY = 'color:#777; background-color:#fff0da; font-weight:300 !important;', LOG_BLUE = 'color:#337;', LOG_GREEN = 'color:#7a7;';
 const LOG_BOLD = 'font-weight:700;';
 
@@ -457,9 +458,9 @@ const PX_PADDING_SMALL = 5;
 const PX_VIEVBOX_MIN_H = 400;
 
 //::	☐ chapter columns
-const PX_COL_MIN_W = 50;
-const PX_COL_MAX_W = 1000;
-const PX_COL_W_INITIAL = 120;
+//--const PX_COL_MIN_W = 50;
+//--const PX_COL_MAX_W = 1000;
+const PX_COL_W_INITIAL = 100;
 const COUNT_LINES_INITIAL = 4;
 const F_ZOOM_SVG_INITIAL = 1;
 
@@ -497,6 +498,14 @@ const CUtil = {
 		return Math.min(Math.max(v, lo), hi);
 	},
 
+	//:::	🔹 fnPrevNextValue
+	fnPrevNextValue(arr, valCurrent, iOffset, fallback = valCurrent) {
+		const idx = arr.indexOf(valCurrent);
+		if (idx === -1) return fallback;
+
+		const idxNew = CUtil.clamp(idx + iOffset, 0, arr.length - 1);
+		return arr[idxNew];
+	},
 }
 
 
@@ -628,7 +637,6 @@ const CModel = {
 
 		try {
 			const path = this.appstate.pathFileOpen;
-			console.log('this.appstate', this.appstate);
 			const key = "docstate:" + encodeURIComponent(path);
 			if (LOGARGS) console.log({path, key, docstate: this.docstate});
 
@@ -1457,7 +1465,7 @@ const CFramework = {
 
 		document.getElementById("btn-popup").addEventListener("click", (e) => {
 			e.preventDefault();
-			app.dispatch({type: 'popup.settings.open'});
+			App.dispatch({type: 'popup.settings.open', sender: 'btn-popup'});
 		});
 
 		window.addEventListener('keydown', e => {this.onKeydown(e)}, {capture: true});
@@ -1645,6 +1653,8 @@ const CFramework = {
 			const font = `${style.fontStyle} ${style.fontVariant} ${style.fontWeight} ${style.fontSize} / ${style.lineHeight} ${style.fontFamily}`;
 			FONTS_SIZE_REF[probe.name] = font;
 		}
+		//--console.log('FONTS_SIZE_REF', FONTS_SIZE_REF);
+
 		if (LOGGING) console.groupEnd();
 	},
 
@@ -2300,7 +2310,8 @@ const CChart = {
 				if (measurePartTextWidth(candidate) <= pxWidthMax) {
 					line = candidate;
 					index += 1;
-				} else {
+				}
+				else {
 					if (!line) {
 						const { fit, rest } = splitTokenToFit(token, pxWidthMax);
 						line = fit;
@@ -3882,14 +3893,14 @@ const App = {
 			//::		🔻 chart.zoom
 			case 'chart.zoom':
 
-				const fZoomNew			= (args.typeZoom === ZOOM_ALL) ? (args.isIn ? (F_ZOOM_SVG * 1.1) : args.isOut ? (F_ZOOM_SVG * 0.9) : 1) : F_ZOOM_SVG;
-				const pxColWidthNew		= (args.typeZoom === ZOOM_ALL || args.typeZoom === ZOOM_HORIZONTAL) ? (args.isIn ? (PX_COL_WIDTH_SVG * 1.1) : args.isOut ? (PX_COL_WIDTH_SVG * 0.9) : PX_COL_W_INITIAL) : PX_COL_WIDTH_SVG;
-				const linecountNew		= (args.typeZoom === ZOOM_LINECOUNT) ? (args.isIn ? (COUNT_LINES_SVG + 1) : args.isOut ? (COUNT_LINES_SVG - 1) : COUNT_LINES_INITIAL) : COUNT_LINES_SVG;
+				const arrZoomValues = [0.4, 0.6, 0.8,  1.0,  1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0, 3.2, 3.4, 3.6, 3.8, 4.0];
+				const arrPxColWidthValues = arrZoomValues.map(z => CUtil.roundN(z * 100, 0));
+				const arrLinecountValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
 
 				const oZoomValuesNew = {
-					fZoom: 		CUtil.clamp(CUtil.roundN(fZoomNew, 2), 0.25, 4.5),
-					pxColWidth:	CUtil.clamp(parseInt(pxColWidthNew), PX_COL_MIN_W, PX_COL_MAX_W), 
-					linecount:	CUtil.clamp(linecountNew, 1, 20),
+					fZoom: 		(args.typeZoom === ZOOM_ALL) ? (args.isReset ? 1.0 : CUtil.fnPrevNextValue(arrZoomValues, F_ZOOM_SVG, (args.isIn ? 1 : -1), F_ZOOM_SVG_INITIAL)) : F_ZOOM_SVG,
+					pxColWidth:	(args.typeZoom === ZOOM_ALL || args.typeZoom === ZOOM_HORIZONTAL) ? (args.isReset ? 100 : CUtil.fnPrevNextValue(arrPxColWidthValues, PX_COL_WIDTH_SVG, (args.isIn ? 1 : -1), PX_COL_W_INITIAL)) : PX_COL_WIDTH_SVG,
+					linecount:	(args.typeZoom === ZOOM_LINECOUNT) ? CUtil.fnPrevNextValue(arrLinecountValues, COUNT_LINES_SVG, (args.isIn ? 1 : -1), COUNT_LINES_INITIAL) : COUNT_LINES_SVG,
 				};
 
 				// calculate factor of zoom before setting PX_COL_WIDTH_SVG to new value (below)
@@ -4002,7 +4013,6 @@ const App = {
 
 	//:		→ App: dispatch:			model.filepath.open
 	App.dispatch({type: 'model.filepath.open', path: CModel.appstate.pathFileOpen, caller: 'App start'});
-	if (LOGGING) console.log(App);
 })();
 
 	</script>
