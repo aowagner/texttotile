@@ -15,11 +15,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
-      # Tauri Linux deps (WebKitGTK, etc.)
+      # Install Tauri Linux dependencies
       - name: Install Linux dependencies
         run: |
           sudo apt-get update
@@ -42,7 +43,7 @@ jobs:
           name: linux-appimage
           path: src-tauri/target/release/bundle/appimage/*.AppImage
 
-      - name: Upload .deb
+      - name: Upload Debian package
         uses: actions/upload-artifact@v4
         with:
           name: linux-deb
