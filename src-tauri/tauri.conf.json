@@ -2,7 +2,7 @@
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "tauri-app2",
   "version": "0.1.0",
-  "identifier": "com.jakobkristiansen.tauri-app",
+  "identifier": "com.aowagner.tauri-app",
   "build": {
     "frontendDist": "../src"
   },
@@ -11,7 +11,7 @@
     "windows": [
       {
 		"label": "main",
-        "title": "Jakob window - No file loaded",
+        "title": "",
         "width": 800,
         "height": 600,
 		"maximized": true,

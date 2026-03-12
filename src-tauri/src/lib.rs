@@ -15,7 +15,7 @@ use tauri::{AppHandle, Emitter, Runtime, State, Manager};
 
 use tauri::menu::{MenuId, MenuItemKind, CheckMenuItem};
 
-use tauri_plugin_dialog::DialogExt;
+//use tauri_plugin_dialog::DialogExt;
 
 
 fn find_menu_item_recursive<R: Runtime>(
@@ -142,6 +142,29 @@ fn start_watch_file(
 	
 	Ok(())
 }
+
+/*--
+#[tauri::command]
+fn stop_watch_file(state: tauri::State<WatcherState>) {
+    let mut watcher = state.0.lock().unwrap();
+    *watcher = None;
+}
+--*/
+#[tauri::command]
+fn stop_watch_file(state: State<WatcherState>) -> Result<(), String> {
+	let mut watcher = state
+		.0
+		.lock()
+		.map_err(|_| "Watcher lock poisoned".to_string())?;
+	
+	*watcher = None;
+	
+	Ok(())
+}
+
+
+
+
 
 
 
@@ -372,7 +395,7 @@ pub fn run() {
 	.plugin(tauri_plugin_fs::init())
 	.plugin(tauri_plugin_persisted_scope::init())
 	.manage(WatcherState(Mutex::new(None)))
-	.invoke_handler(tauri::generate_handler![greet, start_watch_file, set_menu_item_enabled, set_menu_checks])
+	.invoke_handler(tauri::generate_handler![greet, start_watch_file, stop_watch_file, set_menu_item_enabled, set_menu_checks])
 
 	/*-.setup(|app| {
 

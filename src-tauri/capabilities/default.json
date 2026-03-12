@@ -9,6 +9,10 @@
 	"core:window:allow-set-title",
     "opener:default",
 	"dialog:allow-open",
+	"dialog:allow-save",
+	"dialog:allow-message",
+	"dialog:allow-confirm",
+	"dialog:allow-ask",
 	"fs:default",
     {
       "identifier": "fs:allow-read-text-file",
