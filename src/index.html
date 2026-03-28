@@ -4319,10 +4319,10 @@ const App = {
 
 				const source = args.source === SOURCE.NEWDOC ? SOURCE.NEWDOC : SOURCE.FILEPATH;
 				const isLoadingNewFilepath = args.pathFileToLoad !== CModel.appstate.pathFileLoaded;
-
+				const isCalledFromModelInit = args.caller === 'CModel.init';
 
 				//:			→ CModel:		updateDocstate		[update Docstate for doc, before loading new doc, or re-loading current doc]
-				if (args.caller !== 'CModel.init') {
+				if (!isCalledFromModelInit) {
 					CModel.updateDocstate({
 						pxWorkspaceScrollLeft: CChart.elParent.scrollLeft,
 						pxTexteditorScrollTop: CTexteditor.elTextarea.scrollTop,
@@ -4342,7 +4342,9 @@ const App = {
 					return resLoadFileText;
 				}
 
-				if (isLoadingNewFilepath === false && resLoadFileText.text === CTexteditor.value) {
+				const isTextIdentical = resLoadFileText.text === CTexteditor.value;
+
+				if (isTextIdentical && !isLoadingNewFilepath && !isCalledFromModelInit) {
 					if (LOGGING) console.log('NO LOAD - CONTENT IS THE SAME...');
 					if (LOGGING) console.groupEnd();
 					return {status: STATUS.OK, caller};
@@ -4350,7 +4352,6 @@ const App = {
 
 				//:			→ CTexteditor:	setText
 				CTexteditor.setText({txt: resLoadFileText.text, caller});
-
 
 				//:			→ CModel:		loadDocstate
 				CModel.docstate = CModel.loadDocstate({pathFile: args.pathFileToLoad, doLoadDefault: source === SOURCE.NEWDOC, caller});
@@ -4414,6 +4415,10 @@ const App = {
 					//:			→ CModel: updateAppstate:		arrPathFilePinned
 					CModel.updateAppstate({arrPathFilePinned: [...CModel.appstate.arrPathFilePinned, pathToPin], caller});	// update array with copy plus added string 
 
+				//:			→ CPopup: renderPopup
+				if (CModel.appstate.isPopupOpen)
+					CPopup.renderPopup({caller});
+
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
 			}
@@ -4423,6 +4428,10 @@ const App = {
 			
 				//:			→ CModel: updateAppstate:		arrPathFilePinned
 				CModel.updateAppstate({arrPathFilePinned: CModel.appstate.arrPathFilePinned.filter(pathPinned => pathPinned !== args.pathFileToUnpin), caller});
+
+				//:			→ CPopup: renderPopup
+				if (CModel.appstate.isPopupOpen)
+					CPopup.renderPopup({caller});
 
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
