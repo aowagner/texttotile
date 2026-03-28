@@ -18,6 +18,7 @@ use tauri::menu::{MenuId, MenuItemKind, CheckMenuItem};
 //use tauri_plugin_dialog::DialogExt;
 
 
+
 fn find_menu_item_recursive<R: Runtime>(
 items: Vec<MenuItemKind<R>>,
 target: &MenuId,
@@ -190,8 +191,8 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 
 	let new = MenuItem::with_id(app, "file.new", "New", true, Some("CmdOrCtrl+N"))?;
 	let open = MenuItem::with_id(app, "file.open", "Open…", true, Some("CmdOrCtrl+O"))?;
-	let saveas = MenuItem::with_id(app, "file.saveas", "Save As…", true, Some("CmdOrCtrl+Shift+S"))?; 
-	let pincurrent = MenuItem::with_id(app, "file.pincurrent", "Pin Current File", true, Some("CmdOrCtrl+D"))?;
+	let saveas = MenuItem::with_id(app, "file.saveas", "Save as…", true, Some("CmdOrCtrl+Shift+S"))?; 
+	let pincurrent = MenuItem::with_id(app, "file.pincurrent", "Pin current file", true, Some("CmdOrCtrl+D"))?;
 	let settings_b = MenuItem::with_id(app, "file.settings", "Settings… [Win+Linux]", true, Some("CmdOrCtrl+,"))?;
 	let exit = MenuItem::with_id(app, "file.exit", "Exit [Win+Linux]", true, Some("Alt+F4"))?;
 
@@ -250,16 +251,16 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 		let menuitem_chartview_b = CheckMenuItem::with_id(app, "view.chart.viewb", "Tags", true, false, Some("F2"), )?;
 
 		// Build the sub-submenu
-		let submenu_chartview = SubmenuBuilder::new(app, "Chart View")
+		let submenu_chartview = SubmenuBuilder::new(app, "Chart view")
 			.item(&menuitem_chartview_a)
 			.item(&menuitem_chartview_b)
 			.build()?;
 
 
 		// zoom normal submenu items
-		let zoom_normal_in = MenuItem::with_id(app, "view.zoom.normal.in", "Zoom In [⌘ +]", true, None::<&str>)?;
-		let zoom_normal_out = MenuItem::with_id(app, "view.zoom.normal.out", "Zoom Out [⌘ -]", true, None::<&str>)?;
-		let zoom_normal_reset = MenuItem::with_id(app, "view.zoom.normal.reset", "Actual Size [⌘ 0]", true, None::<&str>)?;
+		let zoom_normal_in = MenuItem::with_id(app, "view.zoom.normal.in", "Zoom in [⌘ +]", true, None::<&str>)?;
+		let zoom_normal_out = MenuItem::with_id(app, "view.zoom.normal.out", "Zoom out [⌘ -]", true, None::<&str>)?;
+		let zoom_normal_reset = MenuItem::with_id(app, "view.zoom.normal.reset", "Actual size [⌘ 0]", true, None::<&str>)?;
 
 		// Build the sub-submenu
 		let zoom_normal_submenu = SubmenuBuilder::new(app, "Zoom")
@@ -270,12 +271,12 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 
 
 		// zoom width submenu items
-		let zoom_width_in = MenuItem::with_id(app, "view.zoom.width.in", "Widen Columns [⌥ +]", true, None::<&str>)?;
-		let zoom_width_out = MenuItem::with_id(app, "view.zoom.width.out", "Narrow Columns [⌥ -]", true, None::<&str>)?;
-		//--let zoom_width_reset = MenuItem::with_id(app, "view.zoom.width.reset", "Reset Width [⌥ 0]", true, None::<&str>)?;
+		/*--let zoom_width_in = MenuItem::with_id(app, "view.zoom.width.in", "Widen columns [⌥ +]", true, None::<&str>)?;
+		let zoom_width_out = MenuItem::with_id(app, "view.zoom.width.out", "Narrow columns [⌥ -]", true, None::<&str>)?;
+		//--let zoom_width_reset = MenuItem::with_id(app, "view.zoom.width.reset", "Reset Width [⌥ 0]", true, None::<&str>)?;
 
 		// Build the sub-submenu
-		let zoom_width_submenu = SubmenuBuilder::new(app, "Timeline Width")
+		let zoom_width_submenu = SubmenuBuilder::new(app, "Timeline width")
 			.item(&zoom_width_in)
 			.item(&zoom_width_out)
 			//--.item(&zoom_width_reset)
@@ -283,16 +284,28 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 
 
 		// zoom lines submenu items
-		let zoom_lines_in = MenuItem::with_id(app, "view.zoom.lines.in", "More Lines [⌘ ⌥ +]", true, None::<&str>)?;
-		let zoom_lines_out = MenuItem::with_id(app, "view.zoom.lines.out", "Fewer Lines [⌘ ⌥ -]", true, None::<&str>)?;
-		//--let zoom_lines_reset = MenuItem::with_id(app, "view.zoom.lines.reset", "Reset Lines [⌘ ⌥ 0]", true, None::<&str>)?;
+		let zoom_lines_in = MenuItem::with_id(app, "view.zoom.lines.in", "More lines [⌥ ⌘ +]", true, None::<&str>)?;
+		let zoom_lines_out = MenuItem::with_id(app, "view.zoom.lines.out", "Fewer lines [⌥ ⌘ -]", true, None::<&str>)?;
+		//--let zoom_lines_reset = MenuItem::with_id(app, "view.zoom.lines.reset", "Reset Lines [⌥ ⌘ 0]", true, None::<&str>)?;
 
 		// Build the sub-submenu
-		let zoom_lines_submenu = SubmenuBuilder::new(app, "Lines Shown")
+		let zoom_lines_submenu = SubmenuBuilder::new(app, "Lines shown")
 			.item(&zoom_lines_in)
 			.item(&zoom_lines_out)
 			//--.item(&zoom_lines_reset)
-			.build()?;
+			.build()?;--*/
+
+		// zoom UI submenu items
+		let zoom_ui_in = MenuItem::with_id(app, "view.zoom.ui.in", "Zoom in [⇧ ⌘ +]", true, None::<&str>)?;
+		let zoom_ui_out = MenuItem::with_id(app, "view.zoom.ui.out", "Zoom out [⇧ ⌘ -]", true, None::<&str>)?;
+		let zoom_ui_reset = MenuItem::with_id(app, "view.zoom.ui.reset", "Actual size [⇧ ⌘ 0]", true, None::<&str>)?;
+
+		// Build the sub-submenu
+		let zoom_ui_submenu = SubmenuBuilder::new(app, "UI zoom")
+			.item(&zoom_ui_in)
+			.item(&zoom_ui_out)
+			.item(&zoom_ui_reset)
+			.build()?;			
 
 
 	// --- Theme submenu (checkmarks) ---
@@ -307,37 +320,53 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 		.build()?;
 
 
+	// --- Editor Position submenu (checkmarks) ---
+	let sidebar_position_left = CheckMenuItem::with_id( app, "view.sidebar.position.left", "Left", true, true, None::<&str>)?;             // checked by default (pick what you want at startup) None::<&str>, 
+	let sidebar_position_right = CheckMenuItem::with_id( app, "view.sidebar.position.right", "Right", true, false, None::<&str>)?;
+	let sidebar_position_top = CheckMenuItem::with_id( app, "view.sidebar.position.top", "Top", true, false, None::<&str>)?;
+	let sidebar_position_bottom = CheckMenuItem::with_id( app, "view.sidebar.position.bottom", "Bottom", true, false, None::<&str>)?;
+
+	let sidebar_position_submenu = SubmenuBuilder::new(app, "Editor position")
+		.item(&sidebar_position_left)
+		.item(&sidebar_position_right)
+		.item(&sidebar_position_top)
+		.item(&sidebar_position_bottom)
+		.build()?;
+
 
 	// --- Editor Position submenu (checkmarks) ---
-	let sidebar_layout_left = CheckMenuItem::with_id( app, "view.sidebar.layout.left", "Left", true, true, None::<&str>)?;             // checked by default (pick what you want at startup) None::<&str>, 
-	let sidebar_layout_right = CheckMenuItem::with_id( app, "view.sidebar.layout.right", "Right", true, false, None::<&str>)?;
-	let sidebar_layout_top = CheckMenuItem::with_id( app, "view.sidebar.layout.top", "Top", true, false, None::<&str>)?;
-	let sidebar_layout_bottom = CheckMenuItem::with_id( app, "view.sidebar.layout.bottom", "Bottom", true, false, None::<&str>)?;
+	let graph_height_a = CheckMenuItem::with_id( app, "view.graph.height.a", "25%", true, true, None::<&str>)?;             // checked by default (pick what you want at startup) None::<&str>, 
+	let graph_height_b = CheckMenuItem::with_id( app, "view.graph.height.b", "50%", true, false, None::<&str>)?;
+	let graph_height_c = CheckMenuItem::with_id( app, "view.graph.height.c", "75%", true, false, None::<&str>)?;
+	let graph_height_d = CheckMenuItem::with_id( app, "view.graph.height.d", "100%", true, false, None::<&str>)?;
 
-	let sidebar_layout_submenu = SubmenuBuilder::new(app, "Editor Position")
-		.item(&sidebar_layout_left)
-		.item(&sidebar_layout_right)
-		.item(&sidebar_layout_top)
-		.item(&sidebar_layout_bottom)
+	let graph_height_submenu = SubmenuBuilder::new(app, "Graph height")
+		.item(&graph_height_a)
+		.item(&graph_height_b)
+		.item(&graph_height_c)
+		.item(&graph_height_d)
 		.build()?;
 
 
 
-	let toggle_sidebar = CheckMenuItem::with_id(app, "view.sidebar.toggle", "Show Editor", true, true, Some("CmdOrCtrl+E"))?;
-	let toggle_ribbon = CheckMenuItem::with_id(app, "view.toolbar.toggle", "Show Ribbon", true, true, Some("CmdOrCtrl+R"))?;
+	let toggle_sidebar = CheckMenuItem::with_id(app, "view.sidebar.toggle", "Show editor", true, true, Some("CmdOrCtrl+E"))?;
+	let toggle_ribbon = CheckMenuItem::with_id(app, "view.toolbar.toggle", "Show ribbon", true, true, Some("CmdOrCtrl+R"))?;
+	let toggle_graph = CheckMenuItem::with_id(app, "view.graph.toggle", "Show graphs", true, true, Some("CmdOrCtrl+G"))?;
 
 	let view_submenu = SubmenuBuilder::new(app, "View")
 		.item(&toggle_sidebar)
 		.item(&toggle_ribbon)
-		.separator()
-		.item(&submenu_chartview)
+		.item(&toggle_graph)
 		.separator()
 		.item(&zoom_normal_submenu)
-		.item(&zoom_width_submenu)
-		.item(&zoom_lines_submenu)
+		//--.item(&zoom_width_submenu)
+		//--.item(&zoom_lines_submenu)
 		.separator()
-		.item(&sidebar_layout_submenu)
+		.item(&zoom_ui_submenu)
 		.separator()
+		.item(&submenu_chartview)
+		.item(&graph_height_submenu)
+		.item(&sidebar_position_submenu)
 		.item(&theme_submenu)
 		.separator()
 		.build()?;
@@ -394,36 +423,9 @@ pub fn run() {
 	.plugin(tauri_plugin_dialog::init())
 	.plugin(tauri_plugin_fs::init())
 	.plugin(tauri_plugin_persisted_scope::init())
+	.plugin(tauri_plugin_clipboard_manager::init())
 	.manage(WatcherState(Mutex::new(None)))
-	.invoke_handler(tauri::generate_handler![greet, start_watch_file, stop_watch_file, set_menu_item_enabled, set_menu_checks])
-
-	/*-.setup(|app| {
-
-		if let Some(win) = app.get_webview_window("main") {
-			win.open_devtools();
-			// win.set_focus().ok(); // optional
-		}
-
-		// Set the menu
-		let menu = build_app_menu(app.handle())?;
-		app.set_menu(menu)?;
-		
-		// Send menu events to the frontend (keep logic in your JS router)
-		let handle = app.handle().clone();
-		app.on_menu_event(move |app_handle, event| {
-			let id = event.id().as_ref();
-			
-			if id == "app.quit" {
-				app_handle.exit(0);
-				return;
-			}
-			
-			// emit "menu" with the id string
-			let _ = handle.emit("menu", id.to_string());
-		});
-		
-		Ok(())
-	})-*/ 
+	.invoke_handler(tauri::generate_handler![greet, start_watch_file, stop_watch_file, set_menu_item_enabled, set_menu_checks, write_clipboard])
 
 	.setup(|app| {
 		let win = app
@@ -458,31 +460,8 @@ pub fn run() {
 			let _ = handle.emit("menu", id.to_string());
 		});
 
-/*--app.on_menu_event(move |app_handle, event| {
-    let id = event.id().as_ref();
-
-    // Get the main window
-    if let Some(win) = app_handle.get_webview_window("main") {
-        // Show a message dialog (non-blocking)
-        win.dialog()
-            .message(format!("MENU EVENT: {}", id))
-            .title("Menu Debug")
-            .show(|_| {});
-    }
-
-    if id == "app.quit" {
-        app_handle.exit(0);
-        return;
-    }
-
-    let _ = handle.emit("menu", id.to_string());
-});--*/
-
-		
 		Ok(())
 	})
-
-
 
 	.run(tauri::generate_context!())
 	.expect("error while running tauri application");
@@ -596,6 +575,14 @@ fn set_theme_menu_checks<R: Runtime>(
   Ok(())
 }
   ++++*/
+
+use tauri_plugin_clipboard_manager::ClipboardExt;
+
+#[tauri::command]
+fn write_clipboard(app: tauri::AppHandle, text: String) -> Result<(), String> {
+    app.clipboard().write_text(text).map_err(|e| e.to_string())
+}
+
 
 
   #[tauri::command]
