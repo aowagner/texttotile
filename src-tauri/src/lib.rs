@@ -223,7 +223,7 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 	let item_cut = MenuItem::with_id(app, "edit.cut", "Cut", true, Some("CmdOrCtrl+X"))?;
 	let item_copy = MenuItem::with_id(app, "edit.copy", "Copy", true, Some("CmdOrCtrl+C"))?;
 	let item_paste = MenuItem::with_id(app, "edit.paste", "Paste", true, Some("CmdOrCtrl+V"))?;
-	let item_delete = MenuItem::with_id(app, "edit.delete", "Delete", true, Some("Backspace"))?;
+	let item_delete = MenuItem::with_id(app, "edit.delete", "Delete", true, Some("Delete"))?;
 	let item_selectall = MenuItem::with_id(app, "edit.selectall", "Select all", true, Some("CmdOrCtrl+A"))?;
 	
 	let edit_submenu = SubmenuBuilder::new(app, "Edit")

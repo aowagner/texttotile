@@ -597,7 +597,7 @@ const CWrapper = {
 		// listen for menu events from Rust
 		window.__TAURI__.event.listen('menu', (e) => {
 			if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'window.__TAURI__.event.listen(menu)', '(payload: ' + e.payload + ')'));
-			if (LOGARGS) console.log(e);
+			if (!LOGARGS) console.log(e);
 
 			this.onMenuEvent({payload: e.payload, caller: 'window.__TAURI__.event.listen(menu)'});
 			if (LOGGING) console.groupEnd();
@@ -651,7 +651,6 @@ const CWrapper = {
 		//:			→ App: dispatch:				COMING...
 		if (args.payload === 'file.exit') 			res = await App.dispatch({type: 'COMING...', caller});
 
-
 		// menu: Edit
 		//::		🔻 edit.cut
 		//:			→ this.cut
@@ -672,8 +671,6 @@ const CWrapper = {
 		//::		🔻 edit.selectall
 		//:			→ this.selectAll
 		if (args.payload === 'edit.selectall') 		res = await CWrapper.selectAll({caller});
-
-
 
 		// menu: View
 		//::		🔻 view.sidebar.toggle
@@ -1642,7 +1639,8 @@ const CFramework = {
 		}
 
 		//:: 			Windows 'accelerator' keys: fix for missing feature in Tauri
-		else if (isWindows) {
+		//+else if (isWindows) {
+		else if (1 === 1) {
 
 			//::			🔻 Cmd + N
 			if (isMetaKey && e.key.toLowerCase() === 'n') {
