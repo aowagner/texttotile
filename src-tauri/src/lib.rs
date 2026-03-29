@@ -144,13 +144,7 @@ fn start_watch_file(
 	Ok(())
 }
 
-/*--
-#[tauri::command]
-fn stop_watch_file(state: tauri::State<WatcherState>) {
-    let mut watcher = state.0.lock().unwrap();
-    *watcher = None;
-}
---*/
+
 #[tauri::command]
 fn stop_watch_file(state: State<WatcherState>) -> Result<(), String> {
 	let mut watcher = state
@@ -162,9 +156,6 @@ fn stop_watch_file(state: State<WatcherState>) -> Result<(), String> {
 	
 	Ok(())
 }
-
-
-
 
 
 
@@ -228,18 +219,28 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 // ---- Edit submenu ----
 
 	// PredefinedMenuItem gives native behavior + symbols (esp. on macOS)
-	let delete = MenuItem::with_id(app, "edit.delete", "Delete", true, None::<&str>)?;
+	//-let delete = MenuItem::with_id(app, "edit.delete", "Delete", true, None::<&str>)?;
+	let item_cut = MenuItem::with_id(app, "edit.cut", "Cut", true, Some("CmdOrCtrl+X"))?;
+	let item_copy = MenuItem::with_id(app, "edit.copy", "Copy", true, Some("CmdOrCtrl+C"))?;
+	let item_paste = MenuItem::with_id(app, "edit.paste", "Paste", true, Some("CmdOrCtrl+V"))?;
+	let item_delete = MenuItem::with_id(app, "edit.delete", "Delete", true, Some("Backspace"))?;
+	let item_selectall = MenuItem::with_id(app, "edit.selectall", "Select all", true, Some("CmdOrCtrl+A"))?;
 	
 	let edit_submenu = SubmenuBuilder::new(app, "Edit")
-		.item(&PredefinedMenuItem::undo(app, None)?)
-		.item(&PredefinedMenuItem::redo(app, None)?)
+		//-.item(&PredefinedMenuItem::undo(app, None)?)
+		//-.item(&PredefinedMenuItem::redo(app, None)?)
 		.separator()
-		.item(&PredefinedMenuItem::cut(app, None)?)
-		.item(&PredefinedMenuItem::copy(app, None)?)
-		.item(&PredefinedMenuItem::paste(app, None)?)
-		.item(&delete)
+		//-.item(&PredefinedMenuItem::cut(app, None)?)
+		.item(&item_cut)
+		//-.item(&PredefinedMenuItem::copy(app, None)?)
+		.item(&item_copy)
+		//-.item(&PredefinedMenuItem::paste(app, None)?)
+		.item(&item_paste)
+		//-.item(&delete)
+		.item(&item_delete)
 		.separator()
-		.item(&PredefinedMenuItem::select_all(app, None)?)
+		//-.item(&PredefinedMenuItem::select_all(app, None)?)
+		.item(&item_selectall)
 		.build()?;
 
 
@@ -268,32 +269,6 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 			.item(&zoom_normal_out)
 			.item(&zoom_normal_reset)
 			.build()?;
-
-
-		// zoom width submenu items
-		/*--let zoom_width_in = MenuItem::with_id(app, "view.zoom.width.in", "Widen columns [⌥ +]", true, None::<&str>)?;
-		let zoom_width_out = MenuItem::with_id(app, "view.zoom.width.out", "Narrow columns [⌥ -]", true, None::<&str>)?;
-		//--let zoom_width_reset = MenuItem::with_id(app, "view.zoom.width.reset", "Reset Width [⌥ 0]", true, None::<&str>)?;
-
-		// Build the sub-submenu
-		let zoom_width_submenu = SubmenuBuilder::new(app, "Timeline width")
-			.item(&zoom_width_in)
-			.item(&zoom_width_out)
-			//--.item(&zoom_width_reset)
-			.build()?;
-
-
-		// zoom lines submenu items
-		let zoom_lines_in = MenuItem::with_id(app, "view.zoom.lines.in", "More lines [⌥ ⌘ +]", true, None::<&str>)?;
-		let zoom_lines_out = MenuItem::with_id(app, "view.zoom.lines.out", "Fewer lines [⌥ ⌘ -]", true, None::<&str>)?;
-		//--let zoom_lines_reset = MenuItem::with_id(app, "view.zoom.lines.reset", "Reset Lines [⌥ ⌘ 0]", true, None::<&str>)?;
-
-		// Build the sub-submenu
-		let zoom_lines_submenu = SubmenuBuilder::new(app, "Lines shown")
-			.item(&zoom_lines_in)
-			.item(&zoom_lines_out)
-			//--.item(&zoom_lines_reset)
-			.build()?;--*/
 
 		// zoom UI submenu items
 		let zoom_ui_in = MenuItem::with_id(app, "view.zoom.ui.in", "Zoom in [⇧ ⌘ +]", true, None::<&str>)?;
@@ -359,8 +334,6 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 		.item(&toggle_graph)
 		.separator()
 		.item(&zoom_normal_submenu)
-		//--.item(&zoom_width_submenu)
-		//--.item(&zoom_lines_submenu)
 		.separator()
 		.item(&zoom_ui_submenu)
 		.separator()
@@ -425,7 +398,7 @@ pub fn run() {
 	.plugin(tauri_plugin_persisted_scope::init())
 	.plugin(tauri_plugin_clipboard_manager::init())
 	.manage(WatcherState(Mutex::new(None)))
-	.invoke_handler(tauri::generate_handler![greet, start_watch_file, stop_watch_file, set_menu_item_enabled, set_menu_checks, write_clipboard])
+	.invoke_handler(tauri::generate_handler![greet, start_watch_file, stop_watch_file, set_menu_item_enabled, set_menu_checks, write_clipboard, read_clipboard])
 
 	.setup(|app| {
 		let win = app
@@ -475,106 +448,7 @@ pub fn run() {
 
 
 
-/*-----------
 
-use serde::Deserialize;
-
-#[derive(Debug, Deserialize)]
-pub struct MenuCheckUpdate {
-  pub id: String,
-  pub checked: bool,
-}
-
-#[tauri::command]
-/*pub*/ fn set_menu_check_statesB<R: Runtime>(
-  app: AppHandle<R>,
-  updates: Vec<MenuCheckUpdate>,
-) -> Result<(), String> {
-  // Prefer app menu (macOS global menu bar); otherwise use window menu.
-  let menu = if let Some(menu) = app.menu() {
-    menu
-  } else {
-    let win = app
-      .get_webview_window("main")
-      .ok_or_else(|| "Main window not found".to_string())?;
-
-    win.menu()
-      .ok_or_else(|| "Window has no menu (and no app menu)".to_string())?
-  };
-
-  // Helper: set a single check item
-  let set_checked = |id: &str, checked: bool| -> Result<(), String> {
-    let target = MenuId::new(id);
-
-    let items = menu.items().map_err(|e: tauri::Error| e.to_string())?;
-    let item_opt = find_menu_item_recursive(items, &target).map_err(|e| e.to_string())?;
-    let item = item_opt.ok_or_else(|| format!("Menu item not found: {}", id))?;
-
-    match item {
-      MenuItemKind::Check(ci) => {
-        ci.set_checked(checked).map_err(|e: tauri::Error| e.to_string())?;
-        Ok(())
-      }
-      _ => Err(format!("Menu item is not a CheckMenuItem: {}", id)),
-    }
-  };
-
-  for u in updates {
-    set_checked(&u.id, u.checked)?;
-  }
-
-  Ok(())
-}
-
----*/
-
-
-/*+++++
-#[tauri::command]
-fn set_theme_menu_checks<R: Runtime>(
-  app: AppHandle<R>,
-  theme: String, // "system" | "light" | "dark"
-) -> Result<(), String> {
-  // Prefer app menu (macOS global menu bar); otherwise use window menu.
-  let menu = if let Some(menu) = app.menu() {
-    menu
-  } else {
-    let win = app
-      .get_webview_window("main")
-      .ok_or_else(|| "Main window not found".to_string())?;
-
-    win.menu()
-      .ok_or_else(|| "Window has no menu (and no app menu)".to_string())?
-  };
-
-  let mut set_checked = |id: &str, checked: bool| -> Result<(), String> {
-    let target = MenuId::new(id);
-
-    let items = menu.items().map_err(|e: tauri::Error| e.to_string())?;
-
-    // NOTE: your find_menu_item_recursive returns Result<Option<_>>
-    let item_opt = find_menu_item_recursive(items, &target).map_err(|e| e.to_string())?;
-    let item = item_opt.ok_or_else(|| format!("Menu item not found: {}", id))?;
-
-    match item {
-      MenuItemKind::Check(ci) => {
-        ci.set_checked(checked).map_err(|e: tauri::Error| e.to_string())?;
-        Ok(())
-      }
-      _ => Err(format!("Menu item is not a CheckMenuItem: {}", id)),
-    }
-  };
-
-  let t = theme.to_lowercase();
-  set_checked("view.theme.system", t == "system")?;
-  set_checked("view.theme.light",  t == "light")?;
-  set_checked("view.theme.dark",   t == "dark")?;
-
-  set_checked("view.sidebar.toggle",   t == "system")?;		// TEST - WORKS FINE!
-
-  Ok(())
-}
-  ++++*/
 
 use tauri_plugin_clipboard_manager::ClipboardExt;
 
@@ -583,6 +457,11 @@ fn write_clipboard(app: tauri::AppHandle, text: String) -> Result<(), String> {
     app.clipboard().write_text(text).map_err(|e| e.to_string())
 }
 
+
+#[tauri::command]
+fn read_clipboard(app: tauri::AppHandle) -> Result<String, String> {
+    app.clipboard().read_text().map_err(|e| e.to_string())
+}
 
 
   #[tauri::command]
@@ -602,7 +481,7 @@ fn set_menu_checks<R: Runtime>(
       .ok_or_else(|| "Window has no menu (and no app menu)".to_string())?
   };
 
- //-- let mut set_checked = |id: &str, checked: bool| -> Result<(), String> {
+ // let mut set_checked = |id: &str, checked: bool| -> Result<(), String> {
   let set_checked = |id: &str, checked: bool| -> Result<(), String> {
     let target = MenuId::new(id);
 

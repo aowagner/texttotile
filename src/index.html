@@ -468,7 +468,9 @@ const CODE = Object.freeze({
 	ERROR_FILE_SCOPE: 'ERROR_FILE_SCOPE',
 	ERROR_FILE_READ: 'ERROR_FILE_READ',
 	ERROR_FILE_WRITE: 'ERROR_FILE_WRITE',
-	FILE_PATH_NOTSET: 'FILE_PATH_NOTSET',
+	FILE_PATH_NOT_SET: 'FILE_PATH_NOT_SET',
+	TEXTAREA_NOT_FOCUSED: 'TEXTAREA_NOT_FOCUSED',
+	CLIPBOARD_NOT_TEXT: 'CLIPBOARD_NOT_TEXT',
 });
 
 const SOURCE = Object.freeze({
@@ -648,6 +650,30 @@ const CWrapper = {
 		//::		🔻 file.exit
 		//:			→ App: dispatch:				COMING...
 		if (args.payload === 'file.exit') 			res = await App.dispatch({type: 'COMING...', caller});
+
+
+		// menu: Edit
+		//::		🔻 edit.cut
+		//:			→ this.cut
+		if (args.payload === 'edit.cut') 			res = await CWrapper.cut({caller});
+
+		//::		🔻 edit.copy
+		//:			→ this.copy
+		if (args.payload === 'edit.copy') 			res = await CWrapper.copy({caller});
+
+		//::		🔻 edit.paste
+		//:			→ this.paste
+		if (args.payload === 'edit.paste') 			res = await CWrapper.paste({caller});
+
+		//::		🔻 edit.delete
+		//:			→ this.deleteSelection
+		if (args.payload === 'edit.delete') 		res = await CWrapper.deleteSelection({caller});
+
+		//::		🔻 edit.selectall
+		//:			→ this.selectAll
+		if (args.payload === 'edit.selectall') 		res = await CWrapper.selectAll({caller});
+
+
 
 		// menu: View
 		//::		🔻 view.sidebar.toggle
@@ -895,8 +921,10 @@ const CWrapper = {
 
 	//:::	🔹 setMenuChecks
 	setMenuChecks: async (args) => {
-		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'setMenuChecks', CUtil.getArgsKeys(args), args.caller));
-		if (LOGARGS) console.log(args);
+		//if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'setMenuChecks', CUtil.getArgsKeys(args), args.caller));
+		//if (LOGARGS) console.log(args);
+
+		return;
 
 		const arrCheckableMenuItems = [
 			{idMenu: 'view.theme.system',			key: 'idTheme', val: 'system'},
@@ -965,6 +993,196 @@ const CWrapper = {
 		//: 		→ window.__TAURI__.core.invoke:	write_clipboard
 		await window.__TAURI__.core.invoke('write_clipboard', {text: args.txtToCopy});
 		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 getTa
+	getTa() {
+		const el = document.activeElement;
+		return el instanceof HTMLTextAreaElement ? el : null;
+	},
+
+	//:::	🔹 getSel
+/*--	getSelOLD() {
+		const ta = this.getTa();
+		if (!ta) return null;
+		
+		const start = ta.selectionStart ?? 0;
+		const end = ta.selectionEnd ?? 0;
+		
+		return {
+			ta,
+			start,
+			end,
+			hasSelection: end > start,
+			selectedText: ta.value.slice(start, end),
+		};
+	},
+
+getSel2() {
+	const ta = this.getTa();
+	if (!ta) return null;
+
+	let start = ta.selectionStart ?? 0;
+	let end = ta.selectionEnd ?? 0;
+
+	let hasSelection = end > start;
+
+	// If no selection → expand to current line
+	if (!hasSelection) {
+		const value = ta.value;
+
+		// Find start of line
+		const lineStart = value.lastIndexOf('\n', start - 1) + 1;
+
+		// Find end of line
+		let lineEnd = value.indexOf('\n', start);
+		if (lineEnd === -1) lineEnd = value.length;
+
+		start = lineStart;
+		end = lineEnd;
+
+		hasSelection = true;
+	}
+
+	return {
+		ta,
+		start,
+		end,
+		hasSelection,
+		selectedText: ta.value.slice(start, end),
+	};
+},-*/
+
+	getSel() {
+		const expandLine = true;
+		const ta = this.getTa();
+		if (!ta) return null;
+
+		let start = ta.selectionStart ?? 0;
+		let end = ta.selectionEnd ?? 0;
+
+		const hasExplicitSelection = end > start;
+
+		if (!hasExplicitSelection && expandLine) {
+			const value = ta.value;
+
+			const lineStart = value.lastIndexOf('\n', start - 1) + 1;
+
+			let lineEnd = value.indexOf('\n', start);
+
+			if (lineEnd === -1) {
+				lineEnd = value.length;
+			} else {
+				lineEnd += 1; // include trailing newline
+			}
+
+			start = lineStart;
+			end = lineEnd;
+		}
+
+		return {
+			ta,
+			start,
+			end,
+			hasSelection: end > start,
+			selectedText: ta.value.slice(start, end),
+		};
+	},
+
+	//:::	🔹 cut
+	async cut(args) {
+		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'cut', '', args.caller));
+		const sel = this.getSel();
+		if (!sel || !sel.hasSelection) {
+			if (LOGGING) console.groupEnd();
+			return {status: STATUS.CANCEL, code: CODE.TEXTAREA_NOT_FOCUSED, caller: 'CWrapper.cut'};
+		}
+		await window.__TAURI__.core.invoke('write_clipboard', {text: sel.selectedText});
+		if (LOGGING) console.log('Copied TO clipboard:', sel.selectedText);
+		
+		sel.ta.focus();
+		sel.ta.setRangeText('', sel.start, sel.end, 'start');
+		sel.ta.dispatchEvent(new Event('input', { bubbles: true }));
+
+		if (LOGGING) console.groupEnd();
+		return {status: STATUS.OK, caller: 'CWrapper.cut'};
+	},
+
+	//:::	🔹 copy
+	async copy(args) {
+		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'copy', '', args.caller));
+		const sel = this.getSel();
+		if (!sel || !sel.hasSelection) {
+			if (LOGGING) console.groupEnd();
+			return {status: STATUS.CANCEL, code: CODE.TEXTAREA_NOT_FOCUSED, caller: 'CWrapper.copy'};
+		}
+		
+		await window.__TAURI__.core.invoke('write_clipboard', {text: sel.selectedText});
+		if (LOGGING) console.log('Copied TO clipboard:', sel.selectedText);
+
+		if (LOGGING) console.groupEnd();
+		return {status: STATUS.OK, caller: 'CWrapper.copy'};
+	},
+
+	//:::	🔹 paste
+	async paste(args) {
+		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'paste', '', args.caller));
+		const ta = this.getTa();
+		if (!ta) {
+			if (LOGGING) console.groupEnd();
+			return {status: STATUS.CANCEL, code: CODE.TEXTAREA_NOT_FOCUSED, caller: 'CWrapper.paste'};
+		}
+
+		ta.focus();
+
+		const text = await window.__TAURI__.core.invoke('read_clipboard');
+		if (typeof text !== 'string') {
+			if (LOGGING) console.groupEnd();
+			return {status: STATUS.CANCEL, code: CODE.CLIPBOARD_NOT_TEXT, caller: 'CWrapper.paste'};
+		}
+
+		if (LOGGING) console.log('Copied FROM clipboard:', text);
+
+		const start = ta.selectionStart ?? 0;
+		const end = ta.selectionEnd ?? 0;
+
+		ta.setRangeText(text, start, end, 'end');
+		ta.dispatchEvent(new Event('input', { bubbles: true }));
+
+		if (LOGGING) console.groupEnd();
+		return {status: STATUS.OK, caller: 'CWrapper.paste'};
+	},
+
+	//:::	🔹 deleteSelection
+	deleteSelection(args) {
+		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'deleteSelection', '', args.caller));
+		const sel = this.getSel();
+		if (!sel || !sel.hasSelection) {
+			if (LOGGING) console.groupEnd();
+			return {status: STATUS.CANCEL, code: CODE.TEXTAREA_NOT_FOCUSED, caller: 'CWrapper.deleteSelection'};
+		}
+		sel.ta.focus();
+		sel.ta.setRangeText('', sel.start, sel.end, 'start');
+		sel.ta.dispatchEvent(new Event('input', { bubbles: true }));
+
+		if (LOGGING) console.groupEnd();
+		return {status: STATUS.OK, caller: 'CWrapper.deleteSelection'};
+	},
+
+	//:::	🔹 selectAll
+	selectAll(args) {
+		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'selectAll', '', args.caller));
+		const ta = this.getTa();
+		if (!ta) {
+			if (LOGGING) console.groupEnd();
+			return {status: STATUS.CANCEL, code: CODE.TEXTAREA_NOT_FOCUSED, caller: 'CWrapper.selectAll'};
+		}
+		
+		ta.focus();
+		ta.select();
+
+		if (LOGGING) console.groupEnd();
+		return {status: STATUS.OK, caller: 'CWrapper.selectAll'};
 	},
 
 	/* keep: code for enabling/disabling menu items
@@ -1110,7 +1328,7 @@ const CFramework = {
 				labelOK: 'Close',
 			});
 		}
-		else if (args.code === CODE.FILE_PATH_NOTSET) {		// nb: don't save warnings to error-log! but *maybe* show info somewhere, that doc isn't saved?
+		else if (args.code === CODE.FILE_PATH_NOT_SET) {		// nb: don't save warnings to error-log! but *maybe* show info somewhere, that doc isn't saved?
 			Object.assign(logentry, {
 				title: 'File path not set',
 				message: 'No path was specified.',
@@ -4226,7 +4444,7 @@ const App = {
 
 				if (args.pathFileToSave === '') {
 					if (LOGGING) console.groupEnd();
-					return {status: STATUS.CANCEL, code: CODE.FILE_PATH_NOTSET};
+					return {status: STATUS.CANCEL, code: CODE.FILE_PATH_NOT_SET};
 				}
 
 				else {
