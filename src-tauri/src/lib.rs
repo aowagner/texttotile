@@ -183,9 +183,9 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 	let new = MenuItem::with_id(app, "file.new", "New", true, Some("CmdOrCtrl+N"))?;
 	let open = MenuItem::with_id(app, "file.open", "Open…", true, Some("CmdOrCtrl+O"))?;
 	let saveas = MenuItem::with_id(app, "file.saveas", "Save as…", true, Some("CmdOrCtrl+Shift+S"))?; 
-	let pincurrent = MenuItem::with_id(app, "file.pincurrent", "Pin current file", true, Some("CmdOrCtrl+D"))?;
-	let settings_b = MenuItem::with_id(app, "file.settings", "Settings… [Win+Linux]", true, Some("CmdOrCtrl+,"))?;
-	let exit = MenuItem::with_id(app, "file.exit", "Exit [Win+Linux]", true, Some("Alt+F4"))?;
+	let pincurrent = MenuItem::with_id(app, "file.pincurrent", "Pin current file", true, Some("CmdOrCtrl+Shift+P"))?; 
+	let settings_b = MenuItem::with_id(app, "file.settings", "Settings…", true, Some("CmdOrCtrl+,"))?;		// for Win+Linux only
+	let exit = MenuItem::with_id(app, "file.exit", "Exit", true, Some("Alt+F4"))?;		// for Win+Linux only
 
 	let file_submenu = if cfg!(target_os = "macos") {
 		// macOS — no Exit in File menu
@@ -194,10 +194,10 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 			.item(&open)
 			.item(&saveas)
 			.item(&pincurrent)
-					.separator()		// nb: on build: remove (only for testing Windows style)
-					.item(&settings_b)	// nb: on build: remove (only for testing Windows style)
-					.separator()		// nb: on build: remove (only for testing Windows style)
-					.item(&exit)		// nb: on build: remove (only for testing Windows style)
+					//--.separator()		// nb: on build: remove (only for testing Windows style)
+					//--.item(&settings_b)	// nb: on build: remove (only for testing Windows style)
+					//--.separator()		// nb: on build: remove (only for testing Windows style)
+					//--.item(&exit)		// nb: on build: remove (only for testing Windows style)
 			.build()?
 	}
 	else {
@@ -223,7 +223,8 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 	let item_cut = MenuItem::with_id(app, "edit.cut", "Cut", true, Some("CmdOrCtrl+X"))?;
 	let item_copy = MenuItem::with_id(app, "edit.copy", "Copy", true, Some("CmdOrCtrl+C"))?;
 	let item_paste = MenuItem::with_id(app, "edit.paste", "Paste", true, Some("CmdOrCtrl+V"))?;
-	let item_delete = MenuItem::with_id(app, "edit.delete", "Delete", true, Some("Delete"))?;
+	let item_duplicateline = MenuItem::with_id(app, "edit.duplicateline", "Duplicate line", true, Some("CmdOrCtrl+D"))?;
+	let item_deleteline = MenuItem::with_id(app, "edit.deleteline", "Delete line", true, Some("CmdOrCtrl+Shift+D"))?;
 	let item_selectall = MenuItem::with_id(app, "edit.selectall", "Select all", true, Some("CmdOrCtrl+A"))?;
 	
 	let edit_submenu = SubmenuBuilder::new(app, "Edit")
@@ -237,7 +238,9 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 		//-.item(&PredefinedMenuItem::paste(app, None)?)
 		.item(&item_paste)
 		//-.item(&delete)
-		.item(&item_delete)
+		.separator()
+		.item(&item_duplicateline)
+		.item(&item_deleteline)
 		.separator()
 		//-.item(&PredefinedMenuItem::select_all(app, None)?)
 		.item(&item_selectall)

@@ -470,6 +470,7 @@ const CODE = Object.freeze({
 	ERROR_FILE_WRITE: 'ERROR_FILE_WRITE',
 	FILE_PATH_NOT_SET: 'FILE_PATH_NOT_SET',
 	TEXTAREA_NOT_FOCUSED: 'TEXTAREA_NOT_FOCUSED',
+	TEXTAREA_NO_RANGE: 'TEXTAREA_NO_RANGE',
 	CLIPBOARD_NOT_TEXT: 'CLIPBOARD_NOT_TEXT',
 });
 
@@ -589,6 +590,8 @@ const CUtil = {
 const CWrapper = {
 	reloadTimer: null,		// debounce bursty save events (VS Code / Obsidian often save in quick bursts)
 	msTimestampWriteFileContent: 0,
+	msTimestampLastMenuEvent: 0,
+	payloadLast: '',
 
 	//:::	🔹 init
 	init(args) {
@@ -623,6 +626,20 @@ const CWrapper = {
 		const caller = 'CWrapper: onMenuEvent: ' + args.payload + ' (' + args.caller + ')';
 		let res = {status: STATUS.OK, info: 'not set'};
 
+		// deduper		// jk: explain logic with both 'routes': required on Windows, but active on Mac+Linux too
+		const msTimestampNow = Date.now();
+		const msSinceLastCall = msTimestampNow - CWrapper.msTimestampLastMenuEvent;
+		const isProbablyDuplicate = (msSinceLastCall < 80) && (args.payload === CWrapper.payloadLast);
+
+		CWrapper.msTimestampLastMenuEvent = msTimestampNow;
+		CWrapper.payloadLast = args.payload;
+		
+		if (isProbablyDuplicate) {
+			if (LOGGING) console.log('Call probably duplicate. msSinceLastCall, payload:', msSinceLastCall, args.payload);
+			if (LOGGING) console.groupEnd();
+			return;
+		}
+
 		// menu: App (Mac only)
 		//::		🔻 app.settings
 		//:			→ App: dispatch:				popup.settings.open		🟣 (change from 'if' to 'switch')
@@ -653,24 +670,28 @@ const CWrapper = {
 
 		// menu: Edit
 		//::		🔻 edit.cut
-		//:			→ this.cut
-		if (args.payload === 'edit.cut') 			res = await CWrapper.cut({caller});
+		//:			→ this.editCut
+		if (args.payload === 'edit.cut') 			res = await CWrapper.editCut({caller});
 
 		//::		🔻 edit.copy
-		//:			→ this.copy
-		if (args.payload === 'edit.copy') 			res = await CWrapper.copy({caller});
+		//:			→ this.editCopy
+		if (args.payload === 'edit.copy') 			res = await CWrapper.editCopy({caller});
 
 		//::		🔻 edit.paste
-		//:			→ this.paste
-		if (args.payload === 'edit.paste') 			res = await CWrapper.paste({caller});
+		//:			→ this.editPaste
+		if (args.payload === 'edit.paste') 			res = await CWrapper.editPaste({caller});
 
-		//::		🔻 edit.delete
-		//:			→ this.deleteSelection
-		if (args.payload === 'edit.delete') 		res = await CWrapper.deleteSelection({caller});
+		//::		🔻 edit.duplicateline
+		//:			→ this.editDuplicateLine
+		if (args.payload === 'edit.duplicateline') 		res = await CWrapper.editDuplicateLine({caller});
+
+		//::		🔻 edit.deleteline
+		//:			→ this.editDeleteLine
+		if (args.payload === 'edit.deleteline') 		res = await CWrapper.editDeleteLine({caller});
 
 		//::		🔻 edit.selectall
-		//:			→ this.selectAll
-		if (args.payload === 'edit.selectall') 		res = await CWrapper.selectAll({caller});
+		//:			→ this.editSelectAll
+		if (args.payload === 'edit.selectall') 		res = await CWrapper.editSelectAll({caller});
 
 		// menu: View
 		//::		🔻 view.sidebar.toggle
@@ -992,6 +1013,155 @@ const CWrapper = {
 		if (LOGGING) console.groupEnd();
 	},
 
+	//:::	🔹 editCut
+	async editCut(args) {
+		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'editCut', '', args.caller));
+		const sel = this.getSel();
+		if (!sel || !sel.hasSelection) {
+			if (LOGGING) console.groupEnd();
+			return {status: STATUS.CANCEL, code: CODE.TEXTAREA_NOT_FOCUSED, caller: 'CWrapper.editCut'};
+		}
+
+		//: 		→ window.__TAURI__.core.invoke:	write_clipboard
+		await window.__TAURI__.core.invoke('write_clipboard', {text: sel.selectedText});
+		if (LOGGING) console.log('Copied TO clipboard:', sel.selectedText);
+		
+		sel.ta.focus();
+		sel.ta.setRangeText('', sel.start, sel.end, 'start');
+		sel.ta.dispatchEvent(new Event('input', { bubbles: true }));
+
+		if (LOGGING) console.groupEnd();
+		return {status: STATUS.OK, caller: 'CWrapper.editCut'};
+	},
+
+	//:::	🔹 editCopy
+	async editCopy(args) {
+		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'editCopy', '', args.caller));
+		const sel = this.getSel();
+		if (!sel || !sel.hasSelection) {
+			if (LOGGING) console.groupEnd();
+			return {status: STATUS.CANCEL, code: CODE.TEXTAREA_NOT_FOCUSED, caller: 'CWrapper.editCopy'};
+		}
+		
+		//: 		→ window.__TAURI__.core.invoke:	write_clipboard
+		await window.__TAURI__.core.invoke('write_clipboard', {text: sel.selectedText});
+		if (LOGGING) console.log('Copied TO clipboard:', sel.selectedText);
+
+		if (LOGGING) console.groupEnd();
+		return {status: STATUS.OK, caller: 'CWrapper.editCopy'};
+	},
+
+	//:::	🔹 editPaste
+	async editPaste(args) {
+		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'editPaste', '', args.caller));
+		const ta = this.getTa();
+		if (!ta) {
+			if (LOGGING) console.groupEnd();
+			return {status: STATUS.CANCEL, code: CODE.TEXTAREA_NOT_FOCUSED, caller: 'CWrapper.editPaste'};
+		}
+
+		ta.focus();
+
+		//: 		→ window.__TAURI__.core.invoke:	read_clipboard
+		const text = await window.__TAURI__.core.invoke('read_clipboard');
+		if (typeof text !== 'string') {
+			if (LOGGING) console.groupEnd();
+			return {status: STATUS.CANCEL, code: CODE.CLIPBOARD_NOT_TEXT, caller: 'CWrapper.editPaste'};
+		}
+
+		if (LOGGING) console.log('Copied FROM clipboard:', text);
+
+		const start = ta.selectionStart ?? 0;
+		const end = ta.selectionEnd ?? 0;
+
+		ta.setRangeText(text, start, end, 'end');
+		ta.dispatchEvent(new Event('input', { bubbles: true }));
+
+		if (LOGGING) console.groupEnd();
+		return {status: STATUS.OK, caller: 'CWrapper.editPaste'};
+	},
+
+	//:::	🔹 editSelectAll
+	editSelectAll(args) {
+		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'editSelectAll', '', args.caller));
+		const ta = this.getTa();
+		if (!ta) {
+			if (LOGGING) console.groupEnd();
+			return {status: STATUS.CANCEL, code: CODE.TEXTAREA_NOT_FOCUSED, caller: 'CWrapper.editSelectAll'};
+		}
+		
+		ta.focus();
+		ta.select();
+
+		if (LOGGING) console.groupEnd();
+		return {status: STATUS.OK, caller: 'CWrapper.editSelectAll'};
+	},
+
+	//:::	🔹 editDuplicateLine
+	editDuplicateLine(args) {
+		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'editDuplicateLine', '', args.caller));
+		const range = this.getCurrentLineRange();
+		if (!range) {
+			if (LOGGING) console.groupEnd();
+			return {status: STATUS.CANCEL, code: CODE.TEXTAREA_NO_RANGE, caller: 'CWrapper.editDuplicateLine'};
+		}
+
+		range.ta.focus();
+		range.ta.setRangeText(range.text, range.end, range.end, 'end');
+		range.ta.dispatchEvent(new Event('input', { bubbles: true }));
+
+		if (LOGGING) console.groupEnd();
+		return {status: STATUS.OK, caller: 'CWrapper.editDuplicateLine'};
+	},
+
+	//:::	🔹 editDeleteLine
+	editDeleteLine(args) {
+		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'editDeleteLine', '', args.caller));
+		const range = this.getCurrentLineRange();
+		if (!range) {
+			if (LOGGING) console.groupEnd();
+			return {status: STATUS.CANCEL, code: CODE.TEXTAREA_NO_RANGE, caller: 'CWrapper.editDeleteLine'};
+		}
+
+		range.ta.focus();
+		range.ta.setRangeText('', range.start, range.end, 'start');
+		range.ta.dispatchEvent(new Event('input', { bubbles: true }));
+
+		if (LOGGING) console.groupEnd();
+		return {status: STATUS.OK, caller: 'CWrapper.editDeleteLine'};
+	},
+
+	//:::	🔹 getCurrentLineRange
+	getCurrentLineRange() {
+		const ta = this.getTa();
+		if (!ta) return null;
+
+		const value = ta.value;
+		const selStart = ta.selectionStart ?? 0;
+		const selEnd = ta.selectionEnd ?? 0;
+
+		const blockStart = value.lastIndexOf('\n', Math.max(0, selStart - 1)) + 1;
+
+		let searchEnd = selEnd;
+		if (selEnd > selStart && value[selEnd - 1] === '\n') {
+			searchEnd = selEnd - 1;
+		}
+
+		let blockEnd = value.indexOf('\n', searchEnd);
+		if (blockEnd === -1) {
+			blockEnd = value.length;
+		} else {
+			blockEnd += 1; // include trailing newline
+		}
+
+		return {
+			ta,
+			start: blockStart,
+			end: blockEnd,
+			text: value.slice(blockStart, blockEnd),
+		};
+	},
+
 	//:::	🔹 getTa
 	getTa() {
 		const el = document.activeElement;
@@ -999,57 +1169,6 @@ const CWrapper = {
 	},
 
 	//:::	🔹 getSel
-/*--	getSelOLD() {
-		const ta = this.getTa();
-		if (!ta) return null;
-		
-		const start = ta.selectionStart ?? 0;
-		const end = ta.selectionEnd ?? 0;
-		
-		return {
-			ta,
-			start,
-			end,
-			hasSelection: end > start,
-			selectedText: ta.value.slice(start, end),
-		};
-	},
-
-getSel2() {
-	const ta = this.getTa();
-	if (!ta) return null;
-
-	let start = ta.selectionStart ?? 0;
-	let end = ta.selectionEnd ?? 0;
-
-	let hasSelection = end > start;
-
-	// If no selection → expand to current line
-	if (!hasSelection) {
-		const value = ta.value;
-
-		// Find start of line
-		const lineStart = value.lastIndexOf('\n', start - 1) + 1;
-
-		// Find end of line
-		let lineEnd = value.indexOf('\n', start);
-		if (lineEnd === -1) lineEnd = value.length;
-
-		start = lineStart;
-		end = lineEnd;
-
-		hasSelection = true;
-	}
-
-	return {
-		ta,
-		start,
-		end,
-		hasSelection,
-		selectedText: ta.value.slice(start, end),
-	};
-},-*/
-
 	getSel() {
 		const expandLine = true;
 		const ta = this.getTa();
@@ -1084,102 +1203,6 @@ getSel2() {
 			hasSelection: end > start,
 			selectedText: ta.value.slice(start, end),
 		};
-	},
-
-	//:::	🔹 cut
-	async cut(args) {
-		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'cut', '', args.caller));
-		const sel = this.getSel();
-		if (!sel || !sel.hasSelection) {
-			if (LOGGING) console.groupEnd();
-			return {status: STATUS.CANCEL, code: CODE.TEXTAREA_NOT_FOCUSED, caller: 'CWrapper.cut'};
-		}
-		await window.__TAURI__.core.invoke('write_clipboard', {text: sel.selectedText});
-		if (LOGGING) console.log('Copied TO clipboard:', sel.selectedText);
-		
-		sel.ta.focus();
-		sel.ta.setRangeText('', sel.start, sel.end, 'start');
-		sel.ta.dispatchEvent(new Event('input', { bubbles: true }));
-
-		if (LOGGING) console.groupEnd();
-		return {status: STATUS.OK, caller: 'CWrapper.cut'};
-	},
-
-	//:::	🔹 copy
-	async copy(args) {
-		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'copy', '', args.caller));
-		const sel = this.getSel();
-		if (!sel || !sel.hasSelection) {
-			if (LOGGING) console.groupEnd();
-			return {status: STATUS.CANCEL, code: CODE.TEXTAREA_NOT_FOCUSED, caller: 'CWrapper.copy'};
-		}
-		
-		await window.__TAURI__.core.invoke('write_clipboard', {text: sel.selectedText});
-		if (LOGGING) console.log('Copied TO clipboard:', sel.selectedText);
-
-		if (LOGGING) console.groupEnd();
-		return {status: STATUS.OK, caller: 'CWrapper.copy'};
-	},
-
-	//:::	🔹 paste
-	async paste(args) {
-		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'paste', '', args.caller));
-		const ta = this.getTa();
-		if (!ta) {
-			if (LOGGING) console.groupEnd();
-			return {status: STATUS.CANCEL, code: CODE.TEXTAREA_NOT_FOCUSED, caller: 'CWrapper.paste'};
-		}
-
-		ta.focus();
-
-		const text = await window.__TAURI__.core.invoke('read_clipboard');
-		if (typeof text !== 'string') {
-			if (LOGGING) console.groupEnd();
-			return {status: STATUS.CANCEL, code: CODE.CLIPBOARD_NOT_TEXT, caller: 'CWrapper.paste'};
-		}
-
-		if (LOGGING) console.log('Copied FROM clipboard:', text);
-
-		const start = ta.selectionStart ?? 0;
-		const end = ta.selectionEnd ?? 0;
-
-		ta.setRangeText(text, start, end, 'end');
-		ta.dispatchEvent(new Event('input', { bubbles: true }));
-
-		if (LOGGING) console.groupEnd();
-		return {status: STATUS.OK, caller: 'CWrapper.paste'};
-	},
-
-	//:::	🔹 deleteSelection
-	deleteSelection(args) {
-		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'deleteSelection', '', args.caller));
-		const sel = this.getSel();
-		if (!sel || !sel.hasSelection) {
-			if (LOGGING) console.groupEnd();
-			return {status: STATUS.CANCEL, code: CODE.TEXTAREA_NOT_FOCUSED, caller: 'CWrapper.deleteSelection'};
-		}
-		sel.ta.focus();
-		sel.ta.setRangeText('', sel.start, sel.end, 'start');
-		sel.ta.dispatchEvent(new Event('input', { bubbles: true }));
-
-		if (LOGGING) console.groupEnd();
-		return {status: STATUS.OK, caller: 'CWrapper.deleteSelection'};
-	},
-
-	//:::	🔹 selectAll
-	selectAll(args) {
-		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'selectAll', '', args.caller));
-		const ta = this.getTa();
-		if (!ta) {
-			if (LOGGING) console.groupEnd();
-			return {status: STATUS.CANCEL, code: CODE.TEXTAREA_NOT_FOCUSED, caller: 'CWrapper.selectAll'};
-		}
-		
-		ta.focus();
-		ta.select();
-
-		if (LOGGING) console.groupEnd();
-		return {status: STATUS.OK, caller: 'CWrapper.selectAll'};
 	},
 
 	/* keep: code for enabling/disabling menu items
@@ -1638,102 +1661,140 @@ const CFramework = {
 				res = await App.dispatch({type: 'popup.tab.select', idTab: 'status', caller});
 		}
 
-		//:: 			Windows 'accelerator' keys: fix for missing feature in Tauri
-		//+else if (isWindows) {
-		else if (1 === 1) {
+		//	 	'accelerator' keys: fix for missing feature in Tauri on Windows. Active for all os's, but only 'really' needed for Windows (see 'deduper' in onMenuEvent)
+		//		nb: res does not get set on these
+		//::			🔻 Cmd + N
+		if (isMetaKey && e.key.toLowerCase() === 'n') {
+			if (e.preventDefault) e.preventDefault();
 
-			//::			🔻 Cmd + N
-			if (isMetaKey && e.key.toLowerCase() === 'n') {
-				if (e.preventDefault) e.preventDefault();
+			CWrapper.onMenuEvent({payload: 'file.new', caller});
+		}
 
-				CWrapper.onMenuEvent({payload: 'file.new', caller});
-			}
+		//::			🔻 Cmd + O
+		else if (isMetaKey && e.key.toLowerCase() === 'o') {
+			if (e.preventDefault) e.preventDefault();
 
-			//::			🔻 Cmd + O
-			else if (isMetaKey && e.key.toLowerCase() === 'o') {
-				if (e.preventDefault) e.preventDefault();
+			CWrapper.onMenuEvent({payload: 'file.open', caller});
+		}
 
-				CWrapper.onMenuEvent({payload: 'file.open', caller});
-			}
+		//::			🔻 Cmd + Shift + S
+		else if (isMetaKey && isShiftKey && e.key.toLowerCase() === 's') {
+			if (e.preventDefault) e.preventDefault();
 
-			//::			🔻 Cmd + Shift + S
-			else if (isMetaKey && isShiftKey && e.key.toLowerCase() === 's') {
-				if (e.preventDefault) e.preventDefault();
+			CWrapper.onMenuEvent({payload: 'file.saveas', caller});
+		}
 
-				CWrapper.onMenuEvent({payload: 'file.saveas', caller});
-			}
+		//::			🔻 Cmd + Shift + P
+		else if (isMetaKey && isShiftKey && e.key.toLowerCase() === 'p') {
+			if (e.preventDefault) e.preventDefault();
 
-			//::			🔻 Cmd + D
-			else if (isMetaKey && e.key.toLowerCase() === 'd') {
-				if (e.preventDefault) e.preventDefault();
+			CWrapper.onMenuEvent({payload: 'file.pincurrent', caller});
+		}
 
-				CWrapper.onMenuEvent({payload: 'file.pincurrent', caller});
-			}
+		//::			🔻 Alt + ,
+		else if (isMetaKey && e.key.toLowerCase() === ',') {
+			if (e.preventDefault) e.preventDefault();
 
-			//::			🔻 Alt + ,
-			else if (isMetaKey && e.key.toLowerCase() === ',') {
-				if (e.preventDefault) e.preventDefault();
+			CWrapper.onMenuEvent({payload: 'file.settings', caller});
+		}
 
-				CWrapper.onMenuEvent({payload: 'file.settings', caller});
-			}
+		//::			🔻 Alt + F4
+		else if (isAltKey && e.key === 'F4') {
+			if (e.preventDefault) e.preventDefault();
 
-			//::			🔻 Alt + F4
-			else if (isAltKey && e.key === 'F4') {
-				if (e.preventDefault) e.preventDefault();
+			CWrapper.onMenuEvent({payload: 'file.exit', caller});
+		}
 
-				CWrapper.onMenuEvent({payload: 'file.exit', caller});
-			}
 
-			//::			🔻 Cmd + E
-			else if (isMetaKey && e.key.toLowerCase() === 'e') {
-				if (e.preventDefault) e.preventDefault();
+		//::			🔻 Cmd + X
+		else if (isMetaKey && e.key.toLowerCase() === 'x') {
+			if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: 'view.sidebar.toggle', caller});
-			}
+			CWrapper.onMenuEvent({payload: 'edit.cut', caller});
+		}
 
-			//::			🔻 Cmd + R
-			else if (isMetaKey && e.key.toLowerCase() === 'r') {
-				if (e.preventDefault) e.preventDefault();
+		//::			🔻 Cmd + C
+		else if (isMetaKey && e.key.toLowerCase() === 'c') {
+			if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: 'view.toolbar.toggle', caller});
-			}
+			CWrapper.onMenuEvent({payload: 'edit.copy', caller});
+		}
 
-			//::			🔻 F1
-			else if (!isMetaKey && !isShiftKey && e.key === 'F1') {
-				if (e.preventDefault) e.preventDefault();
+		//::			🔻 Cmd + V
+		else if (isMetaKey && e.key.toLowerCase() === 'v') {
+			if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: 'view.chart.viewa', caller});
-			}
+			CWrapper.onMenuEvent({payload: 'edit.paste', caller});
+		}
 
-			//::			🔻 F2
-			else if (!isMetaKey && !isShiftKey && e.key === 'F2') {
-				if (e.preventDefault) e.preventDefault();
+		//::			🔻 Cmd + Shift + D
+		else if (isMetaKey && isShiftKey && e.key.toLowerCase() === 'd') {
+			if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: 'view.chart.viewb', caller});
-			}
+			CWrapper.onMenuEvent({payload: 'edit.deleteline', caller});
+		}
 
-			//::			🔻 Cmd + Shift + F1
-			else if (isMetaKey && isShiftKey && e.key === 'F1') {
-				if (e.preventDefault) e.preventDefault();
+		//::			🔻 Cmd + D
+		else if (isMetaKey && e.key.toLowerCase() === 'd') {
+			if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: 'view.theme.system', caller});
-			}
+			CWrapper.onMenuEvent({payload: 'edit.duplicateline', caller});
+		}
 
-			//::			🔻 Cmd + Shift + F2
-			else if (isMetaKey && isShiftKey && e.key === 'F2') {
-				if (e.preventDefault) e.preventDefault();
+		//::			🔻 Cmd + A	
+		else if (isMetaKey && e.key.toLowerCase() === 'a') {
+			if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: 'view.theme.light', caller});
-			}
+			CWrapper.onMenuEvent({payload: 'edit.selectall', caller});
+		}
 
-			//::			🔻 Cmd + Shift + F3 
-			else if (isMetaKey && isShiftKey && e.key === 'F3') {
-				if (e.preventDefault) e.preventDefault();
+		//::			🔻 Cmd + E
+		else if (isMetaKey && e.key.toLowerCase() === 'e') {
+			if (e.preventDefault) e.preventDefault();
 
-				CWrapper.onMenuEvent({payload: 'view.theme.dark', caller});
-			}
+			CWrapper.onMenuEvent({payload: 'view.sidebar.toggle', caller});
+		}
 
-			return;
+		//::			🔻 Cmd + R
+		else if (isMetaKey && e.key.toLowerCase() === 'r') {
+			if (e.preventDefault) e.preventDefault();
+
+			CWrapper.onMenuEvent({payload: 'view.toolbar.toggle', caller});
+		}
+
+		//::			🔻 F1
+		else if (!isMetaKey && !isShiftKey && e.key === 'F1') {
+			if (e.preventDefault) e.preventDefault();
+
+			CWrapper.onMenuEvent({payload: 'view.chart.viewa', caller});
+		}
+
+		//::			🔻 F2
+		else if (!isMetaKey && !isShiftKey && e.key === 'F2') {
+			if (e.preventDefault) e.preventDefault();
+
+			CWrapper.onMenuEvent({payload: 'view.chart.viewb', caller});
+		}
+
+		//::			🔻 Cmd + Shift + F1
+		else if (isMetaKey && isShiftKey && e.key === 'F1') {
+			if (e.preventDefault) e.preventDefault();
+
+			CWrapper.onMenuEvent({payload: 'view.theme.system', caller});
+		}
+
+		//::			🔻 Cmd + Shift + F2
+		else if (isMetaKey && isShiftKey && e.key === 'F2') {
+			if (e.preventDefault) e.preventDefault();
+
+			CWrapper.onMenuEvent({payload: 'view.theme.light', caller});
+		}
+
+		//::			🔻 Cmd + Shift + F3 
+		else if (isMetaKey && isShiftKey && e.key === 'F3') {
+			if (e.preventDefault) e.preventDefault();
+
+			CWrapper.onMenuEvent({payload: 'view.theme.dark', caller});
 		}
 
 		res.context = caller;
@@ -2873,8 +2934,8 @@ const CPopup = {
 						<span class="btn__label">Save as…</span>
 					</button>
 
-					<button class="btn" @click=${e => CPopup.onClick({src: '@click: btn.pin.current.file'})} title="Pin file\n(⌘ D)">
-						<span class="kbd">⌘ D</span>
+					<button class="btn" @click=${e => CPopup.onClick({src: '@click: btn.pin.current.file'})} title="Pin file\n(⇧ ⌘ P)">
+						<span class="kbd">⇧ ⌘ P</span>
 						<span class="btn__label">Pin file</span>
 					</button>
 				</div>
