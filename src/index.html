@@ -629,24 +629,26 @@ const CWrapper = {
 		// deduper		// jk: explain logic with both 'routes': required on Windows, but active on Mac+Linux too
 		const msTimestampNow = Date.now();
 		const msSinceLastCall = msTimestampNow - CWrapper.msTimestampLastMenuEvent;
-		const isProbablyDuplicate = (msSinceLastCall < 80) && (args.payload === CWrapper.payloadLast);
+		const isProbablyDuplicateEvent = (msSinceLastCall < 80) && (args.payload === CWrapper.payloadLast);
 
 		CWrapper.msTimestampLastMenuEvent = msTimestampNow;
 		CWrapper.payloadLast = args.payload;
 		
-		if (isProbablyDuplicate) {
+		if (isProbablyDuplicateEvent) {
 			if (LOGGING) console.log('Call probably duplicate. msSinceLastCall, payload:', msSinceLastCall, args.payload);
 			if (LOGGING) console.groupEnd();
 			return;
 		}
+		else
+			if (LOGGING) console.log('Call probably NOT duplicate. msSinceLastCall, payload:', msSinceLastCall, args.payload);
 
 		// menu: App (Mac only)
 		//::		🔻 app.settings
 		//:			→ App: dispatch:				popup.settings.open		🟣 (change from 'if' to 'switch')
 		if (args.payload === 'app.settings') 		res = await App.dispatch({type: 'popup.settings.open', caller});
-		//::		🔻 app.exit
-		//:			→ App: dispatch:				COMING...
-		if (args.payload === 'app.exit') 			res = await App.dispatch({type: 'COMING...', caller});
+		//::		🔻 app.quit
+		//:			→ this: requestQuit
+		if (args.payload === 'app.quit') 			res = await CWrapper.requestQuit({caller});
 
 		// menu: File
 		//::		🔻 file.new
@@ -664,31 +666,26 @@ const CWrapper = {
 		//::		🔻 file.settings
 		//:			→ App: dispatch:				popup.settings.open
 		if (args.payload === 'file.settings') 		res = await App.dispatch({type: 'popup.settings.open', caller});
-		//::		🔻 file.exit
-		//:			→ App: dispatch:				COMING...
-		if (args.payload === 'file.exit') 			res = await App.dispatch({type: 'COMING...', caller});
+		//::		🔻 file.quit
+		//:			→ this: requestQuit
+		if (args.payload === 'file.quit') 			res = await CWrapper.requestQuit({caller});
 
 		// menu: Edit
 		//::		🔻 edit.cut
 		//:			→ this.editCut
 		if (args.payload === 'edit.cut') 			res = await CWrapper.editCut({caller});
-
 		//::		🔻 edit.copy
 		//:			→ this.editCopy
 		if (args.payload === 'edit.copy') 			res = await CWrapper.editCopy({caller});
-
 		//::		🔻 edit.paste
 		//:			→ this.editPaste
 		if (args.payload === 'edit.paste') 			res = await CWrapper.editPaste({caller});
-
 		//::		🔻 edit.duplicateline
 		//:			→ this.editDuplicateLine
-		if (args.payload === 'edit.duplicateline') 		res = await CWrapper.editDuplicateLine({caller});
-
+		if (args.payload === 'edit.duplicateline') 	res = await CWrapper.editDuplicateLine({caller});
 		//::		🔻 edit.deleteline
 		//:			→ this.editDeleteLine
-		if (args.payload === 'edit.deleteline') 		res = await CWrapper.editDeleteLine({caller});
-
+		if (args.payload === 'edit.deleteline') 	res = await CWrapper.editDeleteLine({caller});
 		//::		🔻 edit.selectall
 		//:			→ this.editSelectAll
 		if (args.payload === 'edit.selectall') 		res = await CWrapper.editSelectAll({caller});
@@ -768,14 +765,55 @@ const CWrapper = {
 		if (args.payload === 'view.theme.dark')		res = await App.dispatch({type: 'wrapper.theme.set', idTheme: 'dark', caller});
 
 		//::		🔻 help.docs
-		//:			→ App: dispatch:				COMING...
-		if (args.payload === 'help.docs') 			res = await App.dispatch({type: 'COMING...', caller});
+		//:			→ this.openUrl:					https://www.dr.dk
+		if (args.payload === 'help.docs') 			res = await CWrapper.openUrl({url: 'https://www.dr.dk', caller});
 		//::		🔻 help.website
-		//:			→ App: dispatch:				COMING...
-		if (args.payload === 'help.website') 		res = await App.dispatch({type: 'COMING...', caller});
+		//:			→ this.openUrl:					https://www.youtube.dk
+		if (args.payload === 'help.website') 		res = await CWrapper.openUrl({url: 'https://www.youtube.dk', caller});
 
 		res.context = caller;
 		await CFramework.handleResult(res);
+		if (LOGGING) console.groupEnd();
+	},
+
+	//:::	🔹 openUrl
+	async openUrl(args) {
+		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'openUrl', '', args.caller));
+
+		await window.__TAURI__.core.invoke('open_url', {url: args.url});
+
+		if (LOGGING) console.groupEnd();
+		return {status: STATUS.OK, caller: 'CWrapper.openUrl'};
+	},
+
+	//:::	🔹 requestQuit
+	async requestQuit(args) {
+		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'requestQuit', '', args.caller));
+
+		const caller = 'CWrapper.requestQuit';
+		let res = {status: STATUS.OK, info: 'not set'};
+
+		if (CModel.appstate.isDocdataSaved) {
+			await window.__TAURI__.core.invoke('quit_app');
+			if (LOGGING) console.groupEnd();
+			return res;
+		}
+
+		const resPrompt = await CWrapper.showPromptDialog({type: 'ask', title: 'Unsaved edits', message: 'Save changes to this document?', kind: 'warning', okLabel: 'Save', cancelLabel: 'Don\'t Save', caller});
+
+		if (resPrompt.status === STATUS.OK) {		// 'Save'
+
+			//:				→ App: dispatch:		wrapper.dialog.saveas.show
+			const resSaveAs = await App.dispatch({type: 'wrapper.dialog.saveas.show', caller});
+
+			if (resSaveAs.status !== STATUS.OK) {	// 'Cancel'
+				if (LOGGING) console.groupEnd();
+				return resSaveAs;
+			}
+		}
+
+		await window.__TAURI__.core.invoke('quit_app');
+		return res;
 		if (LOGGING) console.groupEnd();
 	},
 
@@ -942,7 +980,7 @@ const CWrapper = {
 		//if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'setMenuChecks', CUtil.getArgsKeys(args), args.caller));
 		//if (LOGARGS) console.log(args);
 
-		return;
+	//-	return;
 
 		const arrCheckableMenuItems = [
 			{idMenu: 'view.theme.system',			key: 'idTheme', val: 'system'},
@@ -1604,31 +1642,6 @@ const CFramework = {
 			}
 		}
 
-		//::		🔻 Cmd + Shift + 'J/K/0'
-		else if ((isMetaKey && isShiftKey) && (e.key.toLowerCase() === 'j' || e.key.toLowerCase() === 'k' || e.key === '0' || e.code === 'Numpad0')) {
-			if (e.preventDefault) e.preventDefault();
-
-			const isReset = (e.key === '0' || e.code === 'Numpad0');
-			const isIn = (e.key.toLowerCase() === 'k');
-			const isOut = !(isReset || isIn);
-
-			//:			→ App: dispatch:			framework.zoom
-			res = await App.dispatch({type: 'framework.zoom', isIn, isOut, isReset, caller});
-		}
-
-		//::		🔻 Cmd + 'J/K/0'
-		else if (isMetaKey && (e.key.toLowerCase() === 'j' || e.key.toLowerCase() === 'k' || e.key === '0' || e.code === 'Numpad0')) {
-			if (e.preventDefault) e.preventDefault();
-			if (e.stopPropagation) e.stopPropagation();		//++ testing - use in other places too?
-
-			const isReset = (e.key === '0' || e.code === 'Numpad0');
-			const isIn = (e.key.toLowerCase() === 'k');
-			const isOut = !(isReset || isIn);
-
-			//:			→ App: dispatch:			chart.zoom (isIn, isOut, isReset)
-			res = await App.dispatch({type: 'chart.zoom', isIn, isOut, isReset, caller});
-		} 
-
 		//::		🔻 Cmd/Alt + 1 - 9
 		else if ((isMetaKey || isAltKey) && !e.shiftKey && arrNumberKey.includes(e.code)) {		// NB: using e.code instead of e.key
 			if (e.preventDefault) e.preventDefault();
@@ -1661,12 +1674,15 @@ const CFramework = {
 				res = await App.dispatch({type: 'popup.tab.select', idTab: 'status', caller});
 		}
 
+
+
 		//	 	'accelerator' keys: fix for missing feature in Tauri on Windows. Active for all os's, but only 'really' needed for Windows (see 'deduper' in onMenuEvent)
 		//		nb: res does not get set on these
 		//::			🔻 Cmd + N
 		if (isMetaKey && e.key.toLowerCase() === 'n') {
 			if (e.preventDefault) e.preventDefault();
 
+			//:			→ CWrapper: onMenuEvent:			file.new
 			CWrapper.onMenuEvent({payload: 'file.new', caller});
 		}
 
@@ -1674,6 +1690,7 @@ const CFramework = {
 		else if (isMetaKey && e.key.toLowerCase() === 'o') {
 			if (e.preventDefault) e.preventDefault();
 
+			//:			→ CWrapper: onMenuEvent:			file.open
 			CWrapper.onMenuEvent({payload: 'file.open', caller});
 		}
 
@@ -1681,6 +1698,7 @@ const CFramework = {
 		else if (isMetaKey && isShiftKey && e.key.toLowerCase() === 's') {
 			if (e.preventDefault) e.preventDefault();
 
+			//:			→ CWrapper: onMenuEvent:			fifile.saveas
 			CWrapper.onMenuEvent({payload: 'file.saveas', caller});
 		}
 
@@ -1688,6 +1706,7 @@ const CFramework = {
 		else if (isMetaKey && isShiftKey && e.key.toLowerCase() === 'p') {
 			if (e.preventDefault) e.preventDefault();
 
+			//:			→ CWrapper: onMenuEvent:			file.pincurrent
 			CWrapper.onMenuEvent({payload: 'file.pincurrent', caller});
 		}
 
@@ -1695,6 +1714,7 @@ const CFramework = {
 		else if (isMetaKey && e.key.toLowerCase() === ',') {
 			if (e.preventDefault) e.preventDefault();
 
+			//:			→ CWrapper: onMenuEvent:			file.settings
 			CWrapper.onMenuEvent({payload: 'file.settings', caller});
 		}
 
@@ -1702,7 +1722,8 @@ const CFramework = {
 		else if (isAltKey && e.key === 'F4') {
 			if (e.preventDefault) e.preventDefault();
 
-			CWrapper.onMenuEvent({payload: 'file.exit', caller});
+			//:			→ CWrapper: onMenuEvent:			file.quit
+			CWrapper.onMenuEvent({payload: 'file.quit', caller});
 		}
 
 
@@ -1710,6 +1731,7 @@ const CFramework = {
 		else if (isMetaKey && e.key.toLowerCase() === 'x') {
 			if (e.preventDefault) e.preventDefault();
 
+			//:			→ CWrapper: onMenuEvent:			edit.cut
 			CWrapper.onMenuEvent({payload: 'edit.cut', caller});
 		}
 
@@ -1717,6 +1739,7 @@ const CFramework = {
 		else if (isMetaKey && e.key.toLowerCase() === 'c') {
 			if (e.preventDefault) e.preventDefault();
 
+			//:			→ CWrapper: onMenuEvent:			edit.copy
 			CWrapper.onMenuEvent({payload: 'edit.copy', caller});
 		}
 
@@ -1724,6 +1747,7 @@ const CFramework = {
 		else if (isMetaKey && e.key.toLowerCase() === 'v') {
 			if (e.preventDefault) e.preventDefault();
 
+			//:			→ CWrapper: onMenuEvent:			edit.paste
 			CWrapper.onMenuEvent({payload: 'edit.paste', caller});
 		}
 
@@ -1731,6 +1755,7 @@ const CFramework = {
 		else if (isMetaKey && isShiftKey && e.key.toLowerCase() === 'd') {
 			if (e.preventDefault) e.preventDefault();
 
+			//:			→ CWrapper: onMenuEvent:			edit.deleteline
 			CWrapper.onMenuEvent({payload: 'edit.deleteline', caller});
 		}
 
@@ -1738,6 +1763,7 @@ const CFramework = {
 		else if (isMetaKey && e.key.toLowerCase() === 'd') {
 			if (e.preventDefault) e.preventDefault();
 
+			//:			→ CWrapper: onMenuEvent:			edit.duplicateline
 			CWrapper.onMenuEvent({payload: 'edit.duplicateline', caller});
 		}
 
@@ -1745,6 +1771,7 @@ const CFramework = {
 		else if (isMetaKey && e.key.toLowerCase() === 'a') {
 			if (e.preventDefault) e.preventDefault();
 
+			//:			→ CWrapper: onMenuEvent:			edit.selectall
 			CWrapper.onMenuEvent({payload: 'edit.selectall', caller});
 		}
 
@@ -1752,6 +1779,7 @@ const CFramework = {
 		else if (isMetaKey && e.key.toLowerCase() === 'e') {
 			if (e.preventDefault) e.preventDefault();
 
+			//:			→ CWrapper: onMenuEvent:			view.sidebar.toggle
 			CWrapper.onMenuEvent({payload: 'view.sidebar.toggle', caller});
 		}
 
@@ -1759,6 +1787,7 @@ const CFramework = {
 		else if (isMetaKey && e.key.toLowerCase() === 'r') {
 			if (e.preventDefault) e.preventDefault();
 
+			//:			→ CWrapper: onMenuEvent:			view.toolbar.toggle
 			CWrapper.onMenuEvent({payload: 'view.toolbar.toggle', caller});
 		}
 
@@ -1766,6 +1795,7 @@ const CFramework = {
 		else if (!isMetaKey && !isShiftKey && e.key === 'F1') {
 			if (e.preventDefault) e.preventDefault();
 
+			//:			→ CWrapper: onMenuEvent:			view.chart.viewa
 			CWrapper.onMenuEvent({payload: 'view.chart.viewa', caller});
 		}
 
@@ -1773,13 +1803,42 @@ const CFramework = {
 		else if (!isMetaKey && !isShiftKey && e.key === 'F2') {
 			if (e.preventDefault) e.preventDefault();
 
+			//:			→ CWrapper: onMenuEvent:			view.chart.viewb
 			CWrapper.onMenuEvent({payload: 'view.chart.viewb', caller});
+		}
+
+
+		//::			🔻 Cmd + Shift + 'J/K/L'
+		else if ((isMetaKey && isShiftKey) && (e.key.toLowerCase() === 'j' || e.key.toLowerCase() === 'k' || e.key === 'l')) {
+			if (e.preventDefault) e.preventDefault();
+
+			const isReset = (e.key === 'k');
+			const isIn = (e.key.toLowerCase() === 'l');
+			const isOut = !(isReset || isIn);
+			const payload = isOut ? 'view.zoom.ui.out' : isIn ? 'view.zoom.ui.in' : 'view.zoom.ui.reset';
+			
+			//:			→ CWrapper: onMenuEvent:			view.zoom.ui.out|in|reset
+			CWrapper.onMenuEvent({payload, caller});
+		}
+
+		//::			🔻 Cmd + 'J/K/L'
+		else if ((isMetaKey && e.key.toLowerCase() === 'j' || e.key.toLowerCase() === 'k' || e.key === 'l')) {
+			if (e.preventDefault) e.preventDefault();
+
+			const isReset = (e.key === 'k');
+			const isIn = (e.key.toLowerCase() === 'l');
+			const isOut = !(isReset || isIn);
+			const payload = isOut ? 'view.zoom.normal.out' : isIn ? 'view.zoom.normal.in' : 'view.zoom.normal.reset';
+
+			//:			→ CWrapper: onMenuEvent:			view.zoom.normal.out|in|reset
+			CWrapper.onMenuEvent({payload, caller});
 		}
 
 		//::			🔻 Cmd + Shift + F1
 		else if (isMetaKey && isShiftKey && e.key === 'F1') {
 			if (e.preventDefault) e.preventDefault();
 
+			//:			→ CWrapper: onMenuEvent:			view.theme.system
 			CWrapper.onMenuEvent({payload: 'view.theme.system', caller});
 		}
 
@@ -1787,6 +1846,7 @@ const CFramework = {
 		else if (isMetaKey && isShiftKey && e.key === 'F2') {
 			if (e.preventDefault) e.preventDefault();
 
+			//:			→ CWrapper: onMenuEvent:			view.theme.light
 			CWrapper.onMenuEvent({payload: 'view.theme.light', caller});
 		}
 
@@ -1794,6 +1854,7 @@ const CFramework = {
 		else if (isMetaKey && isShiftKey && e.key === 'F3') {
 			if (e.preventDefault) e.preventDefault();
 
+			//:			→ CWrapper: onMenuEvent:			view.theme.dark
 			CWrapper.onMenuEvent({payload: 'view.theme.dark', caller});
 		}
 

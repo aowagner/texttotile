@@ -17,6 +17,11 @@ use tauri::menu::{MenuId, MenuItemKind, CheckMenuItem};
 
 //use tauri_plugin_dialog::DialogExt;
 
+use tauri_plugin_prevent_default::{Builder as PreventDefaultBuilder, Flags};
+
+#[cfg(target_os = "windows")]
+use tauri_plugin_prevent_default::PlatformOptions;
+
 
 
 fn find_menu_item_recursive<R: Runtime>(
@@ -185,7 +190,7 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 	let saveas = MenuItem::with_id(app, "file.saveas", "Save as…", true, Some("CmdOrCtrl+Shift+S"))?; 
 	let pincurrent = MenuItem::with_id(app, "file.pincurrent", "Pin current file", true, Some("CmdOrCtrl+Shift+P"))?; 
 	let settings_b = MenuItem::with_id(app, "file.settings", "Settings…", true, Some("CmdOrCtrl+,"))?;		// for Win+Linux only
-	let exit = MenuItem::with_id(app, "file.exit", "Exit", true, Some("Alt+F4"))?;		// for Win+Linux only
+	let exit = MenuItem::with_id(app, "file.quit", "Exit", true, Some("Alt+F4"))?;		// for Win+Linux only
 
 	let file_submenu = if cfg!(target_os = "macos") {
 		// macOS — no Exit in File menu
@@ -262,9 +267,9 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 
 
 		// zoom normal submenu items
-		let zoom_normal_in = MenuItem::with_id(app, "view.zoom.normal.in", "Zoom in [⌘ +]", true, None::<&str>)?;
-		let zoom_normal_out = MenuItem::with_id(app, "view.zoom.normal.out", "Zoom out [⌘ -]", true, None::<&str>)?;
-		let zoom_normal_reset = MenuItem::with_id(app, "view.zoom.normal.reset", "Actual size [⌘ 0]", true, None::<&str>)?;
+		let zoom_normal_in = MenuItem::with_id(app, "view.zoom.normal.in", "Zoom in", true, Some("CmdOrCtrl+L"))?;
+		let zoom_normal_out = MenuItem::with_id(app, "view.zoom.normal.out", "Zoom out", true, Some("CmdOrCtrl+J"))?;
+		let zoom_normal_reset = MenuItem::with_id(app, "view.zoom.normal.reset", "Actual size", true, Some("CmdOrCtrl+K"))?;
 
 		// Build the sub-submenu
 		let zoom_normal_submenu = SubmenuBuilder::new(app, "Zoom")
@@ -274,12 +279,12 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 			.build()?;
 
 		// zoom UI submenu items
-		let zoom_ui_in = MenuItem::with_id(app, "view.zoom.ui.in", "Zoom in [⇧ ⌘ +]", true, None::<&str>)?;
-		let zoom_ui_out = MenuItem::with_id(app, "view.zoom.ui.out", "Zoom out [⇧ ⌘ -]", true, None::<&str>)?;
-		let zoom_ui_reset = MenuItem::with_id(app, "view.zoom.ui.reset", "Actual size [⇧ ⌘ 0]", true, None::<&str>)?;
+		let zoom_ui_in = MenuItem::with_id(app, "view.zoom.ui.in", "Zoom in", true, Some("CmdOrCtrl+Shift+L"))?;
+		let zoom_ui_out = MenuItem::with_id(app, "view.zoom.ui.out", "Zoom out", true, Some("CmdOrCtrl+Shift+J"))?;
+		let zoom_ui_reset = MenuItem::with_id(app, "view.zoom.ui.reset", "Actual size", true, Some("CmdOrCtrl+Shift+K"))?;
 
 		// Build the sub-submenu
-		let zoom_ui_submenu = SubmenuBuilder::new(app, "UI zoom")
+		let zoom_ui_submenu = SubmenuBuilder::new(app, "UI scale")
 			.item(&zoom_ui_in)
 			.item(&zoom_ui_out)
 			.item(&zoom_ui_reset)
@@ -331,7 +336,7 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 	let toggle_ribbon = CheckMenuItem::with_id(app, "view.toolbar.toggle", "Show ribbon", true, true, Some("CmdOrCtrl+R"))?;
 	let toggle_graph = CheckMenuItem::with_id(app, "view.graph.toggle", "Show graphs", true, true, Some("CmdOrCtrl+G"))?;
 
-	let view_submenu = SubmenuBuilder::new(app, "View")
+	let mut view_builder = SubmenuBuilder::new(app, "View")
 		.item(&toggle_sidebar)
 		.item(&toggle_ribbon)
 		.item(&toggle_graph)
@@ -343,9 +348,17 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 		.item(&submenu_chartview)
 		.item(&graph_height_submenu)
 		.item(&sidebar_position_submenu)
-		.item(&theme_submenu)
-		.separator()
-		.build()?;
+		.item(&theme_submenu);
+
+	// Only on macOS
+	#[cfg(target_os = "macos")]
+	{
+		view_builder = view_builder.separator();
+	}
+
+	let view_submenu = view_builder.build()?;
+
+
 
 
 // ---- Help submenu ----
@@ -395,18 +408,42 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
 	tauri::Builder::default()
+
+	.plugin(
+		{
+			#[cfg(target_os = "windows")]
+			{
+				PreventDefaultBuilder::new()
+					// disable browser-style keyboard shortcuts
+					.with_flags(Flags::keyboard())
+					.platform(
+						PlatformOptions::new()
+							.browser_accelerator_keys(false)
+					)
+					.build()
+			}
+
+			#[cfg(not(target_os = "windows"))]
+			{
+				PreventDefaultBuilder::new()
+					.with_flags(Flags::keyboard())
+					.build()
+			}
+		}
+	)
+
 	.plugin(tauri_plugin_opener::init())
 	.plugin(tauri_plugin_dialog::init())
 	.plugin(tauri_plugin_fs::init())
 	.plugin(tauri_plugin_persisted_scope::init())
 	.plugin(tauri_plugin_clipboard_manager::init())
 	.manage(WatcherState(Mutex::new(None)))
-	.invoke_handler(tauri::generate_handler![greet, start_watch_file, stop_watch_file, set_menu_item_enabled, set_menu_checks, write_clipboard, read_clipboard])
+	.invoke_handler(tauri::generate_handler![greet, start_watch_file, stop_watch_file, set_menu_item_enabled, set_menu_checks, write_clipboard, read_clipboard, open_url, quit_app])
 
 	.setup(|app| {
 		let win = app
-		.get_webview_window("main")
-		.ok_or_else(|| tauri::Error::WindowNotFound)?;
+			.get_webview_window("main")
+			.ok_or_else(|| tauri::Error::WindowNotFound)?;
 		
 		// Build menu once
 		let menu = build_app_menu(app.handle())?;
@@ -427,12 +464,6 @@ pub fn run() {
 		let handle = app.handle().clone();
 		app.on_menu_event(move |app_handle, event| {
 			let id = event.id().as_ref();
-			
-			if id == "app.quit" {
-				app_handle.exit(0);
-				return;
-			}
-			
 			let _ = handle.emit("menu", id.to_string());
 		});
 
@@ -448,9 +479,16 @@ pub fn run() {
 
 
 
+#[tauri::command]
+fn open_url(url: String) -> Result<(), String> {
+    tauri_plugin_opener::open_url(url, None::<&str>)
+        .map_err(|e| e.to_string())
+}
 
-
-
+#[tauri::command]
+fn quit_app(app: tauri::AppHandle) {
+    app.exit(0);
+}
 
 
 use tauri_plugin_clipboard_manager::ClipboardExt;
