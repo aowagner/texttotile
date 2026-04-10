@@ -279,9 +279,9 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 			.build()?;
 
 		// zoom UI submenu items
-		let zoom_ui_in = MenuItem::with_id(app, "view.zoom.ui.in", "Zoom in", true, Some("CmdOrCtrl+Shift+L"))?;
-		let zoom_ui_out = MenuItem::with_id(app, "view.zoom.ui.out", "Zoom out", true, Some("CmdOrCtrl+Shift+J"))?;
-		let zoom_ui_reset = MenuItem::with_id(app, "view.zoom.ui.reset", "Actual size", true, Some("CmdOrCtrl+Shift+K"))?;
+		let zoom_ui_in = MenuItem::with_id(app, "view.zoom.ui.in", "Zoom in", true, Some("CmdOrCtrl+Alt+L"))?;
+		let zoom_ui_out = MenuItem::with_id(app, "view.zoom.ui.out", "Zoom out", true, Some("CmdOrCtrl+Alt+J"))?;
+		let zoom_ui_reset = MenuItem::with_id(app, "view.zoom.ui.reset", "Actual size", true, Some("CmdOrCtrl+Alt+K"))?;
 
 		// Build the sub-submenu
 		let zoom_ui_submenu = SubmenuBuilder::new(app, "UI scale")

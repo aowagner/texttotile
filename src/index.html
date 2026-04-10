@@ -9,26 +9,19 @@
 	:root {
 		color-scheme: light dark;
 
-		/* user editable */
-		--zoom:			1.0;
-		--lineheight:	1.5;
-		--fontsize:		1.1;
 		--fill:			Canvas;
 		--text:			CanvasText;
 		--bold:			400;
-		--fontfamily:				system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-		--fontfamily-texteditor:	ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-
-		/* calculated */
-		--px-base-unit:		12px;
-		--px-line-height:	calc(var(--px-base-unit) * var(--zoom) * var(--lineheight));
-		--px-font-size:		calc(var(--px-base-unit) * var(--zoom) * var(--fontsize));
+		--fontfamily:				system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", Ubuntu, sans-serif;
+		--fontfamily-texteditor:	ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace;
 
 		/* will be overwritten in code by updateCssFromLookupConstants */
-		--px-line-height-svg:	20px;
-		--px-font-size-svg:		16px;
-		--px-header-height-svg:	50px;
-		--count-lines-svg:		4;
+		--px-base-unit:		0px;
+		--px-line-height:	0px;
+		--px-font-size:		0px;
+		/*- --px-header-height:	0px; -*/
+		--px-footer-height:	0px;
+		--count-part-lines:	0;
 
 		/* other */
 		--ms-transition: 0.4s;
@@ -36,51 +29,19 @@
 
 		--px-sidebar-size: 500px;
 		--px-sidebar-min: 200px;
-	}
 
+		--rect-opacity: 1;
+
+		--saturation: 8;		/* 0 - 100 */
+	}
 
 	:root.theme-dark {
 		color-scheme: dark;
-
-		--fill-section-odd-chapter-rect-fill:  #80808026;
-		--fill-section-even-chapter-rect-fill: #8080801f;
-		--fill-chapter-rect-stroke: var(--fill);
-
-		--rect-opacity: 1;
-		--fill-fallback: #888888;	/* nb: must be without alpha! used in color-mix in .tagblock-label-rect */
-		--fill-tagblock-bg-rect-stroke: #52525280;
-		--fill-tagblock-label-stroke: #52525280;
-		--fill-tagblock-label-text-fill: #ffffff;
-
-		--fill-part-rect-stroke: #787878;
-		--fill-part-rect-stroke-hover: #ffffff;
-		--fill-part-rect-fill-mix: #656565;
-		/* --fill-tagblock-part-rect-drop-shadow: #97aebd88; */
 	}
 
 	:root.theme-light {
 		color-scheme: light;
-
-		--fill-section-odd-chapter-rect-fill:  #8080802b;
-		--fill-section-even-chapter-rect-fill: #8080801f;
-		--fill-chapter-rect-stroke: var(--fill);
-
-		--rect-opacity: 1;
-		--fill-fallback: #cccccc;	/* nb: must be without alpha! used in color-mix in .tagblock-label-rect */
-		--fill-tagblock-bg-rect-stroke: #aaaaaa80;
-		--fill-tagblock-label-stroke: #52525280;
-		--fill-tagblock-label-text-fill: #000000;
-
-		--fill-part-rect-stroke: #a1a1a1;
-		--fill-part-rect-stroke-hover: #3a3a3a;
-		--fill-part-rect-fill-mix: #ffffff;
-		/* --fill-tagblock-part-rect-drop-shadow: #97aebd88; */ 
 	}
-
-	:root.theme-dark #workspace {--XXXfill: #333333; /* default tag bg color */ }
-
-	:root.theme-light #workspace {--XXXfill: #ffffff; /* default tag bg color */ }
-
 
 	html, body {height: 100%; margin: 0; overflow: hidden; background: var(--fill);  font-family: var(--fontfamily); font-size: var(--px-font-size); font-weight: var(--bold); color: var(--text); }
 
@@ -106,11 +67,11 @@
 	#app.sidebar-visible-no 		#layout {grid-template-columns: 1fr !important; grid-template-rows: 1fr !important; grid-template-areas: "workspace" !important; }	/* Force single-pane layout regardless of current side */
 	
 /* layout - sidebar */
-							.sidebar {grid-area: sidebar; position: relative; overflow: hidden; display: flex; flex-direction: column; }
-	#app.sidebar-visible-no .sidebar {display: none; }
+							.sidebar	{grid-area: sidebar; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+	#app.sidebar-visible-no .sidebar	{display: none; }
 
 		/* sidebar - sidebar__main */
-		.sidebar__main {flex: 1 1 auto; overflow: auto; display: flex; flex-direction: column;   padding-top: var(--px-header-height-svg); }
+		.sidebar__main {flex: 1 1 auto; overflow: auto; display: flex; flex-direction: column; }
 
 			/* sidebar__main - textarea */
 			.texteditor {flex: 1 1 50%; display:inline-flex; box-sizing: border-box; width: 100%; height: 100%; resize: none; padding: 8px; font-family: var(--fontfamily-texteditor); font-size: var(--px-font-size); font-weight: var(--bold); line-height: var(--px-line-height);  outline: none; /* white-space: pre;*/ tab-size: 3; border: none;  caret-color: #1976d2; overflow: auto;  background: color-mix(in srgb, var(--fill) 97%, var(--text)); color: color-mix(in srgb, var(--text) 90%, var(--fill)); }
@@ -118,7 +79,7 @@
 /* layout - splitter */
 								.splitter {grid-area: splitter; position: relative; cursor: col-resize; z-index: 10; }
 	#app.sidebar-visible-no		.splitter {display: none; }
-	#app.sidebar-position-top 	.splitter,
+	#app.sidebar-position-top 		.splitter,
 	#app.sidebar-position-bottom	.splitter {cursor: row-resize; }
 
 /* layout - workspace */
@@ -135,14 +96,15 @@
 /* toolbar */
 						.toolbar 		{position: absolute; overflow: auto hidden; background: var(--fill); border: 1px solid color-mix(in srgb, var(--text) 11%, transparent); border-radius: 5px; }
 						.toolbarTags 	{--bold-button: var(--bold); /* --bold-button is a 'hack' to use toolbarTags's (aka :root) --bold, so buttons don't use individual tag's --bold */ height: calc(var(--px-line-height) + 7px); max-width: calc(100% - (var(--px-line-height) + 68px)); padding: 7px; margin-top: calc((var(--px-line-height) + 40px) * -1); margin-left: 10px; }
-	.toolbar-visible-no	.toolbarTags 	{display: none; }
+	.toolbar-visible-no	.toolbarTags	{display: none; }
+	.toolbar-visible-no	.popup-btn		{display: none; }
 
-		.toolbar__button 	{position: absolute; transform: translateX(var(--pxX)); border: 1px solid var(--fill-part-rect-stroke); border-radius: 5px; font-family: var(--fontfamily); font-size: var(--px-font-size); line-height: var(--px-line-height); color: var(--text); white-space: nowrap; cursor: pointer; transition: opacity 120ms ease; }
+		.toolbar__button 	{position: absolute; transform: translateX(var(--pxX)); border: 1px solid color-mix(in srgb, Canvas 40%, CanvasText); border-radius: 5px; font-family: var(--fontfamily); font-size: var(--px-font-size); line-height: var(--px-line-height); color: var(--text); white-space: nowrap; cursor: pointer; transition: opacity 120ms ease; }
 		.button--inactive	{opacity: 0.33; }
 		.button-draggable 	{cursor: grab; touch-action: none; }
 
-		.toolbarTags 	.toolbar__button 			{background: color-mix(in srgb, var(--fill) 30%, var(--fill-part-rect-fill-mix)); font-weight: var(--bold-button); }
-		.toolbarTags 	.toolbar__button.is-hover 	{background: color-mix(in srgb, var(--fill) 15%, var(--fill-part-rect-fill-mix)); outline: 1.5px solid black; z-index: 2; border-width: 0px; }
+		.toolbarTags 	.toolbar__button 			{background: color-mix(in srgb, var(--fill) 30%, Canvas); font-weight: var(--bold-button); }
+		.toolbarTags 	.toolbar__button.is-hover 	{background: color-mix(in srgb, var(--fill) 15%, Canvas); outline: 1.5px solid black; z-index: 2; border-width: 0px; }
 
 
 		.popup-btn {
@@ -151,31 +113,30 @@
 			margin-top: calc((var(--px-line-height) + 40px) * -1);
 			width: calc(var(--px-line-height) + 21px);
 			height: calc(var(--px-line-height) + 21px);
-			line-height: calc(var(--px-line-height) + 21px);
+			line-height: calc(var(--px-line-height) + 19px);
 			border-radius: 5px;
 			border: 1px solid color-mix(in srgb, var(--text) 11%, transparent);
-			background: var(--fill);	/*- color-mix(in srgb, var(--fill) 92%, black);-*/
+			background: var(--fill);
 			color: var(--text);
 			cursor: pointer;
 			/* box-sizing: border-box; */
-			font-size: calc(var(--px-font-size) * 1.25);
+			font-size: 2em; 
 			text-align: center;
 		}
 
 		.popup-btn:hover{
-			background: color-mix(in srgb, var(--fill) 86%, var(--text)); 
+			/*-background: color-mix(in srgb, var(--fill) 86%, var(--text)); -*/
+			border: 1px solid color-mix(in srgb, var(--text) 50%, transparent);
 		}
+
 
 /* workspace-main */
 
 	.workspace__main {		/* class used here, not id, since font-width logic with hidden dom-elements use this class too */
-		--fill-header-section-text-fill: color-mix(in srgb, var(--text) 40%, transparent);
-		--fill-header-chapter-text-fill: color-mix(in srgb, var(--text) 60%, transparent);
-
 		flex: 1 1 auto;
 		overflow: auto;
-		line-height: var(--px-line-height-svg);		/* probably not used - but for completeness */
-		font-size: var(--px-font-size-svg);
+		line-height: var(--px-line-height);		/* probably not used - but for completeness */
+		font-size: var(--px-font-size);
 		font-family: var(--fontfamily);
 		font-weight: var(--bold);
 		background: var(--fill);
@@ -194,20 +155,16 @@
 	/* header */
 	.header							{}
 
-	.header__rect					{fill: transparent; stroke-width: 0; }
-	.header__rect:hover				{fill: color-mix(in srgb, var(--fill) 30%, #eee); } 
-	.header__text					{pointer-events: none; dominant-baseline: middle; }
+	/*-.header__rect					{fill: var(--fill); rx: 20px; }-*/
+	/*-.header__text					{pointer-events: none; dominant-baseline: middle; }-*/
 
-	.header__rect--section			{y: 0; height: calc(var(--px-line-height-svg) * 1.5); }
-	.header__text--section			{transform: translate(5px, calc(var(--px-line-height-svg) * 1.0)); fill: var(--fill-header-section-text-fill); font-size: calc(var(--px-font-size-svg) * 1.5); font-weight: var(--bold); }
+	.header__rect--section			{height: calc(100% - var(--px-footer-height)); --fill: CanvasText; fill: var(--fill); rx: 15px; }
+	.header__rect--section-odd		{opacity: calc(var(--saturation) / 100); }
+	.header__rect--section-even		{opacity: calc(var(--saturation) / 125); }	/* nb: will only produce opacity between 0 and 0.8. This is to 'interchange' the background between odd and even sections */
+	.header__text--section			{transform: translate(10px, calc(var(--px-line-height) * 1.1)); fill: var(--text); /*-- opacity: 0.5;*/ font-size: calc(var(--px-font-size) * 1.5); font-weight: var(--bold); pointer-events: none; dominant-baseline: middle; }
 
-	.header__rect--chapter			{y: calc(var(--px-line-height-svg) * 1.5); height: var(--px-line-height-svg); }
-	.header__text--chapter			{transform: translate(5px, calc(var(--px-line-height-svg) * 2)); fill: var(--fill-header-chapter-text-fill); font-size: calc(var(--px-font-size-svg) * 1.00); font-weight: var(--bold); }
-
-	/* chapter */
-	.chapter__rect					{stroke: var(--fill-chapter-rect-stroke); stroke-width: 1; }
-	.chapter__rect--section-odd  	{fill: color-mix(in srgb, var(--fill) 10%, var(--fill-section-odd-chapter-rect-fill)) }
-	.chapter__rect--section-even 	{fill: color-mix(in srgb, var(--fill) 10%, var(--fill-section-even-chapter-rect-fill)) }
+	.header__rect--chapter			{height: calc(100% - ((var(--px-line-height) * 2) + var(--px-footer-height))); fill: var(--fill); rx: 15px; opacity: calc(var(--saturation) / 100); stroke: color-mix(in srgb, CanvasText 50%, transparent); stroke-width: 1; }
+	.header__text--chapter			{transform: translate(10px, calc(var(--px-line-height) * 2.75)); fill: var(--text); font-size: calc(var(--px-font-size) * 1.00); font-weight: var(--bold); pointer-events: none; dominant-baseline: middle; }
 
 	/* tagblock */
 	.tagblocks			{}
@@ -215,51 +172,47 @@
 					.tagblock			{--fill: Canvas; transition: transform var(--ms-transition) ease-out, opacity var(--ms-transition-quick) ease-out; }
 	.chart-viewb	.tagblock			{transform: translate(0px, var(--yb)) }
 	.chart-viewa	.tagblock			{transform: translate(0px, var(--ya)) }
-					.tagblock--inactive	{opacity: 0.33; }
+					.tagblock--inactive	{opacity: 0.2; }
 
 	/* tagblock - bg rect */
 											.tagblock__bg-rect {fill: color-mix(in srgb, var(--fill) 5%, transparent); vector-effect: non-scaling-stroke; pointer-events: none; transition: opacity var(--ms-transition) ease-out, height var(--ms-transition) ease-out }
 	.chart-viewa       						.tagblock__bg-rect {height: 0px; opacity: 0; pointer-events: none; /* needed since pointer-events are still active in the not-scaled area. this is an error in the browser-engine */ }
-	.chart-viewb  		.tagblock--active   .tagblock__bg-rect {height: calc((var(--px-line-height-svg) * var(--count-lines)) + 10px); }
-	.chart-viewb  		.tagblock--inactive	.tagblock__bg-rect {height: calc((var(--px-line-height-svg) * 1) + 10px); }
-						/* .tagblock.is-hover	.tagblock__bg-rect {fill: color-mix(in srgb, var(--fill) 10%, #fff3); stroke: #77777730; } */
+	.chart-viewb  		.tagblock--active   .tagblock__bg-rect {height: calc((var(--px-line-height) * var(--count-rows)) + 10px); }
+	.chart-viewb  		.tagblock--inactive	.tagblock__bg-rect {height: calc((var(--px-line-height) * 1) + 10px); }
 
 	/* part */
-	.tagblocks--parts	{}
+	.tagblocks--parts	{--saturation: 30; }
 										.tb-part 	{transition: var(--ms-transition) ease-out; } 
 	.chart-viewa						.tb-part 	{transform: translate(var(--x), var(--ya)) }
 	.chart-viewb						.tb-part 	{transform: translate(var(--x), var(--yb)) }
 	.chart-viewb	.tagblock--inactive	.tb-part 	{transform: translate(var(--x), 5px); }
 
-					.tb-part__rect	{opacity: var(--rect-opacity); fill: color-mix(in srgb, var(--fill) 30%, var(--fill-part-rect-fill-mix)); stroke: var(--fill-part-rect-stroke); stroke-width: 1; rx: 4px; /* filter: drop-shadow(3px 4px 6px var(--fill-tagblock-part-rect-drop-shadow));*/ }
-	.chart-viewa 	.tb-part__rect	{height: var(--px-line-height-svg); transform: scaleY(var(--count-lines-svg)); transition: transform var(--ms-transition) ease-out; vector-effect: non-scaling-stroke; }
-	.chart-viewb 	.tb-part__rect	{height: var(--px-line-height-svg); /*?transition: transform var(--ms-transition) ease-out;*/ vector-effect: non-scaling-stroke; }
+					.tb-part__rect	{opacity: var(--rect-opacity); fill: color-mix(in srgb, var(--fill) calc(var(--saturation) * 1%), Canvas); stroke: color-mix(in srgb, Canvas 50%, CanvasText); stroke-width: 1; rx: 4px; }
+	.chart-viewa 	.tb-part__rect	{height: var(--px-line-height); transform: scaleY(var(--count-part-lines)); transition: transform var(--ms-transition) ease-out; vector-effect: non-scaling-stroke; }
+	.chart-viewb 	.tb-part__rect	{height: var(--px-line-height); vector-effect: non-scaling-stroke; }
 
-					.tb-part__text						{font-size: var(--px-font-size-svg); transform: scaleY(1); opacity: 1; transition: transform var(--ms-transition) ease-out, opacity var(--ms-transition) ease-out; font-weight: var(--bold); }
-					.tb-part__text--chart-viewa tspan	{dominant-baseline: middle; fill: color-mix(in srgb, var(--fill) 60%, var(--text)); font-weight: var(--bold); }
+					.tb-part__text						{font-size: var(--px-font-size); transform: scaleY(1); opacity: 1; transition: transform var(--ms-transition) ease-out, opacity var(--ms-transition) ease-out; font-weight: var(--bold); }
+					.tb-part__text--chart-viewa tspan	{dominant-baseline: middle; /*-fill: color-mix(in srgb, var(--fill) 80%, var(--text));*/ fill: var(--text); font-weight: var(--bold); }
 					.tb-part__text--chart-viewb			{dominant-baseline: middle; fill: var(--text); font-weight: var(--bold); } 
 
-					.tb-part__text--chart-viewa tspan.top	{fill: var(--text); --bold: 550; }
+	.chart-viewa	.tb-part__text--chart-viewb	{transform: scaleY(0); opacity: 0; pointer-events: none; }
+	.chart-viewb	.tb-part__text--chart-viewa	{transform: scaleY(0); opacity: 0; pointer-events: none; }
 
-	.chart-viewa	.tb-part__text--chart-viewb	{transform: scaleY(0); opacity: 0; }
-	.chart-viewb	.tb-part__text--chart-viewa	{transform: scaleY(0); opacity: 0; }
-
-	.chart-viewa	.tb-part--special	.line1 {font-size: 75%; fill: #777; }
+	.chart-viewa	.tb-part--special	.line1 {font-size: 75%; /* fill: #777; */ opacity: 0.5; }
 	.chart-viewa	.tb-part--special	.line2 {font-size: 175%; font-weight: 600; fill: var(--text); }
 
 					.tb-part__symbol	{text-anchor: end; transition: var(--ms-transition) ease-out; }
-	.chart-viewa	.tb-part__symbol	{transform: translate(var(--x), var(--y));  					font-size: calc(var(--px-line-height-svg) * 1.5);	dominant-baseline: auto;  }
-	.chart-viewb	.tb-part__symbol	{transform: translate(10px, calc(var(--px-line-height-svg) * 0.5)); font-size: calc(var(--px-line-height-svg) * 1.0); 	dominant-baseline: central; }
+	.chart-viewa	.tb-part__symbol	{transform: translate(var(--x), var(--y));  					font-size: calc(var(--px-line-height) * 1.5);	dominant-baseline: auto;  }
+	.chart-viewb	.tb-part__symbol	{transform: translate(10px, calc(var(--px-line-height) * 0.5)); font-size: calc(var(--px-line-height) * 1.0); 	dominant-baseline: central; }
 
 	/* hover tagblock--active */
-	.chart-viewa	.tagblock--active.is-hover .tb-part {/* transform: translate(calc(var(--x) - 8px), calc(var(--ya) - 4px)) scale(1.127); */ }
-					/* .tagblock--active.is-hover .tb-part__rect	{fill: color-mix(in srgb, var(--fill) 20%, var(--fill-part-rect-fill-mix)); stroke: #333; stroke-width: 1.5; } */
+	.chart-viewa	.tagblock--active.is-hover .tb-part {}
 
 					.tagblock--active.is-hover .tagblock-circle,
-					.tagblock--active.is-hover .tagblock-polyline {stroke-width: 2px !important; }
+					.tagblock--active.is-hover .tagblock-polyline {stroke-width: 1.5px !important; }
 
 	/* hover tb-part */
-					.tagblock--active 	.tb-part.is-hover 	.tb-part__rect {/* fill: color-mix(in srgb, var(--fill) 5%, #fff) !important;*/ stroke: var(--text); stroke-width: 1.5; }
+					.tagblock--active 	.tb-part.is-hover 	.tb-part__rect {stroke: CanvasText; stroke-width: 1.5; }
 
 	/* hover circle */
 					.tagblock--active 	.tagblock-circle.is-hover 			{fill: color-mix(in srgb, var(--fill) 10%, #fff) !important; r: 12px;}
@@ -267,11 +220,11 @@
 	/* graphs */
 	.tagblocks--graphs	{}
 					.tagblocks--graphs	.tagblocks-graphs 		{opacity: 1;	transition: opacity var(--ms-transition-quick) ease-out; }
-	.chart-viewa	.tagblocks--graphs	.tagblock--inactive		{opacity: 0.2;	pointer-events: none; }
+	.chart-viewa	.tagblocks--graphs	.tagblock--inactive		{opacity: 0.1;	pointer-events: none; }
 	.chart-viewb	.tagblocks--graphs	.tagblock--inactive		{opacity: 0;	pointer-events: none; }
 
-	.tagblock-polyline		{fill: none; stroke: color-mix(in srgb, var(--fill) 70%, #000); stroke-width: 1.25; /* filter: url(#glow); */ pointer-events: none; }
-	.tagblock-circle 		{fill: color-mix(in srgb, var(--fill) 25%, #fff); stroke: color-mix(in srgb, var(--fill) 70%, #000); stroke-width: 1.5; /* filter: url(#glow); */ }
+	.tagblock-polyline		{fill: none; stroke: color-mix(in srgb, var(--fill) 70%, #000); stroke-width: 1.0; pointer-events: none; }
+	.tagblock-circle 		{fill: color-mix(in srgb, var(--fill) 25%, #fff); stroke: color-mix(in srgb, var(--fill) 70%, #000); stroke-width: 1.0; }
 	
 						.tagblock-circle-text 			{opacity: 0; transform: translate(16px, 1px); pointer-events: none;  dominant-baseline: middle; }
 	.tagblock--active	.tagblock-circle-text.is-hover 	{opacity: 1; }
@@ -286,8 +239,8 @@
 
 	<style>
 
-/* - */
-/* Popup theme variables */
+
+/* Popup variables */
 
 :root {
 	--fg: var(--text);
@@ -321,7 +274,7 @@ button.btn, button.pill, button.tablist__btn, button.close__btn, button.unpin__b
 .tablist__btn:hover:not(.tablist__btn-selected) { background: var(--hover-soft); }
 .tablist__btn-selected { background: var(--popup-bg); }
 
-.close__btn { flex: 0 0 auto; padding: 6px 10px; background: transparent; border: none; border-radius: 10px; color: var(--fg); cursor: pointer; opacity: .5; }
+.close__btn { flex: 0 0 auto; padding: 6px 10px; background: transparent; border: none; border-radius: 10px; color: var(--fg); cursor: pointer; opacity: 0.5; }
 .close__btn:hover { background: var(--hover-soft); opacity: 1; }
 
 /* Popup content area */
@@ -335,11 +288,11 @@ button.btn, button.pill, button.tablist__btn, button.close__btn, button.unpin__b
 .section__head { display: flex; align-items: center; gap: 8px; min-height: 2rem;    margin-bottom: 4px; font-weight: 600;  }
 
 .section__body { display: grid; gap: 6px; padding: 0; }
-.hint { padding-left: 6px; font-size: 11px; font-weight: 400; opacity: .5; }
+.hint { padding-left: 6px; font-size: 0.8em; font-weight: 400; opacity: 0.5; }
 
 /* Keyboard shortcut labels */
 
-.kbd { padding: 1px 5px; border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 8px; font-size: 11px; white-space: nowrap; opacity: .75; }
+.kbd { padding: 1px 5px; border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 8px; font-size: 11px; white-space: nowrap; opacity: 0.5; font-size: 0.8em; }
 .kbd.is-label { display: inline-block; justify-self: start; width: fit-content; pointer-events: none; }
 
 /* Action buttons and segmented/pill controls */
@@ -359,7 +312,7 @@ button.btn, button.pill, button.tablist__btn, button.close__btn, button.unpin__b
 
 /* List rows. Used for pinned files and toggle rows. The fixed first column keeps text alignment stable. */
 
-.body__item { position: relative; display: grid; grid-template-columns: 4rem 1fr auto; align-items: center; column-gap: 12px; padding: 10px 10px; background: transparent; border: none; border-top: 1px solid var(--line-soft); border-radius: 8px; cursor: pointer; user-select: none; -webkit-user-select: none; touch-action: none; }
+.body__item { position: relative; display: grid; grid-template-columns: auto 1fr auto; align-items: center; column-gap: 12px; padding: 10px 10px; background: transparent; border: none; border-top: 1px solid var(--line-soft); border-radius: 8px; cursor: pointer; user-select: none; -webkit-user-select: none; touch-action: none; }
 .body__item:hover { background: var(--hover-row); }
 .draggable-list.is-reordering .body__item:hover { background: transparent; }
 
@@ -368,7 +321,7 @@ button.btn, button.pill, button.tablist__btn, button.close__btn, button.unpin__b
 
 .item__meta { display: grid; gap: 2px; min-width: 0; }
 .item__name { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.item__desc { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: .72; }
+.item__desc { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.72; }
 .item__right { display: inline-flex; align-items: center; justify-self: end; gap: 10px; }
 
 .header__title { font-weight: 600; }
@@ -383,12 +336,12 @@ button.btn, button.pill, button.tablist__btn, button.close__btn, button.unpin__b
 
 /* Secondary row actions */
 
-.unpin__btn { padding: 4px 6px; background: transparent; border: none; border-radius: 10px; color: var(--fg); cursor: pointer; opacity: .7; }
+.unpin__btn { padding: 4px 6px; background: transparent; border: none; border-radius: 10px; color: var(--fg); cursor: pointer; opacity: 0.7; }
 .unpin__btn:hover { background: var(--hover-btn); }
 
 /* Drag ghost. The ghost uses border-box so JS-assigned width matches the visible outer width exactly */
 
-.ghost { position: fixed; left: 0; top: 0; box-sizing: border-box; padding: 10px 10px; background: var(--fill) !important; border: 1px solid color-mix(in srgb, Highlight 35%, var(--border)); border-radius: 10px; box-shadow: 0 10px 24px rgba(0,0,0,.16); z-index: 9999; pointer-events: none; opacity: .98; }
+.ghost { position: fixed; left: 0; top: 0; box-sizing: border-box; padding: 10px 10px; background: var(--fill) !important; border: 1px solid color-mix(in srgb, Highlight 35%, var(--border)); border-radius: 10px; box-shadow: 0 10px 24px rgba(0,0,0,.16); z-index: 9999; pointer-events: none; opacity: 0.98; }
 
 /* Popup textareas. Shared styling for CSS and Status tabs. Readonly textareas still allow selection and copying */
 
@@ -429,7 +382,7 @@ button.btn, button.pill, button.tablist__btn, button.close__btn, button.unpin__b
 
 				<div id="workspace-panel" class="workspace__panel">
 					<!--button id="btn-popup" class="popup-btn" type="button" title="Settings"><span>⚙︎</span></button-->
-					<div id="btn-popup" class="popup-btn" type="button" title="Settings">⚙️</div>
+					<div id="btn-popup" class="popup-btn" type="button" title="Settings">⚙</div>
 				</div>
 			</main>
 
@@ -454,7 +407,7 @@ button.btn, button.pill, button.tablist__btn, button.close__btn, button.unpin__b
 	<script type="module">
 		import { html, svg, render } from './assets/uhtml/+esm.js';			// keep: import { html, svg, render } from 'https://esm.run/uhtml';		// https://github.com/WebReflection/uhtml
 
-//:::📙 CONSTANTS ⚙︎ ⚙️ ⚙️ ✇ ⚙
+//:::📙 CONSTANTS ⚙︎ ⚙️ ✇
 
 
 const STATUS = Object.freeze({
@@ -465,6 +418,8 @@ const STATUS = Object.freeze({
 });
 
 const CODE = Object.freeze({
+	ERROR_RUNTIME: 'ERROR_RUNTIME',
+	ERROR_UNHANDLED_PROMISE: 'ERROR_UNHANDLED_PROMISE',
 	ERROR_FILE_SCOPE: 'ERROR_FILE_SCOPE',
 	ERROR_FILE_READ: 'ERROR_FILE_READ',
 	ERROR_FILE_WRITE: 'ERROR_FILE_WRITE',
@@ -485,7 +440,7 @@ const SOURCE = Object.freeze({
 const STANDALONE = false;
 const TEXT_STANDALONE = ``;
 
-const LOGGING = true, DETAILS = false;
+const LOGGING = false, DETAILS = false;
 const LOGARGS = false;
 const LOG_RED = 'color:#933;', LOG_BOLD = 'font-weight:700;';
 const LOG_MODULE = 'color:#777; background-color:#fff0da; font-weight:300 !important;', LOG_FUNCTION = 'color:#337;', LOG_ARGS = 'color:#7a7; font-weight:500; font-size:0.6rem;', LOG_EXTRA = 'color:#999; font-weight:300; font-size:0.6rem;';
@@ -510,18 +465,17 @@ const PX_PADDING_SMALL = 5;
 const PX_VIEVBOX_MIN_H = 400;
 
 //::	☐ chapter columns
-const PX_COL_W_INITIAL = 100;
-const COUNT_LINES_INITIAL = 4;
-const PX_BASEUNIT_UI_INITIAL = 12;
+const COUNT_PART_LINES_INITIAL = 4;
+const PX_BASEUNIT_INITIAL = 12;
 
-let PX_COL_WIDTH_SVG = PX_COL_W_INITIAL;
-let PX_COL_WIDTH_SVG_ADJ = PX_COL_WIDTH_SVG;
+let PX_COL_WIDTH = 0;
 
-let PX_BASEUNIT_UI = PX_BASEUNIT_UI_INITIAL;
-let PX_HEADER_HEIGHT_SVG = 0;
-let PX_LINE_HEIGHT_SVG = 0;
-let PX_FONT_SIZE_SVG = 0;
-let COUNT_LINES_SVG = COUNT_LINES_INITIAL;
+let PX_BASEUNIT = PX_BASEUNIT_INITIAL;
+let PX_HEADER_HEIGHT = 0;
+let PX_FOOTER_HEIGHT = 0;
+let PX_LINE_HEIGHT = 0;
+let PX_FONT_SIZE = 0;
+let COUNT_PART_LINES = COUNT_PART_LINES_INITIAL;
 
 //::	☐ tagblock
 const COUNT_ROWS_FOR_GRAPH_HEIGHT = 10;
@@ -581,6 +535,47 @@ const CUtil = {
 		return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} `
 			+ `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 	},
+
+	//:::	🔹 fixForOs
+	fixForOs(str) {
+		const isMac = navigator.platform.toUpperCase().includes('MAC');
+
+		// Mac → return as-is (normalized spacing optional)
+		if (isMac) {
+			return str;
+		}
+
+		// Mapping from Mac symbols to Win/Linux
+		const map = {
+			'⌘': 'Ctrl',
+			'⇧': 'Shift',
+			'⌥': 'Alt',
+			'⌃': 'Ctrl'
+		};
+
+		// Split into tokens (handles spaces or thin spaces)
+		const tokens = str.trim().split(/\s+/);
+
+		const modifiers = [];
+		let key = '';
+
+		for (const t of tokens) {
+			if (map[t]) {
+				modifiers.push(map[t]);
+			} else {
+				key = t; // last non-modifier is key
+			}
+		}
+
+		// Ensure consistent order: Ctrl → Shift → Alt
+		const order = ['Ctrl', 'Shift', 'Alt'];
+
+		const sortedModifiers = order.filter(m => modifiers.includes(m));
+
+		// Build final string (compact style)
+		return [...sortedModifiers, key].join(' + ');
+	},
+
 
 }
 
@@ -980,8 +975,6 @@ const CWrapper = {
 		//if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'setMenuChecks', CUtil.getArgsKeys(args), args.caller));
 		//if (LOGARGS) console.log(args);
 
-	//-	return;
-
 		const arrCheckableMenuItems = [
 			{idMenu: 'view.theme.system',			key: 'idTheme', val: 'system'},
 			{idMenu: 'view.theme.light',			key: 'idTheme', val: 'light'},
@@ -1265,6 +1258,7 @@ const CWrapper = {
 const CFramework = {
 	elApp: null,
 	elSplitter: null,
+	isHandlingGlobalError: false,
 	dragging: false,
 	startCoord: 0,
 	startSize: 0,
@@ -1284,6 +1278,46 @@ const CFramework = {
 
 		window.addEventListener('keydown', e => {this.onKeydown({e, caller: 'window.addEventListener(keydown)'})}, {capture: true});
 		window.addEventListener('resize', e => this.onWindowResize({e, caller: 'window.addEventListener(resize)'}));
+
+		window.addEventListener('error', async (e) => {
+			if (CFramework.isHandlingGlobalError)
+				return;
+
+			CFramework.isHandlingGlobalError = true;
+
+			try {
+				await CFramework.handleResult({
+					status: STATUS.ERROR,
+					code: CODE.ERROR_RUNTIME,
+					err: e.error || e.message,
+					caller: `window.error (${e.filename}:${e.lineno})`
+				});
+			}
+			finally {
+				CFramework.isHandlingGlobalError = false;
+			}
+		});
+
+		window.addEventListener('unhandledrejection', async (e) => {
+			e.preventDefault();
+
+			if (CFramework.isHandlingGlobalError)
+				return;
+
+			CFramework.isHandlingGlobalError = true;
+
+			try {
+				await CFramework.handleResult({
+					status: STATUS.ERROR,
+					code: CODE.ERROR_UNHANDLED_PROMISE,
+					err: e.reason,
+					caller: 'window.unhandledrejection'
+				});
+			}
+			finally {
+				CFramework.isHandlingGlobalError = false;
+			}
+		});
 
 		// splitter drag
 		this.elSplitter.addEventListener('mousedown', e => this.onSplitterMousedown({e, caller: 'elSplitter.addEventListener(mousedown)'}));
@@ -1344,7 +1378,7 @@ const CFramework = {
 		if (LOGGING) console.groupEnd();
 	},
 
-		//:::	🔹 handleResult
+	//:::	🔹 handleResult
 	async handleResult(args) {
 		if (LOGGING) console.group(...CUtil.logGroup('CFramework', 'handleResult', CUtil.getArgsKeys(args), args.caller));
 		if (!LOGARGS) console.log(args);
@@ -1353,7 +1387,6 @@ const CFramework = {
 			if (LOGGING) console.groupEnd();
 			return;
 		}
-
 
 		const TYPE_DIALOG = {NONE: 'NONE', MBOX: 'MBOX', PROMPT: 'PROMPT'};
 
@@ -1386,13 +1419,22 @@ const CFramework = {
 				labelOK: 'Close',
 			});
 		}
-		else if (args.code === CODE.FILE_PATH_NOT_SET) {		// nb: don't save warnings to error-log! but *maybe* show info somewhere, that doc isn't saved?
+		/*-- else if (args.code === CODE.FILE_PATH_NOT_SET) {		// called with status = warning, and therefore this function is exit'ed at top
 			Object.assign(logentry, {
 				title: 'File path not set',
 				message: 'No path was specified.',
 				suggestion: 'nb: this should not be shown in mbox, as this is expected flow (user edits New file, etc....)',	// jk: other way to handle this?
 				typeDialogShow: TYPE_DIALOG.NONE,
 				labelCancel: 'See Log',
+				labelOK: 'Close',
+			});
+		}--*/ 
+		else {
+			Object.assign(logentry, {
+				title: 'Unexpected error',
+				message: args.err?.message || String(args.err) || 'An unknown error occurred.',
+				suggestion: 'You can continue, but something may not work as expected.',
+				typeDialogShow: TYPE_DIALOG.MBOX,
 				labelOK: 'Close',
 			});
 		}
@@ -1407,19 +1449,19 @@ const CFramework = {
 			await CWrapper.showMessageDialog({
 				title: logentry.title,
 				message: logentry.message + '\n\n' + logentry.suggestion,
-				kind: logentry.status === STATUS.ERROR ? 'error' : STATUS.WARNING ? 'warning' : 'info',
+				kind: logentry.status === STATUS.ERROR ? 'error' : logentry.status === STATUS.WARNING ? 'warning' : 'info',
 				okLabel: logentry.labelOK,
 			});
 		}
 
 		else if (logentry.typeDialogShow === TYPE_DIALOG.PROMPT) {
 
-			//:			→ CWrapper:				showPromptDialog			['Clear log?']
+			//:		→ CWrapper:				showPromptDialog			['Clear log?']
 			const resPrompt = await CWrapper.showPromptDialog({
 				type: 'ask',
 				title: logentry.title,
 				message: logentry.message + '\n\n' + logentry.suggestion,
-				kind: logentry.status === STATUS.ERROR ? 'error' : STATUS.WARNING ? 'warning' : 'info',
+				kind: logentry.status === STATUS.ERROR ? 'error' : logentry.status === STATUS.WARNING ? 'warning' : 'info',
 				okLabel: logentry.labelOK,
 				cancelLabel: logentry.labelCancel,
 			});
@@ -1511,15 +1553,17 @@ const CFramework = {
 		if (LOGGING) console.group(...CUtil.logGroup('CFramework', 'updateLookupConstants', CUtil.getArgsKeys(args), args.caller));
 		if (LOGARGS) console.log(args);
 
-		PX_BASEUNIT_UI   = args.pxBaseUnitUi ?? PX_BASEUNIT_UI;
-		PX_COL_WIDTH_SVG = args.pxColWidth   ?? PX_COL_WIDTH_SVG;
-		COUNT_LINES_SVG  = args.linecount    ?? COUNT_LINES_SVG;
+		PX_BASEUNIT			= args.pxBaseUnit ?? PX_BASEUNIT;
+		COUNT_PART_LINES	= args.linecount  ?? COUNT_PART_LINES;
 
-		PX_COL_WIDTH_SVG_ADJ = CUtil.roundN(PX_COL_WIDTH_SVG * PX_BASEUNIT_UI / 11, 2);
-		PX_FONT_SIZE_SVG	 = CUtil.roundN(PX_BASEUNIT_UI * 1.2, 2);
-		PX_LINE_HEIGHT_SVG	 = CUtil.roundN(PX_BASEUNIT_UI * 1.5, 2);
-		PX_HEADER_HEIGHT_SVG = CUtil.roundN(PX_LINE_HEIGHT_SVG * 2.5, 2);								// jk: make constant or rule for '2.5'
-		if (!LOGARGS) console.log({PX_BASEUNIT_UI, PX_COL_WIDTH_SVG, PX_COL_WIDTH_SVG_ADJ, COUNT_LINES_SVG,  PX_FONT_SIZE_SVG, PX_LINE_HEIGHT_SVG, PX_HEADER_HEIGHT_SVG});
+		PX_FONT_SIZE		= CUtil.roundN(PX_BASEUNIT * 1.0, 2);	//-- 1.2
+		PX_LINE_HEIGHT		= CUtil.roundN(PX_BASEUNIT * 1.4, 2);	//-- 1.5
+		PX_HEADER_HEIGHT	= CUtil.roundN(PX_LINE_HEIGHT * 3.25, 2);								// jk: make constant or rule for '3.25'
+		PX_FOOTER_HEIGHT	= 30;
+
+		PX_COL_WIDTH = (PX_LINE_HEIGHT * COUNT_PART_LINES) + PX_PADDING_NORMAL;
+
+		if (!LOGARGS) console.log({PX_BASEUNIT, PX_COL_WIDTH, COUNT_PART_LINES,  PX_FONT_SIZE, PX_LINE_HEIGHT, PX_HEADER_HEIGHT});
 
 		//: 		→ this: updateCssFromLookupConstants
 		this.updateCssFromLookupConstants({caller: 'CFramework.updateLookupConstants'});
@@ -1532,12 +1576,12 @@ const CFramework = {
 
 		const root = document.documentElement;
 
-		root.style.setProperty('--px-base-unit', PX_BASEUNIT_UI.toString() + 'px');
-
-		root.style.setProperty('--px-line-height-svg', PX_LINE_HEIGHT_SVG.toString() + 'px');
-		root.style.setProperty('--px-font-size-svg', PX_FONT_SIZE_SVG.toString() + 'px');
-		root.style.setProperty('--px-header-height-svg', PX_HEADER_HEIGHT_SVG.toString() + 'px');
-		root.style.setProperty('--count-lines-svg', COUNT_LINES_SVG.toString());
+		root.style.setProperty('--px-base-unit',		PX_BASEUNIT.toString() + 'px');
+		root.style.setProperty('--px-line-height', 		PX_LINE_HEIGHT.toString() + 'px');
+		root.style.setProperty('--px-font-size',		PX_FONT_SIZE.toString() + 'px');
+	//-	root.style.setProperty('--px-header-height',	PX_HEADER_HEIGHT.toString() + 'px');
+		root.style.setProperty('--px-footer-height',	PX_FOOTER_HEIGHT.toString() + 'px');
+		root.style.setProperty('--count-part-lines',	COUNT_PART_LINES.toString());
 
 		// setup fonts for text measuring
 		const arrProbe = [
@@ -1593,18 +1637,6 @@ const CFramework = {
 			res = await App.dispatch({type: 'popup.settings.close', caller});
 		}
 
-		//::		🔻 Cmd + Shift + G
-		else if (e.key.toLowerCase() === 'g' && isMetaKey && isShiftKey) {
-			if (e.preventDefault) e.preventDefault();
-
-			const arrGraphHeight = [25, 50, 75, 100];
-			const pctGraphHeightCurrent = CModel.appstate.pctGraphHeight;
-			const pctGraphHeightNew = CUtil.getPrevNextValue(arrGraphHeight, pctGraphHeightCurrent,  1, pctGraphHeightCurrent, true);
-
-			//:			→ App: dispatch:			chart.graph.height.set
-			res = await App.dispatch({type: 'chart.graph.height.set', pctGraphHeight: pctGraphHeightNew, caller});
-		}
-
 		//::		🔻 Cmd + Shift + E
 		else if (e.key.toLowerCase() === 'e' && isMetaKey && isShiftKey) {
 			if (e.preventDefault) e.preventDefault();
@@ -1615,6 +1647,18 @@ const CFramework = {
 
 			//:			→ App: dispatch:			framework.sidebar.position.set (cycle thru 4 options)
 			res = await App.dispatch({type: 'framework.sidebar.position.set', idSidebarPosition: idSidebarPositionNew, caller});
+		}
+
+		//::		🔻 Cmd + Shift + G
+		else if (e.key.toLowerCase() === 'g' && isMetaKey && isShiftKey) {
+			if (e.preventDefault) e.preventDefault();
+
+			const arrGraphHeight = [25, 50, 75, 100];
+			const pctGraphHeightCurrent = CModel.appstate.pctGraphHeight;
+			const pctGraphHeightNew = CUtil.getPrevNextValue(arrGraphHeight, pctGraphHeightCurrent,  1, pctGraphHeightCurrent, true);
+
+			//:			→ App: dispatch:			chart.graph.height.set
+			res = await App.dispatch({type: 'chart.graph.height.set', pctGraphHeight: pctGraphHeightNew, caller});
 		}
 
 		//::		🔻 Cmd + Shift + 1 - 9
@@ -1674,19 +1718,19 @@ const CFramework = {
 				res = await App.dispatch({type: 'popup.tab.select', idTab: 'status', caller});
 		}
 
-
-
 		//	 	'accelerator' keys: fix for missing feature in Tauri on Windows. Active for all os's, but only 'really' needed for Windows (see 'deduper' in onMenuEvent)
 		//		nb: res does not get set on these
-		//::			🔻 Cmd + N
-		if (isMetaKey && e.key.toLowerCase() === 'n') {
+		//::
+		//::		matching 'accelerator' keys from here:
+		//::		🔻 Cmd + N
+		else if (isMetaKey && e.key.toLowerCase() === 'n') {
 			if (e.preventDefault) e.preventDefault();
 
 			//:			→ CWrapper: onMenuEvent:			file.new
 			CWrapper.onMenuEvent({payload: 'file.new', caller});
 		}
 
-		//::			🔻 Cmd + O
+		//::		🔻 Cmd + O
 		else if (isMetaKey && e.key.toLowerCase() === 'o') {
 			if (e.preventDefault) e.preventDefault();
 
@@ -1694,7 +1738,7 @@ const CFramework = {
 			CWrapper.onMenuEvent({payload: 'file.open', caller});
 		}
 
-		//::			🔻 Cmd + Shift + S
+		//::		🔻 Cmd + Shift + S
 		else if (isMetaKey && isShiftKey && e.key.toLowerCase() === 's') {
 			if (e.preventDefault) e.preventDefault();
 
@@ -1702,7 +1746,7 @@ const CFramework = {
 			CWrapper.onMenuEvent({payload: 'file.saveas', caller});
 		}
 
-		//::			🔻 Cmd + Shift + P
+		//::		🔻 Cmd + Shift + P
 		else if (isMetaKey && isShiftKey && e.key.toLowerCase() === 'p') {
 			if (e.preventDefault) e.preventDefault();
 
@@ -1710,7 +1754,7 @@ const CFramework = {
 			CWrapper.onMenuEvent({payload: 'file.pincurrent', caller});
 		}
 
-		//::			🔻 Alt + ,
+		//::		🔻 Alt + ,
 		else if (isMetaKey && e.key.toLowerCase() === ',') {
 			if (e.preventDefault) e.preventDefault();
 
@@ -1718,7 +1762,7 @@ const CFramework = {
 			CWrapper.onMenuEvent({payload: 'file.settings', caller});
 		}
 
-		//::			🔻 Alt + F4
+		//::		🔻 Alt + F4
 		else if (isAltKey && e.key === 'F4') {
 			if (e.preventDefault) e.preventDefault();
 
@@ -1727,7 +1771,7 @@ const CFramework = {
 		}
 
 
-		//::			🔻 Cmd + X
+		//::		🔻 Cmd + X
 		else if (isMetaKey && e.key.toLowerCase() === 'x') {
 			if (e.preventDefault) e.preventDefault();
 
@@ -1735,7 +1779,7 @@ const CFramework = {
 			CWrapper.onMenuEvent({payload: 'edit.cut', caller});
 		}
 
-		//::			🔻 Cmd + C
+		//::		🔻 Cmd + C
 		else if (isMetaKey && e.key.toLowerCase() === 'c') {
 			if (e.preventDefault) e.preventDefault();
 
@@ -1743,7 +1787,7 @@ const CFramework = {
 			CWrapper.onMenuEvent({payload: 'edit.copy', caller});
 		}
 
-		//::			🔻 Cmd + V
+		//::		🔻 Cmd + V
 		else if (isMetaKey && e.key.toLowerCase() === 'v') {
 			if (e.preventDefault) e.preventDefault();
 
@@ -1751,7 +1795,7 @@ const CFramework = {
 			CWrapper.onMenuEvent({payload: 'edit.paste', caller});
 		}
 
-		//::			🔻 Cmd + Shift + D
+		//::		🔻 Cmd + Shift + D
 		else if (isMetaKey && isShiftKey && e.key.toLowerCase() === 'd') {
 			if (e.preventDefault) e.preventDefault();
 
@@ -1759,7 +1803,7 @@ const CFramework = {
 			CWrapper.onMenuEvent({payload: 'edit.deleteline', caller});
 		}
 
-		//::			🔻 Cmd + D
+		//::		🔻 Cmd + D
 		else if (isMetaKey && e.key.toLowerCase() === 'd') {
 			if (e.preventDefault) e.preventDefault();
 
@@ -1767,7 +1811,7 @@ const CFramework = {
 			CWrapper.onMenuEvent({payload: 'edit.duplicateline', caller});
 		}
 
-		//::			🔻 Cmd + A	
+		//::		🔻 Cmd + A	
 		else if (isMetaKey && e.key.toLowerCase() === 'a') {
 			if (e.preventDefault) e.preventDefault();
 
@@ -1775,7 +1819,7 @@ const CFramework = {
 			CWrapper.onMenuEvent({payload: 'edit.selectall', caller});
 		}
 
-		//::			🔻 Cmd + E
+		//::		🔻 Cmd + E
 		else if (isMetaKey && e.key.toLowerCase() === 'e') {
 			if (e.preventDefault) e.preventDefault();
 
@@ -1783,7 +1827,7 @@ const CFramework = {
 			CWrapper.onMenuEvent({payload: 'view.sidebar.toggle', caller});
 		}
 
-		//::			🔻 Cmd + R
+		//::		🔻 Cmd + R
 		else if (isMetaKey && e.key.toLowerCase() === 'r') {
 			if (e.preventDefault) e.preventDefault();
 
@@ -1791,7 +1835,15 @@ const CFramework = {
 			CWrapper.onMenuEvent({payload: 'view.toolbar.toggle', caller});
 		}
 
-		//::			🔻 F1
+		//::		🔻 Cmd + G
+		else if (isMetaKey && e.key.toLowerCase() === 'g') {
+			if (e.preventDefault) e.preventDefault();
+
+			//:			→ CWrapper: onMenuEvent:			view.graph.toggle
+			CWrapper.onMenuEvent({payload: 'view.graph.toggle', caller});
+		}
+
+		//::		🔻 F1
 		else if (!isMetaKey && !isShiftKey && e.key === 'F1') {
 			if (e.preventDefault) e.preventDefault();
 
@@ -1799,7 +1851,7 @@ const CFramework = {
 			CWrapper.onMenuEvent({payload: 'view.chart.viewa', caller});
 		}
 
-		//::			🔻 F2
+		//::		🔻 F2
 		else if (!isMetaKey && !isShiftKey && e.key === 'F2') {
 			if (e.preventDefault) e.preventDefault();
 
@@ -1808,8 +1860,8 @@ const CFramework = {
 		}
 
 
-		//::			🔻 Cmd + Shift + 'J/K/L'
-		else if ((isMetaKey && isShiftKey) && (e.key.toLowerCase() === 'j' || e.key.toLowerCase() === 'k' || e.key === 'l')) {
+		//::		🔻 Cmd + Alt + 'J/K/L'
+		else if ((isMetaKey && isAltKey) && (e.key.toLowerCase() === 'j' || e.key.toLowerCase() === 'k' || e.key === 'l')) {
 			if (e.preventDefault) e.preventDefault();
 
 			const isReset = (e.key === 'k');
@@ -1821,8 +1873,8 @@ const CFramework = {
 			CWrapper.onMenuEvent({payload, caller});
 		}
 
-		//::			🔻 Cmd + 'J/K/L'
-		else if ((isMetaKey && e.key.toLowerCase() === 'j' || e.key.toLowerCase() === 'k' || e.key === 'l')) {
+		//::		🔻 Cmd + 'J/K/L'
+		else if (isMetaKey && (e.key.toLowerCase() === 'j' || e.key.toLowerCase() === 'k' || e.key === 'l')) {
 			if (e.preventDefault) e.preventDefault();
 
 			const isReset = (e.key === 'k');
@@ -1834,7 +1886,7 @@ const CFramework = {
 			CWrapper.onMenuEvent({payload, caller});
 		}
 
-		//::			🔻 Cmd + Shift + F1
+		//::		🔻 Cmd + Shift + F1
 		else if (isMetaKey && isShiftKey && e.key === 'F1') {
 			if (e.preventDefault) e.preventDefault();
 
@@ -1842,7 +1894,7 @@ const CFramework = {
 			CWrapper.onMenuEvent({payload: 'view.theme.system', caller});
 		}
 
-		//::			🔻 Cmd + Shift + F2
+		//::		🔻 Cmd + Shift + F2
 		else if (isMetaKey && isShiftKey && e.key === 'F2') {
 			if (e.preventDefault) e.preventDefault();
 
@@ -1850,7 +1902,7 @@ const CFramework = {
 			CWrapper.onMenuEvent({payload: 'view.theme.light', caller});
 		}
 
-		//::			🔻 Cmd + Shift + F3 
+		//::		🔻 Cmd + Shift + F3 
 		else if (isMetaKey && isShiftKey && e.key === 'F3') {
 			if (e.preventDefault) e.preventDefault();
 
@@ -1898,9 +1950,6 @@ const CChart = {
 			<g class="header">
 				${CChart.Templates.Header()}
 			</g>
-			<g class="chapters">
-				${docdata.arrChapter.map(CChart.Templates.Chapter)}
-			</g>
 			<g class="tagblocks tagblocks--parts">
 				${docdata.arrTagblock.map(CChart.Templates.TagblockParts)}
 			</g>
@@ -1919,39 +1968,40 @@ const CChart = {
 		Header() {
 			if (LOGGING) console.log('%c CChart %c Template: %c Header %c ()', LOG_MODULE, LOG_RED, LOG_FUNCTION+LOG_BOLD, LOG_ARGS);
 			const docdata = CModel.docdata;
+			const pxSectionBarHeight = PX_LINE_HEIGHT * 2;
 
 			return [
-				...docdata.arrSection.filter(section => section.arrIdxChapter.length > 0).map(function(section, idx) {
+				...docdata.arrSection.filter(section => section.arrIdxChapter.length > 0).map(function(section, idxSection) {
 					const ellipsis = '…';
-					const pxX = PX_MARGIN_LEFT_W + (PX_COL_WIDTH_SVG_ADJ * section.arrIdxChapter[0]);
-					const pxWidth = PX_COL_WIDTH_SVG_ADJ * section.arrIdxChapter.length;
+					const pxX = PX_MARGIN_LEFT_W + (PX_COL_WIDTH * section.arrIdxChapter[0]);
+					const pxWidth = PX_COL_WIDTH * section.arrIdxChapter.length;
 					const arrCaptionSplit = CChart.splitString(section.caption, pxWidth - (PX_PADDING_NORMAL*2), FONTS_SIZE_REF.section);
 					const strCaption = arrCaptionSplit[0] + (arrCaptionSplit.length > 1 ? ellipsis : '');
+					const strExtraStyle = CChart.getStyleFromMetadata(section.metadata);
+					
+					// new:
+					const strClassesRect = ['header__rect', 'header__rect--section', section.tag, ((idxSection % 2) ? 'header__rect--section-even' : 'header__rect--section-odd')].join(' ');
+					const strClassesText = ['header__text', 'header__text--section', section.tag].join(' ');
 
-					return svg`	<rect class="header__rect header__rect--section" x=${pxX} width=${pxWidth} @click=${e => CChart.onClick({src: 'section', e, idxTextareaLine: section.idxTextareaLine, caller: 'src: section'})} />
-								<text class="header__text header__text--section" x=${pxX}>${strCaption}</text>`;
+					return svg`	<rect class=${strClassesRect} style=${strExtraStyle} x=${pxX} y=${0} width=${pxWidth} @click=${e => CChart.onClick({src: 'section', e, idxTextareaLine: section.idxTextareaLine, caller: 'src: section'})} />
+								<text class=${strClassesText} style=${strExtraStyle} x=${pxX}>${strCaption}</text>`;
 				}),
 				
 				...docdata.arrChapter.map((chapter, idx) => {
 					const ellipsis = '…';
-					const pxX = PX_MARGIN_LEFT_W + (PX_COL_WIDTH_SVG_ADJ * idx);
-					const arrCaptionSplit = CChart.splitString(chapter.caption, PX_COL_WIDTH_SVG_ADJ - (PX_PADDING_NORMAL*1), FONTS_SIZE_REF.chapter);
+					const pxX = PX_MARGIN_LEFT_W + (PX_COL_WIDTH * idx);
+					const arrCaptionSplit = CChart.splitString(chapter.caption, PX_COL_WIDTH - (PX_PADDING_NORMAL*1), FONTS_SIZE_REF.chapter);
 					const strCaption = arrCaptionSplit[0] + (arrCaptionSplit.length > 1 ? ellipsis : '');
+					const strExtraStyle = CChart.getStyleFromMetadata(chapter.metadata);
+					
+					// new:
+					const strClassesRect = ['header__rect', 'header__rect--chapter', chapter.tag].join(' ');
+					const strClassesText = ['header__text', 'header__text--chapter', chapter.tag].join(' ');
 
-					return svg` <rect class="header__rect header__rect--chapter" x=${pxX} width=${PX_COL_WIDTH_SVG_ADJ}  @click=${e => CChart.onClick({src: 'chapter', e, idxTextareaLine: chapter.idxTextareaLine, caller: 'src: chapter'})} />
-								<text class="header__text header__text--chapter" x=${pxX}>${strCaption}</text>`;
+					return svg` <rect class=${strClassesRect} style=${strExtraStyle} x=${pxX} y=${PX_LINE_HEIGHT * 2} width=${PX_COL_WIDTH} @click=${e => CChart.onClick({src: 'chapter', e, idxTextareaLine: chapter.idxTextareaLine, caller: 'src: chapter'})} />
+								<text class=${strClassesText} style=${strExtraStyle} x=${pxX}>${strCaption}</text>`;
 				})
 			];
-		},
-
-		//::		☐ Chapter(chapter, idx)
-		Chapter(chapter, idx) {
-			if (LOGGING) console.log('%c CChart %c Template: %c Chapter %c (chapter, idx)', LOG_MODULE, LOG_RED, LOG_FUNCTION+LOG_BOLD, LOG_ARGS);
-			if (LOGARGS) console.log(chapter, idx);
-			const strClasses = ['chapter__rect', chapter.tag, ((chapter.idxSection % 2) ? 'chapter__rect--section-even' : 'chapter__rect--section-odd')].join(' ');
-			const pxX = PX_MARGIN_LEFT_W + (PX_COL_WIDTH_SVG_ADJ * idx);
-
-			return svg`<rect class=${strClasses} x=${pxX} y=${PX_HEADER_HEIGHT_SVG} width=${PX_COL_WIDTH_SVG_ADJ} height=${CChart.pxHeightViewbox - PX_HEADER_HEIGHT_SVG} @click=${e => CChart.onClick({src: 'chapter', e, idxTextareaLine: chapter.idxTextareaLine, caller: 'src: chapter (col)'})} />`;
 		},
 
 		//::		☐ TagblockParts(tagblock, idx)
@@ -1961,10 +2011,10 @@ const CChart = {
 			if (LOGARGS) console.log(tagblock, idx);
 			const strClasses = ['tagblock', tagblock.id].join(' ');
 			const pxWidthTagblock = CChart.pxWidthViewbox - PX_MARGIN_LEFT_W - PX_MARGIN_RIGHT_W;
-			const pxYa = PX_HEADER_HEIGHT_SVG + 'px';
+			const pxYa = PX_HEADER_HEIGHT + 'px';
 
 			return svg`
-			<g class=${strClasses} style=${`--ya:${pxYa}; --count-lines:${tagblock.countRows}`} data-id=${tagblock.id} @click=${e => CChart.onClick({src: 'tagblock', e, tagblock, caller: 'src: tagblock'})}>
+			<g class=${strClasses} style=${`--ya:${pxYa}; --count-rows:${tagblock.countRows}`} data-id=${tagblock.id} @click=${e => CChart.onClick({src: 'tagblock', e, tagblock, caller: 'src: tagblock'})}>
 				<rect class="tagblock__bg-rect" x=${PX_MARGIN_LEFT_W} y="0" width=${pxWidthTagblock} rx=${PX_PADDING_SMALL} />
 
 				${tagblock.arrPart.map(part => CChart.Templates.Tagblock_Part(part, tagblock))}
@@ -1977,12 +2027,15 @@ const CChart = {
 			if (LOGGING) console.log('%c CChart %c Template: %c TagblockGraphs %c (tagblock, idx)', LOG_MODULE, LOG_RED, LOG_FUNCTION+LOG_BOLD, LOG_ARGS);
 			if (LOGARGS) console.log(tagblock, idx);
 			const strClasses = ['tagblock', tagblock.id].join(' ');
-			const pxYa = PX_HEADER_HEIGHT_SVG + 'px';
+			const pxYa = PX_HEADER_HEIGHT + 'px';
+			const arrKeyExclude = ['fill', 'text', 'bold', 'saturation'];		// jk: same as arrAllowedKey in getStyleFromMetadata. Maybe make global const?
 
 			return svg`
-			<g class=${strClasses} style=${`--ya:${pxYa}; --count-lines:${tagblock.countRows}`} data-id=${tagblock.id} @click=${e => CChart.onClick({src: 'tagblock', e, tagblock, caller: 'src: tagblock'})}>
+			<g class=${strClasses} style=${`--ya:${pxYa}; --count-rows:${tagblock.countRows}`} data-id=${tagblock.id} @click=${e => CChart.onClick({src: 'tagblock', e, tagblock, caller: 'src: tagblock'})}>
 
-				${Object.entries(tagblock.graphtags).map(([keyMeta, arrValueMeta]) => CChart.Templates.Graphtag(tagblock, keyMeta, arrValueMeta))}
+				${Object.entries(tagblock.graphtags)
+					.filter(([keyMeta]) => !arrKeyExclude.includes(keyMeta))
+					.map(([keyMeta, arrValueMeta]) => CChart.Templates.Graphtag(tagblock, keyMeta, arrValueMeta))}
 			</g>`;
 		},
 
@@ -1991,14 +2044,14 @@ const CChart = {
 		Tagblock_Part(part, tagblock) {
 			//if (LOGGING) console.log('%c CChart %c Template: %c Tagblock_Part %c (part, tagblock)', LOG_MODULE, LOG_RED, LOG_FUNCTION+LOG_BOLD, LOG_ARGS);
 			if (LOGARGS) console.log(part, tagblock);
-			const pxWidthRect = PX_COL_WIDTH_SVG_ADJ - (PX_PADDING_SMALL * 2);
-			const pxX = PX_MARGIN_LEFT_W + (PX_COL_WIDTH_SVG_ADJ * part.idxChapter);
-			const pxYa = (((PX_LINE_HEIGHT_SVG * COUNT_LINES_SVG) + PX_PADDING_NORMAL) * part.idxOrderInChapter) + PX_PADDING_SMALL;
-			const pxYb = (PX_LINE_HEIGHT_SVG * part.idxRow) + PX_PADDING_SMALL;
+			const pxWidthRect = PX_COL_WIDTH - (PX_PADDING_SMALL * 2);
+			const pxX = PX_MARGIN_LEFT_W + (PX_COL_WIDTH * part.idxChapter);
+			const pxYa = (((PX_LINE_HEIGHT * COUNT_PART_LINES) + PX_PADDING_NORMAL) * part.idxOrderInChapter) + PX_PADDING_SMALL;
+			const pxYb = (PX_LINE_HEIGHT * part.idxRow) + PX_PADDING_SMALL;
 			const symbolString = part.metadata?.code;
 			const show = part.metadata?.show ?? tagblock.metadata?.show ?? 'normal';
-			const baseStyle = `--x:${pxX}px; --ya:${pxYa}px; --yb:${pxYb}px; `;
-			const extraStyle = CChart.getStyleFromMetadata(part.metadata);
+			const strBaseStyle = `--x:${pxX}px; --ya:${pxYa}px; --yb:${pxYb}px; `;
+			const strExtraStyle = CChart.getStyleFromMetadata(part.metadata);
 			const strClasses = ['tb-part', show === 'normal' ? 'tb-part--normal' : 'tb-part--special'].join(' ');
 
 			let arrTextlines = [];
@@ -2009,19 +2062,22 @@ const CChart = {
 
 				arrTextlines.forEach((textline, idx) => {
 					const addLineHeight = idx === 0 ? 0.5 : 1;
-					arrObjTextline.push({caption: textline, class: 'top', dy: PX_LINE_HEIGHT_SVG * addLineHeight});
+					arrObjTextline.push({caption: textline, class: 'top', style: '', dy: PX_LINE_HEIGHT * addLineHeight, idxTextareaLine: undefined});
 				});
 
 				let countLines = arrObjTextline.length;
+
 				part.arrSub.forEach(sub => {
+
+					const strExtraStyle = CChart.getStyleFromMetadata(sub.metadata);					
 					const arrTextlines = CChart.splitString(sub.caption, pxWidthRect, FONTS_SIZE_REF.part);
 
 					arrTextlines.forEach((textline, idx) => {
-						const addLineHeight = idx === 0 ? 1.5 : 1;
+						const addLineHeight = idx === 0 ? 1.25 : 1;
 						countLines += addLineHeight;
 
-						if (countLines <= COUNT_LINES_SVG)
-							arrObjTextline.push({caption: textline, class: sub.tag, idxTextareaLine: sub.idxTextareaLine, dy: PX_LINE_HEIGHT_SVG * addLineHeight});
+						if (countLines <= COUNT_PART_LINES)
+							arrObjTextline.push({caption: textline, class: sub.tag, style: strExtraStyle, idxTextareaLine: sub.idxTextareaLine, dy: PX_LINE_HEIGHT * addLineHeight});
 					});
 				});
 			}
@@ -2036,21 +2092,21 @@ const CChart = {
 				arrTextlines.forEach((textline, idx) => {
 					const addLineHeight = idx === 0 ? 0.5 : 1.1;
 
-					arrObjTextline.push({caption: textline, class: '', idxTextareaLine: 0, dy: PX_LINE_HEIGHT_SVG * addLineHeight});
+					arrObjTextline.push({caption: textline, class: '', idxTextareaLine: undefined, dy: PX_LINE_HEIGHT * addLineHeight});
 				});
 			}
 
 			return svg`
-		<g class=${strClasses} style=${baseStyle + extraStyle} data-idxline=${'x' + part.idxTextareaLine} @click=${e => CChart.onClick({src: 'part', e, idxTextareaLine: part.idxTextareaLine, caller: 'src: part'})} >
+		<g class=${strClasses} style=${strBaseStyle + strExtraStyle} data-idxline=${'x' + part.idxTextareaLine} @click=${e => CChart.onClick({src: 'part', e, idxTextareaLine: part.idxTextareaLine, caller: 'src: part'})} >
 			<rect class="tb-part__rect" x=${PX_PADDING_SMALL} y="0" width=${pxWidthRect} />
 			<text class="tb-part__text tb-part__text--chart-viewa">
 				${arrObjTextline.map((objTextline, idx) => svg`
-					<tspan data-idxlinesub=${objTextline.idxTextareaLine} class="${objTextline.class + ' line line' + (idx+1)}" x=${PX_PADDING_SMALL * 2} dy=${objTextline.dy}>${objTextline.caption}</tspan>
+					<tspan data-idxlinesub=${objTextline.idxTextareaLine} class="${objTextline.class + ' line line' + (idx+1)}" style="${objTextline.style}" x=${PX_PADDING_SMALL * 2} dy=${objTextline.dy}>${objTextline.caption}</tspan>
 				`)}
 			</text>
-			<text class="tb-part__text tb-part__text--chart-viewb top" x=${PX_PADDING_NORMAL} y=${PX_LINE_HEIGHT_SVG * 0.5}>${part.caption}</text> 
+			<text class="tb-part__text tb-part__text--chart-viewb top" x=${PX_PADDING_NORMAL} y=${PX_LINE_HEIGHT * 0.5}>${part.caption}</text> 
 
-			${symbolString ? svg`<text class="tb-part__symbol" style=${`--x:${pxWidthRect + PX_PADDING_NORMAL}px; --y:${PX_LINE_HEIGHT_SVG * COUNT_LINES_SVG}px;`} x="0" y="0">${symbolString}</text>` : ''}
+			${symbolString ? svg`<text class="tb-part__symbol" style=${`--x:${pxWidthRect + PX_PADDING_NORMAL}px; --y:${PX_LINE_HEIGHT * COUNT_PART_LINES}px;`} x="0" y="0">${symbolString}</text>` : ''}
 		</g>`;
 		},
 
@@ -2127,7 +2183,7 @@ const CChart = {
 			// set height of chapter rects
 			const arrElChapterRect = CChart.elSvgStage.querySelectorAll('.chapter__rect');
 			for (const elChapterRect of arrElChapterRect) {
-				elChapterRect.setAttribute('height', String(CChart.pxHeightViewbox - PX_HEADER_HEIGHT_SVG));
+				elChapterRect.setAttribute('height', String(CChart.pxHeightViewbox - PX_HEADER_HEIGHT));
 			}
 		}
 
@@ -2141,26 +2197,25 @@ const CChart = {
 		if (LOGGING) console.group('%c CChart %c calculateRequiredViewboxSize', LOG_MODULE, LOG_FUNCTION, LOG_ARGS, LOG_EXTRA);
 		if (LOGARGS) console.log(docdata);
 
-		let pxHeightRequired = 0;
+		let pxHeightRequired = PX_HEADER_HEIGHT + PX_FOOTER_HEIGHT;
 
 		if (CModel.docstate.idxView === VIEWA) {
 			const idxOrderInChapterMax = Math.max( ...docdata.arrTagblock.flatMap(tb => tb.arrPart.map(p => p.idxOrderInChapter)) );
-			const pxPartHeight = PX_LINE_HEIGHT_SVG * COUNT_LINES_SVG;
+			const pxPartHeight = PX_LINE_HEIGHT * COUNT_PART_LINES;
 
-			pxHeightRequired = PX_HEADER_HEIGHT_SVG + ((pxPartHeight + PX_PADDING_NORMAL) * (idxOrderInChapterMax + 1));
+			pxHeightRequired += ((pxPartHeight + PX_PADDING_NORMAL) * (idxOrderInChapterMax + 1));
 		}
 		else if (CModel.docstate.idxView === VIEWB) {
-			pxHeightRequired = PX_HEADER_HEIGHT_SVG;
 
 			for (const tagblock of docdata.arrTagblock) {
-				const pxTagblockHeight = (PX_LINE_HEIGHT_SVG * (tagblock.isActive ? tagblock.countRows : 1)) + 10;
+				const pxTagblockHeight = (PX_LINE_HEIGHT * (tagblock.isActive ? tagblock.countRows : 1)) + 10;
 
 				pxHeightRequired += pxTagblockHeight; 
 			}
 		}
 
 		// set ui values
-		CChart.pxWidthViewbox = PX_MARGIN_LEFT_W + PX_MARGIN_RIGHT_W + (PX_COL_WIDTH_SVG_ADJ * docdata.arrChapter.length);
+		CChart.pxWidthViewbox = PX_MARGIN_LEFT_W + PX_MARGIN_RIGHT_W + (PX_COL_WIDTH * docdata.arrChapter.length);
 		CChart.pxHeightSvgContainer = CChart.elParent.clientHeight;
 		CChart.pxHeightViewbox = Math.max(pxHeightRequired, CChart.pxHeightSvgContainer, PX_VIEVBOX_MIN_H);
 
@@ -2172,12 +2227,12 @@ const CChart = {
 		if (LOGGING) console.group('%c CChart %c reflowAllTagblocks', LOG_MODULE, LOG_FUNCTION, LOG_ARGS, LOG_EXTRA);
 		if (LOGARGS) console.log(docdata);
 
-		let pxTagblockTop = PX_HEADER_HEIGHT_SVG;
+		let pxTagblockTop = PX_HEADER_HEIGHT;
 
 		docdata.arrTagblock.forEach(tagblock => {
 
 			const pxYb = pxTagblockTop + 'px';
-			const pxTagblockHeight = (PX_LINE_HEIGHT_SVG * (tagblock.isActive ? tagblock.countRows : 1)) + PX_PADDING_NORMAL;
+			const pxTagblockHeight = (PX_LINE_HEIGHT * (tagblock.isActive ? tagblock.countRows : 1)) + PX_PADDING_NORMAL;
 			const elTagblockParts = CChart.elSvgStage.querySelector(`.tagblocks--parts .tagblock.${tagblock.id}`);
 
 			elTagblockParts.classList.toggle('tagblock--active', tagblock.isActive);
@@ -2239,7 +2294,7 @@ const CChart = {
 			return arrNew;
 		}
 
-		const pxGraphHeight = (CModel.docstate.idxView === VIEWA) ? (CChart.pxHeightSvgContainer - PX_HEADER_HEIGHT_SVG) * (CModel.appstate.pctGraphHeight / 100) : (PX_LINE_HEIGHT_SVG * tagblock.countRows) + PX_PADDING_NORMAL;
+		const pxGraphHeight = (CModel.docstate.idxView === VIEWA) ? (CChart.pxHeightSvgContainer - PX_HEADER_HEIGHT) * (CModel.appstate.pctGraphHeight / 100) : (PX_LINE_HEIGHT * tagblock.countRows) + PX_PADDING_NORMAL;
 
 		Object.entries(tagblock.graphtags).forEach(([keyMeta, arrValueMeta]) => {					// loop over graph tags: 'future', 'action', etc.
 			
@@ -2260,13 +2315,13 @@ const CChart = {
 			const arrValueMetaMapped = mapValuesWithFracX(arrValueMeta);
 
 			arrValueMetaMapped.forEach(({ idxChapter, value, fracX }) => {
-				let pxX = PX_MARGIN_LEFT_W + (idxChapter * PX_COL_WIDTH_SVG_ADJ) + (PX_COL_WIDTH_SVG_ADJ * fracX);
+				let pxX = PX_MARGIN_LEFT_W + (idxChapter * PX_COL_WIDTH) + (PX_COL_WIDTH * fracX);
 				const pctValue = ((value - definition.min) / (definition.max - definition.min)) * 100;		// calculate percent value inside range definition
 				const pxYBase = pxGraphHeight - (pxGraphHeight * (pctValue / 100));
 
 				let pxY;
 				if (CModel.docstate.idxView === VIEWA) {
-					const pxGraphTop = (CChart.pxHeightViewbox - PX_HEADER_HEIGHT_SVG) - pxGraphHeight;
+					const pxGraphTop = ((CChart.pxHeightViewbox - (PX_HEADER_HEIGHT + PX_FOOTER_HEIGHT)) - pxGraphHeight);
 					pxY = pxGraphTop + pxYBase;
 				} else {
 					pxY = pxYBase;
@@ -2296,10 +2351,8 @@ const CChart = {
 	//:::	🔹 getStyleFromMetadata() 				- better placement?
 	getStyleFromMetadata(obj) { 
 		if (!obj) return '';
-
 		//if (LOGGING) console.log('%c CChart %c getStyleFromMetadata', LOG_MODULE, LOG_FUNCTION);
-
-		const arrAllowedKey = ['fill', 'text', 'bold', 'fontsize'];
+		const arrAllowedKey = ['fill', 'text', 'bold', 'saturation'];
 		
 		return Object.entries(obj)
 			.filter(([, v]) => v !== null && v !== undefined && v !== '')
@@ -2311,7 +2364,7 @@ const CChart = {
 
 	//:::	🔹 splitString (*args*)
 	splitString(text, pxWidthMax, fontForMeasuring) {
-		const maxLines = COUNT_LINES_SVG;
+		const maxLines = COUNT_PART_LINES;
 		const content = (text || '').trim();
 		if (!content) return [''];
 		//if (LOGGING) console.log('%c CChart %c splitString', LOG_MODULE, LOG_FUNCTION);
@@ -2897,7 +2950,7 @@ const CToolbar = {
 
 		const arrButtons = CModel.docdata.arrTagblock.map((tagblock, idx) => ({
 			label: (idx+1).toString() + ': #' + tagblock.id,
-			tooltip: `Set active/passive.\nHold Alt to solo / restore all.\nDrag to change order in Tags chart.\n${idx < 9 ? ('(⌘ ' + String(idx+1) + ' -> Activate / deactivate)\n(⌥ ' + String(idx+1) + ' -> Solo / restore all)') : '(No keyboard shortcut)'}`,
+			tooltip: `Set active/passive.\nHold Alt to solo / restore all.\nDrag to change order in Tags chart.\n${idx < 9 ? ('(' + CUtil.fixForOs('⌘ ' + String(idx+1)) + ': Activate / deactivate)\n(' + CUtil.fixForOs('⌥ ' + String(idx+1)) + ': Solo / restore all)') : '(No keyboard shortcut)'}`,
 			classes: [tagblock.id, (tagblock.isActive ? 'button--active' : 'button--inactive')],
 			draggable: true,
 			dataset: {id: tagblock.id},		// can have several data fields
@@ -2939,22 +2992,22 @@ const CPopup = {
 							<div class="popup__tablist" role="tablist">
 								<button class=${['tablist__btn', appstate.idTab === 'files' ? 'tablist__btn-selected' : ''].join(' ')} role="tab"
 									@click=${e => CPopup.onClick({src: '@click: btn.tab.select', e, idTab: 'files'})}
-									title="Select tab: Files\n(⌘ ←)"
+									title=${`Select tab: Files\n(${CUtil.fixForOs('⌘') + ' ← / →'})`}
 								>Files</button>
 
 								<button class=${['tablist__btn', appstate.idTab === 'ui' ? 'tablist__btn-selected' : ''].join(' ')} role="tab"
 									@click=${e => CPopup.onClick({src: '@click: btn.tab.select', e, idTab: 'ui'})}
-									title="Select tab: UI\n(⌘ →)"
+									title=${`Select tab: UI\n(${CUtil.fixForOs('⌘') + ' ← / →'})`}
 								>UI</button>
 
 								<button class=${['tablist__btn', appstate.idTab === 'css' ? 'tablist__btn-selected' : ''].join(' ')} role="tab"
 									@click=${e => CPopup.onClick({src: '@click: btn.tab.select', e, idTab: 'css'})}
-									title="Select tab: Style\n(⌘ →)"
+									title=${`Select tab: Style\n(${CUtil.fixForOs('⌘') + ' ← / →'})`}
 								>Style</button>
 
 								<button class=${['tablist__btn', appstate.idTab === 'status' ? 'tablist__btn-selected' : ''].join(' ')} role="tab"
 									@click=${e => CPopup.onClick({src: '@click: btn.tab.select', e, idTab: 'status'})}
-									title="Select tab: Status\n(⌘ →)"
+									title=${`Select tab: Status\n(${CUtil.fixForOs('⌘') + ' ← / →'})`}
 								>Status</button>
 							</div>
 							
@@ -2980,23 +3033,23 @@ const CPopup = {
 			return html`
 				<div class="content__actions">
 
-					<button class="btn" @click=${e => CPopup.onClick({src: '@click: btn.new.file'})} title="New file\n(⌘ N)">
-						<span class="kbd">⌘ N</span>
+					<button class="btn" @click=${e => CPopup.onClick({src: '@click: btn.new.file'})} title=${`New file\n(${CUtil.fixForOs('⌘ N')})`}>
+						<span class="kbd">${CUtil.fixForOs('⌘ N')}</span>
 						<span class="btn__label">New</span>
 					</button>
 
-					<button class="btn" @click=${e => CPopup.onClick({src: '@click: btn.open.file'})} title="Open file\n(⌘ O)">
-						<span class="kbd">⌘ O</span>
+					<button class="btn" @click=${e => CPopup.onClick({src: '@click: btn.open.file'})} title=${`Open file\n(${CUtil.fixForOs('⌘ O')})`}>
+						<span class="kbd">${CUtil.fixForOs('⌘ O')}</span>
 						<span class="btn__label">Open file…</span>
 					</button>
 
-					<button class="btn" @click=${e => CPopup.onClick({src: '@click: btn.save.as.file'})} title="Save file as\n(⇧ ⌘ S)">
-						<span class="kbd">⇧ ⌘ S</span>
+					<button class="btn" @click=${e => CPopup.onClick({src: '@click: btn.save.as.file'})} title=${`Save file as\n(${CUtil.fixForOs('⇧ ⌘ S')})`}>
+						<span class="kbd">${CUtil.fixForOs('⇧ ⌘ S')}</span>
 						<span class="btn__label">Save as…</span>
 					</button>
 
-					<button class="btn" @click=${e => CPopup.onClick({src: '@click: btn.pin.current.file'})} title="Pin file\n(⇧ ⌘ P)">
-						<span class="kbd">⇧ ⌘ P</span>
+					<button class="btn" @click=${e => CPopup.onClick({src: '@click: btn.pin.current.file'})} title=${`Pin file\n(${CUtil.fixForOs('⇧ ⌘ P')})`}>
+						<span class="kbd">${CUtil.fixForOs('⇧ ⌘ P')}</span>
 						<span class="btn__label">Pin file</span>
 					</button>
 				</div>
@@ -3025,24 +3078,24 @@ const CPopup = {
 				<div class="content__section">
 					<div class="section__head">
 						<span>Visibility</span>
-						<span class="hint">Visibility settings for Editor and UI Elements.</span>
+						<span class="hint">Settings for editor and UI elements. Also available in the View menu</span>
 						<div class="section__actions"></div>
 					</div>
 					<div class="section__body">
-						${CPopup.Templates.BodyItem_ToggleSetting({idField: "isSidebarVisible", isChecked: !!appstate.isSidebarVisible, title: "Toggle Editor visibility\n(⌘ E)", name: 'Show editor', desc: "Text editor in sidebar. Select between positions using ⌘ ⇧ E or menu View → Editor position", shortcut: "⌘ E", argsDispatch: {type: 'framework.sidebar.visibility.set', isSidebarVisible: !appstate.isSidebarVisible, caller: 'Toggle'}})}
+						${CPopup.Templates.BodyItem_ToggleSetting({idField: "isSidebarVisible", isChecked: !!appstate.isSidebarVisible, title: `Toggle Editor visibility\n(${CUtil.fixForOs('⌘ E')})`, name: 'Show editor', desc: 'Text editor in sidebar', shortcut: CUtil.fixForOs('⌘ E'), argsDispatch: {type: 'framework.sidebar.visibility.set', isSidebarVisible: !appstate.isSidebarVisible, caller: 'Toggle'}})}
 					</div>
 					<div class="section__body">
-						${CPopup.Templates.BodyItem_ToggleSetting({idField: "isToolbarVisible", isChecked: !!appstate.isToolbarVisible,  title: "Toggle UI elements visibility\n(⌘ R)", name: 'Show ribbon', desc: "Tag buttons ribbon", shortcut: "⌘ R", argsDispatch: {type: 'framework.toolbar.visibility.set', isToolbarVisible: !appstate.isToolbarVisible, caller: 'Toggle'}})}
+						${CPopup.Templates.BodyItem_ToggleSetting({idField: "isToolbarVisible", isChecked: !!appstate.isToolbarVisible,  title: `Toggle UI elements visibility\n(${CUtil.fixForOs('⌘ R')})`, name: 'Show ribbon', desc: "Tag buttons ribbon", shortcut: CUtil.fixForOs('⌘ R'), argsDispatch: {type: 'framework.toolbar.visibility.set', isToolbarVisible: !appstate.isToolbarVisible, caller: 'Toggle'}})}
 					</div>
 					<div class="section__body">
-						${CPopup.Templates.BodyItem_ToggleSetting({idField: "isGraphVisible", isChecked: !!appstate.isGraphVisible, title: "Toggle Graphs visibility\n(⌘ R)", name: 'Show graphs', desc: "Graphs shown for each tag", shortcut: "⌘ G", argsDispatch: {type: 'chart.graph.visibility.set', isGraphVisible: !appstate.isGraphVisible, caller: 'Toggle'}})}
+						${CPopup.Templates.BodyItem_ToggleSetting({idField: "isGraphVisible", isChecked: !!appstate.isGraphVisible, title: `Toggle Graphs visibility\n(${CUtil.fixForOs('⌘ G')})`, name: 'Show graphs', desc: 'Graphs shown for each tag', shortcut: CUtil.fixForOs('⌘ G'), argsDispatch: {type: 'chart.graph.visibility.set', isGraphVisible: !appstate.isGraphVisible, caller: 'Toggle'}})}
 					</div>
 				</div>
 
 				<div class="content__section">
 					<div class="section__head">
 						<span>Chart view</span>
-						<span class="hint">Select chart view.</span>
+						<span class="hint">Select chart view</span>
 						<div class="section__actions"></div>
 					</div>
 					<div class="section__body">
@@ -3064,26 +3117,26 @@ const CPopup = {
 				<div class="content__section">
 					<div class="section__head">
 						<span>Graph height</span>
-						<span class="hint">Adjust graph height in Structure view. Use ⇧ ⌘ G or View → Graph height.</span>
+						<span class="hint">Adjust graph height in Structure view</span>
 						<div class="section__actions"></div>
 					</div>
 					<div class="section__body">
 						<div class="body__itemP">
 							<div class="pillbar">
-								<button class=${['pill', appstate.pctGraphHeight === 25 ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.graph.height.set', pctGraphHeight: 25})} title="Adjust graph height in Structure view\n(⇧ ⌘ G to choose between heights)">
-									<span class="kbd">⇧ ⌘ G</span>
+								<button class=${['pill', appstate.pctGraphHeight === 25 ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.graph.height.set', pctGraphHeight: 25})} title=${`Adjust graph height in Structure view\n(${CUtil.fixForOs('⇧ ⌘ G')})`}>
+									<span class="kbd">${CUtil.fixForOs('⇧ ⌘ G')}</span>
 									<span class="btn__label">25%</span>
 								</button>
-								<button class=${['pill', appstate.pctGraphHeight === 50 ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.graph.height.set', pctGraphHeight: 50})} title="Adjust graph height in Structure view\n(⇧ ⌘ G to choose between heights)">
-									<span class="kbd">⇧ ⌘ G</span>
+								<button class=${['pill', appstate.pctGraphHeight === 50 ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.graph.height.set', pctGraphHeight: 50})} title=${`Adjust graph height in Structure view\n(${CUtil.fixForOs('⇧ ⌘ G')})`}>
+									<span class="kbd">${CUtil.fixForOs('⇧ ⌘ G')}</span>
 									<span class="btn__label">50%</span>
 								</button>
-								<button class=${['pill', appstate.pctGraphHeight === 75 ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.graph.height.set', pctGraphHeight: 75})} title="Adjust graph height in Structure view\n(⇧ ⌘ G to choose between heights)">
-									<span class="kbd">⇧ ⌘ G</span>
+								<button class=${['pill', appstate.pctGraphHeight === 75 ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.graph.height.set', pctGraphHeight: 75})} title=${`Adjust graph height in Structure view\n(${CUtil.fixForOs('⇧ ⌘ G')})`}>
+									<span class="kbd">${CUtil.fixForOs('⇧ ⌘ G')}</span>
 									<span class="btn__label">75%</span>
 								</button>
-								<button class=${['pill', appstate.pctGraphHeight === 100 ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.graph.height.set', pctGraphHeight: 100})} title="Adjust graph height in Structure view\n(⇧ ⌘ G to choose between heights)">
-									<span class="kbd">⇧ ⌘ G</span>
+								<button class=${['pill', appstate.pctGraphHeight === 100 ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.graph.height.set', pctGraphHeight: 100})} title=${`Adjust graph height in Structure view\n(${CUtil.fixForOs('⇧ ⌘ G')})`}>
+									<span class="kbd">${CUtil.fixForOs('⇧ ⌘ G')}</span>
 									<span class="btn__label">100%</span>
 								</button>
 							</div>
@@ -3094,26 +3147,26 @@ const CPopup = {
 				<div class="content__section">
 					<div class="section__head">
 						<span>Editor position</span>
-						<span class="hint">Choose the editor position on screen. Use ⇧ ⌘ E or View → Editor position.</span>
+						<span class="hint">Choose the editor position on screen</span>
 						<div class="section__actions"></div>
 					</div>
 					<div class="section__body">
 						<div class="body__itemP">
 							<div class="pillbar">
-								<button class=${['pill', appstate.idSidebarPosition === 'sidebar-position-left' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.sidebar.position.set', idSidebarPosition: 'sidebar-position-left'})} title="Select where the editor is positioned on screen\n(⇧ ⌘ E to select between positions)">
-									<span class="kbd">⇧ ⌘ E</span>
+								<button class=${['pill', appstate.idSidebarPosition === 'sidebar-position-left' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.sidebar.position.set', idSidebarPosition: 'sidebar-position-left'})} title=${`Select where the editor is positioned on screen\n(${CUtil.fixForOs('⇧ ⌘ E')})`}>
+									<span class="kbd">${CUtil.fixForOs('⇧ ⌘ E')}</span>
 									<span class="btn__label">Left</span>
 								</button>
-								<button class=${['pill', appstate.idSidebarPosition === 'sidebar-position-right' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.sidebar.position.set', idSidebarPosition: 'sidebar-position-right'})} title="Select where the editor is positioned on screen\n(⇧ ⌘ E to select between positions)">
-									<span class="kbd">⇧ ⌘ E</span>
+								<button class=${['pill', appstate.idSidebarPosition === 'sidebar-position-right' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.sidebar.position.set', idSidebarPosition: 'sidebar-position-right'})} title=${`Select where the editor is positioned on screen\n(${CUtil.fixForOs('⇧ ⌘ E')})`}>
+									<span class="kbd">${CUtil.fixForOs('⇧ ⌘ E')}</span>
 									<span class="btn__label">Right</span>
 								</button>
-								<button class=${['pill', appstate.idSidebarPosition === 'sidebar-position-top' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.sidebar.position.set', idSidebarPosition: 'sidebar-position-top'})} title="Select where the editor is positioned on screen\n(⇧ ⌘ E to select between positions)">
-									<span class="kbd">⇧ ⌘ E</span>
+								<button class=${['pill', appstate.idSidebarPosition === 'sidebar-position-top' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.sidebar.position.set', idSidebarPosition: 'sidebar-position-top'})} title=${`Select where the editor is positioned on screen\n(${CUtil.fixForOs('⇧ ⌘ E')})`}>
+									<span class="kbd">${CUtil.fixForOs('⇧ ⌘ E')}</span>
 									<span class="btn__label">Top</span>
 								</button>
-								<button class=${['pill', appstate.idSidebarPosition === 'sidebar-position-bottom' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.sidebar.position.set', idSidebarPosition: 'sidebar-position-bottom'})} title="Select where the editor is positioned on screen\n(⇧ ⌘ E to select between positions)">
-									<span class="kbd">⇧ ⌘ E</span>
+								<button class=${['pill', appstate.idSidebarPosition === 'sidebar-position-bottom' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.sidebar.position.set', idSidebarPosition: 'sidebar-position-bottom'})} title=${`Select where the editor is positioned on screen\n(${CUtil.fixForOs('⇧ ⌘ E')})`}>
+									<span class="kbd">${CUtil.fixForOs('⇧ ⌘ E')}</span>
 									<span class="btn__label">Bottom</span>
 								</button>
 							</div>
@@ -3123,22 +3176,22 @@ const CPopup = {
 				<div class="content__section">
 					<div class="section__head">
 						<span>Theme</span>
-						<span class="hint">Select color theme.</span>
+						<span class="hint">Select color theme</span>
 						<div class="section__actions"></div>
 					</div>
 					<div class="section__body">
 						<div class="body__itemP">
 							<div class="pillbar">
-								<button class=${['pill', appstate.idTheme === 'system' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.theme.set', idTheme: 'system'})} title="Select color theme System: Colors follows system theme\n(⇧ ⌘ F1)">
-									<span class="kbd">⇧ ⌘ F1</span>
+								<button class=${['pill', appstate.idTheme === 'system' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.theme.set', idTheme: 'system'})} title=${`Select color theme System: Colors follows system theme\n(${CUtil.fixForOs('⇧ ⌘ F1')})`}>
+									<span class="kbd">${CUtil.fixForOs('⇧ ⌘ F1')}</span>
 									<span class="btn__label">System</span>
 								</button>
-								<button class=${['pill', appstate.idTheme === 'light' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.theme.set', idTheme: 'light'})} title="Select color theme Light\n(⇧ ⌘ F2)">
-									<span class="kbd">⇧ ⌘ F2</span>
+								<button class=${['pill', appstate.idTheme === 'light' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.theme.set', idTheme: 'light'})} title=${`Select color theme Light\n(${CUtil.fixForOs('⇧ ⌘ F2')})`}>
+									<span class="kbd">${CUtil.fixForOs('⇧ ⌘ F2')}</span>
 									<span class="btn__label">Light</span>
 								</button>
-								<button class=${['pill', appstate.idTheme === 'dark' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.theme.set', idTheme: 'dark'})} title="Select color theme Dark\n(⇧ ⌘ F3)">
-									<span class="kbd">⇧ ⌘ F3</span>
+								<button class=${['pill', appstate.idTheme === 'dark' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.theme.set', idTheme: 'dark'})} title=${`Select color theme Dark\n(${CUtil.fixForOs('⇧ ⌘ F3')})`}>
+									<span class="kbd">${CUtil.fixForOs('⇧ ⌘ F3')}</span>
 									<span class="btn__label">Dark</span>
 								</button>
 							</div>
@@ -3194,7 +3247,7 @@ const CPopup = {
 		BodyItem_PinnedFile(args) {
 			if (LOGGING) console.log('%c CPopup %c Template: %c BodyItem_PinnedFile %c (args)', LOG_MODULE, LOG_RED, LOG_FUNCTION+LOG_BOLD, LOG_ARGS);
 			const filenameShort = args.pathFilePinned.split(/[\\/]/).pop();
-			const kbd = args.idx < 9 ? `⇧ ⌘ ${args.idx + 1}` : "—";
+			const kbd = args.idx < 9 ? CUtil.fixForOs(`⇧ ⌘ ${args.idx + 1}`) : "—";
 			const shortcut = args.idx < 9 ? kbd : 'No keyboard shortcut';
 
 			return html`
@@ -3797,8 +3850,8 @@ const CModel = {
 		//:		→ CFramework:	setTheme
 		CFramework.setTheme({mode: this.appstate.idTheme, caller});
 
-		//:		→ CFramework:	updateLookupConstants	[pxBaseUnitUi]
-		CFramework.updateLookupConstants({pxBaseUnitUi: this.appstate.pxBaseUnitUi, caller});
+		//:		→ CFramework:	updateLookupConstants	[pxBaseUnit]
+		CFramework.updateLookupConstants({pxBaseUnit: this.appstate.pxBaseUnit, caller});
 
 		//:		→ CFramework:	setAppUiClasses
 		CFramework.setAppUiClasses({caller});
@@ -3819,7 +3872,7 @@ const CModel = {
 
 		const appstateDefault = {
 			_id: 'appstate',
-			pxBaseUnitUi: PX_BASEUNIT_UI_INITIAL,
+			pxBaseUnit: PX_BASEUNIT_INITIAL,
 			isPopupOpen: false,
 			idTab: 'files',
 			idTheme: 'system',
@@ -3892,8 +3945,7 @@ const CModel = {
 			pxWorkspaceScrollLeft: 0,
 			pxTexteditorScrollTop: 0,
 			idxView: VIEWA,
-			pxColWidth: PX_COL_W_INITIAL,
-			linecount: COUNT_LINES_INITIAL,
+			linecount: COUNT_PART_LINES_INITIAL,
 		};
 
 		if (args.doLoadDefault) {
@@ -4086,7 +4138,7 @@ SUGGESTION: ${logentry.suggestion}
 							};
 						};
 
-		const txtMarkdown = args.text;
+		const caller = 'CModel.buildDocdataFromText';
 		const NOTAG = 'notag';
 
 		const arrSection = [];
@@ -4103,12 +4155,13 @@ SUGGESTION: ${logentry.suggestion}
 
 		const objGraphs = {};
 
+		const txtMarkdown = args.text;
 		const linesParsed = txtMarkdown.split(/\r?\n/);
 
 		for (let idxTextareaLine = 0; idxTextareaLine < linesParsed.length; idxTextareaLine++) {
 
-			const rawLine = linesParsed[idxTextareaLine];	
-			const lineTrim = rawLine.trim();
+			const lineRaw = linesParsed[idxTextareaLine];	
+			const lineTrim = lineRaw.trim();
 
 			if (!yamlDone && idxTextareaLine === 0 && lineTrim === '---') {	// YAML FRONT MATTER (only allowed at very top)
 				inYamlFrontMatter = true;
@@ -4131,11 +4184,11 @@ SUGGESTION: ${logentry.suggestion}
 
 			if (inFence) continue; 				// skip fenced content
 
-			if (!rawLine.trim()) continue;
+			if (!lineRaw.trim()) continue;
 
 
-			const depth = countLeadingTabs(rawLine);
-			const contentAfterTabs = rawLine.slice(depth);
+			const depth = countLeadingTabs(lineRaw);
+			const contentAfterTabs = lineRaw.slice(depth);
 			const stripped = stripBulletPrefix(contentAfterTabs);
 
 			const {tag, caption} = parseTagAndCaption(stripped);
@@ -4156,6 +4209,9 @@ SUGGESTION: ${logentry.suggestion}
 					arrIdxChapter: [],
 				};
 
+				//: 		→ this: getPartMetadataFromTextline
+				sectionCurrent.metadata = this.getPartMetadataFromTextline({trimmedContent, caller});
+
 				arrSection.push(sectionCurrent);
 
 				chapterCurrent = null;
@@ -4171,6 +4227,9 @@ SUGGESTION: ${logentry.suggestion}
 					idxTextareaLine,
 					countParts: 0,
 				};
+
+				//: 		→ this: getPartMetadataFromTextline
+				chapterCurrent.metadata = this.getPartMetadataFromTextline({trimmedContent, caller});
 
 				arrChapter.push(chapterCurrent);
 
@@ -4193,7 +4252,7 @@ SUGGESTION: ${logentry.suggestion}
 				};
 
 				//: 		→ this: getPartMetadataFromTextline
-				partCurrent.metadata = this.getPartMetadataFromTextline({trimmedContent, caller: 'CModel.buildDocdataFromText'});
+				partCurrent.metadata = this.getPartMetadataFromTextline({trimmedContent, caller});
 				
 				arrPart.push(partCurrent);
 				chapterCurrent.countParts++;
@@ -4202,7 +4261,6 @@ SUGGESTION: ${logentry.suggestion}
 			else if (depth === 3) {
 
 				if (partCurrent !== null) {
-					//-partCurrent.arrSub.push(trimmedContent);
 
 					const sub = {
 						tag: tagNormalized,
@@ -4210,14 +4268,17 @@ SUGGESTION: ${logentry.suggestion}
 						idxTextareaLine,
 					};
 
+					//: 		→ this: getPartMetadataFromTextline
+					sub.metadata = this.getPartMetadataFromTextline({trimmedContent, caller});
+
 					partCurrent.arrSub.push(sub);
 				}
 			}
 
-
 			// add graphdata. will be added no matter the depth of the line
 			if (sectionCurrent || chapterCurrent) {
 
+				//: 		→ this: getPartMetadataFromTextline
 				const idxChapter = !chapterCurrent ? arrChapter.length : arrChapter.indexOf(chapterCurrent);	// if line is new section (no chapter yet), point to first chapter in section (even though it is not created yet)
 				const metadata = this.getPartMetadataFromTextline({trimmedContent, caller: 'CModel.buildDocdataFromText'});
 				const numericEntries = Object.entries(metadata).filter(([key, value]) => typeof value === 'number');
@@ -4241,8 +4302,6 @@ SUGGESTION: ${logentry.suggestion}
 
 		// make arrTagblock
 		const arrTagblock = Object.entries(objGraphs).map(([tag, obj]) => {			// jk: sort this on tag?
-
-			console.log('tag', tag);
 
 			const arrTagblockPart = arrPart.filter(part => part.tag === tag);
 			const graphtags = obj.graphtags;
@@ -4283,13 +4342,13 @@ SUGGESTION: ${logentry.suggestion}
 	},
 
 	// Parses inline metadata like:
-	// "@weight 65.5kg", "@bmi: 21,", "@color #ff0", "@code🥇", "@code:🥇"
+	// "@weight 65.5kg", "@bmi: 21,", "@fill #ff0", "@code🥇", "@code:🥇"
 	//:::	🔹	getPartMetadataFromTextline
 	getPartMetadataFromTextline(args) {
 		//if (LOGGING) console.log(...CUtil.logGroup('CModel', 'getPartMetadataFromTextline', CUtil.getArgsKeys(args), args.caller));
 
 		const metadata = {};
-		
+
 		// Matches:
 		//   @key value
 		//   @key: value
@@ -4303,16 +4362,16 @@ SUGGESTION: ${logentry.suggestion}
 		// Group 2 = value (if separated by space/colon)
 		// Group 3 = value (if immediately attached: @code🥇)
 		const re = /@([A-Za-z0-9_-]+)(?:(?:\s*:\s*|\s+)(\S+)|(\S+))/g;
-		
+
 		let m;
 		while ((m = re.exec(args.trimmedContent)) !== null) {
 			const key = m[1];
 			const rawToken = (m[2] ?? m[3] ?? '').trim();
 			if (!key || !rawToken) continue;
-			
+
 			// Strip common trailing punctuation from the token (so '21,' -> '21')
 			const token = rawToken.replace(/[),.;!?]+$/g, '');
-			
+
 			// If token begins with a number, parse that numeric prefix.
 			// Supports:
 			//   65
@@ -4330,7 +4389,7 @@ SUGGESTION: ${logentry.suggestion}
 				metadata[key] = token;
 			}
 		}
-		
+
 		return metadata;
 	},
 
@@ -4694,12 +4753,8 @@ const App = {
 				//:			→ CModel:		loadDocstate
 				CModel.docstate = CModel.loadDocstate({pathFile: args.pathFileToLoad, doLoadDefault: source === SOURCE.NEWDOC, caller});
 
-				//:				→ CFramework:	updateLookupConstants	[pxColWidth, linecount]
-				CFramework.updateLookupConstants({
-					pxColWidth: CModel.docstate.pxColWidth,
-					linecount: CModel.docstate.linecount,
-					caller,
-				});
+				//:				→ CFramework:	updateLookupConstants	[--pxColWidth, linecount]
+				CFramework.updateLookupConstants({/*-pxColWidth: CModel.docstate.pxColWidth,-*/ linecount: CModel.docstate.linecount, caller});
 
 				//:				→ CModel:		updateAppstate			[pathFileLoaded, isDocdataSaved]
 				CModel.updateAppstate({
@@ -4749,13 +4804,14 @@ const App = {
 				const pathToPin = CModel.appstate.pathFileLoaded;
 				const isAlreadyPinned = CModel.appstate.arrPathFilePinned.includes(pathToPin);
 
-				if (!isAlreadyPinned && pathToPin !== '')
+				if (!isAlreadyPinned && pathToPin !== '') {
 					//:			→ CModel: updateAppstate:		arrPathFilePinned
 					CModel.updateAppstate({arrPathFilePinned: [...CModel.appstate.arrPathFilePinned, pathToPin], caller});	// update array with copy plus added string 
 
-				//:			→ CPopup: renderPopup
-				if (CModel.appstate.isPopupOpen)
-					CPopup.renderPopup({caller});
+					//:			→ CPopup: renderPopup
+					if (CModel.appstate.isPopupOpen)
+						CPopup.renderPopup({caller});
+				}
 
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
@@ -4798,13 +4854,8 @@ const App = {
 				//:				→ CModel: reapplyDocstate
 				CModel.reapplyDocstate({caller});
 
-
-
-		//:		→ CFramework:	updateCssFromLookupConstants
-		//--CFramework.updateLookupConstants({caller});
-		CFramework.updateCssFromLookupConstants({caller});
-
-
+				//:		→ CFramework:	updateCssFromLookupConstants
+				CFramework.updateCssFromLookupConstants({caller});
 
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
@@ -4932,7 +4983,10 @@ const App = {
 				//:			→ CPopup: renderPopup
 				if (CModel.appstate.isPopupOpen)
 					CPopup.renderPopup({caller});
-				
+
+				// nb: if textarea is not disabled, then it will still get keyboard input somehow (in a strange way)
+				CTexteditor.elTextarea.disabled = !args.isSidebarVisible;
+
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
 			}
@@ -4971,21 +5025,19 @@ const App = {
 			case 'chart.zoom': {
 
 				const arrLinecountValues = [2, 3,   4,   5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
-				const arrPxColWidthValues = arrLinecountValues.map(lc => CUtil.roundN(lc * 25, 0));
-
-				const pxColWidthNew = args.isReset ? PX_COL_W_INITIAL : CUtil.getPrevNextValue(arrPxColWidthValues, PX_COL_WIDTH_SVG, (args.isIn ? 1 : -1), PX_COL_W_INITIAL);
-				const linecountNew =  args.isReset ? COUNT_LINES_INITIAL : CUtil.getPrevNextValue(arrLinecountValues, COUNT_LINES_SVG, (args.isIn ? 1 : -1), COUNT_LINES_INITIAL);
+				const linecountNew =  args.isReset ? COUNT_PART_LINES_INITIAL : CUtil.getPrevNextValue(arrLinecountValues, COUNT_PART_LINES, (args.isIn ? 1 : -1), COUNT_PART_LINES_INITIAL);
+				const pxColWidthNew = (PX_LINE_HEIGHT * linecountNew) + PX_PADDING_NORMAL;
 
 				// calculate factor of zoom
-				const zoomFactor 		= pxColWidthNew / PX_COL_WIDTH_SVG;
+				const zoomFactor 		= pxColWidthNew / PX_COL_WIDTH;
 				const pxWorldCenterXOld	= CChart.elParent.scrollLeft + (CChart.elParent.clientWidth / 2);
 				const pxWorldCenterXNew	= pxWorldCenterXOld	* zoomFactor;
 
 				//:			→ CModel: updateDocstate
-				CModel.updateDocstate({pxColWidth: pxColWidthNew,  linecount: linecountNew,  caller});
+				CModel.updateDocstate({/*--pxColWidth: pxColWidthNew,-*/  linecount: linecountNew,  caller});
 
 				//:			→ CFramework: updateLookupConstants
-				CFramework.updateLookupConstants({pxColWidth: pxColWidthNew,  linecount: linecountNew,  caller});
+				CFramework.updateLookupConstants({/*--pxColWidth: pxColWidthNew,-*/  linecount: linecountNew,  caller});
 
 				//:			→ CChart: renderSvg
 				CChart.renderSvg({typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
@@ -5001,18 +5053,18 @@ const App = {
 			case 'framework.zoom': {
 
 				const arrPxUiBaseUnit = [8, 9, 10, 11,  12,  13, 14, 15, 16, 17, 18];
-				const pxBaseUnitUiNew = args.isReset ? PX_BASEUNIT_UI_INITIAL : CUtil.getPrevNextValue(arrPxUiBaseUnit, CModel.appstate.pxBaseUnitUi, (args.isIn ? 1 : -1), PX_BASEUNIT_UI_INITIAL, false);
+				const pxBaseUnitNew = args.isReset ? PX_BASEUNIT_INITIAL : CUtil.getPrevNextValue(arrPxUiBaseUnit, CModel.appstate.pxBaseUnit, (args.isIn ? 1 : -1), PX_BASEUNIT_INITIAL, false);
 
 				// calculate factor of zoom
-				const zoomFactor 		= pxBaseUnitUiNew / PX_BASEUNIT_UI;
+				const zoomFactor 		= pxBaseUnitNew / PX_BASEUNIT;
 				const pxWorldCenterXOld	= CChart.elParent.scrollLeft + (CChart.elParent.clientWidth / 2);
 				const pxWorldCenterXNew	= pxWorldCenterXOld	* zoomFactor;
 
 				//:			→ CModel:		updateAppstate
-				CModel.updateAppstate({pxBaseUnitUi: pxBaseUnitUiNew, caller});
+				CModel.updateAppstate({pxBaseUnit: pxBaseUnitNew, caller});
 
 				//:			→ CFramework:	updateLookupConstants
-				CFramework.updateLookupConstants({pxBaseUnitUi: pxBaseUnitUiNew, caller});
+				CFramework.updateLookupConstants({pxBaseUnit: pxBaseUnitNew, caller});
 
 				//:			→ CChart: renderSvg
 				CChart.renderSvg({typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
@@ -5112,6 +5164,8 @@ const App = {
 			//::		🔻 popup.settings.open
 			case 'popup.settings.open': {
 
+				CTexteditor.elTextarea.disabled = true;
+
 				const idTab = args.idTab || CModel.appstate.idTab;
 				
 				//:			→ CModel: updateAppstate
@@ -5126,6 +5180,8 @@ const App = {
 
 			//::		🔻 popup.settings.close
 			case 'popup.settings.close': {
+
+				CTexteditor.elTextarea.disabled = false;
 
 				//:			→ CModel: cleanupDrag
 				if (CPopup.draginfo)
