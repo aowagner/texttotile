@@ -1,0 +1,41 @@
+name: macOS Build (Manual)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+
+      - name: Install JS dependencies
+        run: npm ci
+
+      - name: Build Tauri app
+        run: npm run tauri build -- --target universal-apple-darwin
+
+      - name: Upload DMG
+        uses: actions/upload-artifact@v6
+        with:
+          name: macos-dmg
+          path: src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg
+
+      - name: Upload app bundle
+        uses: actions/upload-artifact@v6
+        with:
+          name: macos-app
+          path: src-tauri/target/universal-apple-darwin/release/bundle/macos/*.app
