@@ -228,8 +228,8 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 	let item_cut = MenuItem::with_id(app, "edit.cut", "Cut", true, Some("CmdOrCtrl+X"))?;
 	let item_copy = MenuItem::with_id(app, "edit.copy", "Copy", true, Some("CmdOrCtrl+C"))?;
 	let item_paste = MenuItem::with_id(app, "edit.paste", "Paste", true, Some("CmdOrCtrl+V"))?;
-	let item_duplicateline = MenuItem::with_id(app, "edit.duplicateline", "Duplicate line", true, Some("CmdOrCtrl+D"))?;
-	let item_deleteline = MenuItem::with_id(app, "edit.deleteline", "Delete line", true, Some("CmdOrCtrl+Shift+D"))?;
+	let item_deleteline = MenuItem::with_id(app, "edit.deleteline", "Delete line", true, Some("CmdOrCtrl+D"))?;
+	let item_duplicateline = MenuItem::with_id(app, "edit.duplicateline", "Duplicate line", true, Some("CmdOrCtrl+Shift+D"))?;
 	let item_selectall = MenuItem::with_id(app, "edit.selectall", "Select all", true, Some("CmdOrCtrl+A"))?;
 	
 	let edit_submenu = SubmenuBuilder::new(app, "Edit")
@@ -244,8 +244,8 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 		.item(&item_paste)
 		//-.item(&delete)
 		.separator()
-		.item(&item_duplicateline)
 		.item(&item_deleteline)
+		.item(&item_duplicateline)
 		.separator()
 		//-.item(&PredefinedMenuItem::select_all(app, None)?)
 		.item(&item_selectall)

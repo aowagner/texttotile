@@ -9,8 +9,11 @@
 	:root {
 		color-scheme: light dark;
 
-		/*- --fill:			Canvas;
-		--text:			CanvasText; -*/
+		--fill:			Canvas;
+		--text:			CanvasText;
+
+		--fill-grey:	#888;
+
 		--bold:			400;
 		--fontfamily:				system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", Ubuntu, sans-serif;
 		--fontfamily-texteditor:	ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace;
@@ -29,23 +32,23 @@
 		--px-sidebar-size: 500px;
 		--px-sidebar-min: 200px;
 
-		--rect-opacity: 1;
+		/* --rect-opacity: 1; */
 
 		--saturation: 6;		/* 0 - 100 */
-	}
-
-	:root.theme-dark {
-		color-scheme: dark;
-
-		--fill:			color-mix(in srgb, Canvas 90%, CanvasText);
-		--text:			CanvasText;
 	}
 
 	:root.theme-light {
 		color-scheme: light;
 
-		--fill:			color-mix(in srgb, Canvas 100%, CanvasText);
-		--text:			CanvasText;
+		/*- --fill:			color-mix(in srgb, Canvas 100%, CanvasText);
+		--text:			CanvasText;-*/
+	}
+
+	:root.theme-dark {
+		color-scheme: dark;
+
+		/*- --fill:			color-mix(in srgb, Canvas 90%, CanvasText);
+		--text:			CanvasText;-*/
 	}
 
 	html, body {height: 100%; margin: 0; overflow: hidden; /*? background: var(--fill); */  font-family: var(--fontfamily); font-size: var(--px-font-size); font-weight: var(--bold); color: var(--text); }
@@ -76,10 +79,10 @@
 	#app.sidebar-visible-no .sidebar	{display: none; }
 
 		/* sidebar - sidebar__main */
-		.sidebar__main {flex: 1 1 auto; overflow: auto; display: flex; flex-direction: column; }
+		.sidebar__main {flex: 1 1 auto; overflow: auto; display: flex; flex-direction: column; background-color: var(--text); }
 
 			/* sidebar__main - textarea */
-			.texteditor {flex: 1 1 50%; display:inline-flex; box-sizing: border-box; width: 100%; height: 100%; resize: none; padding: 8px; font-family: var(--fontfamily-texteditor); font-size: var(--px-font-size); font-weight: var(--bold); line-height: var(--px-line-height);  outline: none; /* white-space: pre;*/ tab-size: 3; border: none;  caret-color: #1976d2; overflow: auto;  background: color-mix(in srgb, var(--fill) 97%, var(--text)); color: color-mix(in srgb, var(--text) 90%, var(--fill)); }
+			.texteditor {flex: 1 1 50%; display:inline-flex; box-sizing: border-box; width: 100%; height: 100%; resize: none; padding: 8px; font-family: var(--fontfamily-texteditor); font-size: var(--px-font-size); font-weight: var(--bold); line-height: var(--px-line-height);  outline: none; /* white-space: pre;*/ tab-size: 3; border: none;  caret-color: #1976d2; overflow: auto; background: --fill; opacity: 0.97; color: var(--text); /*- background: color-mix(in srgb, var(--fill) 97%, var(--text)); color: color-mix(in srgb, var(--text) 90%, var(--fill));-*/ }
 
 /* layout - splitter */
 								.splitter {grid-area: splitter; position: relative; cursor: col-resize; z-index: 10; }
@@ -99,17 +102,17 @@
 
 
 /* toolbar */
-						.toolbar 		{position: absolute; overflow: auto hidden; background: var(--fill); border: 1px solid color-mix(in srgb, var(--text) 11%, transparent); border-radius: 5px; }
+						.toolbar 		{--saturation: 40; position: absolute; overflow: auto hidden; background: var(--fill); border: 1px solid var(--fill-grey); /*- color-mix(in srgb, var(--text) 11%, transparent);*/ border-radius: 5px; }
 						.toolbarTags 	{--bold-button: var(--bold); /* --bold-button is a 'hack' to use toolbarTags's (aka :root) --bold, so buttons don't use individual tag's --bold */ height: calc(var(--px-line-height) + 12px); /*- 7px orig */ max-width: calc(100% - (var(--px-line-height) + 68px)); padding: 7px; margin-top: calc((var(--px-line-height) + 40px) * -1); margin-left: 10px; }
 	.toolbar-visible-no	.toolbarTags	{display: none; }
 	.toolbar-visible-no	.popup-btn		{display: none; }
 
-		.toolbar__button 	{position: absolute; transform: translateX(var(--pxX)); border: 1px solid color-mix(in srgb, Canvas 40%, CanvasText); border-radius: 5px; font-family: var(--fontfamily); font-size: var(--px-font-size); line-height: var(--px-line-height); color: var(--text); white-space: nowrap; cursor: pointer; transition: opacity 120ms ease; }
+		.toolbar__button 	{position: absolute; transform: translateX(var(--pxX)); border: 1px solid var(--fill-grey); /*color-mix(in srgb, Canvas 40%, CanvasText);*/ border-radius: 5px; font-family: var(--fontfamily); font-size: var(--px-font-size); line-height: var(--px-line-height); color: var(--text); white-space: nowrap; cursor: pointer; transition: opacity 120ms ease; }
 		.button--inactive	{opacity: 0.33; }
 		.button-draggable 	{cursor: grab; touch-action: none; }
 
-		.toolbarTags 	.toolbar__button 			{background: color-mix(in srgb, var(--fill) 30%, Canvas); font-weight: var(--bold-button); }
-		.toolbarTags 	.toolbar__button.is-hover 	{background: color-mix(in srgb, var(--fill) 15%, Canvas); outline: 1.5px solid black; z-index: 2; border-width: 0px; }
+		.toolbarTags 	.toolbar__button 			{background: var(--fill); /* color-mix(in srgb, var(--fill) 30%, Canvas);*/ font-weight: var(--bold-button); }
+		.toolbarTags 	.toolbar__button.is-hover 	{background: var(--fill); /* color-mix(in srgb, var(--fill) 15%, Canvas);*/ outline: 1.5px solid var(--text); z-index: 2; border-width: 0px; }
 
 
 		.popup-btn {
@@ -120,18 +123,17 @@
 			height: calc(var(--px-line-height) + 21px);
 			line-height: calc(var(--px-line-height) + 19px);
 			border-radius: 5px;
-			border: 1px solid color-mix(in srgb, var(--text) 11%, transparent);
+			border: 1px solid var(--fill-grey); /*- color-mix(in srgb, var(--text) 11%, transparent);-*/
 			background: var(--fill);
 			color: var(--text);
 			cursor: pointer;
 			/* box-sizing: border-box; */
-			font-size: 2em; 
+			font-size: 2em;
 			text-align: center;
 		}
 
 		.popup-btn:hover{
-			/*-background: color-mix(in srgb, var(--fill) 86%, var(--text)); -*/
-			border: 1px solid color-mix(in srgb, var(--text) 50%, transparent);
+			outline: 1.5px solid var(--text);
 		}
 
 
@@ -160,12 +162,12 @@
 	/* header */
 	.header							{}
 
-	.header__rect--section			{height: 100%; --fill: CanvasText; fill: var(--fill); rx: 15px; }
+	.header__rect--section			{height: 100%; --fill: CanvasText; fill: var(--fill); /*-rx: 15px;*/ }
 	.header__rect--section-odd		{opacity: calc(var(--saturation) / 100); }
 	.header__rect--section-even		{opacity: calc(var(--saturation) / 125); }	/* nb: will only produce opacity between 0 and 0.8. This is to 'interchange' the background between odd and even sections */
 	.header__text--section			{transform: translate(10px, calc(var(--px-line-height) * 1.2)); fill: var(--text); font-size: calc(var(--px-font-size) * 1.25); font-weight: var(--bold); pointer-events: none; dominant-baseline: middle; }
 
-	.header__rect--chapter			{height: calc(100% - ((var(--px-line-height) * 2))); fill: var(--fill); rx: 15px; opacity: calc(var(--saturation) / 100); stroke: color-mix(in srgb, CanvasText 50%, transparent); stroke-width: 1; }
+	.header__rect--chapter			{height: calc(100% - ((var(--px-line-height) * 2))); fill: var(--fill); /*- rx: 15px;*/ opacity: calc(var(--saturation) / 100); stroke: var(--fill-grey); /* color-mix(in srgb, CanvasText 50%, transparent);*/ stroke-width: 1; }
 	.header__text--chapter			{transform: translate(10px, calc(var(--px-line-height) * 2.75)); fill: var(--text); font-size: calc(var(--px-font-size) * 1.00); font-weight: var(--bold); pointer-events: none; dominant-baseline: middle; }
 
 						.graphs-bg-rect {transform: translateY(var(--px-header-height)); fill: CanvasText; opacity: 0.04; pointer-events: none; }
@@ -180,9 +182,9 @@
 					.tagblock--inactive	{opacity: 0.2; }
 
 	/* tagblock - bg rect */
-											.tagblock__bg-rect {fill: color-mix(in srgb, var(--fill) 5%, transparent); vector-effect: non-scaling-stroke; pointer-events: none; transition: opacity var(--ms-transition) ease-out, height var(--ms-transition) ease-out }
+											.tagblock__bg-rect {fill: var(--fill); opacity: 0.05; /* color-mix(in srgb, var(--fill) 5%, transparent);*/ vector-effect: non-scaling-stroke; pointer-events: none; transition: opacity var(--ms-transition) ease-out, height var(--ms-transition) ease-out }
 	.chart-viewa       						.tagblock__bg-rect {height: 0px; opacity: 0; pointer-events: none; /* needed since pointer-events are still active in the not-scaled area. this is an error in the browser-engine */ }
-	.chart-viewb							.tagblock__bg-rect {stroke: color-mix(in srgb, Canvas 70%, transparent); stroke-width: 1.5; }
+	.chart-viewb							.tagblock__bg-rect {stroke: Canvas; /* color-mix(in srgb, Canvas 70%, transparent); */ stroke-width: 1.5; }
 	.chart-viewb  		.tagblock--active   .tagblock__bg-rect {height: calc((var(--px-line-height) * var(--count-rows)) + 10px); }
 	.chart-viewb  		.tagblock--inactive	.tagblock__bg-rect {height: calc((var(--px-line-height) * 1) + 10px); }
 
@@ -192,21 +194,25 @@
 
 
 	/* part */
-	.chart-viewa	.tagblocks--parts	{--saturation: 20; }
-	.chart-viewb	.tagblocks--parts	{--saturation: 40; }
+	.tagblocks--parts	{--saturation: 40; }
+	/*-.chart-viewa	.tagblocks--parts	{--saturation: 20; }
+	.chart-viewb	.tagblocks--parts	{--saturation: 20; }-*/
 	
 										.tb-part 	{transition: var(--ms-transition) ease-out; } 
 	.chart-viewa						.tb-part 	{transform: translate(var(--x), var(--ya)) }
 	.chart-viewb						.tb-part 	{transform: translate(var(--x), var(--yb)) }
 	.chart-viewb	.tagblock--inactive	.tb-part 	{transform: translate(var(--x), 5px); }
 
-					.tb-part__rect	{opacity: var(--rect-opacity); fill: color-mix(in srgb, var(--fill) calc(var(--saturation) * 1%), Canvas); stroke: color-mix(in srgb, Canvas 50%, CanvasText); stroke-width: 1; rx: 4px; }
+					.tb-part__rect-bg	{fill: Canvas !important; opacity: 1.0 !important; }
+
+					.tb-part__rect	{/*opacity: var(--rect-opacity);*/ fill: var(--fill); opacity: calc(var(--saturation) / 100); /* color-mix(in srgb, var(--fill) calc(var(--saturation) * 1%), Canvas)*/; /*- opacity: calc(var(--saturation) / 100);*/ stroke: var(--fill-grey); /*- color-mix(in srgb, Canvas 50%, CanvasText);*/ stroke-width: 0.5; /*rx: 4px;*/ }
 	.chart-viewa 	.tb-part__rect	{height: var(--px-line-height); transform: scaleY(var(--count-part-lines)); transition: transform var(--ms-transition) ease-out; vector-effect: non-scaling-stroke; }
 	.chart-viewb 	.tb-part__rect	{height: var(--px-line-height); vector-effect: non-scaling-stroke; }
 
-					.tb-part__text						{font-size: var(--px-font-size); transform: scaleY(1); opacity: 1; transition: transform var(--ms-transition) ease-out, opacity var(--ms-transition) ease-out; font-weight: var(--bold); }
-					.tb-part__text--chart-viewa tspan	{dominant-baseline: middle; /*-fill: color-mix(in srgb, var(--fill) 80%, var(--text));*/ fill: var(--text); font-weight: var(--bold); }
-					.tb-part__text--chart-viewb			{dominant-baseline: middle; fill: var(--text); font-weight: var(--bold); } 
+					.tb-part__text,
+					.tb-part__text--chart-viewa tspan	{dominant-baseline: middle; fill: var(--text); font-weight: var(--bold); font-size: var(--px-font-size); transform: scaleY(1); opacity: 1; transition: transform var(--ms-transition) ease-out, opacity var(--ms-transition) ease-out; }
+					/*.tb-part__text--chart-viewa tspan	{dominant-baseline: middle; fill: var(--text); font-weight: var(--bold); }
+					.tb-part__text--chart-viewb			{dominant-baseline: middle; fill: var(--text); font-weight: var(--bold); }*/
 
 	.chart-viewa	.tb-part__text--chart-viewb	{transform: scaleY(0); opacity: 0; pointer-events: none; }
 	.chart-viewb	.tb-part__text--chart-viewa	{transform: scaleY(0); opacity: 0; pointer-events: none; }
@@ -222,13 +228,13 @@
 	.chart-viewa	.tagblock--active.is-hover .tb-part {}
 
 					.tagblock--active.is-hover .tagblock-circle,
-					.tagblock--active.is-hover .tagblock-polyline {stroke-width: 1.5px !important; }
+					.tagblock--active.is-hover .tagblock-polyline {stroke-width: 1.5 !important; }
 
 	/* hover tb-part */
-					.tagblock--active 	.tb-part.is-hover 	.tb-part__rect {stroke: CanvasText; stroke-width: 1.5; }
+					.tagblock--active 	.tb-part.is-hover 	.tb-part__rect {stroke: CanvasText; stroke-width: 1.0; opacity: 0.3; }
 
 	/* hover circle */
-					.tagblock--active 	.tagblock-circle.is-hover 			{fill: color-mix(in srgb, var(--fill) 10%, #fff) !important; r: calc(var(--px-base-unit) / 1.5); }
+					.tagblock--active 	.tagblock-circle.is-hover 			{fill: Canvas; /*- color-mix(in srgb, var(--fill) 10%, #fff) !important; */ r: calc(var(--px-base-unit) / 1.5); }
 
 	/* graphs */
 	.tagblocks--graphs	{}
@@ -237,8 +243,8 @@
 	.chart-viewa	.tagblocks--graphs	.tagblock--inactive		{opacity: 0.1;	pointer-events: none; }
 	.chart-viewb	.tagblocks--graphs	.tagblock--inactive		{opacity: 0;	pointer-events: none; }
 
-	.tagblock-polyline		{fill: none; stroke: color-mix(in srgb, var(--fill) 70%, #000); stroke-width: 1.0; pointer-events: none; }
-	.tagblock-circle 		{r: calc(var(--px-base-unit) / 2); fill: color-mix(in srgb, var(--fill) 25%, #fff); stroke: color-mix(in srgb, var(--fill) 70%, #000); stroke-width: 1.0; }
+	.tagblock-polyline		{fill: none; stroke: var(--fill); /* color-mix(in srgb, var(--fill) 70%, #000);*/ stroke-width: 1.0; pointer-events: none; }
+	.tagblock-circle 		{r: calc(var(--px-base-unit) / 2); fill: var(--fill);  /* color-mix(in srgb, var(--fill) 25%, #fff);*/ stroke: CanvasText; /* color-mix(in srgb, var(--fill) 70%, #000);*/ stroke-width: 1.0; }
 	
 						.tagblock-circle-text 			{opacity: 0; transform: translate(16px, 1px); pointer-events: none;  dominant-baseline: middle; }
 	.tagblock--active	.tagblock-circle-text.is-hover 	{opacity: 1; }
@@ -257,17 +263,31 @@
 /* Popup variables */
 
 :root {
-	--fg: var(--text);
-	--border: color-mix(in srgb, var(--text) 14%, transparent);
-	--popup-bg: color-mix(in srgb, var(--fill) 92%, black);
-	--popup-panel-bg: color-mix(in srgb, var(--fill) 96%, var(--text) 4%);
-	--focus: color-mix(in srgb, Highlight 55%, transparent);
-	--line-soft: color-mix(in srgb, var(--text) 8%, transparent);
-	--hover-soft: color-mix(in srgb, var(--text) 4%, transparent);
-	--hover-row: color-mix(in srgb, var(--text) 6%, transparent);
-	--hover-btn: color-mix(in srgb, var(--text) 7%, transparent);
+	/*- --fg: var(--text);
+	--border: 			color-mix(in srgb, var(--text) 14%, transparent);
+	--popup-bg: 		color-mix(in srgb, var(--fill) 92%, black);
+	--popup-panel-bg: 	color-mix(in srgb, var(--fill) 96%, var(--text) 4%);
+	--focus: 			color-mix(in srgb, Highlight 55%, transparent);
+	--line-soft: 		color-mix(in srgb, var(--text) 8%, transparent);
+	--hover-soft: 		color-mix(in srgb, var(--text) 4%, transparent);
+	--hover-row: 		color-mix(in srgb, var(--text) 6%, transparent);
+	--hover-btn: 		color-mix(in srgb, var(--text) 7%, transparent);
 	--hover-btn-strong: color-mix(in srgb, var(--text) 8%, transparent);
-	--field-border: color-mix(in srgb, var(--text) 12%, transparent);
+	--field-border: 	color-mix(in srgb, var(--text) 12%, transparent); */
+
+	--fg: var(--text);
+	--border:            #00000024;  /* 14% */
+	--popup-bg:          #ebebeb;    /* 92% white + 8% black */
+	--popup-panel-bg:    #f5f5f5;    /* 96% white + 4% black */
+	--focus:             #d9e1f1;
+	--line-soft:         #00000014;  /* 8% */
+	--hover-soft:        #0000000a;  /* 4% */
+	--hover-row:         #0000000f;  /* 6% */
+	--hover-btn:         #00000012;  /* 7% */
+	--hover-btn-strong:  #00000014;  /* 8% */
+	--field-border:      #0000001f;  /* 12% */
+
+	--switch-bg:	#ddd;
 }
 
 /* Shared button typography */
@@ -277,7 +297,7 @@ button.btn, button.pill, button.tablist__btn, button.close__btn, button.unpin__b
 /* Popup overlay and shell */
 
 .popup-overlay { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; padding: 18px; background: rgba(0,0,0,.28); z-index: 10; overscroll-behavior: contain; touch-action: none; }
-.popup { display: flex; flex-direction: column; width: min(780px, 100%); height: 63vh; max-height: min(78vh, 760px); background: var(--popup-bg); border: 1px solid color-mix(in srgb, var(--text) 10%, transparent); border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,.18); overflow: hidden; touch-action: auto; }
+.popup { display: flex; flex-direction: column; width: min(780px, 100%); height: 63vh; max-height: min(78vh, 760px); background: var(--popup-bg); border: 1px solid var(--border); /*-color-mix(in srgb, var(--text) 10%, transparent);*/ border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,.18); overflow: hidden; touch-action: auto; }
 
 /* Popup header / tab row. The tab strip now acts as the panel header. */
 
@@ -322,7 +342,7 @@ button.btn, button.pill, button.tablist__btn, button.close__btn, button.unpin__b
 
 .pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; background: transparent; border: 1px solid var(--field-border); border-radius: 999px; color: var(--fg); cursor: pointer; user-select: none; -webkit-user-select: none; }
 .pill:hover { background: var(--hover-btn); }
-.pill-selected { background: color-mix(in srgb, Highlight 14%, transparent); border-color: color-mix(in srgb, Highlight 40%, var(--border)); }
+.pill-selected { background: var(--focus); /* color-mix(in srgb, Highlight 14%, transparent);*/ border-color: var(--border); /* color-mix(in srgb, Highlight 40%, var(--border));*/ }
 
 /* List rows. Used for pinned files and toggle rows. The fixed first column keeps text alignment stable. */
 
@@ -330,7 +350,7 @@ button.btn, button.pill, button.tablist__btn, button.close__btn, button.unpin__b
 .body__item:hover { background: var(--hover-row); }
 .draggable-list.is-reordering .body__item:hover { background: transparent; }
 
-.body__item.is-active { padding: 10px 10px; background: color-mix(in srgb, Highlight 10%, transparent); box-shadow: inset 3px 0 0 0 Highlight; }
+.body__item.is-active { padding: 10px 10px; background: var(--focus); /* color-mix(in srgb, Highlight 10%, transparent);*/ box-shadow: inset 3px 0 0 0 Highlight; }
 .body__item.is-dragging { opacity: 0; }
 
 .item__meta { display: grid; gap: 2px; min-width: 0; }
@@ -342,9 +362,9 @@ button.btn, button.pill, button.tablist__btn, button.close__btn, button.unpin__b
 
 /* Toggle switch */
 
-.switch { position: relative; width: 44px; height: 26px; background: color-mix(in srgb, var(--text) 8%, transparent); border: 1px solid var(--border); border-radius: 999px; cursor: pointer; }
+.switch { position: relative; width: 44px; height: 26px; background: var(--switch-bg); /* color-mix(in srgb, var(--text) 8%, transparent);*/ border: 1px solid var(--border); border-radius: 999px; cursor: pointer; }
 .switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; background: var(--fill); border: 1px solid var(--border); border-radius: 999px; transition: transform 120ms ease; }
-.toggle-on .switch { background: color-mix(in srgb, Highlight 35%, transparent); border-color: color-mix(in srgb, Highlight 55%, var(--border)); }
+.toggle-on .switch { background: var(--focus); /*- color-mix(in srgb, Highlight 35%, transparent);*/ border-color: var(--border); /* color-mix(in srgb, Highlight 55%, var(--border));*/ }
 .toggle-on .switch::after { transform: translateX(18px); }
 .switch:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 
@@ -355,7 +375,7 @@ button.btn, button.pill, button.tablist__btn, button.close__btn, button.unpin__b
 
 /* Drag ghost. The ghost uses border-box so JS-assigned width matches the visible outer width exactly */
 
-.ghost { position: fixed; left: 0; top: 0; box-sizing: border-box; padding: 10px 10px; background: var(--fill) !important; border: 1px solid color-mix(in srgb, Highlight 35%, var(--border)); border-radius: 10px; box-shadow: 0 10px 24px rgba(0,0,0,.16); z-index: 9999; pointer-events: none; opacity: 0.98; }
+.ghost { position: fixed; left: 0; top: 0; box-sizing: border-box; padding: 10px 10px; background: var(--fill) !important; border: 1px solid var(--focus); /* color-mix(in srgb, Highlight 35%, var(--border));*/ border-radius: 10px; box-shadow: 0 10px 24px rgba(0,0,0,.16); z-index: 9999; pointer-events: none; opacity: 0.98; }
 
 /* Popup textareas. Shared styling for CSS and Status tabs. Readonly textareas still allow selection and copying */
 
@@ -480,7 +500,7 @@ const PX_VIEVBOX_MIN_H = 400;
 
 //::	☐ chapter columns
 const COUNT_PART_LINES_INITIAL = 8;
-const PX_BASEUNIT_INITIAL = 12;
+const PX_BASEUNIT_INITIAL = 13;
 
 let PX_COL_WIDTH = 0;
 
@@ -1756,17 +1776,17 @@ const CFramework = {
 
 			const idTab = CModel.appstate.idTab;
 
-			//:			→ App: dispatch:			popup.tab.select ('files', 'ui', 'css')
-			if (e.key === 'ArrowLeft' && idTab === 'ui')
+			//:			→ App: dispatch:			popup.tab.select ('files', 'view', 'style', 'status')
+			if (e.key === 'ArrowLeft' && idTab === 'view')
 				res = await App.dispatch({type: 'popup.tab.select', idTab: 'files', caller});
 
-			else if ((e.key === 'ArrowRight' && idTab === 'files') || (e.key === 'ArrowLeft' && idTab === 'css'))
-				res = await App.dispatch({type: 'popup.tab.select', idTab: 'ui', caller});
+			else if ((e.key === 'ArrowRight' && idTab === 'files') || (e.key === 'ArrowLeft' && idTab === 'style'))
+				res = await App.dispatch({type: 'popup.tab.select', idTab: 'view', caller});
 			
-			else if ((e.key === 'ArrowRight' && idTab === 'ui') || (e.key === 'ArrowLeft' && idTab === 'status'))
-				res = await App.dispatch({type: 'popup.tab.select', idTab: 'css', caller});
+			else if ((e.key === 'ArrowRight' && idTab === 'view') || (e.key === 'ArrowLeft' && idTab === 'status'))
+				res = await App.dispatch({type: 'popup.tab.select', idTab: 'style', caller});
 			
-			else if (e.key === 'ArrowRight' && idTab === 'css')
+			else if (e.key === 'ArrowRight' && idTab === 'style')
 				res = await App.dispatch({type: 'popup.tab.select', idTab: 'status', caller});
 		}
 
@@ -1851,16 +1871,16 @@ const CFramework = {
 		else if (isMetaKey && isShiftKey && e.key.toLowerCase() === 'd') {
 			if (e.preventDefault) e.preventDefault();
 
-			//:			→ CWrapper: onMenuEvent:			edit.deleteline
-			CWrapper.onMenuEvent({payload: 'edit.deleteline', caller});
+			//:			→ CWrapper: onMenuEvent:			edit.duplicateline
+			CWrapper.onMenuEvent({payload: 'edit.duplicateline', caller});
 		}
 
 		//::		🔻 Cmd + D
 		else if (isMetaKey && e.key.toLowerCase() === 'd') {
 			if (e.preventDefault) e.preventDefault();
 
-			//:			→ CWrapper: onMenuEvent:			edit.duplicateline
-			CWrapper.onMenuEvent({payload: 'edit.duplicateline', caller});
+			//:			→ CWrapper: onMenuEvent:			edit.deleteline
+			CWrapper.onMenuEvent({payload: 'edit.deleteline', caller});
 		}
 
 		//::		🔻 Cmd + A	
@@ -1913,7 +1933,7 @@ const CFramework = {
 
 
 		//::		🔻 Cmd + Alt + 'J/K/L'
-		else if ((isMetaKey && isAltKey) && (e.key.toLowerCase() === 'j' || e.key.toLowerCase() === 'k' || e.key === 'l')) {
+		else if ((!isShiftKey && isMetaKey && isAltKey) && (e.key.toLowerCase() === 'j' || e.key.toLowerCase() === 'k' || e.key === 'l')) {
 			if (e.preventDefault) e.preventDefault();
 
 			const isReset = (e.key === 'k');
@@ -1926,7 +1946,7 @@ const CFramework = {
 		}
 
 		//::		🔻 Cmd + 'J/K/L'
-		else if (isMetaKey && (e.key.toLowerCase() === 'j' || e.key.toLowerCase() === 'k' || e.key === 'l')) {
+		else if (!isShiftKey && isMetaKey && (e.key.toLowerCase() === 'j' || e.key.toLowerCase() === 'k' || e.key === 'l')) {
 			if (e.preventDefault) e.preventDefault();
 
 			const isReset = (e.key === 'k');
@@ -2021,10 +2041,10 @@ const CChart = {
 		Header() {
 			if (LOGGING) console.log('%c CChart %c Template: %c Header %c ()', LOG_MODULE, LOG_RED, LOG_FUNCTION+LOG_BOLD, LOG_ARGS);
 			const docdata = CModel.docdata;
-			const pxSectionBarHeight = PX_LINE_HEIGHT * 2;
 			const pxWidthGraphBg = (CChart.pxWidthViewbox - PX_MARGIN_LEFT_W - PX_MARGIN_RIGHT_W) + (PX_PADDING_NORMAL * 2);
+			const arrElSvg = [];
 
-			return [
+			arrElSvg.push(
 				...docdata.arrSection.filter(section => section.arrIdxChapter.length > 0).map(function(section, idxSection) {
 					const ellipsis = '…';
 					const pxX = PX_MARGIN_LEFT_W + (PX_COL_WIDTH * section.arrIdxChapter[0]);
@@ -2037,10 +2057,12 @@ const CChart = {
 					const strClassesRect = ['header__rect', 'header__rect--section', section.tag, ((idxSection % 2) ? 'header__rect--section-even' : 'header__rect--section-odd')].join(' ');
 					const strClassesText = ['header__text', 'header__text--section', section.tag].join(' ');
 
-					return svg`	<rect class=${strClassesRect} style=${strExtraStyle} x=${pxX} y=${0} width=${pxWidth} @click=${e => CChart.onClick({src: 'section', e, idxTextareaLine: section.idxTextareaLine, caller: 'src: section'})} />
+					return svg`	<rect class=${strClassesRect} style=${strExtraStyle} x=${pxX} y=${0} width=${pxWidth} rx=${PX_PADDING_NORMAL * 1.5}  @click=${e => CChart.onClick({src: 'section', e, idxTextareaLine: section.idxTextareaLine, caller: 'src: section'})} />
 								<text class=${strClassesText} style=${strExtraStyle} x=${pxX}>${strCaption}</text>`;
-				}),
-				
+				})
+			);
+
+			arrElSvg.push(
 				...docdata.arrChapter.map((chapter, idx) => {
 					const ellipsis = '…';
 					const pxX = PX_MARGIN_LEFT_W + (PX_COL_WIDTH * idx);
@@ -2052,12 +2074,15 @@ const CChart = {
 					const strClassesRect = ['header__rect', 'header__rect--chapter', chapter.tag].join(' ');
 					const strClassesText = ['header__text', 'header__text--chapter', chapter.tag].join(' ');
 
-					return svg` <rect class=${strClassesRect} style=${strExtraStyle} x=${pxX} y=${PX_LINE_HEIGHT * 2} width=${PX_COL_WIDTH} @click=${e => CChart.onClick({src: 'chapter', e, idxTextareaLine: chapter.idxTextareaLine, caller: 'src: chapter'})} />
+					return svg` <rect class=${strClassesRect} style=${strExtraStyle} x=${pxX} y=${PX_LINE_HEIGHT * 2} width=${PX_COL_WIDTH}  rx=${PX_PADDING_NORMAL} @click=${e => CChart.onClick({src: 'chapter', e, idxTextareaLine: chapter.idxTextareaLine, caller: 'src: chapter'})} />
 								<text class=${strClassesText} style=${strExtraStyle} x=${pxX}>${strCaption}</text>`;
-				}),
+				})
+			);
 
-				svg`<rect class="graphs-bg-rect" x=${PX_MARGIN_LEFT_W - PX_PADDING_NORMAL} y="0" width=${pxWidthGraphBg} height="0" rx=${PX_PADDING_SMALL}" />`
-			];
+			if (CModel.appstate.isGraphVisible)
+				arrElSvg.push(svg`<rect class="graphs-bg-rect" x=${PX_MARGIN_LEFT_W - PX_PADDING_NORMAL} y="0" width=${pxWidthGraphBg} height="0" rx=${PX_PADDING_SMALL} />`);
+
+			return arrElSvg;
 		},
 
 		//::		☐ TagblockParts(tagblock, idx)
@@ -2154,7 +2179,8 @@ const CChart = {
 
 			return svg`
 		<g class=${strClasses} style=${strBaseStyle + strExtraStyle} data-idxline=${'x' + part.idxTextareaLine} @click=${e => CChart.onClick({src: 'part', e, idxTextareaLine: part.idxTextareaLine, caller: 'src: part'})} >
-			<rect class="tb-part__rect" x=${PX_PADDING_SMALL} y="0" width=${pxWidthRect} />
+			<rect class="tb-part__rect tb-part__rect-bg" x=${PX_PADDING_SMALL} y="0" width=${pxWidthRect} rx=${PX_PADDING_SMALL-1}/>
+			<rect class="tb-part__rect" x=${PX_PADDING_SMALL} y="0" width=${pxWidthRect} rx=${PX_PADDING_SMALL-1}/>
 			<text class="tb-part__text tb-part__text--chart-viewa">
 				${arrObjTextline.map((objTextline, idx) => svg`
 					<tspan data-idxlinesub=${objTextline.idxTextareaLine} class="${objTextline.class + ' line line' + (idx+1)}" style="${objTextline.style}" x=${PX_PADDING_SMALL * 2} dy=${objTextline.dy}>${objTextline.caption}</tspan>
@@ -2280,7 +2306,7 @@ const CChart = {
 		let pxTagblockTop = PX_HEADER_HEIGHT;
 
 		// update graphs-bg-rect placement
-		if (CModel.docstate.idxView === VIEWA) {
+		if (CModel.docstate.idxView === VIEWA && CModel.appstate.isGraphVisible) {
 
 			const pxGraphsFullHeight = CChart.pxHeightViewbox - (PX_HEADER_HEIGHT + PX_GRAPHS_SPACE_BOTTOM);
 			const pxGraphHeight = pxGraphsFullHeight / 100 * CModel.appstate.pctGraphHeight;
@@ -2288,8 +2314,10 @@ const CChart = {
 			
 			const elGraphsBgRect = CChart.elSvgStage.querySelector('.graphs-bg-rect');
 
-			elGraphsBgRect.setAttribute('y', pxGraphTop);
-			elGraphsBgRect.setAttribute('height', pxGraphHeight);
+			if (elGraphsBgRect) {
+				elGraphsBgRect.setAttribute('y', pxGraphTop);
+				elGraphsBgRect.setAttribute('height', pxGraphHeight);
+			}
 		}
 
 
@@ -3054,13 +3082,13 @@ const CPopup = {
 									title=${`Select tab: Files\n(${CUtil.formatShortcutForOS('⌘') + ' ← / →'})`}
 								>Files</button>
 
-								<button class=${['tablist__btn', appstate.idTab === 'ui' ? 'tablist__btn-selected' : ''].join(' ')} role="tab"
-									@click=${e => CPopup.onClick({src: '@click: btn.tab.select', e, idTab: 'ui'})}
-									title=${`Select tab: UI\n(${CUtil.formatShortcutForOS('⌘') + ' ← / →'})`}
-								>UI</button>
+								<button class=${['tablist__btn', appstate.idTab === 'view' ? 'tablist__btn-selected' : ''].join(' ')} role="tab"
+									@click=${e => CPopup.onClick({src: '@click: btn.tab.select', e, idTab: 'view'})}
+									title=${`Select tab: View\n(${CUtil.formatShortcutForOS('⌘') + ' ← / →'})`}
+								>View</button>
 
-								<button class=${['tablist__btn', appstate.idTab === 'css' ? 'tablist__btn-selected' : ''].join(' ')} role="tab"
-									@click=${e => CPopup.onClick({src: '@click: btn.tab.select', e, idTab: 'css'})}
+								<button class=${['tablist__btn', appstate.idTab === 'style' ? 'tablist__btn-selected' : ''].join(' ')} role="tab"
+									@click=${e => CPopup.onClick({src: '@click: btn.tab.select', e, idTab: 'style'})}
 									title=${`Select tab: Style\n(${CUtil.formatShortcutForOS('⌘') + ' ← / →'})`}
 								>Style</button>
 
@@ -3075,7 +3103,7 @@ const CPopup = {
 
 						<div class="popup__main">
 							<div class="main__content">
-								${appstate.idTab === "files" ? CPopup.Templates.TabFiles() : appstate.idTab === "ui" ? CPopup.Templates.TabUI() : appstate.idTab === "css" ? CPopup.Templates.TabCSS() : CPopup.Templates.TabStatus() }
+								${appstate.idTab === 'files' ? CPopup.Templates.TabFiles() : appstate.idTab === 'view' ? CPopup.Templates.TabView() : appstate.idTab === 'style' ? CPopup.Templates.TabStyle() : CPopup.Templates.TabStatus() }
 							</div>
 						</div>
 					</div>
@@ -3126,10 +3154,10 @@ const CPopup = {
 			`;
 		},
 
-		//::		☐ TabUI()
+		//::		☐ TabView()
 		//:			→ @click: this.onClick
-		TabUI() {
-			if (LOGGING) console.log('%c CPopup %c Template: %c TabUI %c ()', LOG_MODULE, LOG_RED, LOG_FUNCTION+LOG_BOLD, LOG_ARGS);
+		TabView() {
+			if (LOGGING) console.log('%c CPopup %c Template: %c TabView %c ()', LOG_MODULE, LOG_RED, LOG_FUNCTION+LOG_BOLD, LOG_ARGS);
 			const appstate = CModel.appstate;
 			const docstate = CModel.docstate;
 
@@ -3144,7 +3172,7 @@ const CPopup = {
 						${CPopup.Templates.BodyItem_ToggleSetting({idField: "isSidebarVisible", isChecked: !!appstate.isSidebarVisible, title: `Toggle Editor visibility\n(${CUtil.formatShortcutForOS('⌘ E')})`, name: 'Show editor', desc: 'Text editor in sidebar', shortcut: CUtil.formatShortcutForOS('⌘ E'), argsDispatch: {type: 'framework.sidebar.visibility.set', isSidebarVisible: !appstate.isSidebarVisible, caller: 'Toggle'}})}
 					</div>
 					<div class="section__body">
-						${CPopup.Templates.BodyItem_ToggleSetting({idField: "isToolbarVisible", isChecked: !!appstate.isToolbarVisible,  title: `Toggle UI elements visibility\n(${CUtil.formatShortcutForOS('⌘ R')})`, name: 'Show ribbon', desc: "Tag buttons ribbon", shortcut: CUtil.formatShortcutForOS('⌘ R'), argsDispatch: {type: 'framework.toolbar.visibility.set', isToolbarVisible: !appstate.isToolbarVisible, caller: 'Toggle'}})}
+						${CPopup.Templates.BodyItem_ToggleSetting({idField: "isToolbarVisible", isChecked: !!appstate.isToolbarVisible,  title: `Toggle Ribbon visibility\n(${CUtil.formatShortcutForOS('⌘ R')})`, name: 'Show ribbon', desc: "Tag buttons ribbon", shortcut: CUtil.formatShortcutForOS('⌘ R'), argsDispatch: {type: 'framework.toolbar.visibility.set', isToolbarVisible: !appstate.isToolbarVisible, caller: 'Toggle'}})}
 					</div>
 					<div class="section__body">
 						${CPopup.Templates.BodyItem_ToggleSetting({idField: "isGraphVisible", isChecked: !!appstate.isGraphVisible, title: `Toggle Graphs visibility\n(${CUtil.formatShortcutForOS('⌘ G')})`, name: 'Show graphs', desc: 'Graphs shown for each tag', shortcut: CUtil.formatShortcutForOS('⌘ G'), argsDispatch: {type: 'chart.graph.visibility.set', isGraphVisible: !appstate.isGraphVisible, caller: 'Toggle'}})}
@@ -3260,10 +3288,10 @@ const CPopup = {
 			`;
 		},
 
-		//::		☐ TabCSS()
+		//::		☐ TabStyle()
 		//:			→ (textarea)
-		TabCSS() {
-			if (LOGGING) console.log('%c CPopup %c Template: %c TabCSS %c ()', LOG_MODULE, LOG_RED, LOG_FUNCTION+LOG_BOLD, LOG_ARGS);
+		TabStyle() {
+			if (LOGGING) console.log('%c CPopup %c Template: %c TabStyle %c ()', LOG_MODULE, LOG_RED, LOG_FUNCTION+LOG_BOLD, LOG_ARGS);
 			return html`
 				<div class="content__section">
 					<div class="section__head">
@@ -3375,7 +3403,7 @@ const CPopup = {
 		if (LOGGING) console.group('%c CPopup %c renderPopup', LOG_MODULE, LOG_FUNCTION, LOG_ARGS, LOG_EXTRA);
 
 		const isPopupOpen = CModel.appstate.isPopupOpen;
-		const isCssTabActive = isPopupOpen && CModel.appstate.idTab === 'css';
+		const isStyleTabActive = isPopupOpen && CModel.appstate.idTab === 'style';
 		const isEditorAlive = !!CPopup.elTextarea;
 
 		// If popup is being closed, always render empty and destroy editor
@@ -3388,7 +3416,7 @@ const CPopup = {
 		}
 
 		// If Styles tab is active AND editor already exists, don’t re-render
-		if ( (isCssTabActive && isEditorAlive) ) {
+		if ( (isStyleTabActive && isEditorAlive) ) {
 			if (LOGGING) console.groupEnd();
 			return;
 		}
@@ -3398,7 +3426,7 @@ const CPopup = {
 		render(CPopup.elParent, this.Templates.Popup());
 
 		// After render, wire up / tear down the editor island as needed
-		if (isCssTabActive)
+		if (isStyleTabActive)
 			this.ensureCssEditor();
 
 		else
@@ -5120,7 +5148,7 @@ const App = {
 			//::		🔻 framework.zoom
 			case 'framework.zoom': {
 
-				const arrPxUiBaseUnit = [8, 9, 10, 11,  12,  13, 14, 15, 16, 17, 18];
+				const arrPxUiBaseUnit = [8, 9, 10, 11, 12,  13,  14, 15, 16, 17, 18];
 				const pxBaseUnitNew = args.isReset ? PX_BASEUNIT_INITIAL : CUtil.getPrevNextValue(arrPxUiBaseUnit, CModel.appstate.pxBaseUnit, (args.isIn ? 1 : -1), PX_BASEUNIT_INITIAL, false);
 
 				// calculate factor of zoom
@@ -5180,7 +5208,7 @@ const App = {
 				await CWrapper.setMenuChecks({isGraphVisible: args.isGraphVisible, caller});
 
 				//:			→ CChart: renderSvg:		SVG_UPDATE_FULL_RENDER
-				CChart.renderSvg({typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});	// jk: maybe resize is enough - now that view height is not changed?
+				CChart.renderSvg({typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
 
 				//:			→ CPopup: renderPopup
 				if (CModel.appstate.isPopupOpen)
