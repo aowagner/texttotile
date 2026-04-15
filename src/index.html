@@ -192,30 +192,28 @@
 	.chart-viewb  		.tagblock-even		.tagblock__bg-rect { }
 
 
-
 	/* part */
-	.tagblocks--parts	{--saturation: 40; }
-	/*-.chart-viewa	.tagblocks--parts	{--saturation: 20; }
-	.chart-viewb	.tagblocks--parts	{--saturation: 20; }-*/
+	.tagblocks--parts	{--saturation: 30; }
 	
 										.tb-part 	{transition: var(--ms-transition) ease-out; } 
 	.chart-viewa						.tb-part 	{transform: translate(var(--x), var(--ya)) }
 	.chart-viewb						.tb-part 	{transform: translate(var(--x), var(--yb)) }
 	.chart-viewb	.tagblock--inactive	.tb-part 	{transform: translate(var(--x), 5px); }
 
+
 					.tb-part__rect-bg	{fill: Canvas !important; opacity: 1.0 !important; }
 
-					.tb-part__rect	{/*opacity: var(--rect-opacity);*/ fill: var(--fill); opacity: calc(var(--saturation) / 100); /* color-mix(in srgb, var(--fill) calc(var(--saturation) * 1%), Canvas)*/; /*- opacity: calc(var(--saturation) / 100);*/ stroke: var(--fill-grey); /*- color-mix(in srgb, Canvas 50%, CanvasText);*/ stroke-width: 0.5; /*rx: 4px;*/ }
-	.chart-viewa 	.tb-part__rect	{height: var(--px-line-height); transform: scaleY(var(--count-part-lines)); transition: transform var(--ms-transition) ease-out; vector-effect: non-scaling-stroke; }
-	.chart-viewb 	.tb-part__rect	{height: var(--px-line-height); vector-effect: non-scaling-stroke; }
+					.tb-part__rect	{fill: var(--fill); opacity: calc(var(--saturation) / 100); stroke-width: 0.5; stroke: var(--fill-grey); /*- color-mix(in srgb, Canvas 50%, CanvasText);*/ /*rx: 4px;*/ /* color-mix(in srgb, var(--fill) calc(var(--saturation) * 1%), Canvas)*/; /*- opacity: calc(var(--saturation) / 100);*/ }
+					.tb-part__rect	{transition: transform var(--ms-transition) ease-out; vector-effect: non-scaling-stroke; }
+	.chart-viewa 	.tb-part__rect	{height: var(--px-line-height); transform: scaleY(var(--count-part-lines)); }
+	.chart-viewb 	.tb-part__rect	{height: var(--px-line-height); transform: scaleY(1); }
 
-					.tb-part__text,
-					.tb-part__text--chart-viewa tspan	{dominant-baseline: middle; fill: var(--text); font-weight: var(--bold); font-size: var(--px-font-size); transform: scaleY(1); opacity: 1; transition: transform var(--ms-transition) ease-out, opacity var(--ms-transition) ease-out; }
-					/*.tb-part__text--chart-viewa tspan	{dominant-baseline: middle; fill: var(--text); font-weight: var(--bold); }
-					.tb-part__text--chart-viewb			{dominant-baseline: middle; fill: var(--text); font-weight: var(--bold); }*/
+					.tb-part__text-viewb,
+					.tb-part__text-viewa tspan	{dominant-baseline: middle; fill: var(--text); font-weight: var(--bold); font-size: var(--px-font-size); transform: scaleY(1); opacity: 1; transition: fill calc(var(--ms-transition) * 1) ease-out; /*- transform var(--ms-transition) ease-out, opacity var(--ms-transition) ease-out;*/ }
 
-	.chart-viewa	.tb-part__text--chart-viewb	{transform: scaleY(0); opacity: 0; pointer-events: none; }
-	.chart-viewb	.tb-part__text--chart-viewa	{transform: scaleY(0); opacity: 0; pointer-events: none; }
+	.chart-viewa	.tb-part__text-viewb,
+	.chart-viewb	.tb-part__text-viewa tspan	{fill: transparent; pointer-events: none; }
+
 
 	.chart-viewa	.tb-part--special	.line1 {font-size: 75%; /* fill: #777; */ opacity: 0.5; }
 	.chart-viewa	.tb-part--special	.line2 {font-size: 175%; font-weight: 600; fill: var(--text); }
@@ -258,8 +256,6 @@
 
 
 	<style>
-
-
 /* Popup variables */
 
 :root {
@@ -433,8 +429,8 @@ button.btn, button.pill, button.tablist__btn, button.close__btn, button.unpin__b
 	<svg class="workspace__main" style="visibility:hidden; height:0; width:0;">
 		<text id="font-sample-section" 	class="header__text--section">M</text>
 		<text id="font-sample-chapter" 	class="header__text--chapter">M</text>
-		<text id="font-sample-part" 	class="tb-part__text">M</text>
-		<text id="font-sample-part-top" class="tb-part__text top" xxxstyle="font-weight: 800;">M</text>
+		<text id="font-sample-part" 	class="tb-part__text-viewb">M</text>
+		<text id="font-sample-part-top" class="tb-part__text-viewb top">M</text>
 	</svg>
 
 
@@ -2181,12 +2177,12 @@ const CChart = {
 		<g class=${strClasses} style=${strBaseStyle + strExtraStyle} data-idxline=${'x' + part.idxTextareaLine} @click=${e => CChart.onClick({src: 'part', e, idxTextareaLine: part.idxTextareaLine, caller: 'src: part'})} >
 			<rect class="tb-part__rect tb-part__rect-bg" x=${PX_PADDING_SMALL} y="0" width=${pxWidthRect} rx=${PX_PADDING_SMALL-1}/>
 			<rect class="tb-part__rect" x=${PX_PADDING_SMALL} y="0" width=${pxWidthRect} rx=${PX_PADDING_SMALL-1}/>
-			<text class="tb-part__text tb-part__text--chart-viewa">
+			<text class="tb-part__text-viewa">
 				${arrObjTextline.map((objTextline, idx) => svg`
 					<tspan data-idxlinesub=${objTextline.idxTextareaLine} class="${objTextline.class + ' line line' + (idx+1)}" style="${objTextline.style}" x=${PX_PADDING_SMALL * 2} dy=${objTextline.dy}>${objTextline.caption}</tspan>
 				`)}
 			</text>
-			<text class="tb-part__text tb-part__text--chart-viewb top" x=${PX_PADDING_NORMAL} y=${PX_LINE_HEIGHT * 0.5}>${part.caption}</text> 
+			<text class="tb-part__text-viewb top" x=${PX_PADDING_NORMAL} y=${PX_LINE_HEIGHT * 0.5}>${part.caption}</text> 
 
 			${symbolString ? svg`<text class="tb-part__symbol" style=${`--x:${pxWidthRect + PX_PADDING_NORMAL}px; --y:${PX_LINE_HEIGHT * COUNT_PART_LINES}px;`} x="0" y="0">${symbolString}</text>` : ''}
 		</g>`;
@@ -2470,6 +2466,13 @@ const CChart = {
 			return trimmed ? trimmed + ellipsis : ellipsis;
 		};
 
+		const fitSingleWord = (word) => {
+			if (measure(word) <= pxWidthMax)
+				return word;
+
+			return appendEllipsis(word);
+		};
+
 		const words = content.split(/\s+/);
 		const lines = [];
 
@@ -2484,14 +2487,24 @@ const CChart = {
 				continue;
 			}
 
-			// word doesn't fit on current line → push current line
 			if (currentLine) {
 				lines.push(currentLine);
 				if (lines.length >= maxLines) break;
-				currentLine = word; // start new line
-			} else {
-				// single word longer than max width → accept it as-is
-				lines.push(word);
+
+				// start new line with word, but shorten it if needed
+				currentLine = fitSingleWord(word);
+
+				// if the shortened word already ends with ellipsis,
+				// we know the original text was truncated
+				if (currentLine.endsWith('…')) {
+					lines.push(currentLine);
+					currentLine = '';
+					break;
+				}
+			}
+			else {
+				// single word longer than max width → shorten with ellipsis
+				lines.push(fitSingleWord(word));
 				if (lines.length >= maxLines) break;
 				currentLine = '';
 			}
@@ -2501,10 +2514,10 @@ const CChart = {
 			lines.push(currentLine);
 		}
 
-		// apply ellipsis if truncated
+		// apply ellipsis if truncated across multiple words
 		if (lines.length === maxLines && words.length) {
 			const usedWords = lines.join(' ').split(/\s+/).length;
-			if (usedWords < words.length) {
+			if (usedWords < words.length && !lines[lines.length - 1].endsWith('…')) {
 				lines[lines.length - 1] = appendEllipsis(lines[lines.length - 1]);
 			}
 		}
