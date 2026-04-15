@@ -165,10 +165,10 @@
 	.header__rect--section			{height: 100%; --fill: CanvasText; fill: var(--fill); /*-rx: 15px;*/ }
 	.header__rect--section-odd		{opacity: calc(var(--saturation) / 100); }
 	.header__rect--section-even		{opacity: calc(var(--saturation) / 125); }	/* nb: will only produce opacity between 0 and 0.8. This is to 'interchange' the background between odd and even sections */
-	.header__text--section			{transform: translate(10px, calc(var(--px-line-height) * 1.2)); fill: var(--text); font-size: calc(var(--px-font-size) * 1.25); font-weight: var(--bold); pointer-events: none; dominant-baseline: middle; }
+	.header__text--section			{fill: var(--text); font-size: calc(var(--px-font-size) * 1.25); font-weight: var(--bold); pointer-events: none; dominant-baseline: middle; }
 
 	.header__rect--chapter			{height: calc(100% - ((var(--px-line-height) * 2))); fill: var(--fill); /*- rx: 15px;*/ opacity: calc(var(--saturation) / 100); stroke: var(--fill-grey); /* color-mix(in srgb, CanvasText 50%, transparent);*/ stroke-width: 1; }
-	.header__text--chapter			{transform: translate(10px, calc(var(--px-line-height) * 2.75)); fill: var(--text); font-size: calc(var(--px-font-size) * 1.00); font-weight: var(--bold); pointer-events: none; dominant-baseline: middle; }
+	.header__text--chapter			{fill: var(--text); font-size: calc(var(--px-font-size) * 1.00); font-weight: var(--bold); pointer-events: none; dominant-baseline: middle; }
 
 						.graphs-bg-rect {transform: translateY(var(--px-header-height)); fill: CanvasText; opacity: 0.04; pointer-events: none; }
 		.chart-viewb	.graphs-bg-rect {display: none; }
@@ -218,9 +218,15 @@
 	.chart-viewa	.tb-part--special	.line1 {font-size: 75%; /* fill: #777; */ opacity: 0.5; }
 	.chart-viewa	.tb-part--special	.line2 {font-size: 175%; font-weight: 600; fill: var(--text); }
 
-					.tb-part__symbol	{text-anchor: end; transition: var(--ms-transition) ease-out; }
-	.chart-viewa	.tb-part__symbol	{transform: translate(var(--x), var(--y));  					font-size: calc(var(--px-line-height) * 1.5);	dominant-baseline: auto;  }
-	.chart-viewb	.tb-part__symbol	{transform: translate(10px, calc(var(--px-line-height) * 0.5)); font-size: calc(var(--px-line-height) * 1.0); 	dominant-baseline: central; }
+					.tb-part__symbol	{transition: transform var(--ms-transition) ease-out; }
+	.chart-viewa	.tb-part__symbol	{transform: translate(var(--x), var(--y)); }
+	.chart-viewb	.tb-part__symbol	{transform: translate(10px, calc(var(--px-line-height) * 0.5)); }
+
+	.chart-viewa	.tb-part__symbol	text	{font-size: calc(var(--px-line-height) * 1.5);	dominant-baseline: auto;    text-anchor: end; }
+	.chart-viewb	.tb-part__symbol	text	{font-size: calc(var(--px-line-height) * 1.0); 	dominant-baseline: central; text-anchor: end; }
+
+
+
 
 	/* hover tagblock--active */
 	.chart-viewa	.tagblock--active.is-hover .tb-part {}
@@ -2054,7 +2060,7 @@ const CChart = {
 					const strClassesText = ['header__text', 'header__text--section', section.tag].join(' ');
 
 					return svg`	<rect class=${strClassesRect} style=${strExtraStyle} x=${pxX} y=${0} width=${pxWidth} rx=${PX_PADDING_NORMAL * 1.5}  @click=${e => CChart.onClick({src: 'section', e, idxTextareaLine: section.idxTextareaLine, caller: 'src: section'})} />
-								<text class=${strClassesText} style=${strExtraStyle} x=${pxX}>${strCaption}</text>`;
+								<text class=${strClassesText} style=${strExtraStyle} x=${pxX + PX_PADDING_NORMAL} y=${PX_LINE_HEIGHT * 1.2}>${strCaption}</text>`;
 				})
 			);
 
@@ -2071,7 +2077,7 @@ const CChart = {
 					const strClassesText = ['header__text', 'header__text--chapter', chapter.tag].join(' ');
 
 					return svg` <rect class=${strClassesRect} style=${strExtraStyle} x=${pxX} y=${PX_LINE_HEIGHT * 2} width=${PX_COL_WIDTH}  rx=${PX_PADDING_NORMAL} @click=${e => CChart.onClick({src: 'chapter', e, idxTextareaLine: chapter.idxTextareaLine, caller: 'src: chapter'})} />
-								<text class=${strClassesText} style=${strExtraStyle} x=${pxX}>${strCaption}</text>`;
+								<text class=${strClassesText} style=${strExtraStyle} x=${pxX + PX_PADDING_NORMAL} y=${PX_LINE_HEIGHT * 2.75}>${strCaption}</text>`;
 				})
 			);
 
@@ -2184,9 +2190,11 @@ const CChart = {
 			</text>
 			<text class="tb-part__text-viewb top" x=${PX_PADDING_NORMAL} y=${PX_LINE_HEIGHT * 0.5}>${part.caption}</text> 
 
-			${symbolString ? svg`<text class="tb-part__symbol" style=${`--x:${pxWidthRect + PX_PADDING_NORMAL}px; --y:${PX_LINE_HEIGHT * COUNT_PART_LINES}px;`} x="0" y="0">${symbolString}</text>` : ''}
+			${symbolString ? svg`<g class="tb-part__symbol" style=${`--x:${pxWidthRect + PX_PADDING_NORMAL}px; --y:${PX_LINE_HEIGHT * COUNT_PART_LINES}px;`}><text x="0" y="0">${symbolString}</text></g>` : ''}
 		</g>`;
 		},
+
+		//${symbolString ? svg`<text class="tb-part__symbol" style=${`--x:${pxWidthRect + PX_PADDING_NORMAL}px; --y:${PX_LINE_HEIGHT * COUNT_PART_LINES}px;`} x="0" y="0">${symbolString}</text>` : ''}
 
 		//::		☐ Graphtag(tagblock, keyMeta, arrValueMeta) 😃
 		//:			→ @click: this.onClick
