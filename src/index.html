@@ -82,7 +82,7 @@
 		.sidebar__main {flex: 1 1 auto; overflow: auto; display: flex; flex-direction: column; background-color: var(--text); }
 
 			/* sidebar__main - textarea */
-			.texteditor {flex: 1 1 50%; display:inline-flex; box-sizing: border-box; width: 100%; height: 100%; resize: none; padding: 8px; font-family: var(--fontfamily-texteditor); font-size: var(--px-font-size); font-weight: var(--bold); line-height: var(--px-line-height);  outline: none; /* white-space: pre;*/ tab-size: 3; border: none;  caret-color: #1976d2; overflow: auto; background: --fill; opacity: 0.97; color: var(--text); /*- background: color-mix(in srgb, var(--fill) 97%, var(--text)); color: color-mix(in srgb, var(--text) 90%, var(--fill));-*/ }
+			.texteditor {flex: 1 1 50%; display:inline-flex; box-sizing: border-box; width: 100%; height: 100%; resize: none; padding: 8px; font-family: var(--fontfamily-texteditor); font-size: var(--px-font-size); font-weight: var(--bold); line-height: var(--px-line-height);  outline: none; /* white-space: pre;*/ tab-size: 3; border: none;  caret-color: #1976d2; overflow: auto; background: var(--fill); opacity: 0.97; color: var(--text); /*- background: color-mix(in srgb, var(--fill) 97%, var(--text)); color: color-mix(in srgb, var(--text) 90%, var(--fill));-*/ }
 
 /* layout - splitter */
 								.splitter {grid-area: splitter; position: relative; cursor: col-resize; z-index: 10; }
@@ -191,11 +191,16 @@
 	.chart-viewb  		.tagblock-odd		.tagblock__bg-rect { }
 	.chart-viewb  		.tagblock-even		.tagblock__bg-rect { }
 
+												.tagblock-separator {stroke: Canvas; pointer-events: none; transition: opacity var(--ms-transition-quick) ease-out; }
+	.chart-viewa       							.tagblock-separator {opacity: 0; }
+	.chart-viewb       							.tagblock-separator {opacity: 0.75; }
+	.chart-viewb  		.tagblock--inactive		.tagblock-separator {opacity: 1; }
+
 
 	/* part */
 	.tagblocks--parts	{--saturation: 30; }
 	
-										.tb-part 	{transition: var(--ms-transition) ease-out; } 
+										.tb-part 	{transition: transform var(--ms-transition) ease-out; } 
 	.chart-viewa						.tb-part 	{transform: translate(var(--x), var(--ya)) }
 	.chart-viewb						.tb-part 	{transform: translate(var(--x), var(--yb)) }
 	.chart-viewb	.tagblock--inactive	.tb-part 	{transform: translate(var(--x), 5px); }
@@ -1615,13 +1620,59 @@ const CFramework = {
 		if (LOGGING) console.group(...CUtil.logGroup('CFramework', 'setCustomCss', CUtil.getArgsKeys(args), args.caller));
 		if (LOGARGS) console.log(args);
 
-		// strip #def Lines
-  		const textContent = args.txtCustomCss.replace(/^\s*#def\s*\{[^}]*\}\s*;?\s*$/gmi, '').trim();
+		const txtInput = args.txtCustomCss || '';
 
-		// set custom css
+		// 1) Remove #def lines entirely
+		const txtWithoutDefs = txtInput.replace(
+			/^\s*#def\s*\{[^}]*\}\s*;?\s*$/gmi,
+			''
+		);
+
+		// 2) Convert app-style tag rules:
+		//    #gitte { @fill: #fa0; @bold 800; }
+		// into:
+		//    .gitte { --fill: #fa0; --bold: 800; }
+		const txtConverted = txtWithoutDefs.replace(
+			/^\s*#([a-zA-Z_][\w-]*)\s*\{([^}]*)\}\s*;?\s*$/gmi,
+			(match, tagName, body) => {
+				const arrFields = body
+					.split(';')
+					.map(s => s.trim())
+					.filter(Boolean);
+
+				const arrCssFields = [];
+
+				for (const field of arrFields) {
+					// Allow both:
+					// @fill: #fa0
+					// @fill #fa0
+					const mm = field.match(/^@([a-zA-Z_][\w-]*)\s*(?::\s*|\s+)(.+)$/);
+					if (!mm)
+						continue;
+
+					const key = mm[1];
+					const value = mm[2].trim();
+
+					if (!value)
+						continue;
+
+					arrCssFields.push(`--${key}: ${value};`);
+				}
+
+				// If no valid @fields were found, drop the whole rule
+				if (arrCssFields.length === 0)
+					return '';
+
+				return `.${tagName} { ${arrCssFields.join(' ')} }`;
+			}
+		).trim();
+
+		// 3) Set resulting CSS
 		const elStyleSettings = document.querySelector(`#${args.idElStyle}`);
-		elStyleSettings.textContent = textContent;
-		if (LOGGING) console.groupEnd();
+		elStyleSettings.textContent = txtConverted;
+
+		if (LOGGING)
+			console.groupEnd();
 	},
 
 	//:::	🔹 updateLookupConstants
@@ -2077,7 +2128,7 @@ const CChart = {
 					const strClassesText = ['header__text', 'header__text--chapter', chapter.tag].join(' ');
 
 					return svg` <rect class=${strClassesRect} style=${strExtraStyle} x=${pxX} y=${PX_LINE_HEIGHT * 2} width=${PX_COL_WIDTH}  rx=${PX_PADDING_NORMAL} @click=${e => CChart.onClick({src: 'chapter', e, idxTextareaLine: chapter.idxTextareaLine, caller: 'src: chapter'})} />
-								<text class=${strClassesText} style=${strExtraStyle} x=${pxX + PX_PADDING_NORMAL} y=${PX_LINE_HEIGHT * 2.75}>${strCaption}</text>`;
+								<text class=${strClassesText} style=${strExtraStyle} x=${pxX + PX_PADDING_NORMAL} y=${PX_LINE_HEIGHT * 2.65}>${strCaption}</text>`;
 				})
 			);
 
@@ -2098,7 +2149,8 @@ const CChart = {
 
 			return svg`
 			<g class=${strClasses} style=${`--ya:${pxYa}; --count-rows:${tagblock.countRows}`} data-id=${tagblock.id} @click=${e => CChart.onClick({src: 'tagblock', e, tagblock, caller: 'src: tagblock'})}>
-				<rect class="tagblock__bg-rect" x=${PX_MARGIN_LEFT_W - PX_PADDING_NORMAL} y="0" width=${pxWidthTagblock + (PX_PADDING_NORMAL * 2)} rx=${PX_PADDING_SMALL} />
+				<rect class="tagblock__bg-rect" x=${PX_MARGIN_LEFT_W} y="0" width=${pxWidthTagblock} />
+				<line class=${'tagblock-separator separator' + idx} x1=${PX_MARGIN_LEFT_W - 1} y1=${0} x2=${PX_MARGIN_LEFT_W + pxWidthTagblock + 2} y2=${0} stroke-width=${PX_BASEUNIT * 0.15}/>
 
 				${tagblock.arrPart.map(part => CChart.Templates.Tagblock_Part(part, tagblock))}
 			</g>`;
@@ -4517,11 +4569,10 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 
 		// add metadata for each tagblock
 		for (const tagblock of this.docdata.arrTagblock) {
-			const selector = '.' + tagblock.id;			// eg. '.gitte'
 
 			//: 		→ this: getTagblockMetadataFromCss * 2
-			const metadataForSelectorFromGlobalCss		= this.getTagblockMetadataFromCss({txtCss: args.txtGlobalCss,   selector: selector, caller: 'global'});
-			//?const metadataForSelectorFromDocumentCss	= this.getTagblockMetadataFromCss({txtCss: args.txtDocumentCss, selector: selector, caller: 'doc'});
+			const metadataForSelectorFromGlobalCss		= this.getTagblockMetadataFromCss({txtCss: args.txtGlobalCss,   tag: tagblock.id, caller: 'global'});
+			//?const metadataForSelectorFromDocumentCss	= this.getTagblockMetadataFromCss({txtCss: args.txtDocumentCss, tag: tagblock.id, caller: 'doc'});
 
 			tagblock.metadata = {
 				...metadataForSelectorFromGlobalCss,
@@ -4534,14 +4585,22 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 	//:::	🔹	getTagblockMetadataFromCss
 	getTagblockMetadataFromCss(args) {
 		//if (LOGGING) console.log(...CUtil.logGroup('CModel', 'getTagblockMetadataFromCss', CUtil.getArgsKeys(args), args.selector + ', ' + args.caller));
-		//if (LOGARGS) console.log(args);
+		//if (LOGARGS) console.log(args);	
 		
-		const escapedSelector = args.selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');	// Escape selector for use in RegExp (e.g. '.gitte' → '\.gitte')
-		const re = new RegExp(`^\\s*${escapedSelector}\\s*\\{([^}]*)\\}`, 'm');		// Match: optional spaces + selector + optional spaces + { ... }. // [^}]* grabs everything until the first closing brace (including newlines)
-		const match = args.txtCss.match(re);
+		const txtStyle = args.txtCss || '';
+		const tag = typeof args.tag === 'string' ? args.tag.trim() : '';
+		if (!tag) return {};
+
+		// Escape tag name for regex use
+		const escapedTag = tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+		// Match a line like:
+		// #gitte { ... }
+		const re = new RegExp(`^\\s*#${escapedTag}\\s*\\{([^}]*)\\}\\s*;?\\s*$`, 'm');
+		const match = txtStyle.match(re);
 		if (!match) return {};
 
-		const inside = match[1].trim();
+		const inside = (match[1] || '').trim();
 		if (!inside) return {};
 
 		const obj = {};
@@ -4550,32 +4609,42 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 			const pair = entry.trim();
 			if (!pair) return;
 
-			const [rawKey, rawVal] = pair.split(':').map(s => s.trim());
-			if (!rawKey || rawVal === undefined) return;
+			// Allow:
+			// @fill: #fa0
+			// @fill #fa0
+			//
+			// Ignore:
+			// bold: 800
+			// saturation: 90
+			// _@text: #ff0
+			const mm = pair.match(/^@([a-zA-Z_][\w-]*)\s*(?::\s*|\s+)(.+)$/);
+			if (!mm) return;
 
-			if (!rawKey.startsWith('--')) return;		// Only care about CSS custom properties, e.g. --fill
+			const rawKey = mm[1];
+			const rawVal = mm[2].trim();
+			if (!rawVal) return;
 
-			const key = rawKey.slice(2);		// Remove leading '--'
-			const camelKey = key.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());		// kebab-case → camelCase (color-tag → colorTag)
+			const camelKey = rawKey.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
 
 			let value = rawVal;
 
-			if (rawVal === 'true') {		// Convert booleans
+			if (rawVal === 'true') {
 				value = true;
-			} else if (rawVal === 'false') {
+			}
+			else if (rawVal === 'false') {
 				value = false;
 			}
-			
-			else if (/^-?\d+(\.\d+)?$/.test(rawVal)) {		// Convert numbers (integer or float)
+			else if (/^-?\d+(?:\.\d+)?$/.test(rawVal)) {
 				value = Number(rawVal);
 			}
-			// Else keep as string
 
 			obj[camelKey] = value;
 		});
 
 		return obj;
 	},
+
+
 
 	//:::	🔹 setDocdataDefinitionsFromCss
 	setDocdataDefinitionsFromCss(args) {
@@ -4595,12 +4664,11 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 	},
 
 	/**
-	 * Parse "#def {key: ...; unit: ...; min: ...; max: ...; target: ...}" lines
-	 * from a settings text blob (optionally containing a ```css fenced block).
+	 * Parse "#def {key: ...; unit: ...; min: ...; max: ...; target: ...}" lines from a settings text blob 
 	 *
 	 * Returns an object like:
 	 * {
-	 *   weight: { unit: 'kg', min: 40, max: 140, target: 65 },
+	 *   weight: { unit: 'kg', min: 40, max: 140 },
 	 *   bmi:    { unit: 'bmi', min: 15, max: 30, target: 21 }
 	 * }
 	 */
@@ -4608,71 +4676,84 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 	getDocdataDefinitionsFromCss(args) {
 		if (LOGGING) console.group(...CUtil.logGroup('CModel', 'getDocdataDefinitionsFromCss', CUtil.getArgsKeys(args), args.caller));
 		if (LOGARGS) console.log(args);
-
-		const defs = {};
 		
-		// 1) If a ```css (or any) fenced block exists, parse only inside it.
-		//    Otherwise, parse the whole text.
+		const defs = {};
+
 		const fenceMatch = args.txtCss.match(/```(?:css|obx|txt)?\s*\n([\s\S]*?)\n```/i);
 		const src = fenceMatch ? fenceMatch[1] : args.txtCss;
-		
-		// 2) Find all #def { ... } lines (tolerant with whitespace)
-		//    Works even if there are multiple defs per file.
+
 		const defMatches = src.matchAll(/^\s*#def\s*\{([^}]*)\}\s*;?\s*$/gmi);
-		
+
 		for (const m of defMatches) {
 			const inside = (m[1] || '').trim();
-			if (!inside) continue;
-			
-			// Split on semicolons into 'key: value' tokens
+			if (!inside)
+				continue;
+
 			const pairs = inside
 				.split(';')
 				.map(s => s.trim())
 				.filter(Boolean);
-			
+
 			const obj = {};
+
 			for (const pair of pairs) {
-				// allow 'key: value' with arbitrary whitespace
 				const mm = pair.match(/^([a-zA-Z_][\w-]*)\s*:\s*(.+)$/);
-				if (!mm) continue;
-				
+				if (!mm)
+					continue;
+
 				const k = mm[1];
 				let v = mm[2].trim();
-				
-				// Strip optional trailing comma (user might type it)
+
 				v = v.replace(/,\s*$/, '');
-				
-				// Strip optional wrapping quotes (single or double)
+
 				if (
-				(v.startsWith('"') && v.endsWith('"')) ||
-				(v.startsWith("'") && v.endsWith("'"))
+					(v.startsWith('"') && v.endsWith('"')) ||
+					(v.startsWith("'") && v.endsWith("'"))
 				) {
 					v = v.slice(1, -1);
 				}
-				
-				// Convert numeric values when they look like numbers
-				// (supports ints and decimals, incl. negative)
+
 				if (/^-?\d+(?:\.\d+)?$/.test(v)) {
 					obj[k] = Number(v);
-				} else {
+				}
+				else {
 					obj[k] = v;
 				}
 			}
-			
-			// Require a 'key' field to register the definition
-			const defKey = typeof obj.key === 'string' ? obj.key.trim() : '';
-			if (!defKey) continue;
-			
-			// Remove 'key' from stored fields
-			delete obj.key;
-			
-			// Store: later defs with same key override earlier ones
-			defs[defKey] = obj;
+
+			const rawKey = typeof obj.key === 'string' ? obj.key.trim() : '';
+			const defKey = /^[a-zA-Z_][\w-]*$/.test(rawKey) ? rawKey : '';
+
+			const unit = typeof obj.unit === 'string' ? obj.unit.trim() : '';
+			const min = obj.min;
+			const max = obj.max;
+			const target = obj.target;
+
+			const isValid =
+				defKey &&
+				unit &&
+				typeof min === 'number' &&
+				Number.isFinite(min) &&
+				typeof max === 'number' &&
+				Number.isFinite(max) &&
+				(target == null || (typeof target === 'number' && Number.isFinite(target)));
+
+			if (!isValid)
+				continue;
+
+			defs[defKey] = {
+				unit,
+				min,
+				max,
+				...(target == null ? {} : {target}),
+			};
 		}
-		
+
 		if (LOGGING) console.groupEnd();
 		return defs;
 	},
+
+
 
 	//:::	🔹 reapplyDocstate
 	reapplyDocstate(args) {
