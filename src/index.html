@@ -9,9 +9,6 @@
 	:root {
 		color-scheme: light dark;
 
-		--fill:			Canvas;
-		--text:			CanvasText;
-
 		--fill-header:	#888;
 		--fill-grey:	#888;
 		--fill-bg:		var(--fill);
@@ -38,6 +35,9 @@
 	:root.theme-light {
 		color-scheme: light;
 
+		--fill:			Canvas;
+		--text:			CanvasText;
+
 		--saturation-header: 10;
 		--saturation-tags: 20;
 	}
@@ -45,8 +45,11 @@
 	:root.theme-dark {
 		color-scheme: dark;
 
-		--saturation-header: 10;
-		--saturation-tags: 40;
+		--fill:			#333;			/* not Canvas here like in theme-light */
+		--text:			CanvasText;
+
+		--saturation-header: 20;
+		--saturation-tags: 60;
 	}
 
 	html, body {height: 100%; margin: 0; overflow: hidden; /*? background: var(--fill); */  font-family: var(--fontfamily); font-size: var(--px-font-size); font-weight: var(--bold); color: var(--text); }
@@ -99,11 +102,8 @@
 
 	#workspace {grid-area: workspace; position: relative; overflow: hidden; display: flex; flex-direction: column; }
 
-/* Prevent selection in the workspace */
-#workspace * {
-  user-select: none;
-  -webkit-user-select: none;
-}
+/* prevent selection in the workspace */
+#workspace * {user-select: none; -webkit-user-select: none; }
 
 
 /* toolbar */
@@ -127,12 +127,12 @@
 	.workspace__main {		/* class used here, not id, since font-width logic with hidden dom-elements use this class too */
 		flex: 1 1 auto;
 		overflow: auto;
-		/*? line-height: var(--px-line-height);
-		font-size: var(--px-font-size);
-		font-family: var(--fontfamily);
-		font-weight: var(--bold);
 		background: var(--fill);
-		fill: var(--text); */
+			/*? line-height: var(--px-line-height);
+			font-size: var(--px-font-size);
+			font-family: var(--fontfamily);
+			font-weight: var(--bold);
+			fill: var(--text); */
 	}
 
 	/* workspace-panel */
@@ -193,7 +193,7 @@
 
 					.tb-part__rect-bg	{fill: Canvas !important; opacity: 1.0 !important; }
 
-					.tb-part__rect	{fill: var(--fill); opacity: calc(var(--saturation) / 100); stroke-width: 1; stroke: var(--fill-grey); }
+					.tb-part__rect	{/*--fill: rgba(var(--fillrgb), calc(var(--saturation) / 100));-*/  fill: var(--fill); opacity: calc(var(--saturation) / 100);  stroke-width: 1; stroke: var(--fill-grey); }
 					.tb-part__rect	{transition: transform var(--ms-transition) ease-out; vector-effect: non-scaling-stroke; }
 	.chart-viewa 	.tb-part__rect	{height: var(--px-line-height); transform: scaleY(var(--count-part-lines)); }
 	.chart-viewb 	.tb-part__rect	{height: calc(var(--px-line-height) - 2px); transform: scaleY(1); }
@@ -252,121 +252,501 @@
 
 
 	<style>
-/* Popup variables */
+/* Popup */
+
+:root.theme-light {
+	--col-back: 255, 255, 255;
+	--col-front: 0, 0, 0;
+	--col-hilite: #5588ff29;
+}
+
+:root.theme-dark {
+	--col-back: 96, 96, 96;
+	--col-front: 255, 255, 255;
+	--col-hilite: #5588ff38;
+}
 
 :root {
-	--fg: var(--text);
-	--border:            #00000024;  /* 14% */
-	--popup-bg:          #ebebeb;    /* 92% white + 8% black */
-	--popup-panel-bg:    #f5f5f5;    /* 96% white + 4% black */
-	--focus:             #d9e1f1;
-	--line-soft:         #00000014;  /* 8% */
-	--hover-soft:        #0000000a;  /* 4% */
-	--hover-row:         #0000000f;  /* 6% */
-	--hover-btn:         #00000012;  /* 7% */
-	--hover-btn-strong:  #00000014;  /* 8% */
-	--field-border:      #0000001f;  /* 12% */
+	--popup-bg:         var(--fill-bg);
+	--popup-fg:         var(--text);
 
-	--switch-bg:	#ddd;
+	--col-border:       rgba(var(--col-front), 0.15);
+
+	--popup-panel-bg:   rgba(var(--col-back), 0.5);
+	--col-button:       rgba(var(--col-back), 0.15);
+	--col-hover:        rgba(var(--col-back), 1);
 }
+
+
+/* layered tint */
+
+.popup::after,
+.tablist__btn-selected::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: rgba(var(--col-front), 0.1);
+	pointer-events: none;
+	border-radius: inherit;
+}
+
+/*-.tablist__btn:hover::after {
+	background: transparent;
+}-*/
+
 
 /* Shared button typography */
 
-button.btn, button.pill, button.tablist__btn, button.close__btn, button.unpin__btn { font-family: var(--fontfamily); font-size: var(--px-font-size); font-weight: var(--bold); }
+button.btn,
+button.pill,
+button.tablist__btn,
+button.close__btn,
+button.unpin__btn {
+	font-family: var(--fontfamily);
+	font-size: var(--px-font-size);
+	font-weight: var(--bold);
+}
+
 
 /* Popup overlay and shell */
 
-.popup-overlay { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; padding: 18px; background: rgba(0,0,0,.28); z-index: 10; overscroll-behavior: contain; touch-action: none; }
-.popup { display: flex; flex-direction: column; width: min(780px, 100%); height: 63vh; max-height: min(78vh, 760px); background: var(--popup-bg); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,.18); overflow: hidden; touch-action: auto; }
+.popup-overlay {
+	position: fixed;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 18px;
+	background: rgba(0,0,0,.28);
+	z-index: 10;
+	overscroll-behavior: contain;
+	touch-action: none;
+}
 
-/* Popup header / tab row. The tab strip now acts as the panel header. */
+.popup {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	width: min(780px, 100%);
+	height: 63vh;
+	max-height: min(78vh, 760px);
+	min-height: 0;
+	background: var(--popup-bg);
+	border: 1px solid var(--col-border);
+	border-radius: 12px;
+	box-shadow: 0 12px 40px rgba(0,0,0,.18);
+	overflow: hidden;
+	touch-action: auto;
+}
 
-.popup__panel { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 16px 0 16px; background: var(--popup-panel-bg); border-bottom: none; }
-.popup__tablist { display: flex; align-items: flex-end; overflow: hidden; background: transparent; }
 
-.tablist__btn { display: flex; align-items: center; gap: 8px; padding: 8px 60px; background: transparent; border: 0; border-radius: 10px 10px 0 0; color: var(--fg); cursor: pointer; user-select: none; -webkit-user-select: none; }
-.tablist__btn:hover:not(.tablist__btn-selected) { background: var(--hover-soft); }
-.tablist__btn-selected { background: var(--popup-bg); }
+/* Popup header / tab row */
 
-.close__btn { flex: 0 0 auto; padding: 6px 10px; background: transparent; border: none; border-radius: 10px; color: var(--fg); cursor: pointer; opacity: 0.5; }
-.close__btn:hover { background: var(--hover-soft); opacity: 1; }
+.popup__panel {
+	display: flex;
+	flex: 0 0 auto;
+	z-index: 1;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	padding: 12px 16px 0 16px;
+	background: var(--popup-panel-bg);
+	border-bottom: none;
+	min-height: 0;
+}
 
-/* Popup content area */
+.panel__tablist {
+	display: flex;
+	align-items: flex-end;
+	overflow: hidden;
+	background: transparent;
+}
 
-.popup__main { padding: 18px; overflow: auto; min-height: 0; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; touch-action: pan-y; }
-.main__content { display: grid; gap: 30px; min-height: 100%; }
+.tablist__btn {
+	position: relative;
+	display: flex;
+	flex: 0 0 auto;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 60px;
+	background: transparent;
+	border: 0;
+	border-radius: 10px 10px 0 0;
+	color: var(--popup-fg);
+	cursor: pointer;
+	user-select: none;
+	-webkit-user-select: none;
+}
 
-/* Generic content sections. Flat layout: use spacing and soft rules instead of cards. */
+.tablist__btn:hover {
+	background: var(--col-hover);
+}
 
-.content__section { background: transparent; border: none; overflow: hidden; }
-.section__head { display: flex; align-items: center; gap: 8px; min-height: 2rem;    margin-bottom: 4px; font-weight: 600;  }
+.tablist__btn-selected {
+	background: var(--popup-bg);
+}
 
-.section__body { display: grid; gap: 6px; padding: 0; }
-.hint { padding-left: 6px; font-size: 0.8em; font-weight: 400; opacity: 0.5; }
+.close__btn {
+	flex: 0 0 auto;
+	padding: 6px 10px;
+	background: transparent;
+	border: none;
+	border-radius: 10px;
+	color: var(--popup-fg);
+	cursor: pointer;
+	opacity: 0.5;
+}
+
+.close__btn:hover {
+	background: var(--col-hover);
+	opacity: 1;
+}
+
+
+/* Popup content area - default for file/view tabs */
+
+.popup__main {
+	z-index: 2;
+	flex: 1 1 auto;
+	min-height: 0;
+	padding: 18px;
+	overflow: auto;
+	overscroll-behavior: contain;
+	-webkit-overflow-scrolling: touch;
+	touch-action: pan-y;
+}
+
+.main__content {
+	display: grid;
+	gap: 30px;
+	align-content: start;
+	min-height: 0;
+}
+
+
+/* Generic content sections. Default: natural height */
+
+.content__section {
+	background: transparent;
+	border: none;
+	overflow: visible;
+}
+
+.section__head {
+	display: flex;
+	flex: 0 0 auto;
+	align-items: center;
+	gap: 8px;
+	min-height: 2rem;
+	margin-bottom: 4px;
+	font-weight: 600;
+}
+
+.section__body {
+	display: grid;
+	gap: 6px;
+	padding: 0;
+}
+
+.hint {
+	padding-left: 6px;
+	font-size: 0.8em;
+	font-weight: 400;
+	opacity: 0.5;
+}
+
+
+/* Editor-style tabs: Style + Status */
+
+.popup.tab-style .popup__main,
+.popup.tab-status .popup__main {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+.popup.tab-style .main__content,
+.popup.tab-status .main__content {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
+	min-height: 0;
+	gap: 30px;
+}
+
+.popup.tab-style .content__section,
+.popup.tab-status .content__section {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow: hidden;
+}
+
+.popup.tab-style .section__body,
+.popup.tab-status .section__body {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
+	min-height: 0;
+}
+
 
 /* Keyboard shortcut labels */
 
-.kbd { padding: 1px 5px; border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 8px; font-size: 11px; white-space: nowrap; opacity: 0.5; font-size: 0.8em; }
-.kbd.is-label { display: inline-block; justify-self: start; width: fit-content; pointer-events: none; }
+.kbd {
+	padding: 1px 5px;
+	border: 1px solid var(--col-border);
+	border-bottom-width: 2px;
+	border-radius: 8px;
+	white-space: nowrap;
+	opacity: 0.5;
+	font-size: 0.8em;
+}
+
+.kbd.is-label {
+	display: inline-block;
+	justify-self: start;
+	width: fit-content;
+	pointer-events: none;
+}
+
 
 /* Action buttons and segmented/pill controls */
 
-.content__actions { display: flex; flex-wrap: wrap; gap: 5px; }
+.content__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 5px;
+}
 
-.btn { display: inline-flex; align-items: center; gap: 10px; padding: 8px 10px; background: transparent; border: 1px solid var(--field-border); border-radius: 10px; color: var(--fg); cursor: pointer; user-select: none; -webkit-user-select: none; }
-.btn:hover { background: var(--hover-btn-strong); }
+.btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 10px;
+	background: var(--col-button);
+	border: 1px solid var(--col-border);
+	border-radius: 10px;
+	color: var(--popup-fg);
+	cursor: pointer;
+	user-select: none;
+	-webkit-user-select: none;
+}
 
-.btn-small { padding: 4px 8px; font-size: 12px; }
+.btn:hover {
+	background: var(--col-hover);
+}
 
-.pillbar { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn-small {
+	padding: 4px 8px;
+	font-size: 12px;
+}
 
-.pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; background: transparent; border: 1px solid var(--field-border); border-radius: 999px; color: var(--fg); cursor: pointer; user-select: none; -webkit-user-select: none; }
-.pill:hover { background: var(--hover-btn); }
-.pill-selected { background: var(--focus); border-color: var(--border); }
+.pillbar {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
 
-/* List rows. Used for pinned files and toggle rows. The fixed first column keeps text alignment stable. */
+.pill {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 6px 10px;
+	background: var(--col-button);
+	border: 1px solid var(--col-border);
+	border-radius: 999px;
+	color: var(--popup-fg);
+	cursor: pointer;
+	user-select: none;
+	-webkit-user-select: none;
+}
 
-.body__item { position: relative; display: grid; grid-template-columns: auto 1fr auto; align-items: center; column-gap: 12px; padding: 10px 10px; background: transparent; border: none; border-top: 1px solid var(--line-soft); border-radius: 8px; cursor: pointer; user-select: none; -webkit-user-select: none; touch-action: none; }
-.body__item:hover { background: var(--hover-row); }
-.draggable-list.is-reordering .body__item:hover { background: transparent; }
+.pill:not(.pill-selected):hover {
+	background: var(--col-hover);
+}
 
-.body__item.is-active { padding: 10px 10px; background: var(--focus);  box-shadow: inset 3px 0 0 0 Highlight; }
-.body__item.is-dragging { opacity: 0; }
+.pill-selected {
+	background: var(--col-hilite);
+	/*- border-color: var(--col-border); -*/
+}
 
-.item__meta { display: grid; gap: 2px; min-width: 0; }
-.item__name { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.item__desc { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.72; }
-.item__right { display: inline-flex; align-items: center; justify-self: end; gap: 10px; }
 
-.header__title { font-weight: 600; }
+
+/* List rows */
+
+.body__item-plain {}
+
+.body__item {
+	position: relative;
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	align-items: center;
+	column-gap: 12px;
+	padding: 10px 10px;
+	background: transparent;
+	border: none;
+	border-top: 1px solid var(--col-border);
+	border-radius: 8px;
+	cursor: pointer;
+	user-select: none;
+	-webkit-user-select: none;
+	touch-action: none;
+}
+
+.body__item:hover {
+	background: var(--col-hover);
+}
+
+.draggable-list.is-reordering .body__item:hover {
+	background: transparent;
+}
+
+.body__item.is-active {
+	/*-padding: 10px 10px;-*/
+	background: var(--col-hilite);
+	/*-box-shadow: inset 3px 0 0 0 Highlight;-*/
+}
+
+.body__item.is-dragging {
+	opacity: 0;
+}
+
+.item__meta {
+	display: grid;
+	gap: 2px;
+	min-width: 0;
+}
+
+.item__name {
+	font-weight: 600;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.item__desc {
+	font-size: 12px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	opacity: 0.72;
+}
+
+.item__right {
+	display: inline-flex;
+	align-items: center;
+	justify-self: end;
+	gap: 10px;
+}
+
+/*-.header__title {
+	font-weight: 600;
+}-*/
+
 
 /* Toggle switch */
 
-.switch { position: relative; width: 44px; height: 26px; background: var(--switch-bg);  border: 1px solid var(--border); border-radius: 999px; cursor: pointer; }
-.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; background: var(--fill); border: 1px solid var(--border); border-radius: 999px; transition: transform 120ms ease; }
-.toggle-on .switch { background: var(--focus);  border-color: var(--border); }
-.toggle-on .switch::after { transform: translateX(18px); }
-.switch:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.switch {
+	position: relative;
+	width: 44px;
+	height: 26px;
+	background: var(--col-border);
+	border: 1px solid var(--col-border);
+	border-radius: 999px;
+	cursor: pointer;
+}
+
+.switch::after {
+	content: '';
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	width: 20px;
+	height: 20px;
+	background: var(--popup-bg);
+	border: 1px solid var(--col-border);
+	border-radius: 999px;
+	transition: transform 120ms ease;
+}
+
+.toggle-on .switch {
+	background: var(--col-hilite);
+}
+
+.toggle-on .switch::after {
+	transform: translateX(18px);
+}
+
 
 /* Secondary row actions */
 
-.unpin__btn { padding: 4px 6px; background: transparent; border: none; border-radius: 10px; color: var(--fg); cursor: pointer; opacity: 0.7; }
-.unpin__btn:hover { background: var(--hover-btn); }
+.unpin__btn {
+	padding: 4px 6px;
+	background: transparent;
+	border: none;
+	border-radius: 10px;
+	color: var(--popup-fg);
+	cursor: pointer;
+	opacity: 0.7;
+}
 
-/* Drag ghost. The ghost uses border-box so JS-assigned width matches the visible outer width exactly */
-
-.ghost { position: fixed; left: 0; top: 0; box-sizing: border-box; padding: 10px 10px; background: var(--fill) !important; border: 1px solid var(--focus); border-radius: 10px; box-shadow: 0 10px 24px rgba(0,0,0,.16); z-index: 9999; pointer-events: none; opacity: 0.98; }
-
-/* Popup textareas. Shared styling for CSS and Status tabs. Readonly textareas still allow selection and copying */
-
-.texteditor-globalcss, 
-.texteditor-status { width: 100%; height: 45vh; border: 1px solid var(--field-border); border-radius: 10px;resize: none; }
-.texteditor-status[readonly] { cursor: default; }
+.unpin__btn:hover {
+	background: var(--col-border);
+}
 
 
+/* Drag ghost */
 
-.section__actions { margin-left: auto; display: flex; align-items: center; gap: 6px; flex: 0 0 auto; }
+.ghost {
+	position: fixed;
+	left: 0;
+	top: 0;
+	box-sizing: border-box;
+	padding: 10px 10px;
+	background: var(--popup-bg) !important;
+	border: 1px solid var(--col-border);
+	border-radius: 10px;
+	box-shadow: 0 10px 24px rgba(0,0,0,.16);
+	z-index: 9999;
+	pointer-events: none;
+	opacity: 0.98;
+}
 
+
+/* Popup textareas */
+
+.texteditor-globalcss,
+.texteditor-status {
+	display: block;
+	width: 100%;
+	height: auto;
+	min-height: 0;
+	box-sizing: border-box;
+	border: 1px solid var(--col-border);
+	border-radius: 10px;
+	resize: none;
+}
+
+.popup.tab-style .texteditor-globalcss,
+.popup.tab-status .texteditor-status {
+	flex: 1 1 auto;
+}
+
+.texteditor-status[readonly] {
+	cursor: default;
+}
+
+
+.section__actions {
+	margin-left: auto;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	flex: 0 0 auto;
+}
 
 
 	</style>
@@ -668,7 +1048,7 @@ const CUtil = {
 			b,
 			rgb: `${r}, ${g}, ${b}`,
 		};
-	},	
+	},
 
 }
 
@@ -2115,9 +2495,8 @@ const CChart = {
 					const strCaption = arrCaptionSplit[0] + (arrCaptionSplit.length > 1 ? ellipsis : '');
 					const strExtraStyle = CChart.getStyleFromMetadata(section.metadata);
 					
-					// new:
-					const strClassesRect = ['header__rect', 'header__rect--section', section.tag, ((idxSection % 2) ? 'header__rect--section-even' : 'header__rect--section-odd')].join(' ');
-					const strClassesText = ['header__text', 'header__text--section', section.tag].join(' ');
+					const strClassesRect = ['header__rect', 'header__rect--section', ...section.arrTag, ((idxSection % 2) ? 'header__rect--section-even' : 'header__rect--section-odd')].join(' ');
+					const strClassesText = ['header__text', 'header__text--section', ...section.arrTag].join(' ');
 
 					return svg`	<rect class=${strClassesRect} style=${strExtraStyle} x=${pxX} y=${0} width=${pxWidth} rx=${PX_PADDING_NORMAL * 1.5}  @click=${e => CChart.onClick({src: 'section', e, idxTextareaLine: section.idxTextareaLine, caller: 'src: section'})} />
 								<text class=${strClassesText} style=${strExtraStyle} x=${pxX + PX_PADDING_NORMAL} y=${PX_LINE_HEIGHT * 1.2}>${strCaption}</text>`;
@@ -2133,8 +2512,8 @@ const CChart = {
 					const strExtraStyle = CChart.getStyleFromMetadata(chapter.metadata);
 					
 					// new:
-					const strClassesRect = ['header__rect', 'header__rect--chapter', chapter.tag].join(' ');
-					const strClassesText = ['header__text', 'header__text--chapter', chapter.tag].join(' ');
+					const strClassesRect = ['header__rect', 'header__rect--chapter', ...chapter.arrTag].join(' ');
+					const strClassesText = ['header__text', 'header__text--chapter', ...chapter.arrTag].join(' ');
 
 					return svg` <rect class=${strClassesRect} style=${strExtraStyle} x=${pxX} y=${PX_LINE_HEIGHT * 2} width=${PX_COL_WIDTH}  rx=${PX_PADDING_NORMAL} @click=${e => CChart.onClick({src: 'chapter', e, idxTextareaLine: chapter.idxTextareaLine, caller: 'src: chapter'})} />
 								<text class=${strClassesText} style=${strExtraStyle} x=${pxX + PX_PADDING_NORMAL} y=${PX_LINE_HEIGHT * 2.65}>${strCaption}</text>`;
@@ -2157,7 +2536,7 @@ const CChart = {
 			const pxYa = PX_HEADER_HEIGHT + 'px';
 
 			return svg`
-			<g class=${strClasses} style=${`--ya:${pxYa}; --count-rows:${tagblock.countRows}; --fillrgb: ${tagblock.metadata.fillrgb};`}; data-id=${tagblock.id} @click=${e => CChart.onClick({src: 'tagblock', e, tagblock, caller: 'src: tagblock'})}>
+			<g class=${strClasses} style=${`--ya:${pxYa}; --count-rows:${tagblock.countRows}; --fill: ${tagblock.metadata.fill}; --fillrgb: ${tagblock.metadata.fillrgb};`}; data-id=${tagblock.id} @click=${e => CChart.onClick({src: 'tagblock', e, tagblock, caller: 'src: tagblock'})}>
 				<rect class="tagblock__bg-rect" x=${PX_MARGIN_LEFT_W - 1} y="0" width=${pxWidthTagblock + 2} />
 
 				${tagblock.arrPart.map(part => CChart.Templates.Tagblock_Part(part, tagblock))}
@@ -2195,7 +2574,7 @@ const CChart = {
 			const show = part.metadata?.show ?? tagblock.metadata?.show ?? 'normal';
 			const strBaseStyle = `--x:${pxX}px; --ya:${pxYa}px; --yb:${pxYb}px; `;
 			const strExtraStyle = CChart.getStyleFromMetadata(part.metadata);
-			const strClasses = ['tb-part', show === 'normal' ? 'tb-part--normal' : 'tb-part--special'].join(' ');
+			const strClasses = ['tb-part', ...part.arrTag, show === 'normal' ? 'tb-part--normal' : 'tb-part--special'].join(' ');
 
 			let arrTextlines = [];
 			let arrObjTextline = [];
@@ -2205,7 +2584,7 @@ const CChart = {
 
 				arrTextlines.forEach((textline, idx) => {
 					const addLineHeight = idx === 0 ? 0.5 : 1;
-					arrObjTextline.push({caption: textline, class: 'top', style: '', dy: PX_LINE_HEIGHT * addLineHeight, idxTextareaLine: undefined});
+					arrObjTextline.push({caption: textline, classes: ['top'], style: '', dy: PX_LINE_HEIGHT * addLineHeight, idxTextareaLine: undefined});
 				});
 
 				let countLines = arrObjTextline.length;
@@ -2220,7 +2599,7 @@ const CChart = {
 						countLines += addLineHeight;
 
 						if (countLines <= COUNT_PART_LINES)
-							arrObjTextline.push({caption: textline, class: sub.tag, style: strExtraStyle, idxTextareaLine: sub.idxTextareaLine, dy: PX_LINE_HEIGHT * addLineHeight});
+							arrObjTextline.push({caption: textline, classes: sub.arrTag, style: strExtraStyle, idxTextareaLine: sub.idxTextareaLine, dy: PX_LINE_HEIGHT * addLineHeight});
 					});
 				});
 			}
@@ -2235,7 +2614,7 @@ const CChart = {
 				arrTextlines.forEach((textline, idx) => {
 					const addLineHeight = idx === 0 ? 0.5 : 1.1;
 
-					arrObjTextline.push({caption: textline, class: '', idxTextareaLine: undefined, dy: PX_LINE_HEIGHT * addLineHeight});
+					arrObjTextline.push({caption: textline, classes: [], idxTextareaLine: undefined, dy: PX_LINE_HEIGHT * addLineHeight});
 				});
 			}
 
@@ -2245,7 +2624,7 @@ const CChart = {
 			<rect class="tb-part__rect" x=${PX_PADDING_SMALL} y="0" width=${pxWidthRect} rx=${PX_PADDING_SMALL-1}/>
 			<text class="tb-part__text-viewa">
 				${arrObjTextline.map((objTextline, idx) => svg`
-					<tspan data-idxlinesub=${objTextline.idxTextareaLine} class="${objTextline.class + ' line line' + (idx+1)}" style="${objTextline.style}" x=${PX_PADDING_SMALL * 2} dy=${objTextline.dy}>${objTextline.caption}</tspan>
+					<tspan data-idxlinesub=${objTextline.idxTextareaLine} class=${[...objTextline.classes, 'line', 'line' + (idx+1)].join(' ')} style="${objTextline.style}" x=${PX_PADDING_SMALL * 2} dy=${objTextline.dy}>${objTextline.caption}</tspan>
 				`)}
 			</text>
 			<text class="tb-part__text-viewb top" x=${PX_PADDING_NORMAL} y=${PX_LINE_HEIGHT * 0.5}>${part.caption}</text> 
@@ -3178,12 +3557,13 @@ const CPopup = {
 			if (LOGGING) console.log('%c CPopup %c Template: %c Popup %c ()', LOG_MODULE, LOG_RED, LOG_FUNCTION+LOG_BOLD, LOG_ARGS);
 
 			const appstate = CModel.appstate;
+			const strClasses = ['popup', 'tab-' + appstate.idTab].join(' ');
 
 			return html`
 				<div class="popup-overlay" id="popup-overlay" @pointerdown=${e => {if (e.target === e.currentTarget) CPopup.onClick({src: '@pointerdown: overlay', e})}}>
-					<div class="popup" role="popup">
+					<div class=${strClasses} role="popup">
 						<div class="popup__panel">
-							<div class="popup__tablist" role="tablist">
+							<div class="panel__tablist" role="tablist">
 								<button class=${['tablist__btn', appstate.idTab === 'files' ? 'tablist__btn-selected' : ''].join(' ')} role="tab"
 									@click=${e => CPopup.onClick({src: '@click: btn.tab.select', e, idTab: 'files'})}
 									title=${`Select tab: Files\n(${CUtil.formatShortcutForOS('⌘') + ' ← / →'})`}
@@ -3293,7 +3673,7 @@ const CPopup = {
 						<div class="section__actions"></div>
 					</div>
 					<div class="section__body">
-						<div class="body__itemP">
+						<div class="body__item-plain">
 							<div class="pillbar">
 								<button class=${['pill', docstate.idxView === VIEWA ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.view.chart', idxView: VIEWA})} title="View chart as Structure\n(F1)">
 									<span class="kbd">F1</span>
@@ -3315,7 +3695,7 @@ const CPopup = {
 						<div class="section__actions"></div>
 					</div>
 					<div class="section__body">
-						<div class="body__itemP">
+						<div class="body__item-plain">
 							<div class="pillbar">
 								<button class=${['pill', appstate.pctGraphHeight === 25 ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.graph.height.set', pctGraphHeight: 25})} title=${`Adjust graph height in Structure view\n(${CUtil.formatShortcutForOS('⇧ ⌘ G')})`}>
 									<span class="kbd">${CUtil.formatShortcutForOS('⇧ ⌘ G')}</span>
@@ -3345,7 +3725,7 @@ const CPopup = {
 						<div class="section__actions"></div>
 					</div>
 					<div class="section__body">
-						<div class="body__itemP">
+						<div class="body__item-plain">
 							<div class="pillbar">
 								<button class=${['pill', appstate.idSidebarPosition === 'sidebar-position-left' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.sidebar.position.set', idSidebarPosition: 'sidebar-position-left'})} title=${`Select where the editor is positioned on screen\n(${CUtil.formatShortcutForOS('⇧ ⌘ E')})`}>
 									<span class="kbd">${CUtil.formatShortcutForOS('⇧ ⌘ E')}</span>
@@ -3374,7 +3754,7 @@ const CPopup = {
 						<div class="section__actions"></div>
 					</div>
 					<div class="section__body">
-						<div class="body__itemP">
+						<div class="body__item-plain">
 							<div class="pillbar">
 								<button class=${['pill', appstate.idTheme === 'system' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.theme.set', idTheme: 'system'})} title=${`Select color theme System: Colors follows system theme\n(${CUtil.formatShortcutForOS('⇧ ⌘ F1')})`}>
 									<span class="kbd">${CUtil.formatShortcutForOS('⇧ ⌘ F1')}</span>
@@ -4310,8 +4690,8 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 		if (LOGGING) console.group(...CUtil.logGroup('CModel', 'buildDocdataFromText', CUtil.getArgsKeys(args), args.caller));
 		if (LOGARGS) console.log(args);
 
-						// :		(→ ☐ countLeadingTabs)
-						const countLeadingTabs = (line) => {
+						// :		(→ ☐ getLeadingTabCount)
+						const getLeadingTabCount = (line) => {
 							let count = 0;
 							while (count < line.length && line[count] === '\t') count += 1;
 							return count;
@@ -4320,18 +4700,17 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 						// :		(→ ☐ stripBulletPrefix)
 						const stripBulletPrefix = (text) => text.replace(/^\s*-\s*/, '');
 
-						// :		(→ ☐ parseTagAndCaption)
-						const parseTagAndCaption = (text) => {
-							const trimmed = text.trim();
-							const match = trimmed.match(/^#([A-Za-z0-9_-]+)(.*)$/);
-							if (!match){
-								return { tag: null, caption: trimmed };
-							}
-							const [, tag, rest] = match;
-							return {
-								tag,
-								caption: rest.replace(/^\s+/, '')
-							};
+						const getCaptionFromLine = (text) => {
+							let line = String(text || '');
+
+							// 1. Remove comment part (// ...)
+							line = line.split('//')[0];
+
+							// 2. Remove ONE optional leading tag (after optional whitespace)
+							line = line.replace(/^\s*#[a-zA-Z_][a-zA-Z0-9_-]*\s*/, '');
+
+							// 3. Normalize whitespace
+							return line.trim().replace(/\s+/g, ' ');
 						};
 
 		const caller = 'CModel.buildDocdataFromText';
@@ -4384,30 +4763,36 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 			if (!lineRaw.trim()) continue;
 
 
-			const depth = countLeadingTabs(lineRaw);
-			const contentAfterTabs = lineRaw.slice(depth);
-			const stripped = stripBulletPrefix(contentAfterTabs);
+			const countLeadingTabs = getLeadingTabCount(lineRaw);
+			const lineAfterTabs = lineRaw.slice(countLeadingTabs);
+			const lineStripped = stripBulletPrefix(lineAfterTabs);
 
-			const {tag, caption} = parseTagAndCaption(stripped);
-			const tagNormalized = tag ? tag.toLowerCase() : NOTAG;
-			const trimmedContent = stripped.trim();
-			const captionValue = caption.trim().split('//')[0].trim();  	// strip metadata block after //
+			//: 		→ this: getTagsFromLine
+			//: 		→ this: getMetadataFromline
+			const arrTag   = this.getTagsFromLine({lineStripped, caller});
+			const metadata = this.getMetadataFromline({lineStripped, caller});
 
-			if (!objGraphs[tagNormalized])
-				objGraphs[tagNormalized] = {graphtags: {}, hasParts: false};
+			const caption = getCaptionFromLine(lineStripped);
+			const tag = arrTag[0] ?? NOTAG;
 
 
-			if (depth === 0) {			// 'section'
+			if (!objGraphs[tag])
+				objGraphs[tag] = {graphtags: {}, hasParts: false};
+
+
+			if (countLeadingTabs === 0) {			// 'section'
+
+				const idxSection = arrSection.length;
 
 				sectionCurrent = {
-					tag: tagNormalized,
-					caption: captionValue,
+					tag,
+					caption,
 					idxTextareaLine,
 					arrIdxChapter: [],
+					arrTag,
+					metadata,
+					idx: idxSection,
 				};
-
-				//: 		→ this: getPartMetadataFromTextline
-				sectionCurrent.metadata = this.getPartMetadataFromTextline({trimmedContent, caller});
 
 				arrSection.push(sectionCurrent);
 
@@ -4415,71 +4800,69 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 				partCurrent = null;			// jk: make sure this is correct
 			}
 
-			else if (depth === 1) {		// 'chapter'
+			else if (countLeadingTabs === 1) {		// 'chapter'
 				if (!sectionCurrent) continue;
 
+				const idxChapter = arrChapter.length;
+
 				chapterCurrent = {
-					tag: tagNormalized,
-					caption: captionValue,
+					tag,
+					caption,
 					idxTextareaLine,
 					countParts: 0,
+					arrTag,
+					metadata,
+					idx: idxChapter,
 				};
-
-				//: 		→ this: getPartMetadataFromTextline
-				chapterCurrent.metadata = this.getPartMetadataFromTextline({trimmedContent, caller});
 
 				arrChapter.push(chapterCurrent);
 
-				sectionCurrent.arrIdxChapter.push(arrChapter.indexOf(chapterCurrent));
+				sectionCurrent.arrIdxChapter.push(idxChapter);
 
 				partCurrent = null;			// jk: make sure this is correct
 			}
 
-			else if (depth === 2) {		// 'part'
+			else if (countLeadingTabs === 2) {		// 'part'
 				if (!sectionCurrent || !chapterCurrent) continue;
 
-				objGraphs[tagNormalized].hasParts = true;
+				objGraphs[tag].hasParts = true;
 
 				partCurrent = {
-					tag: tagNormalized,
-					caption: captionValue,
+					tag,
+					caption,
 					idxTextareaLine,
-					idxSection: arrSection.indexOf(sectionCurrent),
-					idxChapter: arrChapter.indexOf(chapterCurrent),
+					idxSection: sectionCurrent.idx,
+					idxChapter: chapterCurrent.idx,
 					idxOrderInChapter: chapterCurrent.countParts,
 					arrSub: [],
+					arrTag,
+					metadata,
 				};
-
-				//: 		→ this: getPartMetadataFromTextline
-				partCurrent.metadata = this.getPartMetadataFromTextline({trimmedContent, caller});
 				
 				arrPart.push(partCurrent);
 				chapterCurrent.countParts++;
 			}
 
-			else if (depth === 3) {
+			else if (countLeadingTabs === 3) {		// 'sub'
 
 				if (partCurrent !== null) {
 
 					const sub = {
-						tag: tagNormalized,
-						caption: captionValue,
+						tag,
+						caption,
 						idxTextareaLine,
+						arrTag,
+						metadata,
 					};
-
-					//: 		→ this: getPartMetadataFromTextline
-					sub.metadata = this.getPartMetadataFromTextline({trimmedContent, caller});
 
 					partCurrent.arrSub.push(sub);
 				}
 			}
 
-			// add graphdata. will be added no matter the depth of the line
+			// add graphdata. will be added no matter the countLeadingTabs of the line
 			if (sectionCurrent || chapterCurrent) {
 
-				//: 		→ this: getPartMetadataFromTextline
 				const idxChapter = !chapterCurrent ? arrChapter.length : arrChapter.indexOf(chapterCurrent);	// if line is new section (no chapter yet), point to first chapter in section (even though it is not created yet)
-				const metadata = this.getPartMetadataFromTextline({trimmedContent, caller: 'CModel.buildDocdataFromText'});
 				const numericEntries = Object.entries(metadata).filter(([key, value]) => typeof value === 'number');
 
 				numericEntries.forEach(([key, value]) => {
@@ -4490,10 +4873,10 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 						idxTextareaLine,
 					};
 
-					if (!objGraphs[tagNormalized].graphtags[key])
-						objGraphs[tagNormalized].graphtags[key] = [];
+					if (!objGraphs[tag].graphtags[key])
+						objGraphs[tag].graphtags[key] = [];
 
-					objGraphs[tagNormalized].graphtags[key].push(graphinfo);
+					objGraphs[tag].graphtags[key].push(graphinfo);
 				});
 			}
 		};
@@ -4549,11 +4932,34 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 		if (LOGGING) console.groupEnd();
 	},
 
+
+	//:::	🔹	getTagsFromLine
+	getTagsFromLine(args) {
+		//if (LOGGING) console.log(...CUtil.logGroup('CModel', 'getTagsFromLine', CUtil.getArgsKeys(args), args.caller));
+		const line = String(args.lineStripped || '');
+
+		// Remove metadata tokens first, so values like:
+		// @fill #ff00aa
+		// @plot 20
+		// @code🥇
+		// do not contribute accidental tags
+		const lineWithoutMetadata = line.replace(
+			/(?:^|\s)@([A-Za-z0-9_-]+)(?:(?:\s*:\s*|\s+)(\S+)|(\S+))/g,
+			' '
+		);
+
+		const matches = lineWithoutMetadata.matchAll(
+			/(?:^|\s)#([a-zA-Z_][a-zA-Z0-9_-]*)(?=$|[\s.,;:!?])/g
+		);
+
+		return [...new Set(Array.from(matches, m => m[1].toLowerCase()))];
+	},
+
 	// Parses inline metadata like:
 	// "@weight 65.5kg", "@bmi: 21,", "@fill #ff0", "@code🥇", "@code:🥇"
-	//:::	🔹	getPartMetadataFromTextline
-	getPartMetadataFromTextline(args) {
-		//if (LOGGING) console.log(...CUtil.logGroup('CModel', 'getPartMetadataFromTextline', CUtil.getArgsKeys(args), args.caller));
+	//:::	🔹	getMetadataFromline
+	getMetadataFromline(args) {
+		//if (LOGGING) console.log(...CUtil.logGroup('CModel', 'getMetadataFromline', CUtil.getArgsKeys(args), args.caller));
 
 		const metadata = {};
 
@@ -4572,7 +4978,7 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 		const re = /@([A-Za-z0-9_-]+)(?:(?:\s*:\s*|\s+)(\S+)|(\S+))/g;
 
 		let m;
-		while ((m = re.exec(args.trimmedContent)) !== null) {
+		while ((m = re.exec(args.lineStripped)) !== null) {
 			const key = m[1];
 			const rawToken = (m[2] ?? m[3] ?? '').trim();
 			if (!key || !rawToken) continue;
@@ -4627,8 +5033,8 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 		//if (LOGARGS) console.log(args);	
 
 		const metadataDefault = {
-			fill: '#fff',
-			fillrgb: '255, 255, 255',
+			fill: '#888888',			//? '#ffffff',
+			fillrgb: '128, 128, 128',	//? '255, 255, 255',
 			stroke: 'CanvasText',
 			show: 'normal',
 		};
@@ -4636,11 +5042,11 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 		const txtStyle = args.txtCss || '';
 		const tag = typeof args.tag === 'string' ? args.tag.trim() : '';
 
-		// Always return a fresh object
-		const obj = {...metadataDefault};
+		// Always return a fresh metadata object
+		const metadata = {...metadataDefault};
 
 		if (!tag) {
-			return obj;
+			return metadata;
 		}
 
 		// Escape tag name for regex use
@@ -4688,20 +5094,18 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 						value = Number(rawVal);
 					}
 
-					obj[camelKey] = value;
-
-					if (camelKey === 'fill')
-						obj.stroke = obj.fill;
+					metadata[camelKey] = value;
 				});
 			}
 		}
 
-		const infoColor = CUtil.getColorInfo(obj.fill);
-		obj.fillrgb = infoColor ? infoColor.rgb : metadataDefault.fillrgb;
+		const infoColor = CUtil.getColorInfo(metadata.fill);
 
-		
-		console.log('# # # obj', tag, obj);
-		return obj;
+		metadata.fill = infoColor ? infoColor.hex : metadataDefault.fill;
+		metadata.fillrgb = infoColor ? infoColor.rgb : metadataDefault.fillrgb;
+		metadata.stroke = infoColor ? infoColor.hex : metadataDefault.stroke;
+
+		return metadata;
 	},
 
 
@@ -4869,7 +5273,7 @@ const App = {
 	//:::	🔹 dispatch ()
 	async dispatch(args) {
 		if (LOGGING) console.group(...CUtil.logGroup('App -> dispatch: ', `'${args.type}'`, CUtil.getArgsKeys(args), args.caller));
-		if (!LOGARGS) console.log(args);
+		if (LOGARGS) console.log(args);
 
 		const caller = args.type;
 

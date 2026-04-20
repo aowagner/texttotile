@@ -6,22 +6,12 @@ use std::{
 
 use notify::Result as NotifyResult;
 use notify::{Event, RecommendedWatcher, RecursiveMode, Watcher};
-
-
-
-//?use tauri::menu::{MenuBuilder, MenuItem, PredefinedMenuItem, SubmenuBuilder};
-
 use tauri::{AppHandle, Emitter, Runtime, State, Manager};
-
 use tauri::menu::{MenuId, MenuItemKind, CheckMenuItem};
-
-//use tauri_plugin_dialog::DialogExt;
-
 use tauri_plugin_prevent_default::{Builder as PreventDefaultBuilder, Flags};
 
 #[cfg(target_os = "windows")]
 use tauri_plugin_prevent_default::PlatformOptions;
-
 
 
 fn find_menu_item_recursive<R: Runtime>(
@@ -42,9 +32,6 @@ for item in items {
 }
 Ok(None)
 }
-
-
-
 
 
 
@@ -199,10 +186,6 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 			.item(&open)
 			.item(&saveas)
 			.item(&pincurrent)
-					//--.separator()		// nb: on build: remove (only for testing Windows style)
-					//--.item(&settings_b)	// nb: on build: remove (only for testing Windows style)
-					//--.separator()		// nb: on build: remove (only for testing Windows style)
-					//--.item(&exit)		// nb: on build: remove (only for testing Windows style)
 			.build()?
 	}
 	else {
@@ -224,7 +207,6 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 // ---- Edit submenu ----
 
 	// PredefinedMenuItem gives native behavior + symbols (esp. on macOS)
-	//-let delete = MenuItem::with_id(app, "edit.delete", "Delete", true, None::<&str>)?;
 	let item_cut = MenuItem::with_id(app, "edit.cut", "Cut", true, Some("CmdOrCtrl+X"))?;
 	let item_copy = MenuItem::with_id(app, "edit.copy", "Copy", true, Some("CmdOrCtrl+C"))?;
 	let item_paste = MenuItem::with_id(app, "edit.paste", "Paste", true, Some("CmdOrCtrl+V"))?;
@@ -233,21 +215,14 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 	let item_selectall = MenuItem::with_id(app, "edit.selectall", "Select all", true, Some("CmdOrCtrl+A"))?;
 	
 	let edit_submenu = SubmenuBuilder::new(app, "Edit")
-		//-.item(&PredefinedMenuItem::undo(app, None)?)
-		//-.item(&PredefinedMenuItem::redo(app, None)?)
 		.separator()
-		//-.item(&PredefinedMenuItem::cut(app, None)?)
 		.item(&item_cut)
-		//-.item(&PredefinedMenuItem::copy(app, None)?)
 		.item(&item_copy)
-		//-.item(&PredefinedMenuItem::paste(app, None)?)
 		.item(&item_paste)
-		//-.item(&delete)
 		.separator()
 		.item(&item_deleteline)
 		.item(&item_duplicateline)
 		.separator()
-		//-.item(&PredefinedMenuItem::select_all(app, None)?)
 		.item(&item_selectall)
 		.build()?;
 
