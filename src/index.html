@@ -9,6 +9,9 @@
 	:root {
 		color-scheme: light dark;
 
+		--fill:			Canvas;
+		--text:			CanvasText;
+
 		--fill-header:	#888;
 		--fill-grey:	#888;
 		--fill-bg:		var(--fill);
@@ -35,20 +38,14 @@
 	:root.theme-light {
 		color-scheme: light;
 
-		--fill:			Canvas;
-		--text:			CanvasText;
-
 		--saturation-header: 10;
-		--saturation-tags: 20;
+		--saturation-tags: 25;
 	}
 
 	:root.theme-dark {
 		color-scheme: dark;
 
-		--fill:			#333;			/* not Canvas here like in theme-light */
-		--text:			CanvasText;
-
-		--saturation-header: 20;
+		--saturation-header: 30;
 		--saturation-tags: 60;
 	}
 
@@ -108,7 +105,7 @@
 
 /* toolbar */
 						.toolbar 		{position: absolute; overflow: auto hidden; background: var(--fill); border: 1px solid var(--fill-grey); border-radius: 5px; }
-						.toolbarTags 	{--bold-button: var(--bold); /* --bold-button is a 'hack' to use toolbarTags's (aka :root) --bold, so buttons don't use individual tag's --bold */ height: calc(var(--px-line-height) + 12px); margin-left: 10px; max-width: calc(100% - 34px); padding: 7px; margin-top: calc((var(--px-line-height) + 43px) * -1); }
+						.toolbarTags 	{--bold-button: var(--bold); /* --bold-button is a 'hack' to use toolbarTags's (aka :root) --bold, so buttons don't use individual tag's --bold */ height: calc(var(--px-line-height) + 18px); margin-left: 10px; max-width: calc(100% - 34px); padding: 7px; margin-top: calc((var(--px-line-height) + 48px) * -1); }
 	.toolbar-visible-no	.toolbarTags	{display: none; }
 
 		.toolbar__button 	{position: absolute; transform: translateX(var(--pxX)); border: 1px solid var(--fill-grey); border-radius: 5px; font-family: var(--fontfamily); font-size: var(--px-font-size); line-height: var(--px-line-height); color: var(--text); white-space: nowrap; cursor: pointer; transition: opacity 120ms ease; }
@@ -148,13 +145,13 @@
 
 	.header__rect--section			{height: 100%; fill: var(--fill); }
 	.header__rect--section-odd		{opacity: calc(var(--saturation) / 100); }
-	.header__rect--section-even		{opacity: calc(var(--saturation) / 125); }	/* nb: will only produce opacity between 0 and 0.8. This is to 'interchange' the background between odd and even sections */
+	.header__rect--section-even		{opacity: calc(var(--saturation) / 150); }	/* nb: will only produce opacity between 0 and 0.8. This is to 'interchange' the background between odd and even sections */
 	.header__text--section			{fill: var(--text); font-size: calc(var(--px-font-size) * 1.25); font-weight: var(--bold); pointer-events: none; dominant-baseline: middle; }
 
 	.header__rect--chapter			{height: calc(100% - ((var(--px-line-height) * 2))); fill: var(--fill); opacity: calc(var(--saturation) / 100); stroke: Canvas; stroke-width: 1; }
 	.header__text--chapter			{fill: var(--text); font-size: calc(var(--px-font-size) * 1.00); font-weight: var(--bold); pointer-events: none; dominant-baseline: middle; }
 
-						.graphs-bg-rect {transform: translateY(var(--px-header-height)); fill: CanvasText; opacity: 0.04; pointer-events: none; }
+						.graphs-bg-rect {transform: translateY(var(--px-header-height)); fill: CanvasText; opacity: 0.1; pointer-events: none; }
 		.chart-viewb	.graphs-bg-rect {display: none; }
 
 	/* tagblock */
@@ -369,6 +366,7 @@ button.unpin__btn {
 	align-items: center;
 	gap: 8px;
 	padding: 8px 60px;
+	margin: 0px;
 	background: transparent;
 	border: 0;
 	border-radius: 10px 10px 0 0;
@@ -830,8 +828,6 @@ const SOURCE = Object.freeze({
 
 
 const APPNAME = 'TextToTile';
-const STANDALONE = false;
-const TEXT_STANDALONE = ``;
 
 const LOGGING = false, DETAILS = false;
 const LOGARGS = false;
@@ -1060,10 +1056,14 @@ const CWrapper = {
 	msTimestampWriteFileContent: 0,
 	msTimestampLastMenuEvent: 0,
 	payloadLast: '',
+	version_app: '0.0.0',
 
 	//:::	🔹 init
-	init(args) {
+	async init(args) {
 		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'init', CUtil.getArgsKeys(args), args.caller));
+
+		this.version_app = await window.__TAURI__.app.getVersion();
+
 
 		// listen for menu events from Rust
 		window.__TAURI__.event.listen('menu', (e) => {
@@ -1081,7 +1081,12 @@ const CWrapper = {
 
 			this.onFileChangedEvent({payload: e.payload, caller: 'window.__TAURI__.event.listen(file-changed)'});
 			if (LOGGING) console.groupEnd();
-		});		
+		});
+
+		// prevent 'context' menu - when right clicking the webview (where 'Reload' and 'Inspect Element' are placed)
+		document.addEventListener('contextmenu', (event) => {
+			event.preventDefault();
+		});
 
 		if (LOGGING) console.groupEnd();
 	},
@@ -1111,6 +1116,9 @@ const CWrapper = {
 			if (LOGGING) console.log('Call probably NOT duplicate. msSinceLastCall, payload:', msSinceLastCall, args.payload);
 
 		// menu: App (Mac only)
+		//::		🔻 app.about
+		//:			→ this: showMessageDialogAbout
+		if (args.payload === 'app.about') 			res = await CWrapper.showMessageDialogAbout({caller});
 		//::		🔻 app.settings
 		//:			→ App: dispatch:				popup.settings.open		🟣 (change from 'if' to 'switch')
 		if (args.payload === 'app.settings') 		res = await App.dispatch({type: 'popup.settings.open', caller});
@@ -1374,8 +1382,14 @@ const CWrapper = {
 		const {message, title, kind, okLabel} = args;
 
 		//: 		→ window.__TAURI__.dialog:			message
-		await window.__TAURI__.dialog.message(message, {title, kind, okLabel});
+		const res = await window.__TAURI__.dialog.message(message, {title, kind, okLabel});
+
+		const resPrompt = {
+			status: STATUS.OK,
+		};
+
 		if (LOGGING) console.groupEnd();
+		return resPrompt;
 	},
 
 	//:::	🔹 showPromptDialog
@@ -1401,15 +1415,38 @@ const CWrapper = {
 		return resPrompt;
 	},
 
+	
+
+	//:::	🔹 showMessageDialogAbout
+	async showMessageDialogAbout(args) {
+		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'showMessageDialogAbout', CUtil.getArgsKeys(args), args.caller));
+		if (LOGARGS) console.log(args);
+
+		const message = `
+TextToTile
+
+Version ${CWrapper.version_app}
+
+Turn structured text into visual tiles and story maps.
+
+© 2026 A. O. Wagner
+		`;
+
+		const resPrompt = await CWrapper.showMessageDialog({
+			title: 'TextToTile',
+			message,
+			kind: 'info',
+			okLabel: 'OK',
+		});
+
+		if (LOGGING) console.groupEnd();
+		return resPrompt;
+	},
+
 	//:::	🔹 loadFileText
 	async loadFileText(args) {
 		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'loadFileText', '(pathFileToLoad: ' + args.pathFileToLoad + ')', args.caller));
 		if (LOGARGS) console.log(args);
-
-		/*+if (STANDALONE) {
-			if (LOGGING) console.groupEnd();
-			return {text: TEXT_STANDALONE, err: null};
-		}*/
 		
 		// retry a couple of times to survive 'atomic save' moments where the file is briefly unavailable (common in editors)
 		let lastErr = null;
@@ -1878,7 +1915,7 @@ const CFramework = {
 		}
 
 		let logentry = {
-			version: '0.1.0',	// jk: constant in CModel (appstate?)
+			version: CWrapper.version_app,
 			status: args.status,
 			code: args.code,
 			stack: args.stack ?? null,

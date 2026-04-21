@@ -153,14 +153,14 @@ fn stop_watch_file(state: State<WatcherState>) -> Result<(), String> {
 
 
 fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::Menu<R>> {
-	use tauri::menu::{MenuBuilder, MenuItem, PredefinedMenuItem, SubmenuBuilder};
+	use tauri::menu::{MenuBuilder, MenuItem, SubmenuBuilder};
 	
 // ---- App submenu (will only be on macOS: treats first submenu as the "App" menu) ----
-	let about = MenuItem::with_id(app, "app.about", "About OutlineBoard", true, None::<&str>)?;
+	let about = MenuItem::with_id(app, "app.about", "About TextToTile", true, None::<&str>)?;
 	let settings = MenuItem::with_id(app, "app.settings", "Settings…", true, Some("CmdOrCtrl+,"))?;
-	let quit = MenuItem::with_id(app, "app.quit", "Quit OutlineBoard", true, Some("CmdOrCtrl+Q"))?;
+	let quit = MenuItem::with_id(app, "app.quit", "Quit TextToTile", true, Some("CmdOrCtrl+Q"))?;
 	
-	let app_submenu = SubmenuBuilder::new(app, "OutlineBoard")
+	let app_submenu = SubmenuBuilder::new(app, "TextToTile")
 		.item(&about)
 		.separator()
 		.item(&settings)
@@ -206,7 +206,6 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 
 // ---- Edit submenu ----
 
-	// PredefinedMenuItem gives native behavior + symbols (esp. on macOS)
 	let item_cut = MenuItem::with_id(app, "edit.cut", "Cut", true, Some("CmdOrCtrl+X"))?;
 	let item_copy = MenuItem::with_id(app, "edit.copy", "Copy", true, Some("CmdOrCtrl+C"))?;
 	let item_paste = MenuItem::with_id(app, "edit.paste", "Paste", true, Some("CmdOrCtrl+V"))?;
@@ -339,11 +338,29 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 // ---- Help submenu ----
 	let docs = MenuItem::with_id(app, "help.docs", "Documentation…", true, None::<&str>)?;
 	let website = MenuItem::with_id(app, "help.website", "Website…", true, None::<&str>)?;
+	let about_b = MenuItem::with_id(app, "app.about", "About TextToTile", true, None::<&str>)?;
 
-	let help_submenu = SubmenuBuilder::new(app, "Help")
+	/*-let help_submenu = SubmenuBuilder::new(app, "Help")
 		.item(&docs)
 		.item(&website)
-		.build()?;
+		.build()?;-*/
+
+	let help_submenu = if cfg!(target_os = "macos") {
+		// macOS
+		SubmenuBuilder::new(app, "Help")
+			.item(&docs)
+			.item(&website)
+			.build()?
+	}
+	else {
+		// Windows/Linux
+		SubmenuBuilder::new(app, "Help")
+			.item(&docs)
+			.item(&website)
+			.separator()
+			.item(&about_b)
+			.build()?
+	};
 
 
 
@@ -432,12 +449,13 @@ pub fn run() {
 			app.set_menu(menu)?;
 		}
 		
-		// (optional) DevTools during debugging
-		win.open_devtools();
+		//  (optional) DevTools during debugging
+		// win.open_devtools();
 		
 		// Menu events -> frontend
 		let handle = app.handle().clone();
-		app.on_menu_event(move |app_handle, event| {
+
+		app.on_menu_event(move |_app_handle, event| {
 			let id = event.id().as_ref();
 			let _ = handle.emit("menu", id.to_string());
 		});
