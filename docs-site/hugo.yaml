@@ -1,6 +1,8 @@
 baseURL: "https://aowagner.github.io/texttotile/"
 languageCode: "en-us"
 title: "TextToTile"
+canonifyURLs: true
+relativeURLs: false
 
 theme: hextra
 
