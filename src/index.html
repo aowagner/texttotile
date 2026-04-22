@@ -1085,7 +1085,7 @@ const CWrapper = {
 
 		// prevent 'context' menu - when right clicking the webview (where 'Reload' and 'Inspect Element' are placed)
 		document.addEventListener('contextmenu', (event) => {
-			event.preventDefault();
+			//+event.preventDefault();
 		});
 
 		if (LOGGING) console.groupEnd();
@@ -3084,7 +3084,6 @@ const CChart = {
 	
 };
 
-
 //:::
 //:::📙 const CTexteditor
 const CTexteditor = {
@@ -3108,6 +3107,7 @@ const CTexteditor = {
 		elTextarea.setAttribute('autocorrect', 'off');
 		elTextarea.setAttribute('autocapitalize', 'off');
 		elTextarea.setAttribute('wrap', 'off');
+		elTextarea.setAttribute('placeholder', 'off sdfh dsfh sdfh sdfhdsfh\n\tLine 2');
 
 		this.onInputDebounced = this.debounce(() => this.onInput(), 400);		// jk: define const for ms?
 
@@ -5964,13 +5964,13 @@ const App = {
 	App.init();
 
 	// jk: for debug in DevTools: remove!
-	window.App = App
+	/*- window.App = App
 	window.CWrapper = CWrapper
 	window.CFramework = CFramework
 	window.CChart = CChart
 	window.CTexteditor = CTexteditor
 	window.CToolbar = CToolbar
-	window.CPopup = CPopup
+	window.CPopup = CPopup -*/
 	window.CModel = CModel
 })();
 
