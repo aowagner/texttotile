@@ -1,6 +1,6 @@
-baseURL: "http://localhost:1313/"
+baseURL: "https://aowagner.github.io/texttotile/"
 languageCode: "en-us"
-title: "Owl"
+title: "TextToTile"
 
 theme: hextra
 
@@ -29,13 +29,13 @@ menu:
       weight: 10
 
     - name: "Download"
-      url: "https://github.com/aowagner/<your-repo>/releases/latest"
+      url: "https://github.com/aowagner/texttotile/releases/latest"
       weight: 20
 
     - name: "Discussions"
-      url: "https://github.com/aowagner/<your-repo>/discussions"
+      url: "https://github.com/aowagner/texttotile/discussions"
       weight: 30
 
     - name: "GitHub"
-      url: "https://github.com/aowagner/<your-repo>"
+      url: "https://github.com/aowagner/texttotile"
       weight: 40
