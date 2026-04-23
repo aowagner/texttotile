@@ -1,17 +1,133 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>TextToTile – Docs</title><link>https://aowagner.github.io/texttotile/docs/</link><description>Recent content in Docs on TextToTile</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 28 Feb 2026 11:09:50 +0100</lastBuildDate><atom:link href="https://aowagner.github.io/texttotile/docs/index.xml" rel="self" type="application/rss+xml"/><item><title>Appearance</title><link>https://aowagner.github.io/texttotile/docs/settings/appearance/</link><pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate><guid>https://aowagner.github.io/texttotile/docs/settings/appearance/</guid><description/></item><item><title>Behavior</title><link>https://aowagner.github.io/texttotile/docs/settings/behavior/</link><pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate><guid>https://aowagner.github.io/texttotile/docs/settings/behavior/</guid><description/></item><item><title>Concepts</title><link>https://aowagner.github.io/texttotile/docs/concepts/</link><pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate><guid>https://aowagner.github.io/texttotile/docs/concepts/</guid><description>
-&lt;h1&gt;Headline here&lt;/h1&gt;&lt;p&gt;A lot of text here&lt;/p&gt;
-&lt;h2&gt;Sub headline here&lt;span class="hx:absolute hx:-mt-20" id="sub-headline-here"&gt;&lt;/span&gt;
-&lt;a href="#sub-headline-here" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;More text to com here&amp;hellip;.&lt;/p&gt;</description></item><item><title>Faq</title><link>https://aowagner.github.io/texttotile/docs/faq/</link><pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate><guid>https://aowagner.github.io/texttotile/docs/faq/</guid><description/></item><item><title>Getting Started</title><link>https://aowagner.github.io/texttotile/docs/getting-started/</link><pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate><guid>https://aowagner.github.io/texttotile/docs/getting-started/</guid><description/></item><item><title>Opening and Saving</title><link>https://aowagner.github.io/texttotile/docs/files/opening-and-saving/</link><pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate><guid>https://aowagner.github.io/texttotile/docs/files/opening-and-saving/</guid><description>
-&lt;h1&gt;sfg asdg as&lt;/h1&gt;&lt;h2&gt;sfh sfdh sdh dsfhds gh s&lt;span class="hx:absolute hx:-mt-20" id="sfh-sfdh-sdh-dsfhds-gh-s"&gt;&lt;/span&gt;
-&lt;a href="#sfh-sfdh-sdh-dsfhds-gh-s" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;sdfh sdfh sdfh sdfh sdfh dsfh dsfh dsfh sdfh&lt;/p&gt;
-&lt;h1&gt;sdfh dsf&lt;/h1&gt;&lt;h2&gt;sdfh dsfh dsfh dsf&lt;span class="hx:absolute hx:-mt-20" id="sdfh-dsfh-dsfh-dsf"&gt;&lt;/span&gt;
-&lt;a href="#sdfh-dsfh-dsfh-dsf" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;dg dsfh sdfh dsfh dsfh dshf 123&lt;/p&gt;</description></item><item><title>Pinning and Tabs</title><link>https://aowagner.github.io/texttotile/docs/files/pinning-and-tabs/</link><pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate><guid>https://aowagner.github.io/texttotile/docs/files/pinning-and-tabs/</guid><description>
-&lt;ul&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>TextToTile – Docs</title>
+    <link>http://localhost:1313/docs/</link>
+    <description>Recent content in Docs on TextToTile</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 28 Feb 2026 11:09:50 +0100</lastBuildDate>
+    
+	  <atom:link href="http://localhost:1313/docs/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+      
+        
+      
+    
+    
+    <item>
+      <title>Appearance</title>
+      <link>http://localhost:1313/docs/settings/appearance/</link>
+      <pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate>
+      
+      <guid>http://localhost:1313/docs/settings/appearance/</guid>
+      <description>
+        
+        
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Behavior</title>
+      <link>http://localhost:1313/docs/settings/behavior/</link>
+      <pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate>
+      
+      <guid>http://localhost:1313/docs/settings/behavior/</guid>
+      <description>
+        
+        
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Concepts</title>
+      <link>http://localhost:1313/docs/concepts/</link>
+      <pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate>
+      
+      <guid>http://localhost:1313/docs/concepts/</guid>
+      <description>
+        
+        
+        &lt;h1&gt;Headline here&lt;/h1&gt;&lt;p&gt;A lot of text here&lt;/p&gt;
+&lt;h2&gt;Sub headline here&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;sub-headline-here&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#sub-headline-here&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;More text to com here&amp;hellip;.&lt;/p&gt;
+
+      </description>
+    </item>
+    
+    <item>
+      <title>Faq</title>
+      <link>http://localhost:1313/docs/faq/</link>
+      <pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate>
+      
+      <guid>http://localhost:1313/docs/faq/</guid>
+      <description>
+        
+        
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Getting Started</title>
+      <link>http://localhost:1313/docs/getting-started/</link>
+      <pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate>
+      
+      <guid>http://localhost:1313/docs/getting-started/</guid>
+      <description>
+        
+        
+        &lt;h2&gt;Download TextToTile&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;download-texttotile&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#download-texttotile&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Download the latest version of TextToTile for your platform.&lt;/p&gt;
+&lt;h3&gt;macOS&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;macos&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#macos&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Version 0.1.0
+Works on all Macs (Apple Silicon &amp;amp; Intel)&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/aowagner/texttotile/releases/download/v0.1.0/TextToTile-0.1.0-macos-universal.dmg&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Download TextToTile for macOS&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Windows&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;windows&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#windows&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Coming soon.&lt;/p&gt;
+&lt;h3&gt;Linux&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;linux&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#linux&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Coming soon.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/aowagner/texttotile/releases&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;All releases&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Notes&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;notes&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#notes&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;On first launch, macOS may require you to allow the app in System Settings.&lt;/p&gt;
+
+      </description>
+    </item>
+    
+    <item>
+      <title>Opening and Saving</title>
+      <link>http://localhost:1313/docs/files/opening-and-saving/</link>
+      <pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate>
+      
+      <guid>http://localhost:1313/docs/files/opening-and-saving/</guid>
+      <description>
+        
+        
+        &lt;h1&gt;sfg asdg as&lt;/h1&gt;&lt;h2&gt;sfh sfdh sdh dsfhds gh s&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;sfh-sfdh-sdh-dsfhds-gh-s&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#sfh-sfdh-sdh-dsfhds-gh-s&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;sdfh sdfh sdfh sdfh sdfh dsfh dsfh dsfh sdfh&lt;/p&gt;
+&lt;h1&gt;sdfh dsf&lt;/h1&gt;&lt;h2&gt;sdfh dsfh dsfh dsf&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;sdfh-dsfh-dsfh-dsf&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#sdfh-dsfh-dsfh-dsf&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;dg dsfh sdfh dsfh dsfh dshf 123&lt;/p&gt;
+
+      </description>
+    </item>
+    
+    <item>
+      <title>Pinning and Tabs</title>
+      <link>http://localhost:1313/docs/files/pinning-and-tabs/</link>
+      <pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate>
+      
+      <guid>http://localhost:1313/docs/files/pinning-and-tabs/</guid>
+      <description>
+        
+        
+        &lt;ul&gt;
 &lt;li&gt;Week 7qqq
 &lt;ul&gt;
 &lt;li&gt;🥰🎾Monday
 &lt;ul&gt;
-&lt;li&gt;#gitte fghijk lmo pq rs t uv wxyz 12 34 5 // @weight 85.2 @bold 800 fontsize 0.5 show weight @code 😃&lt;/li&gt;
+&lt;li&gt;#gitte fghijk lmo pq rs t uv wxyz 12 34 5 // @weight 85.2 @bold 800 fontsize 0.5 show weight  @code 😃&lt;/li&gt;
 &lt;li&gt;#familie jagoq joining ball where he can dance all night long with his friends, who are not afraid of turning up from time to time. NEWLINE: Here are some new ideas for a thing that could make it happen in a smooth way. The first is to do what is needing fixing in the moment // @bmi: 21 @fill #0ff fontsize 1.5&lt;/li&gt;
 &lt;li&gt;#susan God dag! @weight 74; @bmi 16 @show bmi&lt;/li&gt;
 &lt;/ul&gt;
@@ -45,7 +161,7 @@
 &lt;p&gt;#empty&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;#susan Dette er en rigtig god dag at blive vejet på // @weight 65.5 kg // A personal best. @fill #ff0 bold 200; @text #2b2 @bmi 21, @code🥇&lt;/p&gt;
+&lt;p&gt;#susan Dette er en rigtig god dag at blive vejet på // @weight 65.5 kg // A personal best.  @fill #ff0 bold 200; @text #2b2 @bmi 21, @code🥇&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Stort fremskridt - virkelig godt gået!&lt;/li&gt;
 &lt;/ul&gt;
@@ -54,177 +170,256 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;</description></item><item><title>Shortcuts</title><link>https://aowagner.github.io/texttotile/docs/shortcuts/</link><pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate><guid>https://aowagner.github.io/texttotile/docs/shortcuts/</guid><description/></item><item><title>Sidebar Editor</title><link>https://aowagner.github.io/texttotile/docs/editor/sidebar-editor/</link><pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate><guid>https://aowagner.github.io/texttotile/docs/editor/sidebar-editor/</guid><description/></item><item><title>Structure</title><link>https://aowagner.github.io/texttotile/docs/views/structure/</link><pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate><guid>https://aowagner.github.io/texttotile/docs/views/structure/</guid><description/></item><item><title>Tags</title><link>https://aowagner.github.io/texttotile/docs/views/tags/</link><pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate><guid>https://aowagner.github.io/texttotile/docs/views/tags/</guid><description/></item><item><title>Zoom and Layout</title><link>https://aowagner.github.io/texttotile/docs/editor/zoom-and-layout/</link><pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate><guid>https://aowagner.github.io/texttotile/docs/editor/zoom-and-layout/</guid><description>
-&lt;p&gt;Hugo supports &lt;a href="https://en.wikipedia.org/wiki/Markdown"target="_blank" rel="noopener"&gt;Markdown&lt;/a&gt; syntax for formatting text, creating lists, and more. This page will show you some of the most common Markdown syntax examples.&lt;/p&gt;
-&lt;h2&gt;Markdown Examples&lt;span class="hx:absolute hx:-mt-20" id="markdown-examples"&gt;&lt;/span&gt;
-&lt;a href="#markdown-examples" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h3&gt;Styling Text&lt;span class="hx:absolute hx:-mt-20" id="styling-text"&gt;&lt;/span&gt;
-&lt;a href="#styling-text" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th style="text-align: left"&gt;Style&lt;/th&gt;
-&lt;th style="text-align: left"&gt;Syntax&lt;/th&gt;
-&lt;th style="text-align: left"&gt;Example&lt;/th&gt;
-&lt;th style="text-align: left"&gt;Output&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td style="text-align: left"&gt;Bold&lt;/td&gt;
-&lt;td style="text-align: left"&gt;&lt;code&gt;**bold text**&lt;/code&gt;&lt;/td&gt;
-&lt;td style="text-align: left"&gt;&lt;code&gt;**bold text**&lt;/code&gt;&lt;/td&gt;
-&lt;td style="text-align: left"&gt;&lt;strong&gt;bold text&lt;/strong&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style="text-align: left"&gt;Italic&lt;/td&gt;
-&lt;td style="text-align: left"&gt;&lt;code&gt;*italicized text*&lt;/code&gt;&lt;/td&gt;
-&lt;td style="text-align: left"&gt;&lt;code&gt;*italicized text*&lt;/code&gt;&lt;/td&gt;
-&lt;td style="text-align: left"&gt;&lt;em&gt;italicized text&lt;/em&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style="text-align: left"&gt;Strikethrough&lt;/td&gt;
-&lt;td style="text-align: left"&gt;&lt;code&gt;~~strikethrough text~~&lt;/code&gt;&lt;/td&gt;
-&lt;td style="text-align: left"&gt;&lt;code&gt;~~strikethrough text~~&lt;/code&gt;&lt;/td&gt;
-&lt;td style="text-align: left"&gt;&lt;del&gt;strikethrough text&lt;/del&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style="text-align: left"&gt;Subscript&lt;/td&gt;
-&lt;td style="text-align: left"&gt;&lt;code&gt;&amp;lt;sub&amp;gt;&amp;lt;/sub&amp;gt;&lt;/code&gt;&lt;/td&gt;
-&lt;td style="text-align: left"&gt;&lt;code&gt;This is a &amp;lt;sub&amp;gt;subscript&amp;lt;/sub&amp;gt; text&lt;/code&gt;&lt;/td&gt;
-&lt;td style="text-align: left"&gt;This is a &lt;sub&gt;subscript&lt;/sub&gt; text&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style="text-align: left"&gt;Superscript&lt;/td&gt;
-&lt;td style="text-align: left"&gt;&lt;code&gt;&amp;lt;sup&amp;gt;&amp;lt;/sup&amp;gt;&lt;/code&gt;&lt;/td&gt;
-&lt;td style="text-align: left"&gt;&lt;code&gt;This is a &amp;lt;sup&amp;gt;superscript&amp;lt;/sup&amp;gt; text&lt;/code&gt;&lt;/td&gt;
-&lt;td style="text-align: left"&gt;This is a &lt;sup&gt;superscript&lt;/sup&gt; text&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
+&lt;/ul&gt;
+
+      </description>
+    </item>
+    
+    <item>
+      <title>Shortcuts</title>
+      <link>http://localhost:1313/docs/shortcuts/</link>
+      <pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate>
+      
+      <guid>http://localhost:1313/docs/shortcuts/</guid>
+      <description>
+        
+        
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Sidebar Editor</title>
+      <link>http://localhost:1313/docs/editor/sidebar-editor/</link>
+      <pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate>
+      
+      <guid>http://localhost:1313/docs/editor/sidebar-editor/</guid>
+      <description>
+        
+        
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Structure</title>
+      <link>http://localhost:1313/docs/views/structure/</link>
+      <pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate>
+      
+      <guid>http://localhost:1313/docs/views/structure/</guid>
+      <description>
+        
+        
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Tags</title>
+      <link>http://localhost:1313/docs/views/tags/</link>
+      <pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate>
+      
+      <guid>http://localhost:1313/docs/views/tags/</guid>
+      <description>
+        
+        
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Zoom and Layout</title>
+      <link>http://localhost:1313/docs/editor/zoom-and-layout/</link>
+      <pubDate>Sat, 28 Feb 2026 11:09:51 +0100</pubDate>
+      
+      <guid>http://localhost:1313/docs/editor/zoom-and-layout/</guid>
+      <description>
+        
+        
+        &lt;p&gt;Hugo supports &lt;a href=&#34;https://en.wikipedia.org/wiki/Markdown&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Markdown&lt;/a&gt; syntax for formatting text, creating lists, and more. This page will show you some of the most common Markdown syntax examples.&lt;/p&gt;
+&lt;h2&gt;Markdown Examples&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;markdown-examples&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#markdown-examples&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h3&gt;Styling Text&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;styling-text&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#styling-text&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;Style&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;Syntax&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;Example&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;Output&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Bold&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;**bold text**&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;**bold text**&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;strong&gt;bold text&lt;/strong&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Italic&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;*italicized text*&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;*italicized text*&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;em&gt;italicized text&lt;/em&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Strikethrough&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;~~strikethrough text~~&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;~~strikethrough text~~&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;del&gt;strikethrough text&lt;/del&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Subscript&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;&amp;lt;sub&amp;gt;&amp;lt;/sub&amp;gt;&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;This is a &amp;lt;sub&amp;gt;subscript&amp;lt;/sub&amp;gt; text&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;This is a &lt;sub&gt;subscript&lt;/sub&gt; text&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Superscript&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;&amp;lt;sup&amp;gt;&amp;lt;/sup&amp;gt;&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;This is a &amp;lt;sup&amp;gt;superscript&amp;lt;/sup&amp;gt; text&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;This is a &lt;sup&gt;superscript&lt;/sup&gt; text&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;h3&gt;Blockquotes&lt;span class="hx:absolute hx:-mt-20" id="blockquotes"&gt;&lt;/span&gt;
-&lt;a href="#blockquotes" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Blockquote with attribution&lt;/p&gt;
+&lt;h3&gt;Blockquotes&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;blockquotes&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#blockquotes&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Blockquote with attribution&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;Don&amp;rsquo;t communicate by sharing memory, share memory by communicating.&lt;br&gt;
-— &lt;cite&gt;Rob Pike&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/cite&gt;&lt;/p&gt;
+  &lt;p&gt;Don&amp;rsquo;t communicate by sharing memory, share memory by communicating.&lt;br&gt;
+— &lt;cite&gt;Rob Pike&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/cite&gt;&lt;/p&gt;
+
 &lt;/blockquote&gt;
-&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
-&lt;div class="hextra-code-filename not-prose" dir="auto"&gt;Markdown&lt;/div&gt;&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;&amp;gt; &lt;/span&gt;&lt;span style="font-style:italic"&gt;Don&amp;#39;t communicate by sharing memory, share memory by communicating.&amp;lt;br&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;&amp;gt; &lt;/span&gt;&lt;span style="font-style:italic"&gt;— &amp;lt;cite&amp;gt;Rob Pike[^1]&amp;lt;/cite&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;[^1]: The above quote is excerpted from Rob Pike&amp;#39;s [&lt;span style="color:#f92672"&gt;talk&lt;/span&gt;](&lt;span style="color:#a6e22e"&gt;https://www.youtube.com/watch?v=PAAkCSZUG1c&lt;/span&gt;) during Gopherfest, November 18, 2015.&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-8"&gt;
-&lt;button
-class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
-title="Copy code"
-aria-label="Copy code"
-data-copied-label="Copied!"
-&gt;
-&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
-&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
-&lt;/button&gt;
+&lt;div class=&#34;hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code&#34;&gt;
+
+&lt;div class=&#34;hextra-code-filename not-prose&#34; dir=&#34;auto&#34;&gt;Markdown&lt;/div&gt;&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-markdown&#34; data-lang=&#34;markdown&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;Don&amp;#39;t communicate by sharing memory, share memory by communicating.&amp;lt;br&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;— &amp;lt;cite&amp;gt;Rob Pike[^1]&amp;lt;/cite&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[^1]: The above quote is excerpted from Rob Pike&amp;#39;s [&lt;span style=&#34;color:#f92672&#34;&gt;talk&lt;/span&gt;](&lt;span style=&#34;color:#a6e22e&#34;&gt;https://www.youtube.com/watch?v=PAAkCSZUG1c&lt;/span&gt;) during Gopherfest, November 18, 2015.&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-8&#34;&gt;
+  &lt;button
+    class=&#34;hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50&#34;
+    title=&#34;Copy code&#34;
+    aria-label=&#34;Copy code&#34;
+    data-copied-label=&#34;Copied!&#34;
+  &gt;
+    &lt;div class=&#34;hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+&lt;div class=&#34;hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+  &lt;/button&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;h4&gt;Jakob test&lt;span class="hx:absolute hx:-mt-20" id="jakob-test"&gt;&lt;/span&gt;
-&lt;a href="#jakob-test" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;Her er noget mere indrykket tekst&lt;/p&gt;
-&lt;h3&gt;Alerts&lt;span class="hx:absolute hx:-mt-20" id="alerts"&gt;&lt;/span&gt;
-&lt;a href="#alerts" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Alerts are a Markdown extension based on the blockquote syntax that you can use to emphasize critical information.
-&lt;a href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts"target="_blank" rel="noopener"&gt;GitHub-style alerts&lt;/a&gt; are supported.
-Please make sure you are using the latest version of Hextra and &lt;a href="https://github.com/gohugoio/hugo/releases/tag/v0.146.0"target="_blank" rel="noopener"&gt;Hugo v0.146.0&lt;/a&gt; or later.&lt;/p&gt;
-&lt;div class="hx:overflow-x-auto hx:mt-6 hx:flex hx:flex-col hx:rounded-lg hx:border hx:py-4 hx:px-4 hx:border-gray-200 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200"&gt;
-&lt;p class="hx:flex hx:items-center hx:font-medium"&gt;&lt;svg height=16px class="hx:inline-block hx:align-middle hx:mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/&gt;&lt;/svg&gt;Note&lt;/p&gt;
-&lt;div class="hx:w-full hx:min-w-0 hx:leading-7"&gt;
-&lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0"&gt;&lt;p&gt;Useful information that users should know, even when skimming content.&lt;/p&gt;&lt;/div&gt;
+&lt;h4&gt;Jakob test&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;jakob-test&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#jakob-test&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;Her er noget mere indrykket tekst&lt;/p&gt;
+&lt;h3&gt;Alerts&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;alerts&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#alerts&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Alerts are a Markdown extension based on the blockquote syntax that you can use to emphasize critical information.
+&lt;a href=&#34;https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;GitHub-style alerts&lt;/a&gt; are supported.
+Please make sure you are using the latest version of Hextra and &lt;a href=&#34;https://github.com/gohugoio/hugo/releases/tag/v0.146.0&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Hugo v0.146.0&lt;/a&gt; or later.&lt;/p&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:flex-col hx:rounded-lg hx:border hx:py-4 hx:px-4 hx:border-gray-200 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;p class=&#34;hx:flex hx:items-center hx:font-medium&#34;&gt;&lt;svg height=16px class=&#34;hx:inline-block hx:align-middle hx:mr-2&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34; fill=&#34;none&#34; viewBox=&#34;0 0 24 24&#34; stroke-width=&#34;2&#34; stroke=&#34;currentColor&#34; aria-hidden=&#34;true&#34;&gt;&lt;path stroke-linecap=&#34;round&#34; stroke-linejoin=&#34;round&#34; d=&#34;M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z&#34;/&gt;&lt;/svg&gt;Note&lt;/p&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;p&gt;Useful information that users should know, even when skimming content.&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:flex-col hx:rounded-lg hx:border hx:py-4 hx:px-4 hx:border-gray-200 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-green-200 hx:bg-green-100 hx:text-green-900 hx:dark:border-green-200/30 hx:dark:bg-green-900/30 hx:dark:text-green-200&#34;&gt;
+  &lt;p class=&#34;hx:flex hx:items-center hx:font-medium&#34;&gt;&lt;svg height=16px class=&#34;hx:inline-block hx:align-middle hx:mr-2&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34; fill=&#34;none&#34; viewBox=&#34;0 0 24 24&#34; stroke-width=&#34;2&#34; stroke=&#34;currentColor&#34; aria-hidden=&#34;true&#34;&gt;&lt;path stroke-linecap=&#34;round&#34; stroke-linejoin=&#34;round&#34; d=&#34;M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z&#34;/&gt;&lt;/svg&gt;Tip&lt;/p&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;p&gt;Helpful advice for doing things better or more easily.&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:flex-col hx:rounded-lg hx:border hx:py-4 hx:px-4 hx:border-gray-200 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-purple-200 hx:bg-purple-100 hx:text-purple-900 hx:dark:border-purple-200/30 hx:dark:bg-purple-900/30 hx:dark:text-purple-200&#34;&gt;
+  &lt;p class=&#34;hx:flex hx:items-center hx:font-medium&#34;&gt;&lt;svg height=16px class=&#34;hx:inline-block hx:align-middle hx:mr-2&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34; fill=&#34;none&#34; viewBox=&#34;0 0 24 24&#34; stroke-width=&#34;2&#34; stroke=&#34;currentColor&#34; aria-hidden=&#34;true&#34;&gt;&lt;path stroke-linecap=&#34;round&#34; stroke-linejoin=&#34;round&#34; d=&#34;M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z&#34;/&gt;&lt;/svg&gt;Important&lt;/p&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;p&gt;Key information users need to know to achieve their goal.&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:flex-col hx:rounded-lg hx:border hx:py-4 hx:px-4 hx:border-gray-200 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-amber-200 hx:bg-amber-100 hx:text-amber-900 hx:dark:border-amber-200/30 hx:dark:bg-amber-900/30 hx:dark:text-amber-200&#34;&gt;
+  &lt;p class=&#34;hx:flex hx:items-center hx:font-medium&#34;&gt;&lt;svg height=16px class=&#34;hx:inline-block hx:align-middle hx:mr-2&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34; fill=&#34;none&#34; viewBox=&#34;0 0 24 24&#34; stroke-width=&#34;2&#34; stroke=&#34;currentColor&#34; aria-hidden=&#34;true&#34;&gt;&lt;path stroke-linecap=&#34;round&#34; stroke-linejoin=&#34;round&#34; d=&#34;M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z&#34;/&gt;&lt;/svg&gt;Warning&lt;/p&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;p&gt;Urgent info that needs immediate user attention to avoid problems.&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:flex-col hx:rounded-lg hx:border hx:py-4 hx:px-4 hx:border-gray-200 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-red-200 hx:bg-red-100 hx:text-red-900 hx:dark:border-red-200/30 hx:dark:bg-red-900/30 hx:dark:text-red-200&#34;&gt;
+  &lt;p class=&#34;hx:flex hx:items-center hx:font-medium&#34;&gt;&lt;svg height=16px class=&#34;hx:inline-block hx:align-middle hx:mr-2&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34; fill=&#34;none&#34; viewBox=&#34;0 0 24 24&#34; stroke-width=&#34;2&#34; stroke=&#34;currentColor&#34; aria-hidden=&#34;true&#34;&gt;&lt;path stroke-linecap=&#34;round&#34; stroke-linejoin=&#34;round&#34; d=&#34;M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z&#34;/&gt;&lt;/svg&gt;Caution&lt;/p&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;p&gt;Advises about risks or negative outcomes of certain actions.&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code&#34;&gt;
+
+&lt;div class=&#34;hextra-code-filename not-prose&#34; dir=&#34;auto&#34;&gt;Markdown&lt;/div&gt;&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-markdown&#34; data-lang=&#34;markdown&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;[!NOTE]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;Useful information that users should know, even when skimming content.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;[!TIP]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;Helpful advice for doing things better or more easily.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;[!IMPORTANT]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;Key information users need to know to achieve their goal.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;[!WARNING]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;Urgent info that needs immediate user attention to avoid problems.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;[!CAUTION]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; Advises about risks or negative outcomes of certain actions.&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-8&#34;&gt;
+  &lt;button
+    class=&#34;hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50&#34;
+    title=&#34;Copy code&#34;
+    aria-label=&#34;Copy code&#34;
+    data-copied-label=&#34;Copied!&#34;
+  &gt;
+    &lt;div class=&#34;hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+&lt;div class=&#34;hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+  &lt;/button&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div class="hx:overflow-x-auto hx:mt-6 hx:flex hx:flex-col hx:rounded-lg hx:border hx:py-4 hx:px-4 hx:border-gray-200 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-green-200 hx:bg-green-100 hx:text-green-900 hx:dark:border-green-200/30 hx:dark:bg-green-900/30 hx:dark:text-green-200"&gt;
-&lt;p class="hx:flex hx:items-center hx:font-medium"&gt;&lt;svg height=16px class="hx:inline-block hx:align-middle hx:mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/&gt;&lt;/svg&gt;Tip&lt;/p&gt;
-&lt;div class="hx:w-full hx:min-w-0 hx:leading-7"&gt;
-&lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0"&gt;&lt;p&gt;Helpful advice for doing things better or more easily.&lt;/p&gt;&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class="hx:overflow-x-auto hx:mt-6 hx:flex hx:flex-col hx:rounded-lg hx:border hx:py-4 hx:px-4 hx:border-gray-200 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-purple-200 hx:bg-purple-100 hx:text-purple-900 hx:dark:border-purple-200/30 hx:dark:bg-purple-900/30 hx:dark:text-purple-200"&gt;
-&lt;p class="hx:flex hx:items-center hx:font-medium"&gt;&lt;svg height=16px class="hx:inline-block hx:align-middle hx:mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/&gt;&lt;/svg&gt;Important&lt;/p&gt;
-&lt;div class="hx:w-full hx:min-w-0 hx:leading-7"&gt;
-&lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0"&gt;&lt;p&gt;Key information users need to know to achieve their goal.&lt;/p&gt;&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class="hx:overflow-x-auto hx:mt-6 hx:flex hx:flex-col hx:rounded-lg hx:border hx:py-4 hx:px-4 hx:border-gray-200 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-amber-200 hx:bg-amber-100 hx:text-amber-900 hx:dark:border-amber-200/30 hx:dark:bg-amber-900/30 hx:dark:text-amber-200"&gt;
-&lt;p class="hx:flex hx:items-center hx:font-medium"&gt;&lt;svg height=16px class="hx:inline-block hx:align-middle hx:mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/&gt;&lt;/svg&gt;Warning&lt;/p&gt;
-&lt;div class="hx:w-full hx:min-w-0 hx:leading-7"&gt;
-&lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0"&gt;&lt;p&gt;Urgent info that needs immediate user attention to avoid problems.&lt;/p&gt;&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class="hx:overflow-x-auto hx:mt-6 hx:flex hx:flex-col hx:rounded-lg hx:border hx:py-4 hx:px-4 hx:border-gray-200 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-red-200 hx:bg-red-100 hx:text-red-900 hx:dark:border-red-200/30 hx:dark:bg-red-900/30 hx:dark:text-red-200"&gt;
-&lt;p class="hx:flex hx:items-center hx:font-medium"&gt;&lt;svg height=16px class="hx:inline-block hx:align-middle hx:mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/&gt;&lt;/svg&gt;Caution&lt;/p&gt;
-&lt;div class="hx:w-full hx:min-w-0 hx:leading-7"&gt;
-&lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0"&gt;&lt;p&gt;Advises about risks or negative outcomes of certain actions.&lt;/p&gt;&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
-&lt;div class="hextra-code-filename not-prose" dir="auto"&gt;Markdown&lt;/div&gt;&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;&amp;gt; &lt;/span&gt;&lt;span style="font-style:italic"&gt;[!NOTE]
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;&amp;gt; &lt;/span&gt;&lt;span style="font-style:italic"&gt;Useful information that users should know, even when skimming content.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;&amp;gt; &lt;/span&gt;&lt;span style="font-style:italic"&gt;[!TIP]
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;&amp;gt; &lt;/span&gt;&lt;span style="font-style:italic"&gt;Helpful advice for doing things better or more easily.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;&amp;gt; &lt;/span&gt;&lt;span style="font-style:italic"&gt;[!IMPORTANT]
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;&amp;gt; &lt;/span&gt;&lt;span style="font-style:italic"&gt;Key information users need to know to achieve their goal.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;&amp;gt; &lt;/span&gt;&lt;span style="font-style:italic"&gt;[!WARNING]
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;&amp;gt; &lt;/span&gt;&lt;span style="font-style:italic"&gt;Urgent info that needs immediate user attention to avoid problems.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;&amp;gt; &lt;/span&gt;&lt;span style="font-style:italic"&gt;[!CAUTION]
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&amp;gt; Advises about risks or negative outcomes of certain actions.&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-8"&gt;
-&lt;button
-class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
-title="Copy code"
-aria-label="Copy code"
-data-copied-label="Copied!"
-&gt;
-&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
-&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
-&lt;/button&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h3&gt;Tables&lt;span class="hx:absolute hx:-mt-20" id="tables"&gt;&lt;/span&gt;
-&lt;a href="#tables" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Tables aren&amp;rsquo;t part of the core Markdown spec, but Hugo supports them out-of-the-box.&lt;/p&gt;
+&lt;h3&gt;Tables&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;tables&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#tables&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Tables aren&amp;rsquo;t part of the core Markdown spec, but Hugo supports them out-of-the-box.&lt;/p&gt;
 &lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th style="text-align: left"&gt;Name&lt;/th&gt;
-&lt;th style="text-align: left"&gt;Age&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td style="text-align: left"&gt;Bob&lt;/td&gt;
-&lt;td style="text-align: left"&gt;27&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style="text-align: left"&gt;Alice&lt;/td&gt;
-&lt;td style="text-align: left"&gt;23&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;Name&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;Age&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Bob&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;27&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Alice&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;23&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
-&lt;div class="hextra-code-filename not-prose" dir="auto"&gt;Markdown&lt;/div&gt;&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;| Name | Age |
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;| :---- | :-- |
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;| Bob | 27 |
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;| Alice | 23 |&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-8"&gt;
-&lt;button
-class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
-title="Copy code"
-aria-label="Copy code"
-data-copied-label="Copied!"
-&gt;
-&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
-&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
-&lt;/button&gt;
+&lt;div class=&#34;hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code&#34;&gt;
+
+&lt;div class=&#34;hextra-code-filename not-prose&#34; dir=&#34;auto&#34;&gt;Markdown&lt;/div&gt;&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-markdown&#34; data-lang=&#34;markdown&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| Name  | Age |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| :---- | :-- |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| Bob   | 27  |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| Alice | 23  |&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-8&#34;&gt;
+  &lt;button
+    class=&#34;hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50&#34;
+    title=&#34;Copy code&#34;
+    aria-label=&#34;Copy code&#34;
+    data-copied-label=&#34;Copied!&#34;
+  &gt;
+    &lt;div class=&#34;hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+&lt;div class=&#34;hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+  &lt;/button&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
 &lt;hr&gt;
 &lt;ol&gt;
-&lt;li id="fn:1"&gt;
-&lt;p&gt;The above quote is excerpted from Rob Pike&amp;rsquo;s &lt;a href="https://www.youtube.com/watch?v=PAAkCSZUG1c"target="_blank" rel="noopener"&gt;talk&lt;/a&gt; during Gopherfest, November 18, 2015.&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;The above quote is excerpted from Rob Pike&amp;rsquo;s &lt;a href=&#34;https://www.youtube.com/watch?v=PAAkCSZUG1c&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;talk&lt;/a&gt; during Gopherfest, November 18, 2015.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</description></item></channel></rss>
+&lt;/div&gt;
+      </description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,11 +1,11 @@
 ---
-title: "Owl"
+title: "TextToTile"
 layout: "hextra-home"
 ---
 
-{{< hextra/hero-container image="/images/landing/overview.png" imageTitle="Owl" imageWidth="900" >}}
+{{< hextra/hero-container image="/images/landing/overview.png" imageTitle="TexToTile" imageWidth="900" >}}
 
-{{< hextra/hero-headline >}} Owl {{< /hextra/hero-headline >}}
+{{< hextra/hero-headline >}} TextToTile {{< /hextra/hero-headline >}}
 {{< hextra/hero-subtitle >}} A lightweight, visual overview of long texts — built for writers. {{< /hextra/hero-subtitle >}}
 
 {{< hextra/hero-button text="Get Started" link="docs/getting-started/" >}}

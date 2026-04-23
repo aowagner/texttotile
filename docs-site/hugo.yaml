@@ -16,7 +16,7 @@ markup:
 params:
   navbar:
     displayTitle: true
-    displayLogo: false
+    displayLogo: true
 
   theme:
     default: system
