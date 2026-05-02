@@ -1,0 +1,219 @@
+{
+  "main": {
+    "id": "e781483266ecac40",
+    "type": "split",
+    "children": [
+      {
+        "id": "c9c452f914030ec6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "057455f9b2d565f8",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "docs/10-concept.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "10-concept"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "dae0aa7c278c6591",
+    "type": "split",
+    "children": [
+      {
+        "id": "a989b05453772fa0",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "141f9d9dbbadb3a0",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "433d240bfeb43ac4",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "01dba6c5795c7aa9",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 486.5
+  },
+  "right": {
+    "id": "6fee8ec1866ca10d",
+    "type": "split",
+    "children": [
+      {
+        "id": "4c20bc3bb8b65f2c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "65ba817a88e40cd5",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "docs/10-concept.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for 10-concept"
+            }
+          },
+          {
+            "id": "d3bfb1e8c0337567",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "docs/10-concept.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from 10-concept"
+            }
+          },
+          {
+            "id": "5a857a7123a882cd",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "3dd49e98ad273f94",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "e4c49aa252fe4106",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "docs/10-concept.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of 10-concept"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 572.5
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "057455f9b2d565f8",
+  "lastOpenFiles": [
+    "texttotile3-light.png",
+    "texttotile3-dark.png",
+    "Screenshot 2026-04-29 at 15.54.00.png",
+    "Screenshot 2026-04-29 at 15.53.45.png",
+    "texttotile2-light.png",
+    "texttotile2-dark.png",
+    "Screenshot 2026-04-29 at 15.46.42.png",
+    "Screenshot 2026-04-29 at 15.46.18.png",
+    "transparent.png.png",
+    "transparent.png",
+    "texttotile-light.png",
+    "docs/30-showcase.md",
+    "docs/14-philosophy.md",
+    "docs/12-getting-started.md",
+    "docs/10-concept.md",
+    "docs/_index.md",
+    "docs/70-download.md",
+    "docs/56-ai-integration.md",
+    "docs/54-definitions.md",
+    "docs/52-styles.md",
+    "docs/50-faq.md",
+    "docs/36-advanced.md",
+    "docs/34-graphs.md",
+    "docs/32-basics.md",
+    "docs/12-praktisk-anvendelse.md",
+    "docs/14-filosofi.md",
+    "docs/36-avanceret.md",
+    "docs/34-graphs 2.md",
+    "docs/14-independence.md",
+    "docs/16-abstractions.md",
+    "_index.md"
+  ]
+}

@@ -3,6 +3,11 @@ languageCode: "en-us"
 title: "TextToTile"
 canonifyURLs: true
 relativeURLs: false
+  
+
+cascade:
+  params:
+    breadcrumbs: false
 
 theme: hextra
 
@@ -13,6 +18,12 @@ markup:
     renderer:
       unsafe: true
 
+  highlight:
+    noClasses: false
+    guessSyntax: true
+
+
+
 params:
   navbar:
     displayTitle: true
@@ -20,24 +31,64 @@ params:
 
   theme:
     default: system
+    displayToggle: false
 
-  css:
-    - css/custom.css
+#  css:
+#    - css/custom.css
+
+  page:
+    width: normal
+
+  imageZoom:
+    enable: true    
 
 menu:
   main:
-    - name: "Docs"
-      pageRef: "/docs"
+    - name: Home
+      pageRef: "/"
+      weight: 5
+      params:
+        icon: home
+
+    - name: "Concept"
+      url: "/docs/10-concept"
       weight: 10
 
-    - name: "Download"
-      url: "https://github.com/aowagner/texttotile/releases/latest"
-      weight: 20
-
-    - name: "Discussions"
-      url: "https://github.com/aowagner/texttotile/discussions"
+    - name: "Showcase"
+      url: "/docs/30-showcase"
       weight: 30
 
-    - name: "GitHub"
-      url: "https://github.com/aowagner/texttotile"
-      weight: 40
+    - name: "Faq"
+      url: "/docs/50-faq"
+      weight: 50
+
+    - name: "Download"
+      url: "/docs/70-download"
+      weight: 70
+
+    - name: "Documentation"
+      pageRef: "/docs"
+      weight: 90
+
+#
+#    - name: "Download"
+#      url: "https://github.com/aowagner/texttotile/releases/latest"
+#      weight: 20
+#
+#    - name: "Discussions"
+#      url: "https://github.com/aowagner/texttotile/discussions"
+#      weight: 30
+#
+#    - name: "GitHub"
+#      url: "https://github.com/aowagner/texttotile"
+#      weight: 40
+
+    - name: Search
+      params:
+        type: search
+
+    - name: Theme Toggle
+      params:
+        type: theme-toggle
+        label: false # optional, default is false
+

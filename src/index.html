@@ -6,6 +6,10 @@
 	<title>SVG App — Text + Preview (Light Theme)</title>
 	<style>
 
+
+
+
+
 	:root {
 		color-scheme: light dark;
 
@@ -31,7 +35,7 @@
 		--ms-transition: 0.4s;
 		--ms-transition-quick: 0.15s;
 
-		--px-sidebar-size: 500px;
+		--px-sidebar-size: 600px;	/* jk: 500px! 600 is for screenshots! */
 		--px-sidebar-min: 200px;
 	}
 
@@ -39,7 +43,7 @@
 		color-scheme: light;
 
 		--saturation-header: 15;
-		--saturation-tags: 40;
+		--saturation-tags: 50;
 	}
 
 	:root.theme-dark {
@@ -49,6 +53,35 @@
 		--saturation-tags: 60;
 	}
 
+
+
+	/*-- Fallback for older browsers */
+	/*--.theme-light .tb-part {
+		--stroke: #888;
+	}
+
+	.theme-dark .tb-part {
+		--stroke: var(--fill);
+	}--*/
+
+	/* set theme-specific default stroke on parts using :where(), which has zero specificity, so tag/class rules (e.g. .insight { --stroke: ... }) can still override these defaults. */
+	:where(.theme-light .tb-part) {
+		--stroke: #777;
+	}
+
+	:where(.theme-dark .tb-part) {
+		--stroke: var(--fill);
+	}
+
+	.part-rect {
+		stroke: var(--stroke);
+	}
+
+
+	/* .tb-part 	{--stroke: var(--stroke-init); } */
+
+
+
 	html, body {height: 100%; margin: 0; overflow: hidden; /*? background: var(--fill); */  font-family: var(--fontfamily); font-size: var(--px-font-size); font-weight: var(--bold); color: var(--text); }
 
 	body.no-select, body.no-select * {user-select: none; -webkit-user-select: none; }
@@ -57,8 +90,8 @@
 
 	.workspace__panel	{--saturation: var(--saturation-tags); }
 	.header				{--saturation: var(--saturation-header);	--fill: CanvasText; }
-	.tagblocks--parts	{--saturation: var(--saturation-tags); 		--fill: #fff; }
-	.tagblocks--graphs	{--saturation: var(--saturation-tags); 		--fill: #fff; }
+	.tagblocks--parts	{--saturation: var(--saturation-tags); 		--fill: Canvas; }
+	.tagblocks--graphs	{--saturation: var(--saturation-tags); 		--fill: Canvas; }
 
 
 
@@ -114,9 +147,27 @@
 
 		.toolbarTags	.button-draggable.is-dragging 	{background: CanvasText !important; color: Canvas; }
 
-		.toolbarTags 	.toolbar__button 			{background: rgba(var(--fillrgb), calc(var(--saturation) / 100)); font-weight: var(--bold-button); }
-		.toolbarTags 	.toolbar__button.is-hover 	{background: rgba(var(--fillrgb), calc(var(--saturation) / 80)); z-index: 2; border: 1px solid CanvasText; }
+		.toolbarTags 	.toolbar__button 			{background: transparent; font-weight: var(--bold-button); z-index: 1; }
+		.toolbarTags 	.toolbar__button.is-hover 	{border: 1px solid CanvasText; }
+		.toolbarTags 	.toolbar__button.is-hover:before 	{opacity: calc(var(--saturation) / 150); }
 
+
+
+.toolbarTags .toolbar__button::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: var(--fill);
+	opacity: calc(var(--saturation) / 100);
+	border-radius: 4px;
+	z-index: -1;
+}
+
+
+
+
+
+		.toolbarTags	.button-settings			{--fill: Canvas; }
 		.toolbarTags	.button-settings:hover		{border: 1px solid CanvasText; }
 
 /* workspace-main */
@@ -151,7 +202,7 @@
 	.header__rect--chapter			{height: calc(100% - ((var(--px-line-height) * 2))); fill: var(--fill); opacity: calc(var(--saturation) / 100); stroke: Canvas; stroke-width: 1; }
 	.header__text--chapter			{fill: var(--text); font-size: calc(var(--px-font-size) * 1.00); font-weight: var(--bold); pointer-events: none; dominant-baseline: middle; }
 
-						.graphs-bg-rect {transform: translateY(var(--px-header-height)); fill: CanvasText; opacity: 0.1; pointer-events: none; }
+						.graphs-bg-rect {transform: translateY(var(--px-header-height)); fill: Canvas; opacity: 0.25; pointer-events: none; }
 		.chart-viewb	.graphs-bg-rect {display: none; }
 
 	/* tagblock */
@@ -166,7 +217,7 @@
 
 
 	/* tagblock - bg rect */
-											.tagblock__bg-rect {fill: rgba(var(--fillrgb), 0.04); stroke: var(--fill-bg); stroke-width: calc(var(--px-base-unit) * 0.15); vector-effect: non-scaling-stroke; pointer-events: none; transition: opacity var(--ms-transition) ease-out, height var(--ms-transition) ease-out }
+											.tagblock__bg-rect {fill: var(--fill); opacity: 0.1; stroke: var(--fill-bg); stroke-width: calc(var(--px-base-unit) * 0.15); vector-effect: non-scaling-stroke; pointer-events: none; transition: opacity var(--ms-transition) ease-out, height var(--ms-transition) ease-out }
 	.chart-viewa       						.tagblock__bg-rect {height: 0px; opacity: 0; pointer-events: none; /* needed since pointer-events are still active in the not-scaled area. this is an error in the browser-engine */ }
 	.chart-viewb							.tagblock__bg-rect {}
 	.chart-viewb  		.tagblock--active   .tagblock__bg-rect {height: calc((var(--px-line-height) * var(--count-rows)) + 10px); }
@@ -181,8 +232,8 @@
 	.chart-viewb  		.tagblock--inactive		.tagblock-separator {opacity: 1; }
 
 
-	/* part */	
-										.tb-part 	{transition: transform var(--ms-transition) ease-out; } 
+/* part */	
+										.tb-part 	{transition: transform var(--ms-transition) ease-out; /*- --stroke: var(--fill); */ --strokewidth: 1; } 
 	.chart-viewa						.tb-part 	{transform: translate(var(--x), var(--ya)) }
 	.chart-viewb						.tb-part 	{transform: translate(var(--x), var(--yb)) }
 	.chart-viewb	.tagblock--inactive	.tb-part 	{transform: translate(var(--x), 5px); }
@@ -190,7 +241,7 @@
 
 					.tb-part__rect-bg	{fill: Canvas !important; opacity: 1.0 !important; }
 
-					.tb-part__rect	{/*--fill: rgba(var(--fillrgb), calc(var(--saturation) / 100));-*/  fill: var(--fill); opacity: calc(var(--saturation) / 100);  stroke-width: 1; stroke: var(--fill-grey); }
+					.tb-part__rect	{fill: var(--fill); opacity: calc(var(--saturation) / 100); stroke: var(--stroke); stroke-width: var(--strokewidth); }
 					.tb-part__rect	{transition: transform var(--ms-transition) ease-out; vector-effect: non-scaling-stroke; }
 	.chart-viewa 	.tb-part__rect	{height: var(--px-line-height); transform: scaleY(var(--count-part-lines)); }
 	.chart-viewb 	.tb-part__rect	{height: calc(var(--px-line-height) - 2px); transform: scaleY(1); }
@@ -224,7 +275,7 @@
 					.tagblock--active 	.tb-part.is-hover 	.tb-part__rect {stroke: CanvasText; opacity: calc(var(--saturation) / 150); }
 
 	/* hover circle */
-					.tagblock--active 	.tagblock-circle.is-hover 			{fill: rgba(var(--fillrgb), calc(var(--saturation) / 150)); r: calc(var(--px-base-unit) / 1.7); }
+					.tagblock--active 	.tagblock-circle.is-hover 			{fill: var(--fill); opacity: calc(var(--saturation) / 150); stroke: #fff; stroke-width: 1.0; }
 
 	/* graphs */
 	.tagblocks--graphs	{}
@@ -233,16 +284,16 @@
 	.chart-viewa	.tagblocks--graphs	.tagblock--inactive		{opacity: 0.1;	pointer-events: none; }
 	.chart-viewb	.tagblocks--graphs	.tagblock--inactive		{opacity: 0;	pointer-events: none; }
 
-	.tagblock-polyline		{fill: none; stroke: var(--stroke); stroke-width: 1.0; pointer-events: none; }
-	.tagblock-circle 		{r: calc(var(--px-base-unit) / 2); fill: rgba(var(--fillrgb), calc(var(--saturation) / 100));  stroke: var(--stroke);  stroke-width: 1.0; }
-	.tagblock-circle-bg 	{r: calc((var(--px-base-unit) / 2)); fill: white !important;  stroke: white !important; stroke-width: 1; }
+	.tagblock-polyline		{fill: none; stroke: var(--fill); stroke-width: 1.0; pointer-events: none; }
+	.tagblock-circle 		{r: calc(var(--px-base-unit) / 2); fill: var(--fill); opacity: calc(var(--saturation) / 100);  stroke: var(--fill);  stroke-width: 1.0; }
+	.tagblock-circle-bg 	{r: calc(var(--px-base-unit) / 2); fill: Canvas;  stroke: var(--fill); stroke-width: 1.0; }
 	
-						.tagblock-circle-text 			{opacity: 0; transform: translate(16px, 1px); pointer-events: none;  dominant-baseline: middle; }
+						.tagblock-circle-text 			{opacity: 0; fill: CanvasText; font-weight:200; transform: translate(16px, 1px); pointer-events: none;  dominant-baseline: middle; }
 	.tagblock--active	.tagblock-circle-text.is-hover 	{opacity: 1; }
 
 	/* .tagblock--inactive		.graph	{opacity: 0.5; pointer-events: none; } */
 
-	.tagblock-circle		{transition: r var(--ms-transition) ease-out, opacity var(--ms-transition-quick) ease-out; }
+	.tagblock-circle		{transition: opacity var(--ms-transition-quick) ease-out; }
 	.tagblock-circle-text	{transition: opacity var(--ms-transition-quick) ease-out; }
 
 	</style>
@@ -1007,43 +1058,34 @@ const CUtil = {
 
 	//:::	🔹 getColorInfo
 	getColorInfo(input) {
-		if (typeof input !== 'string')
-			return null;
+		if (typeof input !== 'string') return null;
 
 		const value = input.trim();
-		if (!value)
-			return null;
+		if (!value) return null;
 
 		const el = document.createElement('div');
-		el.style.color = '';
 		el.style.color = value;
 
-		// Browser rejected it
-		if (!el.style.color)
-			return null;
+		if (!el.style.color) return null;
 
 		document.body.appendChild(el);
-		const resolved = getComputedStyle(el).color;
-		el.remove();
 
-		const mm = resolved.match(/^rgba?\(\s*(\d+),\s*(\d+),\s*(\d+)/i);
-		if (!mm)
-			return null;
+		try {
+			const resolved = getComputedStyle(el).color;
+			const arr = resolved.match(/\d+/g);
 
-		const r = Number(mm[1]);
-		const g = Number(mm[2]);
-		const b = Number(mm[3]);
+			if (!arr || arr.length < 3) return null;
 
-		const toHex = n => n.toString(16).padStart(2, '0');
+			const [r, g, b] = arr.slice(0, 3).map(Number);
+			const toHex = n => n.toString(16).padStart(2, '0');
 
-		return {
-			raw: value,
-			hex: `#${toHex(r)}${toHex(g)}${toHex(b)}`,
-			r,
-			g,
-			b,
-			rgb: `${r}, ${g}, ${b}`,
-		};
+			return {
+				hex: `#${toHex(r)}${toHex(g)}${toHex(b)}`,
+			};
+		}
+		finally {
+			el.remove();
+		}
 	},
 
 }
@@ -2001,11 +2043,12 @@ const CFramework = {
 	},
 
 	//:::	🔹	applyThemeClass
-	applyThemeClass(args) {
+	async applyThemeClass(args) {
 		if (LOGGING) console.group(...CUtil.logGroup('CFramework', 'applyThemeClass', `(mode: ${args.mode})`, args.caller));
 		if (LOGARGS) console.log('args, mql', args, this.mql);		
 
 		const root = document.documentElement;
+		const caller = 'CFramework.applyThemeClass';
 
 		root.classList.remove('theme-light', 'theme-dark');
 		
@@ -2018,6 +2061,18 @@ const CFramework = {
 		else if (args.mode === 'system') {
 			root.classList.add(this.mql.matches === true ? 'theme-dark' : 'theme-light');
 		}
+
+
+		// in order to fix fill colors based on Canvas (and more):
+
+		//:		→ App: dispatch				model.build.and.augment
+		await App.dispatch({type: 'model.build.and.augment', text: CTexteditor.value, caller});
+
+		//:		→ App: dispatch				chart.render
+		await App.dispatch({type: 'chart.render', typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
+
+		//:		→ App: dispatch				toolbar.buttons.recreate
+		await App.dispatch({type: 'toolbar.buttons.recreate', caller});
 		if (LOGGING) console.groupEnd();
 	},	
 
@@ -2041,64 +2096,71 @@ const CFramework = {
 		if (LOGGING) console.groupEnd();
 	},
 
+
+
 	//:::	🔹 setCustomCss
 	setCustomCss(args) {
 		if (LOGGING) console.group(...CUtil.logGroup('CFramework', 'setCustomCss', CUtil.getArgsKeys(args), args.caller));
 		if (LOGARGS) console.log(args);
-
 		const txtInput = args.txtCustomCss || '';
+		const setColorKeys = new Set(['fill', 'stroke', 'text', 'bg', 'background', 'color']);
 
-		// 1) Remove #def lines entirely
-		const txtWithoutDefs = txtInput.replace(
-			/^\s*#def\s*\{[^}]*\}\s*;?\s*$/gmi,
-			''
-		);
+		const lines = txtInput.split('\n');
 
-		// 2) Convert app-style tag rules:
-		//    #gitte { @fill: #fa0; @bold 800; }
-		// into:
-		//    .gitte { --fill: #fa0; --bold: 800; }
-		const txtConverted = txtWithoutDefs.replace(
-			/^\s*#([a-zA-Z_][\w-]*)\s*\{([^}]*)\}\s*;?\s*$/gmi,
-			(match, tagName, body) => {
-				const arrFields = body
-					.split(';')
-					.map(s => s.trim())
-					.filter(Boolean);
+		const outLines = [];
 
-				const arrCssFields = [];
+		for (let line of lines) {
+			const trimmed = line.trim();
 
-				for (const field of arrFields) {
-					// Allow both:
-					// @fill: #fa0
-					// @fill #fa0
-					const mm = field.match(/^@([a-zA-Z_][\w-]*)\s*(?::\s*|\s+)(.+)$/);
-					if (!mm)
-						continue;
+			// 1) skip #def lines
+			if (/^#def\s*\{/.test(trimmed)) {
+				continue;
+			}
 
-					const key = mm[1];
-					const value = mm[2].trim();
+			// 2) match tag rule
+			const mmLine = trimmed.match(/^#([a-zA-Z_][\w-]*)\s*\{([^}]*)\}\s*;?\s*$/);
 
-					if (!value)
-						continue;
+			if (!mmLine) {
+				outLines.push(line);   // ← keep untouched
+				continue;
+			}
 
-					arrCssFields.push(`--${key}: ${value};`);
+			const tagName = mmLine[1];
+			const body = mmLine[2];
+
+			const arrFields = body
+				.split(';')
+				.map(s => s.trim())
+				.filter(Boolean);
+
+			const arrCssFields = [];
+
+			for (const field of arrFields) {
+				const mm = field.match(/^@([a-zA-Z_][\w-]*)\s*(?::\s*|\s+)(.+)$/);
+				if (!mm) continue;
+
+				const key = mm[1];
+				let value = mm[2].trim();
+
+				if (!value) continue;
+
+				if (setColorKeys.has(key)) {
+					const infoColor = CUtil.getColorInfo(value);
+					if (!infoColor) continue;
 				}
 
-				// If no valid @fields were found, drop the whole rule
-				if (arrCssFields.length === 0)
-					return '';
-
-				return `.${tagName} { ${arrCssFields.join(' ')} }`;
+				arrCssFields.push(`--${key}: ${value};`);
 			}
-		).trim();
 
-		// 3) Set resulting CSS
+			// Always output line (even if empty body)
+			outLines.push(`.${tagName} { ${arrCssFields.join(' ')} }`);
+		}
+
+		const txtConverted = outLines.join('\n');
+
 		const elStyleSettings = document.querySelector(`#${args.idElStyle}`);
 		elStyleSettings.textContent = txtConverted;
-
-		if (LOGGING)
-			console.groupEnd();
+		if (LOGGING) console.groupEnd();
 	},
 
 	//:::	🔹 updateLookupConstants
@@ -2573,7 +2635,7 @@ const CChart = {
 			const pxYa = PX_HEADER_HEIGHT + 'px';
 
 			return svg`
-			<g class=${strClasses} style=${`--ya:${pxYa}; --count-rows:${tagblock.countRows}; --fill: ${tagblock.metadata.fill}; --fillrgb: ${tagblock.metadata.fillrgb};`}; data-id=${tagblock.id} @click=${e => CChart.onClick({src: 'tagblock', e, tagblock, caller: 'src: tagblock'})}>
+			<g class=${strClasses} style=${`--ya:${pxYa}; --count-rows:${tagblock.countRows};`}; data-id=${tagblock.id} @click=${e => CChart.onClick({src: 'tagblock', e, tagblock, caller: 'src: tagblock'})}>
 				<rect class="tagblock__bg-rect" x=${PX_MARGIN_LEFT_W - 1} y="0" width=${pxWidthTagblock + 2} />
 
 				${tagblock.arrPart.map(part => CChart.Templates.Tagblock_Part(part, tagblock))}
@@ -2587,13 +2649,11 @@ const CChart = {
 			if (LOGARGS) console.log(tagblock, idx);
 			const strClasses = ['tagblock', tagblock.id].join(' ');
 			const pxYa = PX_HEADER_HEIGHT + 'px';
-			const arrKeyExclude = ['fill', 'text', 'bold', 'saturation'];		// jk: same as arrAllowedKey in getStyleFromMetadata. Maybe make global const?
 
 			return svg`
-			<g class=${strClasses} style=${`--ya:${pxYa}; --count-rows:${tagblock.countRows}; --fillrgb: ${tagblock.metadata.fillrgb}; --stroke: ${tagblock.metadata.stroke};`} data-id=${tagblock.id} @click=${e => CChart.onClick({src: 'tagblock', e, tagblock, caller: 'src: tagblock'})}>
+			<g class=${strClasses} style=${`--ya:${pxYa}; --count-rows:${tagblock.countRows};`} data-id=${tagblock.id} @click=${e => CChart.onClick({src: 'tagblock', e, tagblock, caller: 'src: tagblock'})}>
 
 				${Object.entries(tagblock.graphtags)
-					.filter(([keyMeta]) => !arrKeyExclude.includes(keyMeta))
 					.map(([keyMeta, arrValueMeta]) => CChart.Templates.Graphtag(tagblock, keyMeta, arrValueMeta))}
 			</g>`;
 		},
@@ -2603,14 +2663,19 @@ const CChart = {
 		Tagblock_Part(part, tagblock) {
 			//if (LOGGING) console.log('%c CChart %c Template: %c Tagblock_Part %c (part, tagblock)', LOG_MODULE, LOG_RED, LOG_FUNCTION+LOG_BOLD, LOG_ARGS);
 			if (LOGARGS) console.log(part, tagblock);
+
+			// get 'show' (last/closest) and 'code' (combined) values from css metadata from part's arrTag ('classes') + part's own metadata
+			const docdata = CModel.docdata;
+			const arrTagMetadata = part.arrTag.map(tag => docdata.alltags[tag].metadata);
+			const code = [part.metadata.code, ...arrTagMetadata.map(metadata => metadata.code)].filter(Boolean).join('');
+			const show = part.metadata.show ?? arrTagMetadata.find(metadata => metadata.show)?.show ?? 'normal';
+
 			const pxWidthRect = PX_COL_WIDTH - (PX_PADDING_SMALL * 2);
 			const pxX = PX_MARGIN_LEFT_W + (PX_COL_WIDTH * part.idxChapter);
 			const pxYa = (((PX_LINE_HEIGHT * COUNT_PART_LINES) + PX_PADDING_NORMAL) * part.idxOrderInChapter) + PX_PADDING_SMALL;
 			const pxYb = (PX_LINE_HEIGHT * part.idxRow) + PX_PADDING_SMALL;
-			const symbolString = part.metadata?.code;
-			const show = part.metadata?.show ?? tagblock.metadata?.show ?? 'normal';
 			const strBaseStyle = `--x:${pxX}px; --ya:${pxYa}px; --yb:${pxYb}px; `;
-			const strExtraStyle = CChart.getStyleFromMetadata(part.metadata);
+			const strExtraStyle = CChart.getStyleFromMetadata(part.metadata);			// nb: must be *part* metadata only (*not* arrTagMetadata from css (see above))
 			const strClasses = ['tb-part', ...part.arrTag, show === 'normal' ? 'tb-part--normal' : 'tb-part--special'].join(' ');
 
 			let arrTextlines = [];
@@ -2666,11 +2731,9 @@ const CChart = {
 			</text>
 			<text class="tb-part__text-viewb top" x=${PX_PADDING_NORMAL} y=${PX_LINE_HEIGHT * 0.5}>${part.caption}</text> 
 
-			${symbolString ? svg`<g class="tb-part__symbol" style=${`--x:${pxWidthRect + PX_PADDING_NORMAL}px; --y:${PX_LINE_HEIGHT * COUNT_PART_LINES}px;`}><text x="0" y="0">${symbolString}</text></g>` : ''}
+			${code ? svg`<g class="tb-part__symbol" style=${`--x:${pxWidthRect + PX_PADDING_NORMAL}px; --y:${PX_LINE_HEIGHT * COUNT_PART_LINES}px;`}><text x="0" y="0">${code}</text></g>` : ''}
 		</g>`;
 		},
-
-		//${symbolString ? svg`<text class="tb-part__symbol" style=${`--x:${pxWidthRect + PX_PADDING_NORMAL}px; --y:${PX_LINE_HEIGHT * COUNT_PART_LINES}px;`} x="0" y="0">${symbolString}</text>` : ''}
 
 		//::		☐ Graphtag(tagblock, keyMeta, arrValueMeta) 😃
 		//:			→ @click: this.onClick
@@ -2923,12 +2986,13 @@ const CChart = {
 
 
 	//:::	🔹 getStyleFromMetadata() 				- better placement?
-	getStyleFromMetadata(obj) { 
-		if (!obj) return '';
+	getStyleFromMetadata(metadata) { 
 		//if (LOGGING) console.log('%c CChart %c getStyleFromMetadata', LOG_MODULE, LOG_FUNCTION);
-		const arrAllowedKey = ['fill', 'text', 'bold', 'saturation'];
+		if (!metadata) return '';
+
+		const arrAllowedKey = ['fill', 'text', 'bold', 'saturation', 'stroke', 'strokewidth'];
 		
-		return Object.entries(obj)
+		return Object.entries(metadata)
 			.filter(([, v]) => v !== null && v !== undefined && v !== '')
 			.filter(([k, v]) => arrAllowedKey.includes(k)) 
 			.map(([k, v]) => `--${k}: ${v};`)
@@ -3493,7 +3557,6 @@ const CToolbar = {
 			elButton.textContent = btn.label;
 			elButton.className = ['toolbar__button', ...btn.classes, (btn.draggable ? 'button-draggable' : '')].join(' ').trim();
 			elButton.style.setProperty('--pxX', pxX + 'px');
-			elButton.style.setProperty('--fillrgb', btn.fillrgb);
 			elButton.style.setProperty('width', pxTextWidth + 'px');
 			elButton.dataset['pxx'] = pxX;
 			if (btn.tooltip) elButton.title = btn.tooltip;
@@ -3545,7 +3608,6 @@ const CToolbar = {
 			label: (idx+1).toString() + ': #' + tagblock.id,
 			tooltip: `Set active/passive.\nHold Alt to solo / restore all.\nDrag to change order in Tags chart.\n${idx < 9 ? ('(' + CUtil.formatShortcutForOS('⌘ ' + String(idx+1)) + ': Activate / deactivate)\n(' + CUtil.formatShortcutForOS('⌥ ' + String(idx+1)) + ': Solo / restore all)') : '(No keyboard shortcut)'}`,
 			classes: [tagblock.id, (tagblock.isActive ? 'button--active' : 'button--inactive')],
-			fillrgb: tagblock.metadata.fillrgb,
 			draggable: true,
 			dataset: {id: tagblock.id},		// can have several data fields
 			//::		 ☐ onClick
@@ -3560,7 +3622,6 @@ const CToolbar = {
 			label: ' ⚙ ',
 			tooltip: `Settings…\n(${CUtil.formatShortcutForOS('⌘ ,')})`,
 			classes: ['button-settings', 'button--active'],
-			fillrgb: '255, 255, 255',
 			draggable: false,
 			dataset: {},		// can have several data fields
 			//::		 ☐ onClick
@@ -4709,8 +4770,8 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 	},
 
 	//:::
-	//-:::	🔹 extractFirstCssBlockFromText
-	/*?extractFirstCssBlockFromText(args) {
+	//:::	🔹 extractFirstCssBlockFromText
+	extractFirstCssBlockFromText(args) {
 		if (LOGGING) console.group(...CUtil.logGroup('CModel', 'extractFirstCssBlockFromText', CUtil.getArgsKeys(args), args.caller));
 		if (LOGARGS) console.log(args);
 
@@ -4720,8 +4781,9 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 		
 		if (LOGGING) console.groupEnd();
 		return m ? m[1] : '';
-	},*/
+	},
 
+	//:::
 	//:::	🔹 buildDocdataFromText
 	buildDocdataFromText(args) {
 		if (LOGGING) console.group(...CUtil.logGroup('CModel', 'buildDocdataFromText', CUtil.getArgsKeys(args), args.caller));
@@ -4756,6 +4818,7 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 		const arrSection = [];
 		const arrChapter = [];
 		const arrPart = [];
+		const setTagsAll = new Set([NOTAG]);
 
 		let inYamlFrontMatter = false;
 		let yamlDone = false;          // only allow YAML block at top
@@ -4766,7 +4829,7 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 		let partCurrent = null;
 
 		const objGraphs = {};
-		const objPartTags = {};
+		//-const objPartTags = {};
 
 		const txtMarkdown = args.text;
 		const linesParsed = txtMarkdown.split(/\r?\n/);
@@ -4808,6 +4871,10 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 			//: 		→ this: getMetadataFromline
 			const arrTag   = this.getTagsFromLine({lineStripped, caller});
 			const metadata = this.getMetadataFromline({lineStripped, caller});
+
+			for (const tag of arrTag) {
+				setTagsAll.add(tag);
+			}
 
 			const caption = getCaptionFromLine(lineStripped);
 			const tag = arrTag[0] ?? NOTAG;
@@ -4900,21 +4967,24 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 			if (sectionCurrent || chapterCurrent) {
 
 				const idxChapter = !chapterCurrent ? arrChapter.length : arrChapter.indexOf(chapterCurrent);	// if line is new section (no chapter yet), point to first chapter in section (even though it is not created yet)
-				const numericEntries = Object.entries(metadata).filter(([key, value]) => typeof value === 'number');
+				const arrEntryNumeric = Object.entries(metadata).filter(([key, value]) => typeof value === 'number');
+				const arrKeyIgnore = ['bold', 'saturation'];
 
-				numericEntries.forEach(([key, value]) => {
+				arrEntryNumeric
+					.filter(([key]) => !arrKeyIgnore.includes(key))
+					.forEach(([key, value]) => {
 
-					const graphinfo = {
-						idxChapter,
-						value,
-						idxTextareaLine,
-					};
+						const graphinfo = {
+							idxChapter,
+							value,
+							idxTextareaLine,
+						};
 
-					if (!objGraphs[tag].graphtags[key])
-						objGraphs[tag].graphtags[key] = [];
+						if (!objGraphs[tag].graphtags[key])
+							objGraphs[tag].graphtags[key] = [];
 
-					objGraphs[tag].graphtags[key].push(graphinfo);
-				});
+						objGraphs[tag].graphtags[key].push(graphinfo);
+					});
 			}
 		};
 
@@ -4958,13 +5028,20 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 		// remove tagblock 'void' completely (parts already have a position assigned so #void parts will create 'spaces' in viewa)
 		const idxTagblockVoid = arrTagblock.findIndex(tb => tb.id === 'void');
 		if (idxTagblockVoid !== -1)
-			arrTagblock.splice(idxTagblockVoid, 1);		
+			arrTagblock.splice(idxTagblockVoid, 1);
 
+		// create alltags object with field for every distinct tag found in the text
+		const alltags = {};
+		for (const tag of setTagsAll) {
+			alltags[tag] = {};
+		}
 
 		this.docdata = {
 			arrSection,
 			arrChapter,
 			arrTagblock,
+			alltags: alltags,
+			definitions: {},
 		};
 		if (LOGGING) console.groupEnd();
 	},
@@ -5044,50 +5121,35 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 		return metadata;
 	},
 
-	//:::	🔹 setTagblockMetadataFromCss
-	setTagblockMetadataFromCss(args) {
-		if (LOGGING) console.group(...CUtil.logGroup('CModel', 'setTagblockMetadataFromCss', CUtil.getArgsKeys(args), args.caller));
+	//:::	🔹 setTagMetadataFromCss
+	setTagMetadataFromCss(args) {
+		if (LOGGING) console.group(...CUtil.logGroup('CModel', 'setTagMetadataFromCss', CUtil.getArgsKeys(args), args.caller));
 		if (LOGARGS) console.log(args);
 
-		// add metadata for each tagblock
-		for (const tagblock of this.docdata.arrTagblock) {
+		// get metadata from css for all tags
+		for (const tag in this.docdata.alltags) {
 
 			//: 		→ this: getTagblockMetadataFromCss * 2
-			const metadataForSelectorFromGlobalCss		= this.getTagblockMetadataFromCss({txtCss: args.txtGlobalCss,   tag: tagblock.id, caller: 'global'});
-			//?const metadataForSelectorFromDocumentCss	= this.getTagblockMetadataFromCss({txtCss: args.txtDocumentCss, tag: tagblock.id, caller: 'doc'});
+			const metadataForSelectorFromGlobalCss   = this.getTagMetadataFromCss({txtCss: args.txtGlobalCss,   tag: tag, caller: 'global'});
+			const metadataForSelectorFromDocumentCss = this.getTagMetadataFromCss({txtCss: args.txtDocumentCss, tag: tag, caller: 'doc'});
 
-			tagblock.metadata = {
+			this.docdata.alltags[tag].metadata = {
 				...metadataForSelectorFromGlobalCss,
-				//?...metadataForSelectorFromDocumentCss,	// overrides keys set from ...globalDefinitions with same name
-			};
+				...metadataForSelectorFromDocumentCss,	// overrides keys set from ...metadataForSelectorFromGlobalCss with same name
+			}
 		}
 		if (LOGGING) console.groupEnd();
 	},
 
-	//:::	🔹	getTagblockMetadataFromCss
-	getTagblockMetadataFromCss(args) {
-		//if (LOGGING) console.log(...CUtil.logGroup('CModel', 'getTagblockMetadataFromCss', CUtil.getArgsKeys(args), args.selector + ', ' + args.caller));
-		//if (LOGARGS) console.log(args);	
-
-		const metadataDefault = {
-			fill: '#888888',			//? '#ffffff',
-			fillrgb: '128, 128, 128',	//? '255, 255, 255',
-			stroke: 'CanvasText',
-			show: 'normal',
-		};
+	//:::	🔹	getTagMetadataFromCss
+	getTagMetadataFromCss(args) {
+		//if (LOGGING) console.log(...CUtil.logGroup('CModel', 'getTagMetadataFromCss', CUtil.getArgsKeys(args), args.selector + ', ' + args.caller));
+		//if (LOGARGS) console.log(args);
 
 		const txtStyle = args.txtCss || '';
 		const tag = typeof args.tag === 'string' ? args.tag.trim() : '';
-
-		// Always return a fresh metadata object
-		const metadata = {...metadataDefault};
-
-		if (!tag) {
-			return metadata;
-		}
-
-		// Escape tag name for regex use
-		const escapedTag = tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+		const escapedTag = tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');		// Escape tag name for regex use
+		const metadata = {};
 
 		// Match a line like:
 		// #gitte { ... }
@@ -5136,12 +5198,6 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 			}
 		}
 
-		const infoColor = CUtil.getColorInfo(metadata.fill);
-
-		metadata.fill = infoColor ? infoColor.hex : metadataDefault.fill;
-		metadata.fillrgb = infoColor ? infoColor.rgb : metadataDefault.fillrgb;
-		metadata.stroke = infoColor ? infoColor.hex : metadataDefault.stroke;
-
 		return metadata;
 	},
 
@@ -5153,11 +5209,11 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 
 		//: 		→ this: getDocdataDefinitionsFromCss * 2
 		const globalDefinitions = this.getDocdataDefinitionsFromCss({txtCss: args.txtGlobalCss, caller: 'globalDefinitions'});
-		//?const docDefinitions    = this.getDocdataDefinitionsFromCss({txtCss: args.txtDocumentCss, caller: 'docDefinitions'});
+		const docDefinitions    = this.getDocdataDefinitionsFromCss({txtCss: args.txtDocumentCss, caller: 'docDefinitions'});
 
 		this.docdata.definitions = {
 			...globalDefinitions,
-			//?...docDefinitions   		// overrides keys set from ...globalDefinitions with same name
+			...docDefinitions   		// overrides keys set from ...globalDefinitions with same name
 		};
 	
 		if (LOGGING) console.groupEnd();
@@ -5467,14 +5523,24 @@ const App = {
 				//:					→ CWrapper: setMenuChecks
 				await CWrapper.setMenuChecks({idxView: CModel.docstate.idxView, caller});
 
-				//:			→ App: dispatch:	model.build.and.augment		🟣 (test on res?)
-				const resBuildAndAugment = await App.dispatch({type: 'model.build.and.augment', text: CTexteditor.value, caller});
+				//-:			→ App: dispatch:	model.build.and.augment		🟣 (test on res?)
+				//-const resBuildAndAugment = await App.dispatch({type: 'model.build.and.augment', text: CTexteditor.value, caller});
 
-				//:			→ CChart:		renderSvg
-				CChart.renderSvg({typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
+				//-:			→ CChart:		renderSvg
+				//-CChart.renderSvg({typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
 
-				//:			→ CToolbar:		recreateButtons
-				CToolbar.recreateButtons({caller});
+				//-:			→ CToolbar:		recreateButtons
+				//-CToolbar.recreateButtons({caller});
+
+		//:		→ App: dispatch				model.build.and.augment		🟣 (test on res?)
+		const resBuildAndAugment = await App.dispatch({type: 'model.build.and.augment', text: CTexteditor.value, caller});
+
+		//:		→ App: dispatch				chart.render
+		await App.dispatch({type: 'chart.render', typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
+
+		//:		→ App: dispatch				toolbar.buttons.recreate
+		await App.dispatch({type: 'toolbar.buttons.recreate', caller});
+
 
 				//:		?	→ [UI updates: CChart.elParent.scrollLeft), CTexteditor.elTextarea.scrollTop]
 				CChart.elParent.scrollLeft = CModel.docstate.pxWorkspaceScrollLeft; 		// these 2 lines must be *after* renderSvg, and only here since it will not change on same doc edits
@@ -5534,20 +5600,20 @@ const App = {
 
 				//?:			→ CModel: extractFirstCssBlockFromText
 				const txtGlobalCss = CModel.appstate.txtGlobalCss;
-				//?const txtDocumentCss = CModel.extractFirstCssBlockFromText({text: args.text, caller});
+				const txtDocumentCss = CModel.extractFirstCssBlockFromText({text: args.text, caller});
 
 				//:				→ CFramework: setCustomCss
-				CFramework.setCustomCss({txtCustomCss: txtGlobalCss,   idElStyle: 'style-from-settings', caller: 'model.build.and.augment (txtGlobalCss)'});	// jk: not all the time - just here for testing logic and flow
-				//?CFramework.setCustomCss({txtCustomCss: txtDocumentCss, idElStyle: 'style-from-doc', caller: 'model.build.and.augment (txtDocumentCss)'});		// jk: maybe only if css part has changed?
+				CFramework.setCustomCss({txtCustomCss: txtGlobalCss,   idElStyle: 'style-from-settings', caller});	// jk: not all the time - just here for testing logic and flow
+				CFramework.setCustomCss({txtCustomCss: txtDocumentCss, idElStyle: 'style-from-doc', caller});		// jk: maybe only if css part has changed?
 				
 				//:			→ CModel: buildDocdataFromText
 				CModel.buildDocdataFromText({text: args.text, caller});
 
-				//:				→ CModel: setTagblockMetadataFromCss
-				CModel.setTagblockMetadataFromCss({txtGlobalCss, caller});
+				//:				→ CModel: setTagMetadataFromCss
+				CModel.setTagMetadataFromCss({txtGlobalCss, txtDocumentCss, caller});
 
 				//:				→ CModel: setDocdataDefinitionsFromCss
-				CModel.setDocdataDefinitionsFromCss({txtGlobalCss, caller});	//? txtDocumentCss removed from args
+				CModel.setDocdataDefinitionsFromCss({txtGlobalCss, txtDocumentCss, caller});
 
 				//:				→ CModel: reapplyDocstate
 				CModel.reapplyDocstate({caller});

@@ -1,3 +1,86 @@
+
+/*
+
 .hextra-feature-grid + .hextra-feature-grid {
 	margin-top: 1.5rem;
 }
+*/
+
+
+/*
+nav a[href$="/docs/"] {
+  display: none;
+}
+
+
+.hextra-scrollbar > ul > li:not(:first-child) {
+  display: none;
+}
+*/
+
+
+
+
+/*?
+aside.hextra-sidebar-container li > .hextra-sidebar-children {
+    height: auto;
+    padding-top: calc(var(--hx-spacing) * 1);
+}
+*/
+
+aside.hextra-sidebar-container li:has(a[href*="/docs/30-showcase/"]),
+aside.hextra-sidebar-container li:has(a[href*="/docs/50-faq/"]),
+aside.hextra-sidebar-container li:has(a[href*="/docs/70-download/"]) {
+  margin-top: 1.5rem;
+}
+
+nav a[href$="/docs"] {
+  display: none;
+}
+
+
+
+
+
+img.theme-figure__img {
+	/* border: 1px solid #eee !important;   */
+	border-radius: 8px !important;
+	box-shadow: #999 3px 3px 7px !important;
+}
+
+
+img.theme-figure__img--dark {
+	display: none;
+	box-shadow: #777 3px 3px 7px !important;
+}
+
+html.dark img.theme-figure__img--light {
+	display: none;
+}
+
+html.dark img.theme-figure__img--dark {
+  display: block;
+}
+
+
+img[alt="hextra-zoom-init"] {
+	display: none;
+}
+
+
+/*?
+.theme-figure img {
+	width: 100%;
+	height: auto;
+}
+*/
+
+
+/* make sidebar use full height, after theme selector has been hidden in hugo.yaml (params: theme: displayToggle: false) */
+@media (min-width: 48rem) {
+	aside.hextra-sidebar-container {
+		align-self: stretch;
+	}
+}
+
+

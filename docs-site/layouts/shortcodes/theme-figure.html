@@ -1,0 +1,26 @@
+{{- $light := .Get "light" | relURL -}}
+{{- $dark := .Get "dark" | relURL -}}
+{{- $alt := .Get "alt" -}}
+{{- $title := .Get "title" -}}
+
+<figure class="theme-figure">
+  <img
+    class="theme-figure__img theme-figure__img--light"
+    src="{{ $light }}"
+    alt="{{ $alt }}"
+    title="{{ $title }}"
+    data-zoomable
+    loading="lazy"
+  >
+  <img
+    class="theme-figure__img theme-figure__img--dark"
+    src="{{ $dark }}"
+    alt="{{ $alt }}"
+    title="{{ $title }}"
+    data-zoomable
+    loading="lazy"
+  >
+  {{ with $title }}
+    <figcaption>{{ . }}</figcaption>
+  {{ end }}
+</figure>
