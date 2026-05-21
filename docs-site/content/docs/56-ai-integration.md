@@ -15,3 +15,13 @@ weight: 56
 - This is conceptually separate from TextToTile’s role. The app’s purpose is simply to present a text-based structure/outline in a clear visual way. Who—or what—maintains the text (on your local computer) is not important to the app.
 
 - That said, TextToTile can be used to visualize dashboards, overviews, and plans that are partially or fully maintained by different AI agents, each handling specific tasks you define.
+
+- AI should collaborate through open text formats.
+
+- “TextToTile uses structured plain text that humans and AI can understand together.”
+
+- “Built for collaborative workflows between people and AI agents.”
+
+
+
+

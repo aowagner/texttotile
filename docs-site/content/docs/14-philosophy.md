@@ -4,41 +4,110 @@ title: 'Philosophy'
 weight: 14
 ---
 
-### Files over apps
 
-Edit data, not apps.
+## The Philosophy Behind TextToTile
 
-There is a growing trend — perhaps still a niche — toward focusing on your data as files that you can fully understand and keep track of.
+TextToTile is built around a simple idea: your information should belong to you. Not hidden inside a proprietary app, database, or cloud service — but stored in a format you can understand, control, and keep for the long term.
 
-Ideally in the simplest possible form: plain text.
+TextToTile separates the data itself from the way the data is visualized. This gives you the best of both worlds: simple, durable text files combined with rich visual overviews of structure, hierarchy, relationships, progress, and data points.
 
-Text files can still be read many years from now, even if the applications used to create them no longer exist.
+Your outlines can contain almost anything — from quick notes, brainstorming, journals, and project plans to research, calendars, articles, and complete novels. If it can be written as structured text, it can be visualized in TextToTile.
 
-The outlines you work with are simple text files, stored locally on your own computer.
-
-
-### Markdown
-
-Still just text files, but with a set of simple ways to style the content — covering much of what you would otherwise need a dedicated word processor for.
-
-Examples include *italic*, **bold**, headings, tables, etc.
-
-Regardless of which app you use to edit these files — such as the note-taking app Obsidian - the files and all the content you have created and refined remain fully readable, even if the app itself is no longer available.
+Instead of relying on separate specialized apps and services for different types of information — planning, tracking, research, writing, or organization — you maintain your information as simple structured text and create visual overviews tailored to your own workflow.
 
 
-### Text-first, local-first
+## Files Over Apps and subscriptions
 
-Work with text as your primary format, and keep your data local.
+Instead of locking your information inside an application, TextToTile works directly with ordinary text files stored on your own computer.
+
+This reflects a growing movement toward local-first software, open and human-readable formats, long-term durability, and simpler tools with fewer dependencies.
+
+The idea is simple: edit your data — not your apps.
+
+Applications come and go. File formats change. Cloud services disappear. Business models and subscriptions change over time.
+
+But plain text remains readable, private, and fully under your control.
+
+A text file created today will still be understandable many years from now — even if the original software no longer exists.
+
+In contrast to the traditional app-centric way of working with data, TextToTile does not “own” your information. It simply helps you see it more clearly.
+
+{{< theme-figure
+  light="/img/texttotile-illustration06-light.png"
+  dark="/img/texttotile-illustration06-light.png"
+  alt="Apps change. Text survives"
+  title="Apps change. Text survives (click to zoom)"
+>}}
 
 
-### Single source of truth
 
-Edit your text and data in one place, while maintaining a visual overview — from the first idea to the final result, or as a dynamic view of ongoing updates and everything you need to keep track of.
+## Text-First, Local-First
 
-I have tried many apps and platforms that were excellent in themselves, but often suited only specific, isolated phases of a project — such as brainstorming, planning, or reorganizing structure.
+<kbd>TextToTile</kbd> is designed around a text-first workflow.
 
-When I started writing the actual content — for example, a novel — and made changes there, it required a lot of effort to step out of the writing process just to keep a separate planning or visualization tool up to date. So much so that I eventually stopped maintaining those external tools in order to stay focused in writing mode.
+Your files remain editable, portable, searchable, versionable, and understandable because they are still just text files. You can work with them in Obsidian, VSCode, Git repositories, cloud-sync folders, local folders, or simple text editors — or entirely offline if you prefer.
 
-Personally, I now use Obsidian for all types of writing — whether it’s quickly noting a phone number, drafting an email, or working on my next novel.
+TextToTile focuses on visualization and overview. Your actual information remains independent from the app itself.
 
-However, any text editor that saves content as plain text — rather than in a proprietary or unreadable format — can be used. Some apps, such as Obsidian, automatically save your work continuously, meaning the visual representation in TextToTile is always up to date without requiring manual saves. Other apps — such as Visual Studio Code or Notepad require explicit saving (Ctrl/Cmd+S) to ensure changes are reflected.
+This also means you remain in control of backups, sharing, privacy, and whether AI tools can access your files at all.
+
+
+
+## Human-Readable by Design
+
+The text files you use with TextToTile remain readable and understandable without requiring TextToTile — or any other app for that matter.
+
+Even without TextToTile itself, the structure remains readable as ordinary text.
+
+This matters more than it may seem.
+
+Many modern tools store information in hidden cloud databases, proprietary formats, or complex internal systems where it becomes difficult to inspect the actual data directly — or even know who can access it.
+
+Plain structured text is different. You can open it anywhere, search it easily, edit it directly, and understand it without requiring special software.
+
+The hierarchy itself gives semantic meaning — without requiring complicated schemas or databases.
+
+
+
+## Markdown as an Optional Enhancement
+
+TextToTile works with ordinary text files. You don't need to know any Markdown formatting to use it.
+
+A Markdown file is still just a plain text file. Markdown simply adds a lightweight set of readable text-based formatting conventions.
+
+In the same way, an ordinary text file can already be viewed as a valid Markdown file — simply without using the optional formatting features.
+
+Markdown adds convenient formatting for things like headings, emphasis, lists, tables, links, and images while remaining readable even in its raw form.
+
+For many people, Markdown replaces the need for heavier document formats while keeping everything text-based and portable. This makes TextToTile fit naturally into workflows involving tools like Obsidian, VSCode, Typora, Logseq, GitHub, or simple text editors.
+
+Markdown is not required. It is simply one possible layer on top of plain text.
+
+
+
+## AI-Friendly by Nature
+
+Modern AI systems work exceptionally well with structured text. Because TextToTile is based on simple, hierarchically structured text files, AI agents can read outlines, reorganize structures, summarize information, update tasks or metadata, and assist with planning and analysis.
+
+Importantly, this happens without depending on fragile automation or complex app integrations.
+
+AI interacts with the same files you do — not with hidden internal systems.
+
+This creates a transparent workflow where you remain in control, changes remain inspectable, files remain portable, and AI assistance stays optional rather than mandatory.
+
+
+
+## Why This Matters
+
+Technology changes constantly. But simplicity tends to survive.
+
+TextToTile is built around a belief that simple formats, local ownership, structured text, visual clarity, and interoperability are becoming increasingly important — not just for developers, but for anyone who wants more control, more transparency, less lock-in, and calmer, longer-lasting workflows.
+
+It is not meant to replace writing, thinking, or creativity. Instead, TextToTile is designed to help you see your ideas, structures, plans, and patterns more clearly while keeping your files simple, readable, and fully under your own control.
+
+The visualization is simply another way of understanding what is already there.
+
+
+
+<!-- invisible image required to trigger Hextra’s medium-zoom initialization, enabling zoom on shortcode-rendered images -->
+![hextra-zoom-init](/img/transparent.png "")

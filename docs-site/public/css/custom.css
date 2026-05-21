@@ -1,6 +1,6 @@
+/* custom.css for Hugo + Hextra built website for TextToTile */
 
 /*
-
 .hextra-feature-grid + .hextra-feature-grid {
 	margin-top: 1.5rem;
 }
@@ -28,10 +28,10 @@ aside.hextra-sidebar-container li > .hextra-sidebar-children {
 }
 */
 
-aside.hextra-sidebar-container li:has(a[href*="/docs/30-showcase/"]),
+aside.hextra-sidebar-container li:has(a[href*="/docs/30-basics/"]),
 aside.hextra-sidebar-container li:has(a[href*="/docs/50-faq/"]),
 aside.hextra-sidebar-container li:has(a[href*="/docs/70-download/"]) {
-  margin-top: 1.5rem;
+  margin-top: 1.25rem;
 }
 
 nav a[href$="/docs"] {
@@ -62,7 +62,7 @@ html.dark img.theme-figure__img--dark {
   display: block;
 }
 
-
+/* invisible image required to trigger Hextra’s medium-zoom initialization - see bottom of individual pages */
 img[alt="hextra-zoom-init"] {
 	display: none;
 }
@@ -82,5 +82,9 @@ img[alt="hextra-zoom-init"] {
 		align-self: stretch;
 	}
 }
+
+
+
+.language-markdown .line .cl .err {color: unset; background-color: unset; }
 
 

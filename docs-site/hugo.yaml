@@ -54,8 +54,8 @@ menu:
       url: "/docs/10-concept"
       weight: 10
 
-    - name: "Showcase"
-      url: "/docs/30-showcase"
+    - name: "Basics"
+      url: "/docs/30-basics"
       weight: 30
 
     - name: "Faq"

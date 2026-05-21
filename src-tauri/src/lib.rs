@@ -227,41 +227,72 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 
 
 
+// ---- Chart submenu ----
+
+	// submenu chart view ('structure', 'tag groups')
+	let menuitem_chartview_a = CheckMenuItem::with_id(app, "view.chart.viewa", "Structure", true, true, Some("F1"), )?;
+	let menuitem_chartview_b = CheckMenuItem::with_id(app, "view.chart.viewb", "Tag Groups", true, false, Some("F2"), )?;
+
+	// Build the sub-submenu
+	let submenu_chartview = SubmenuBuilder::new(app, "Chart mode")
+		.item(&menuitem_chartview_a)
+		.item(&menuitem_chartview_b)
+		.build()?;
+
+
+	// zoom normal submenu items
+	let zoom_normal_out = MenuItem::with_id(app, "view.zoom.linecount.out", "Zoom out", true, Some("CmdOrCtrl+J"))?;
+	let zoom_normal_reset = MenuItem::with_id(app, "view.zoom.linecount.reset", "Default", true, Some("CmdOrCtrl+K"))?;
+	let zoom_normal_in = MenuItem::with_id(app, "view.zoom.linecount.in", "Zoom in", true, Some("CmdOrCtrl+L"))?;
+
+	// Build the sub-submenu
+	let zoom_normal_submenu = SubmenuBuilder::new(app, "Zoom")
+		.item(&zoom_normal_out)
+		.item(&zoom_normal_reset)
+		.item(&zoom_normal_in)
+		.build()?;
+
+
+	// 'zoom' margin
+	let zoom_margin_out = MenuItem::with_id(app, "view.zoom.margin.out", "Smaller", true, Some("CmdOrCtrl+Alt+J"))?;
+	let zoom_margin_reset = MenuItem::with_id(app, "view.zoom.margin.reset", "Normal", true, Some("CmdOrCtrl+Alt+K"))?;
+	let zoom_margin_in = MenuItem::with_id(app, "view.zoom.margin.in", "Larger", true, Some("CmdOrCtrl+Alt+L"))?;
+
+	// Build the sub-submenu
+	let zoom_margin_submenu = SubmenuBuilder::new(app, "Part spacing")
+		.item(&zoom_margin_out)
+		.item(&zoom_margin_reset)
+		.item(&zoom_margin_in)
+		.build()?;
+
+
+	let toggle_rounding = CheckMenuItem::with_id(app, "menu.chart.rounding.toggle", "Rounded Corners", true, true, Some("CmdOrCtrl+Alt+R"))?;
+
+
+
+	let chart_submenu = SubmenuBuilder::new(app, "Chart")
+		.item(&submenu_chartview)
+		.item(&zoom_normal_submenu)
+		.item(&zoom_margin_submenu)
+		.separator()
+		.item(&toggle_rounding)
+		.build()?;
+
+
+
+
 // ---- View submenu ----
 
-		// submenu chart view ('structure', 'tags')
-		let menuitem_chartview_a = CheckMenuItem::with_id(app, "view.chart.viewa", "Structure", true, true, Some("F1"), )?;
-		let menuitem_chartview_b = CheckMenuItem::with_id(app, "view.chart.viewb", "Tags", true, false, Some("F2"), )?;
-
-		// Build the sub-submenu
-		let submenu_chartview = SubmenuBuilder::new(app, "Chart view")
-			.item(&menuitem_chartview_a)
-			.item(&menuitem_chartview_b)
-			.build()?;
-
-
-		// zoom normal submenu items
-		let zoom_normal_in = MenuItem::with_id(app, "view.zoom.normal.in", "Zoom in", true, Some("CmdOrCtrl+L"))?;
-		let zoom_normal_out = MenuItem::with_id(app, "view.zoom.normal.out", "Zoom out", true, Some("CmdOrCtrl+J"))?;
-		let zoom_normal_reset = MenuItem::with_id(app, "view.zoom.normal.reset", "Actual size", true, Some("CmdOrCtrl+K"))?;
-
-		// Build the sub-submenu
-		let zoom_normal_submenu = SubmenuBuilder::new(app, "Zoom")
-			.item(&zoom_normal_in)
-			.item(&zoom_normal_out)
-			.item(&zoom_normal_reset)
-			.build()?;
-
-		// zoom UI submenu items
-		let zoom_ui_in = MenuItem::with_id(app, "view.zoom.ui.in", "Zoom in", true, Some("CmdOrCtrl+Alt+L"))?;
-		let zoom_ui_out = MenuItem::with_id(app, "view.zoom.ui.out", "Zoom out", true, Some("CmdOrCtrl+Alt+J"))?;
-		let zoom_ui_reset = MenuItem::with_id(app, "view.zoom.ui.reset", "Actual size", true, Some("CmdOrCtrl+Alt+K"))?;
+		// UI scale submenu items
+		let zoom_ui_out = MenuItem::with_id(app, "view.scale.ui.out", "Smaller", true, Some("CmdOrCtrl+Alt+Shift+J"))?;
+		let zoom_ui_reset = MenuItem::with_id(app, "view.scale.ui.reset", "Normal", true, Some("CmdOrCtrl+Alt+Shift+K"))?;
+		let zoom_ui_in = MenuItem::with_id(app, "view.scale.ui.in", "Larger", true, Some("CmdOrCtrl+Alt+Shift+L"))?;
 
 		// Build the sub-submenu
 		let zoom_ui_submenu = SubmenuBuilder::new(app, "UI scale")
-			.item(&zoom_ui_in)
 			.item(&zoom_ui_out)
 			.item(&zoom_ui_reset)
+			.item(&zoom_ui_in)
 			.build()?;			
 
 
@@ -315,11 +346,12 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 		.item(&toggle_ribbon)
 		.item(&toggle_graph)
 		.separator()
-		.item(&zoom_normal_submenu)
-		.separator()
+		//-.item(&zoom_normal_submenu)
+		//-.item(&zoom_margin_submenu)
+		//-.separator()
 		.item(&zoom_ui_submenu)
-		.separator()
-		.item(&submenu_chartview)
+		//?.separator()
+		//-.item(&submenu_chartview)
 		.item(&graph_height_submenu)
 		.item(&sidebar_position_submenu)
 		.item(&theme_submenu);
@@ -371,6 +403,7 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 				&app_submenu,
 				&file_submenu,
 				&edit_submenu,
+				&chart_submenu,
 				&view_submenu,
 				&help_submenu,
 			])
@@ -380,6 +413,7 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 			.items(&[
 				&file_submenu,
 				&edit_submenu,
+				&chart_submenu,
 				&view_submenu,
 				&help_submenu,
 			])

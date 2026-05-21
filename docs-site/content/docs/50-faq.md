@@ -45,9 +45,14 @@ weight: 50
 
 
 {{< details title="Are there more views coming?" closed="true" >}}
-- Currently includes Structure view and Tags view
+- Currently includes Structure view and Tag group view
 - Additional views are possible, such as a monthly calendar or other ways to visualize structured text
 - Future development will likely be guided by practical needs—especially replacing existing tools where simple text-based management is sufficient
+{{< /details >}}
+
+
+{{< details title="You mention Obsidian a lot - what is it?" closed="true" >}}
+- explain here
 {{< /details >}}
 
 

@@ -35,50 +35,50 @@
 		--ms-transition: 0.4s;
 		--ms-transition-quick: 0.15s;
 
-		--px-sidebar-size: 600px;	/* jk: 500px! 600 is for screenshots! */
+		--px-sidebar-size: 670px;	/* ao: 500px! 600 is for screenshots! */
 		--px-sidebar-min: 200px;
+
+		/*-  --px-col-margin: 11; -*/
 	}
 
 	:root.theme-light {
 		color-scheme: light;
 
-		--saturation-header: 15;
-		--saturation-tags: 50;
+		--saturation-header2: var(--saturation-header, 15);		/* --saturation-header2 gets set to 15, if not explicitly overridden in user's css */
+		--saturation-tags2:   var(--saturation-tags, 40);		/* --saturation-tags2 gets set to 40, if not explicitly overridden in user's css */
 	}
 
 	:root.theme-dark {
 		color-scheme: dark;
 
-		--saturation-header: 30;
-		--saturation-tags: 60;
+		--saturation-header2: var(--saturation-header, 30);
+		--saturation-tags2:   var(--saturation-tags, 60);
 	}
 
 
 
-	/*-- Fallback for older browsers */
-	/*--.theme-light .tb-part {
-		--stroke: #888;
-	}
 
-	.theme-dark .tb-part {
-		--stroke: var(--fill);
-	}--*/
+	/* make stroke and 'overrides' work in both light and dark theme */
 
-	/* set theme-specific default stroke on parts using :where(), which has zero specificity, so tag/class rules (e.g. .insight { --stroke: ... }) can still override these defaults. */
 	:where(.theme-light .tb-part) {
-		--stroke: #777;
+		--stroke2: var(--stroke, #777);		/* --stroke2 gets set to #777, if not explicitly overridden in user's css (or as @stroke on text line) */
+		--strokewidth2: var(--strokewidth, 1);
 	}
 
 	:where(.theme-dark .tb-part) {
-		--stroke: var(--fill);
+		--stroke2: var(--stroke, var(--fill));   /* same as above - except 'fallback' color (if no 'overrides' by user) is var(--fill), instead of #777 */
+		--strokewidth2: var(--strokewidth, 1);
 	}
 
-	.part-rect {
-		stroke: var(--stroke);
+	.tb-part__rect {
+		stroke: var(--stroke2);					/* rect stroke always gets set to --stroke2 - which gets set using rules above */
+		stroke-width: var(--strokewidth2);
 	}
 
 
-	/* .tb-part 	{--stroke: var(--stroke-init); } */
+
+
+
 
 
 
@@ -88,10 +88,10 @@
 	body.no-select .texteditor {pointer-events: none; }
 
 
-	.workspace__panel	{--saturation: var(--saturation-tags); }
-	.header				{--saturation: var(--saturation-header);	--fill: CanvasText; }
-	.tagblocks--parts	{--saturation: var(--saturation-tags); 		--fill: Canvas; }
-	.tagblocks--graphs	{--saturation: var(--saturation-tags); 		--fill: Canvas; }
+	.workspace__panel	{--saturation: var(--saturation-tags2); }
+	.header				{--saturation: var(--saturation-header2);	--fill: CanvasText; }
+	.tagblocks--parts	{--saturation: var(--saturation-tags2); 	--fill: Canvas; }
+	.tagblocks--graphs	{--saturation: var(--saturation-tags2); 	--fill: Canvas; }
 
 
 
@@ -120,7 +120,7 @@
 		.sidebar__main {flex: 1 1 auto; overflow: auto; display: flex; flex-direction: column; background-color: var(--text); }
 
 			/* sidebar__main - textarea */
-			.texteditor {flex: 1 1 50%; display:inline-flex; box-sizing: border-box; width: 100%; height: 100%; resize: none; padding: 8px; font-family: var(--fontfamily-texteditor); font-size: var(--px-font-size); font-weight: var(--bold); line-height: var(--px-line-height);  outline: none; /* white-space: pre;*/ tab-size: 3; border: none;  caret-color: #1976d2; overflow: auto; background: var(--fill); opacity: 0.97; color: var(--text); }
+			.texteditor {flex: 1 1 50%; display:inline-flex; box-sizing: border-box; width: 100%; height: 100%; resize: none; padding: 8px; font-family: var(--fontfamily-texteditor); font-size: var(--px-font-size); font-weight: var(--bold); line-height: var(--px-line-height);  outline: none; /* white-space: pre;*/ tab-size: 4; border: none;  caret-color: #1976d2; overflow: auto; background: var(--fill); opacity: 0.97; color: var(--text); }
 
 /* layout - splitter */
 								.splitter {grid-area: splitter; position: relative; background: var(--fill-bg); cursor: col-resize; z-index: 10; }
@@ -140,6 +140,7 @@
 						.toolbar 		{position: absolute; overflow: auto hidden; background: var(--fill); border: 1px solid var(--fill-grey); border-radius: 5px; }
 						.toolbarTags 	{--bold-button: var(--bold); /* --bold-button is a 'hack' to use toolbarTags's (aka :root) --bold, so buttons don't use individual tag's --bold */ height: calc(var(--px-line-height) + 18px); margin-left: 10px; max-width: calc(100% - 34px); padding: 7px; margin-top: calc((var(--px-line-height) + 48px) * -1); }
 	.toolbar-visible-no	.toolbarTags	{display: none; }
+						.toolbarTags.no-buttons	{display: none; }
 
 		.toolbar__button 	{position: absolute; transform: translateX(var(--pxX)); border: 1px solid var(--fill-grey); border-radius: 5px; font-family: var(--fontfamily); font-size: var(--px-font-size); line-height: var(--px-line-height); color: var(--text); white-space: nowrap; cursor: pointer; transition: opacity 120ms ease; }
 		.button--inactive	{opacity: 0.33; }
@@ -167,8 +168,8 @@
 
 
 
-		.toolbarTags	.button-settings			{--fill: Canvas; }
-		.toolbarTags	.button-settings:hover		{border: 1px solid CanvasText; }
+		.toolbarTags	.button-chartmode			{--fill: Canvas; }
+		.toolbarTags	.button-chartmode:hover		{border: 1px solid CanvasText; }
 
 /* workspace-main */
 
@@ -239,7 +240,7 @@
 
 
 /* part */	
-										.tb-part 	{transition: transform var(--ms-transition) ease-out; /*- --stroke: var(--fill); */ --strokewidth: 1; } 
+										.tb-part 	{transition: transform var(--ms-transition) ease-out; /* --strokewidth: 1; */ }
 	.chart-viewa						.tb-part 	{transform: translate(var(--x), var(--ya)) }
 	.chart-viewb						.tb-part 	{transform: translate(var(--x), var(--yb)) }
 	.chart-viewb	.tagblock--inactive	.tb-part 	{transform: translate(var(--x), 5px); }
@@ -247,7 +248,7 @@
 
 					.tb-part__rect-bg	{fill: Canvas !important; opacity: 1.0 !important; }
 
-					.tb-part__rect	{fill: var(--fill); opacity: calc(var(--saturation) / 100); stroke: var(--stroke); stroke-width: var(--strokewidth); }
+					.tb-part__rect	{fill: var(--fill); opacity: calc(var(--saturation) / 100); /* stroke-width: var(--strokewidth); */ }
 					.tb-part__rect	{transition: transform var(--ms-transition) ease-out; vector-effect: non-scaling-stroke; }
 	.chart-viewa 	.tb-part__rect	{height: var(--px-line-height); transform: scaleY(var(--count-part-lines)); }
 	.chart-viewb 	.tb-part__rect	{height: calc(var(--px-line-height) - 2px); transform: scaleY(1); }
@@ -266,8 +267,8 @@
 	.chart-viewa	.tb-part__symbol	{transform: translate(var(--x), var(--y)); }
 	.chart-viewb	.tb-part__symbol	{transform: translate(10px, calc(var(--px-line-height) * 0.5)); }
 
-	.chart-viewa	.tb-part__symbol	text	{font-size: calc(var(--px-line-height) * 1.5);	dominant-baseline: auto;    text-anchor: end; }
-	.chart-viewb	.tb-part__symbol	text	{font-size: calc(var(--px-line-height) * 1.0); 	dominant-baseline: central; text-anchor: end; }
+	.chart-viewa	.tb-part__symbol	text	{font-size: calc(var(--px-line-height) * 1.5);	dominant-baseline: ideographic;    text-anchor: end; }
+	.chart-viewb	.tb-part__symbol	text	{font-size: calc(var(--px-line-height) * 1.0); 	dominant-baseline: central;    text-anchor: end; }
 
 
 
@@ -287,7 +288,7 @@
 	.tagblocks--graphs	{}
 
 					/*? .tagblocks--graphs	.tagblocks-graphs 		{opacity: 1;	transition: opacity var(--ms-transition-quick) ease-out; } */
-	.chart-viewa	.tagblocks--graphs	.tagblock--inactive		{opacity: 0.1;	pointer-events: none; }
+	.chart-viewa	.tagblocks--graphs	.tagblock--inactive		{opacity: 0.2;	pointer-events: none; }
 	.chart-viewb	.tagblocks--graphs	.tagblock--inactive		{opacity: 0;	pointer-events: none; }
 
 	.tagblock-polyline		{fill: none; stroke: var(--fill); stroke-width: 1.0; pointer-events: none; }
@@ -422,7 +423,7 @@ button.unpin__btn {
 	flex: 0 0 auto;
 	align-items: center;
 	gap: 8px;
-	padding: 8px 60px;
+	padding: 8px 40px;
 	margin: 0px;
 	background: transparent;
 	border: 0;
@@ -477,6 +478,9 @@ button.unpin__btn {
 	align-content: start;
 	min-height: 0;
 }
+					.main__content {
+						gap: 22px;  /* ao: remove */
+					}
 
 
 /* Generic content sections. Default: natural height */
@@ -497,6 +501,10 @@ button.unpin__btn {
 	font-weight: 600;
 }
 
+					.section__head {
+						min-height: 1.65rem;  /* ao: remove */
+					}
+
 .section__body {
 	display: grid;
 	gap: 6px;
@@ -514,6 +522,7 @@ button.unpin__btn {
 /* Editor-style tabs: Style + Status */
 
 .popup.tab-style .popup__main,
+.popup.tab-defs .popup__main,
 .popup.tab-status .popup__main {
 	display: flex;
 	flex-direction: column;
@@ -521,6 +530,7 @@ button.unpin__btn {
 }
 
 .popup.tab-style .main__content,
+.popup.tab-defs .main__content,
 .popup.tab-status .main__content {
 	display: flex;
 	flex-direction: column;
@@ -530,6 +540,7 @@ button.unpin__btn {
 }
 
 .popup.tab-style .content__section,
+.popup.tab-defs .content__section,
 .popup.tab-status .content__section {
 	display: flex;
 	flex-direction: column;
@@ -539,6 +550,7 @@ button.unpin__btn {
 }
 
 .popup.tab-style .section__body,
+.popup.tab-defs .section__body,
 .popup.tab-status .section__body {
 	display: flex;
 	flex-direction: column;
@@ -637,7 +649,7 @@ button.unpin__btn {
 .body__item {
 	position: relative;
 	display: grid;
-	grid-template-columns: auto 1fr auto;
+	grid-template-columns: 3rem 1fr auto;
 	align-items: center;
 	column-gap: 12px;
 	padding: 10px 10px;
@@ -774,6 +786,7 @@ button.unpin__btn {
 /* Popup textareas */
 
 .texteditor-globalcss,
+.texteditor-globaldefs,
 .texteditor-status {
 	display: block;
 	width: 100%;
@@ -786,6 +799,7 @@ button.unpin__btn {
 }
 
 .popup.tab-style .texteditor-globalcss,
+.popup.tab-defs  .texteditor-globaldefs,
 .popup.tab-status .texteditor-status {
 	flex: 1 1 auto;
 }
@@ -913,6 +927,7 @@ const PX_VIEVBOX_MIN_H = 400;
 //::	☐ chapter columns
 const COUNT_PART_LINES_INITIAL = 8;
 const PX_BASEUNIT_INITIAL = 13;
+const PX_MARGIN_PART_INITIAL = 5;
 
 let PX_COL_WIDTH = 0;
 
@@ -920,11 +935,12 @@ let PX_BASEUNIT = PX_BASEUNIT_INITIAL;
 let PX_HEADER_HEIGHT = 0;
 let PX_LINE_HEIGHT = 0;
 let PX_FONT_SIZE = 0;
+let PX_MARGIN_PART = 0;
 let PX_GRAPHS_SPACE_BOTTOM = PX_PADDING_NORMAL * 2;
 let COUNT_PART_LINES = COUNT_PART_LINES_INITIAL;
 
 //::	☐ tagblock
-const COUNT_ROWS_FOR_GRAPH_HEIGHT = 10;
+const COUNT_ROWS_FOR_GRAPH_HEIGHT = 6;	// ao: must be 10!!!
 
 //::	☐ canvas - for measuring and splitting text
 const CANVAS_FOR_TEXT_MEASURE = document.createElement('canvas');
@@ -985,7 +1001,7 @@ const CUtil = {
 	//:::	🔹 formatShortcutForOS
 	formatShortcutForOS(str) {
 		const platform = navigator.platform.toUpperCase();
-		const isMac = platform.includes('MAC');			// jk: maybe set single state/const in init? (CModel.init): appstate.platform = ['mac', 'windows', 'linux']
+		const isMac = platform.includes('MAC');			// ao: maybe set single state/const in init? (CModel.init): appstate.platform = ['mac', 'windows', 'linux']
 		const isWindows = platform.includes('WIN');
 		const isLinux = !isMac && !isWindows;
 
@@ -1147,7 +1163,7 @@ const CWrapper = {
 		const caller = 'CWrapper: onMenuEvent: ' + args.payload + ' (' + args.caller + ')';
 		let res = {status: STATUS.OK, info: 'not set'};
 
-		// deduper		// jk: explain logic with both 'routes': required on Windows, but active on Mac+Linux too
+		// deduper		// ao: explain logic with both 'routes': required on Windows, but active on Mac+Linux too
 		const msTimestampNow = Date.now();
 		const msSinceLastCall = msTimestampNow - CWrapper.msTimestampLastMenuEvent;
 		const isProbablyDuplicateEvent = (msSinceLastCall < 80) && (args.payload === CWrapper.payloadLast);
@@ -1232,25 +1248,39 @@ const CWrapper = {
 		//:			→ App: dispatch:				chart.view.select				idxView: VIEWB
 		if (args.payload === 'view.chart.viewb')	res = await App.dispatch({type: 'chart.view.select', idxView: VIEWB, caller});
 
-		//::		🔻 view.zoom.normal.in
-		//:			→ App: dispatch:				chart.zoom:					isIn
-		if (args.payload === 'view.zoom.normal.in')	res = await App.dispatch({type: 'chart.zoom', isIn: true, isOut:  false, isReset: false, caller});
-		//::		🔻 view.zoom.normal.out
-		//:			→ App: dispatch:				chart.zoom:					isOut
-		if (args.payload === 'view.zoom.normal.out') res = await App.dispatch({type: 'chart.zoom', isIn: false, isOut: true,  isReset: false, caller});
-		//::		🔻 view.zoom.normal.reset
-		//:			→ App: dispatch:				chart.zoom:					isReset
-		if (args.payload === 'view.zoom.normal.reset')	res = await App.dispatch({type: 'chart.zoom', isIn: false, isOut: false, isReset: true, caller});
+		//::		🔻 view.zoom.linecount.in
+		//:			→ App: dispatch:				chart.normal.zoom:					isIn
+		if (args.payload === 'view.zoom.linecount.in')	res = await App.dispatch({type: 'chart.normal.zoom', isIn: true, isOut:  false, isReset: false, caller});
+		//::		🔻 view.zoom.linecount.out
+		//:			→ App: dispatch:				chart.normal.zoom:					isOut
+		if (args.payload === 'view.zoom.linecount.out') res = await App.dispatch({type: 'chart.normal.zoom', isIn: false, isOut: true,  isReset: false, caller});
+		//::		🔻 view.zoom.linecount.reset
+		//:			→ App: dispatch:				chart.normal.zoom:					isReset
+		if (args.payload === 'view.zoom.linecount.reset')	res = await App.dispatch({type: 'chart.normal.zoom', isIn: false, isOut: false, isReset: true, caller});
 
-		//::		🔻 view.zoom.ui.in
-		//:			→ App: dispatch:				chart.zoom:					isIn
-		if (args.payload === 'view.zoom.ui.in')	res = await App.dispatch({type: 'framework.zoom', isIn: true, isOut:  false, isReset: false, caller});
-		//::		🔻 view.zoom.ui.out
-		//:			→ App: dispatch:				chart.zoom:					isOut
-		if (args.payload === 'view.zoom.ui.out') res = await App.dispatch({type: 'framework.zoom', isIn: false, isOut: true,  isReset: false, caller});
-		//::		🔻 view.zoom.ui.reset
-		//:			→ App: dispatch:				chart.zoom:					isReset
-		if (args.payload === 'view.zoom.ui.reset')	res = await App.dispatch({type: 'framework.zoom', isIn: false, isOut: false, isReset: true, caller});
+		//::		🔻 view.zoom.margin.in
+		//:			→ App: dispatch:				chart.margin.zoom:			isIn
+		if (args.payload === 'view.zoom.margin.in')	res = await App.dispatch({type: 'chart.margin.zoom', isIn: true, isOut:  false, isReset: false, caller});
+		//::		🔻 view.zoom.margin.out
+		//:			→ App: dispatch:				chart.margin.zoom:			isOut
+		if (args.payload === 'view.zoom.margin.out') res = await App.dispatch({type: 'chart.margin.zoom', isIn: false, isOut: true,  isReset: false, caller});
+		//::		🔻 view.zoom.margin.reset
+		//:			→ App: dispatch:				chart.margin.zoom:			isReset
+		if (args.payload === 'view.zoom.margin.reset')	res = await App.dispatch({type: 'chart.margin.zoom', isIn: false, isOut: false, isReset: true, caller});
+
+		//::		🔻 view.zoom.margin.reset
+		//:			→ App: dispatch:				chart.margin.zoom:			isReset
+		if (args.payload === 'menu.chart.rounding.toggle')	res = await App.dispatch({type: 'chart.rounding.toggle', caller});
+
+		//::		🔻 view.scale.ui.in
+		//:			→ App: dispatch:				framework.ui.scale:			isIn
+		if (args.payload === 'view.scale.ui.in')	res = await App.dispatch({type: 'framework.ui.scale', isIn: true, isOut: false, isReset: false, caller});
+		//::		🔻 view.scale.ui.out
+		//:			→ App: dispatch:				framework.ui.scale:			isOut
+		if (args.payload === 'view.scale.ui.out')	res = await App.dispatch({type: 'framework.ui.scale', isIn: false, isOut: true, isReset: false, caller});
+		//::		🔻 view.scale.ui.reset
+		//:			→ App: dispatch:				framework.ui.scale:			isReset
+		if (args.payload === 'view.scale.ui.reset')	res = await App.dispatch({type: 'framework.ui.scale', isIn: false, isOut: false, isReset: true, caller});
 
 		//::		🔻 view.graph.height.a
 		//:			→ App: dispatch:				chart.graph.height.set:		25
@@ -1351,7 +1381,7 @@ const CWrapper = {
 		const msSinceWriteFileContent = msTimestampFileChanged - CWrapper.msTimestampWriteFileContent;
 		const changedPath = args.payload;
 		const isFileShouldReload = (changedPath === CModel.appstate.pathFileLoaded) && (msSinceWriteFileContent > msBufferToPreventOpen);
-		if (LOGARGS) console.log('Reload file: ' + (isFileShouldReload ? 'YES: ' : 'NO: ') + msSinceWriteFileContent + ' ms)');	// jk: test and fix
+		if (LOGARGS) console.log('Reload file: ' + (isFileShouldReload ? 'YES: ' : 'NO: ') + msSinceWriteFileContent + ' ms)');	// ao: test and fix
 		
 		if (isFileShouldReload) {
 			
@@ -1381,7 +1411,7 @@ const CWrapper = {
 	async showOpenFileSystemDialog(args) {
 		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'showOpenFileSystemDialog', CUtil.getArgsKeys(args), args.caller));
 		const platform = navigator.platform.toUpperCase();
-		const isMac = platform.includes('MAC');			// jk: maybe set single state/const in init? (CModel.init): appstate.platform = ['mac', 'windows', 
+		const isMac = platform.includes('MAC');			// ao: maybe set single state/const in init? (CModel.init): appstate.platform = ['mac', 'windows', 
 
 		//: 		→ window.__TAURI__.dialog:			open
 		const pathFileSelected = await window.__TAURI__.dialog.open({
@@ -1557,6 +1587,7 @@ Turn structured text into visual tiles and story maps.
 			{idMenu: 'view.graph.height.d',			key: 'pctGraphHeight', val: 100},
 			{idMenu: 'view.chart.viewa',			key: 'idxView', val: VIEWA},
 			{idMenu: 'view.chart.viewb',			key: 'idxView', val: VIEWB},
+			{idMenu: 'menu.chart.rounding.toggle',	key: 'isChartRoundingOn', val: true},
 		];
 
 		const arrUpdates = arrCheckableMenuItems
@@ -1572,6 +1603,9 @@ Turn structured text into visual tiles and story maps.
 	setWindowTitle: async (args) => {	
 		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'setWindowTitle', `(title: ${args.title})`, args.caller));
 		if (LOGARGS) console.log(args);
+
+		if (args.title.indexOf('Tracking') === 0)
+			args.title = 'Tracking';		// ao: remove line!
 		
 		//: 		→  window.__TAURI__.window:		setTitle
 		await window.__TAURI__.window.getCurrentWindow().setTitle(args.title + ' — ' + args.prefix);
@@ -2102,71 +2136,24 @@ const CFramework = {
 		if (LOGGING) console.groupEnd();
 	},
 
-
-
 	//:::	🔹 setCustomCss
 	setCustomCss(args) {
-		if (LOGGING) console.group(...CUtil.logGroup('CFramework', 'setCustomCss', CUtil.getArgsKeys(args), args.caller));
-		if (LOGARGS) console.log(args);
+	if (LOGGING) console.group(...CUtil.logGroup('CFramework', 'setCustomCss', CUtil.getArgsKeys(args), args.caller));
+	if (LOGARGS) console.log(args);
 		const txtInput = args.txtCustomCss || '';
-		const setColorKeys = new Set(['fill', 'stroke', 'text', 'bg', 'background', 'color']);
 
-		const lines = txtInput.split('\n');
+		const txtConverted = txtInput
+			// Remove old #def lines
+			.replace(/^\s*#def\s*\{[^}]*\}\s*;?\s*$/gm, '')
 
-		const outLines = [];
+			// Convert tag selectors: #gitte { ... } -> .gitte { ... }  - only when #tag is followed by {
+			.replace(/(^|\n)(\s*)#([a-zA-Z_][\w-]*)\s*(?=\{)/g, '$1$2.$3 ')
 
-		for (let line of lines) {
-			const trimmed = line.trim();
-
-			// 1) skip #def lines
-			if (/^#def\s*\{/.test(trimmed)) {
-				continue;
-			}
-
-			// 2) match tag rule
-			const mmLine = trimmed.match(/^#([a-zA-Z_][\w-]*)\s*\{([^}]*)\}\s*;?\s*$/);
-
-			if (!mmLine) {
-				outLines.push(line);   // ← keep untouched
-				continue;
-			}
-
-			const tagName = mmLine[1];
-			const body = mmLine[2];
-
-			const arrFields = body
-				.split(';')
-				.map(s => s.trim())
-				.filter(Boolean);
-
-			const arrCssFields = [];
-
-			for (const field of arrFields) {
-				const mm = field.match(/^@([a-zA-Z_][\w-]*)\s*(?::\s*|\s+)(.+)$/);
-				if (!mm) continue;
-
-				const key = mm[1];
-				let value = mm[2].trim();
-
-				if (!value) continue;
-
-				if (setColorKeys.has(key)) {
-					const infoColor = CUtil.getColorInfo(value);
-					if (!infoColor) continue;
-				}
-
-				arrCssFields.push(`--${key}: ${value};`);
-			}
-
-			// Always output line (even if empty body)
-			outLines.push(`.${tagName} { ${arrCssFields.join(' ')} }`);
-		}
-
-		const txtConverted = outLines.join('\n');
+			// Convert TextToTile custom properties: @fill -> --fill
+			.replace(/@([a-zA-Z_][\w-]*)\s*:/g, '--$1:');
 
 		const elStyleSettings = document.querySelector(`#${args.idElStyle}`);
 		elStyleSettings.textContent = txtConverted;
-		if (LOGGING) console.groupEnd();
 	},
 
 	//:::	🔹 updateLookupConstants
@@ -2176,12 +2163,13 @@ const CFramework = {
 
 		PX_BASEUNIT			= args.pxBaseUnit ?? PX_BASEUNIT;
 		COUNT_PART_LINES	= args.linecount  ?? COUNT_PART_LINES;
+		PX_MARGIN_PART		= args.pxMarginPart ?? PX_MARGIN_PART;
 
 		PX_FONT_SIZE		= CUtil.roundN(PX_BASEUNIT * 1.0, 2);
 		PX_LINE_HEIGHT		= CUtil.roundN(PX_BASEUNIT * 1.4, 2);
-		PX_HEADER_HEIGHT	= CUtil.roundN(PX_LINE_HEIGHT * 3.25, 2);								// jk: make constant or rule for '3.25'
+		PX_HEADER_HEIGHT	= CUtil.roundN(PX_LINE_HEIGHT * 3.25, 2);								// ao: make constant or rule for '3.25'
 
-		PX_COL_WIDTH = (PX_LINE_HEIGHT * COUNT_PART_LINES) + PX_PADDING_NORMAL;
+		PX_COL_WIDTH = (PX_LINE_HEIGHT * COUNT_PART_LINES) + (PX_MARGIN_PART * 2);
 
 		if (LOGARGS) console.log({PX_BASEUNIT, PX_COL_WIDTH, COUNT_PART_LINES,  PX_FONT_SIZE, PX_LINE_HEIGHT, PX_HEADER_HEIGHT});
 
@@ -2446,6 +2434,14 @@ const CFramework = {
 			CWrapper.onMenuEvent({payload: 'view.sidebar.toggle', caller});
 		}
 
+		//::		🔻 Alt + Cmd + R
+		else if (isAltKey && isMetaKey && e.code === 'KeyR') {		// nb: tests on e.code because e.key is "®"
+			if (e.preventDefault) e.preventDefault();
+
+			//:			→ CWrapper: onMenuEvent:			menu.chart.rounding.toggle
+			CWrapper.onMenuEvent({payload: 'menu.chart.rounding.toggle', caller});
+		}
+
 		//::		🔻 Cmd + R
 		else if (isMetaKey && e.key.toLowerCase() === 'r') {
 			if (e.preventDefault) e.preventDefault();
@@ -2478,30 +2474,42 @@ const CFramework = {
 			CWrapper.onMenuEvent({payload: 'view.chart.viewb', caller});
 		}
 
+		//::		🔻 Shift + Cmd + Alt + 'J/K/L'
+		else if ((isShiftKey && isMetaKey && isAltKey) && (e.key.toLowerCase() === 'j' || e.key.toLowerCase() === 'k' || e.key === 'l')) {
+			if (e.preventDefault) e.preventDefault();
 
-		//::		🔻 Cmd + Alt + 'J/K/L'
+			const isReset = (e.key === 'k');
+			const isIn = (e.key.toLowerCase() === 'l');
+			const isOut = !(isReset || isIn);
+			const payload = isOut ? 'view.scale.ui.out' : isIn ? 'view.scale.ui.in' : 'view.scale.ui.reset';
+			
+			//:			→ CWrapper: onMenuEvent:			view.scale.ui.out|in|reset
+			CWrapper.onMenuEvent({payload, caller});
+		}
+
+		//::		🔻 !Shift + Cmd + Alt + 'J/K/L'
 		else if ((!isShiftKey && isMetaKey && isAltKey) && (e.key.toLowerCase() === 'j' || e.key.toLowerCase() === 'k' || e.key === 'l')) {
 			if (e.preventDefault) e.preventDefault();
 
 			const isReset = (e.key === 'k');
 			const isIn = (e.key.toLowerCase() === 'l');
 			const isOut = !(isReset || isIn);
-			const payload = isOut ? 'view.zoom.ui.out' : isIn ? 'view.zoom.ui.in' : 'view.zoom.ui.reset';
+			const payload = isOut ? 'view.zoom.margin.out' : isIn ? 'view.zoom.margin.in' : 'view.zoom.margin.reset';
 			
-			//:			→ CWrapper: onMenuEvent:			view.zoom.ui.out|in|reset
+			//:			→ CWrapper: onMenuEvent:			view.zoom.margin.out|in|reset
 			CWrapper.onMenuEvent({payload, caller});
 		}
 
-		//::		🔻 Cmd + 'J/K/L'
+		//::		🔻 !Shift + Cmd + 'J/K/L'
 		else if (!isShiftKey && isMetaKey && (e.key.toLowerCase() === 'j' || e.key.toLowerCase() === 'k' || e.key === 'l')) {
 			if (e.preventDefault) e.preventDefault();
 
 			const isReset = (e.key === 'k');
 			const isIn = (e.key.toLowerCase() === 'l');
 			const isOut = !(isReset || isIn);
-			const payload = isOut ? 'view.zoom.normal.out' : isIn ? 'view.zoom.normal.in' : 'view.zoom.normal.reset';
+			const payload = isOut ? 'view.zoom.linecount.out' : isIn ? 'view.zoom.linecount.in' : 'view.zoom.linecount.reset';
 
-			//:			→ CWrapper: onMenuEvent:			view.zoom.normal.out|in|reset
+			//:			→ CWrapper: onMenuEvent:			view.zoom.linecount.out|in|reset
 			CWrapper.onMenuEvent({payload, caller});
 		}
 
@@ -2604,7 +2612,7 @@ const CChart = {
 					const strClassesText = ['header__text', 'header__text--section', ...section.arrTag].join(' ');
 
 					return svg`	<rect class=${strClassesRect} style=${strExtraStyle} x=${pxX} y=${0} width=${pxWidth} rx=${PX_PADDING_NORMAL * 1.5}  @click=${e => CChart.onClick({src: 'section', e, idxTextareaLine: section.idxTextareaLine, caller: 'src: section'})} />
-								<text class=${strClassesText} style=${strExtraStyle} x=${pxX + PX_PADDING_NORMAL} y=${PX_LINE_HEIGHT * 1.2}>${strCaption}</text>`;
+								<text class=${strClassesText} style=${strExtraStyle} x=${pxX + PX_MARGIN_PART + PX_PADDING_SMALL} y=${PX_LINE_HEIGHT * 1.2}>${strCaption}</text>`;
 				})
 			);
 
@@ -2621,7 +2629,7 @@ const CChart = {
 					const strClassesText = ['header__text', 'header__text--chapter', ...chapter.arrTag].join(' ');
 
 					return svg` <rect class=${strClassesRect} style=${strExtraStyle} x=${pxX} y=${PX_LINE_HEIGHT * 2} width=${PX_COL_WIDTH}  rx=${PX_PADDING_NORMAL} @click=${e => CChart.onClick({src: 'chapter', e, idxTextareaLine: chapter.idxTextareaLine, caller: 'src: chapter'})} />
-								<text class=${strClassesText} style=${strExtraStyle} x=${pxX + PX_PADDING_NORMAL} y=${PX_LINE_HEIGHT * 2.65}>${strCaption}</text>`;
+								<text class=${strClassesText} style=${strExtraStyle} x=${pxX + PX_MARGIN_PART + PX_PADDING_SMALL} y=${PX_LINE_HEIGHT * 2.65}>${strCaption}</text>`;
 				})
 			);
 
@@ -2670,19 +2678,20 @@ const CChart = {
 			//if (LOGGING) console.log('%c CChart %c Template: %c Tagblock_Part %c (part, tagblock)', LOG_MODULE, LOG_RED, LOG_FUNCTION+LOG_BOLD, LOG_ARGS);
 			if (LOGARGS) console.log(part, tagblock);
 
-			// get 'show' (last/closest) and 'code' (combined) values from css metadata from part's arrTag ('classes') + part's own metadata
+			// get 'show' (last/closest) and 'icon' (combined) values from css metadata from part's arrTag ('classes') + part's own metadata
 			const docdata = CModel.docdata;
 			const arrTagMetadata = part.arrTag.map(tag => docdata.alltags[tag].metadata);
-			const code = [part.metadata.code, ...arrTagMetadata.map(metadata => metadata.code)].filter(Boolean).join('');
+			const icon = [part.metadata.icon, ...arrTagMetadata.map(metadata => metadata.icon)].filter(Boolean).join('');
 			const show = part.metadata.show ?? arrTagMetadata.find(metadata => metadata.show)?.show ?? 'normal';
 
-			const pxWidthRect = PX_COL_WIDTH - (PX_PADDING_SMALL * 2);
+			const pxWidthRect = PX_COL_WIDTH - (PX_MARGIN_PART * 2);
 			const pxX = PX_MARGIN_LEFT_W + (PX_COL_WIDTH * part.idxChapter);
-			const pxYa = (((PX_LINE_HEIGHT * COUNT_PART_LINES) + PX_PADDING_NORMAL) * part.idxOrderInChapter) + PX_PADDING_SMALL;
+			const pxYa = (((PX_LINE_HEIGHT * COUNT_PART_LINES) + (PX_MARGIN_PART * 2)) * part.idxOrderInChapter) + PX_MARGIN_PART;
 			const pxYb = (PX_LINE_HEIGHT * part.idxRow) + PX_PADDING_SMALL;
 			const strBaseStyle = `--x:${pxX}px; --ya:${pxYa}px; --yb:${pxYb}px; `;
 			const strExtraStyle = CChart.getStyleFromMetadata(part.metadata);			// nb: must be *part* metadata only (*not* arrTagMetadata from css (see above))
 			const strClasses = ['tb-part', ...part.arrTag, show === 'normal' ? 'tb-part--normal' : 'tb-part--special'].join(' ');
+			const pxChartRounding = CModel.docstate.isChartRoundingOn ? 5 : 0;
 
 			let arrTextlines = [];
 			let arrObjTextline = [];
@@ -2714,7 +2723,8 @@ const CChart = {
 
 			else {
 				const definition = CModel.docdata.definitions?.[show];
-				const strLine0 = `${show} (${definition ? definition.unit : '?'})`;
+				//-const strLine0 = `${show} (${definition ? definition.unit : '?'})`;
+				const strLine0 = definition?.unit ? `${show} (${definition.unit})` : `${show}`;
 				const strLine1 = part.metadata?.[show] ?? '—';
 
 				arrTextlines = [strLine0, strLine1];
@@ -2728,16 +2738,16 @@ const CChart = {
 
 			return svg`
 		<g class=${strClasses} style=${strBaseStyle + strExtraStyle} data-idxline=${'x' + part.idxTextareaLine} @click=${e => CChart.onClick({src: 'part', e, idxTextareaLine: part.idxTextareaLine, caller: 'src: part'})} >
-			<rect class="tb-part__rect tb-part__rect-bg" x=${PX_PADDING_SMALL} y="0" width=${pxWidthRect} rx=${PX_PADDING_SMALL-1}/>
-			<rect class="tb-part__rect" x=${PX_PADDING_SMALL} y="0" width=${pxWidthRect} rx=${PX_PADDING_SMALL-1}/>
+			<rect class="tb-part__rect tb-part__rect-bg" x=${PX_MARGIN_PART} y="0" width=${pxWidthRect} rx=${pxChartRounding}/>
+			<rect class="tb-part__rect" x=${PX_MARGIN_PART} y="0" width=${pxWidthRect} rx=${pxChartRounding}/>
 			<text class="tb-part__text-viewa">
 				${arrObjTextline.map((objTextline, idx) => svg`
-					<tspan data-idxlinesub=${objTextline.idxTextareaLine} class=${[...objTextline.classes, 'line', 'line' + (idx+1)].join(' ')} style="${objTextline.style}" x=${PX_PADDING_SMALL * 2} dy=${objTextline.dy}>${objTextline.caption}</tspan>
+					<tspan data-idxlinesub=${objTextline.idxTextareaLine} class=${[...objTextline.classes, 'line', 'line' + (idx+1)].join(' ')} style="${objTextline.style}" x=${PX_MARGIN_PART + PX_PADDING_SMALL * 1} dy=${objTextline.dy}>${objTextline.caption}</tspan>
 				`)}
 			</text>
 			<text class="tb-part__text-viewb top" x=${PX_PADDING_NORMAL} y=${PX_LINE_HEIGHT * 0.5}>${part.caption}</text> 
 
-			${code ? svg`<g class="tb-part__symbol" style=${`--x:${pxWidthRect + PX_PADDING_NORMAL}px; --y:${PX_LINE_HEIGHT * COUNT_PART_LINES}px;`}><text x="0" y="0">${code}</text></g>` : ''}
+			${icon ? svg`<g class="tb-part__symbol" style=${`--x:${PX_COL_WIDTH - 1}px; --y:${PX_COL_WIDTH - PX_MARGIN_PART}px;`}><text x="0" y="0">${icon}</text></g>` : ''}
 		</g>`;
 		},
 
@@ -2901,7 +2911,7 @@ const CChart = {
 	},
 
 	//:::	🔹		updateTagblockGraphs(tagblock)
-	updateTagblockGraphs(tagblock, definitions, elTagblock) {		// jk: maybe make this function 'safer'
+	updateTagblockGraphs(tagblock, definitions, elTagblock) {		// ao: maybe make this function 'safer'
 		if (LOGGING) console.group('%c CChart %c updateTagblockGraphs %c (' + tagblock.id + ')', LOG_MODULE, LOG_FUNCTION, LOG_ARGS, LOG_EXTRA);
 		if (LOGARGS) console.log(tagblock, definitions);
 
@@ -2979,7 +2989,7 @@ const CChart = {
 				circle.setAttribute('cy', point.pxY);
 				circle.style.display = '';
 
-				circletexts[idx].setAttribute('x', point.pxX);	// jk: could be 'safer' here?
+				circletexts[idx].setAttribute('x', point.pxX);	// ao: could be 'safer' here?
 				circletexts[idx].setAttribute('y', point.pxY);
 
 				circlesBg[idx].setAttribute('cx', point.pxX);
@@ -3179,7 +3189,7 @@ const CTexteditor = {
 		elTextarea.setAttribute('wrap', 'off');
 		elTextarea.setAttribute('placeholder', 'off sdfh dsfh sdfh sdfhdsfh\n\tLine 2');
 
-		this.onInputDebounced = this.debounce(() => this.onInput(), 400);		// jk: define const for ms?
+		this.onInputDebounced = this.debounce(() => this.onInput(), 400);		// ao: define const for ms?
 
 		elTextarea.addEventListener('input', this.onInputDebounced);
 		elTextarea.addEventListener('keydown', e => this.onKeydown(e));
@@ -3577,6 +3587,8 @@ const CToolbar = {
 		this.elToolbar.replaceChildren(...arrElButtonNew);
 		this.elToolbar.style.width = pxX + 'px';
 
+		this.elToolbar.classList.toggle('no-buttons', arrButtons.length === 0);
+
 		if (LOGGING) console.groupEnd();
 	},
 
@@ -3624,21 +3636,23 @@ const CToolbar = {
 			}
 		}));
 
-		const btnSettings = {
-			label: ' ⚙ ',
-			tooltip: `Settings…\n(${CUtil.formatShortcutForOS('⌘ ,')})`,
-			classes: ['button-settings', 'button--active'],
+		const btnChartMode = {
+			label: CModel.docstate.idxView === VIEWA ? ' ▥ ' : ' ▤ ', 		// also tried ☷ and ☰ (but not same width) optional: ▦	   old for 'Settings': ⚙
+			tooltip: `Swap Chart mode.\n(${CUtil.formatShortcutForOS('F1')}: Structure)\n(${CUtil.formatShortcutForOS('F2')}: Tag groups)`,
+			classes: ['button-chartmode', 'button--active'],
 			draggable: false,
-			dataset: {},		// can have several data fields
+			dataset: {},
 			//::		 ☐ onClick
-			//:			→ App: dispatch:			model.tagblock.active.set
+			//:			→ App: dispatch:			chart.view.select
 			onClick: async (e) => {
 				e.stopPropagation();
-				await App.dispatch({type: 'popup.settings.open', caller: 'btn-popup'});
+				const idxViewNew = CModel.docstate.idxView === VIEWA ? VIEWB : VIEWA;
+				const res = await App.dispatch({type: 'chart.view.select', idxView: idxViewNew, caller: 'CToolbar -> btnChartMode'});
 			}
 		};
 
-		arrButtons.unshift(btnSettings);
+		if (arrButtons.length > 0)
+			arrButtons.unshift(btnChartMode);
 		
 		this.createButtons(arrButtons);
 
@@ -3651,6 +3665,7 @@ const CToolbar = {
 const CPopup = {
 	elTextarea: null,
 	draginfo: null,
+	idTextareaTab: '',
 
 	//:::	📗 Templates
 	Templates: {
@@ -3683,6 +3698,11 @@ const CPopup = {
 									title=${`Select tab: Style\n(${CUtil.formatShortcutForOS('⌘') + ' ← / →'})`}
 								>Style</button>
 
+								<button class=${['tablist__btn', appstate.idTab === 'defs' ? 'tablist__btn-selected' : ''].join(' ')} role="tab"
+									@click=${e => CPopup.onClick({src: '@click: btn.tab.select', e, idTab: 'defs'})}
+									title=${`Select tab: Definitions\n(${CUtil.formatShortcutForOS('⌘') + ' ← / →'})`}
+								>Definitions</button>
+
 								<button class=${['tablist__btn', appstate.idTab === 'status' ? 'tablist__btn-selected' : ''].join(' ')} role="tab"
 									@click=${e => CPopup.onClick({src: '@click: btn.tab.select', e, idTab: 'status'})}
 									title=${`Select tab: Status\n(${CUtil.formatShortcutForOS('⌘') + ' ← / →'})`}
@@ -3694,7 +3714,7 @@ const CPopup = {
 
 						<div class="popup__main">
 							<div class="main__content">
-								${appstate.idTab === 'files' ? CPopup.Templates.TabFiles() : appstate.idTab === 'view' ? CPopup.Templates.TabView() : appstate.idTab === 'style' ? CPopup.Templates.TabStyle() : CPopup.Templates.TabStatus() }
+								${appstate.idTab === 'files' ? CPopup.Templates.TabFiles() : appstate.idTab === 'view' ? CPopup.Templates.TabView() : appstate.idTab === 'style' ? CPopup.Templates.TabStyle() : appstate.idTab === 'defs' ? CPopup.Templates.TabDefs() :  CPopup.Templates.TabStatus() }
 							</div>
 						</div>
 					</div>
@@ -3744,7 +3764,30 @@ const CPopup = {
 				</div>
 			`;
 		},
+/*
 
+				<div class="content__section">
+					<div class="section__head">
+						<span>Chart view</span>
+						<span class="hint">Select chart view</span>
+						<div class="section__actions"></div>
+					</div>
+					<div class="section__body">
+						<div class="body__item-plain">
+							<div class="pillbar">
+								<button class=${['pill', docstate.idxView === VIEWA ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.view.chart', idxView: VIEWA})} title="View chart as Structure\n(F1)">
+									<span class="kbd">F1</span>
+									<span class="btn__label">Structure</span>
+								</button>
+								<button class=${['pill', docstate.idxView === VIEWB ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.view.chart', idxView: VIEWB})} title="View chart grouped by Tags\n(F2)">
+									<span class="kbd">F2</span>
+									<span class="btn__label">Tags</span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+*/
 		//::		☐ TabView()
 		//:			→ @click: this.onClick
 		TabView() {
@@ -3772,48 +3815,53 @@ const CPopup = {
 
 				<div class="content__section">
 					<div class="section__head">
-						<span>Chart view</span>
-						<span class="hint">Select chart view</span>
+						<span>UI scale</span>
+						<span class="hint">Adjust the size of text and interface elements</span>
 						<div class="section__actions"></div>
 					</div>
 					<div class="section__body">
 						<div class="body__item-plain">
 							<div class="pillbar">
-								<button class=${['pill', docstate.idxView === VIEWA ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.view.chart', idxView: VIEWA})} title="View chart as Structure\n(F1)">
-									<span class="kbd">F1</span>
-									<span class="btn__label">Structure</span>
+								<button class=${['pill'].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.ui.scale', isIn: false, isOut: true, isReset: false})} title=${`Make text and interface elements smaller\n(${CUtil.formatShortcutForOS('⌥ ⇧ ⌘ J')})`}>
+									<span class="kbd">${CUtil.formatShortcutForOS('⌥ ⇧ ⌘ J')}</span>
+									<span class="btn__label">Smaller</span>
 								</button>
-								<button class=${['pill', docstate.idxView === VIEWB ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.view.chart', idxView: VIEWB})} title="View chart grouped by Tags\n(F2)">
-									<span class="kbd">F2</span>
-									<span class="btn__label">Tags</span>
+								<button class=${['pill'].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.ui.scale', isIn: false, isOut: false, isReset: true})} title=${`Reset text and interface elements to default size\n(${CUtil.formatShortcutForOS('⌥ ⇧ ⌘ K')})`}>
+									<span class="kbd">${CUtil.formatShortcutForOS('⌥ ⇧ ⌘ K')}</span>
+									<span class="btn__label">Normal</span>
+								</button>
+								<button class=${['pill'].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.ui.scale', isIn: true, isOut: false, isReset: false})} title=${`Make text and interface elements larger\n(${CUtil.formatShortcutForOS('⌥ ⇧ ⌘ L')})`}>
+									<span class="kbd">${CUtil.formatShortcutForOS('⌥ ⇧ ⌘ L')}</span>
+									<span class="btn__label">Larger</span>
 								</button>
 							</div>
 						</div>
 					</div>
 				</div>
 
+
 				<div class="content__section">
 					<div class="section__head">
 						<span>Graph height</span>
-						<span class="hint">Adjust graph height in Structure view</span>
+						<span class="hint">Adjust graph height in Structure mode</span>
 						<div class="section__actions"></div>
 					</div>
 					<div class="section__body">
 						<div class="body__item-plain">
 							<div class="pillbar">
-								<button class=${['pill', appstate.pctGraphHeight === 25 ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.graph.height.set', pctGraphHeight: 25})} title=${`Adjust graph height in Structure view\n(${CUtil.formatShortcutForOS('⇧ ⌘ G')})`}>
+								<button class=${['pill', appstate.pctGraphHeight === 25 ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.graph.height.set', pctGraphHeight: 25})} title=${`Adjust graph height in Structure mode\n(${CUtil.formatShortcutForOS('⇧ ⌘ G')})`}>
 									<span class="kbd">${CUtil.formatShortcutForOS('⇧ ⌘ G')}</span>
 									<span class="btn__label">25%</span>
 								</button>
-								<button class=${['pill', appstate.pctGraphHeight === 50 ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.graph.height.set', pctGraphHeight: 50})} title=${`Adjust graph height in Structure view\n(${CUtil.formatShortcutForOS('⇧ ⌘ G')})`}>
+								<button class=${['pill', appstate.pctGraphHeight === 50 ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.graph.height.set', pctGraphHeight: 50})} title=${`Adjust graph height in Structure mode\n(${CUtil.formatShortcutForOS('⇧ ⌘ G')})`}>
 									<span class="kbd">${CUtil.formatShortcutForOS('⇧ ⌘ G')}</span>
 									<span class="btn__label">50%</span>
 								</button>
-								<button class=${['pill', appstate.pctGraphHeight === 75 ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.graph.height.set', pctGraphHeight: 75})} title=${`Adjust graph height in Structure view\n(${CUtil.formatShortcutForOS('⇧ ⌘ G')})`}>
+								<button class=${['pill', appstate.pctGraphHeight === 75 ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.graph.height.set', pctGraphHeight: 75})} title=${`Adjust graph height in Structure mode\n(${CUtil.formatShortcutForOS('⇧ ⌘ G')})`}>
 									<span class="kbd">${CUtil.formatShortcutForOS('⇧ ⌘ G')}</span>
 									<span class="btn__label">75%</span>
 								</button>
-								<button class=${['pill', appstate.pctGraphHeight === 100 ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.graph.height.set', pctGraphHeight: 100})} title=${`Adjust graph height in Structure view\n(${CUtil.formatShortcutForOS('⇧ ⌘ G')})`}>
+								<button class=${['pill', appstate.pctGraphHeight === 100 ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.graph.height.set', pctGraphHeight: 100})} title=${`Adjust graph height in Structure mode\n(${CUtil.formatShortcutForOS('⇧ ⌘ G')})`}>
 									<span class="kbd">${CUtil.formatShortcutForOS('⇧ ⌘ G')}</span>
 									<span class="btn__label">100%</span>
 								</button>
@@ -3825,25 +3873,25 @@ const CPopup = {
 				<div class="content__section">
 					<div class="section__head">
 						<span>Editor position</span>
-						<span class="hint">Choose the editor position on screen</span>
+						<span class="hint">Choose the editor position</span>
 						<div class="section__actions"></div>
 					</div>
 					<div class="section__body">
 						<div class="body__item-plain">
 							<div class="pillbar">
-								<button class=${['pill', appstate.idSidebarPosition === 'sidebar-position-left' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.sidebar.position.set', idSidebarPosition: 'sidebar-position-left'})} title=${`Select where the editor is positioned on screen\n(${CUtil.formatShortcutForOS('⇧ ⌘ E')})`}>
+								<button class=${['pill', appstate.idSidebarPosition === 'sidebar-position-left' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.sidebar.position.set', idSidebarPosition: 'sidebar-position-left'})} title=${`Place the editor on the left side of the screen\n(${CUtil.formatShortcutForOS('⇧ ⌘ E')})`}>
 									<span class="kbd">${CUtil.formatShortcutForOS('⇧ ⌘ E')}</span>
 									<span class="btn__label">Left</span>
 								</button>
-								<button class=${['pill', appstate.idSidebarPosition === 'sidebar-position-right' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.sidebar.position.set', idSidebarPosition: 'sidebar-position-right'})} title=${`Select where the editor is positioned on screen\n(${CUtil.formatShortcutForOS('⇧ ⌘ E')})`}>
+								<button class=${['pill', appstate.idSidebarPosition === 'sidebar-position-right' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.sidebar.position.set', idSidebarPosition: 'sidebar-position-right'})} title=${`Place the editor on the right side of the screen\n(${CUtil.formatShortcutForOS('⇧ ⌘ E')})`}>
 									<span class="kbd">${CUtil.formatShortcutForOS('⇧ ⌘ E')}</span>
 									<span class="btn__label">Right</span>
 								</button>
-								<button class=${['pill', appstate.idSidebarPosition === 'sidebar-position-top' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.sidebar.position.set', idSidebarPosition: 'sidebar-position-top'})} title=${`Select where the editor is positioned on screen\n(${CUtil.formatShortcutForOS('⇧ ⌘ E')})`}>
+								<button class=${['pill', appstate.idSidebarPosition === 'sidebar-position-top' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.sidebar.position.set', idSidebarPosition: 'sidebar-position-top'})} title=${`Place the editor on the top of the screen\n(${CUtil.formatShortcutForOS('⇧ ⌘ E')})`}>
 									<span class="kbd">${CUtil.formatShortcutForOS('⇧ ⌘ E')}</span>
 									<span class="btn__label">Top</span>
 								</button>
-								<button class=${['pill', appstate.idSidebarPosition === 'sidebar-position-bottom' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.sidebar.position.set', idSidebarPosition: 'sidebar-position-bottom'})} title=${`Select where the editor is positioned on screen\n(${CUtil.formatShortcutForOS('⇧ ⌘ E')})`}>
+								<button class=${['pill', appstate.idSidebarPosition === 'sidebar-position-bottom' ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.sidebar.position.set', idSidebarPosition: 'sidebar-position-bottom'})} title=${`Place the editor on the bottom of the screen\n(${CUtil.formatShortcutForOS('⇧ ⌘ E')})`}>
 									<span class="kbd">${CUtil.formatShortcutForOS('⇧ ⌘ E')}</span>
 									<span class="btn__label">Bottom</span>
 								</button>
@@ -3851,6 +3899,7 @@ const CPopup = {
 						</div>
 					</div>
 				</div>
+
 				<div class="content__section">
 					<div class="section__head">
 						<span>Theme</span>
@@ -3898,6 +3947,25 @@ const CPopup = {
 			`;
 		},
 
+		//::		☐ TabDefs()
+		//:			→ (textarea)
+		TabDefs() {
+			if (LOGGING) console.log('%c CPopup %c Template: %c TabDefs %c ()', LOG_MODULE, LOG_RED, LOG_FUNCTION+LOG_BOLD, LOG_ARGS);
+			return html`
+				<div class="content__section">
+					<div class="section__head">
+						<span>Global definitions</span>
+						<span class="hint">Edits apply immediately (no OK/Cancel)</span>
+						<div class="section__actions"></div>
+					</div>
+
+					<div class="section__body">
+						<textarea id="texteditorGlobaldefs" class="texteditor texteditor-globaldefs"></textarea>
+					</div>
+				</div>
+			`;
+		},
+
 		//::		☐ TabStatus()
 		TabStatus() {
 			if (LOGGING) console.log('%c CPopup %c Template: %c TabStatus %c ()', LOG_MODULE, LOG_RED, LOG_FUNCTION+LOG_BOLD, LOG_ARGS);
@@ -3927,6 +3995,7 @@ const CPopup = {
 			const filenameShort = args.pathFilePinned.split(/[\\/]/).pop();
 			const kbd = args.idx < 9 ? CUtil.formatShortcutForOS(`⇧ ⌘ ${args.idx + 1}`) : "—";
 			const shortcut = args.idx < 9 ? kbd : 'No keyboard shortcut';
+			const path = args.pathFilePinned.replace('jakobkristiansen', 'aowagner');		// ao: remove 'hack' for screenshots
 
 			return html`
 				<div
@@ -3938,7 +4007,7 @@ const CPopup = {
 					<span class="kbd is-label">${kbd}</span>
 					<div class="item__meta">
 						<div class="item__name">${filenameShort}</div>
-						<div class="item__desc">${args.pathFilePinned}</div>
+						<div class="item__desc">${path}</div>
 					</div>
 					<div class="item__right">
 						<button class="unpin__btn" @click=${e => {e.stopPropagation(); CPopup.onClick({src: '@click: btn.unpin.file', pathFileToUnpin: args.pathFilePinned});}} title="Unpin this file\n(No keyboard shortcut)">Unpin</button>
@@ -3994,47 +4063,57 @@ const CPopup = {
 		if (LOGGING) console.group('%c CPopup %c renderPopup', LOG_MODULE, LOG_FUNCTION, LOG_ARGS, LOG_EXTRA);
 
 		const isPopupOpen = CModel.appstate.isPopupOpen;
-		const isStyleTabActive = isPopupOpen && CModel.appstate.idTab === 'style';
-		const isEditorAlive = !!CPopup.elTextarea;
+		const idTab = CModel.appstate.idTab;
+		const setTabsWithEditor = new Set(['style', 'defs']);
+		const isEditorTabActive = isPopupOpen && setTabsWithEditor.has(idTab);
+		const isCorrectEditorAlive = !!CPopup.elTextarea && CPopup.idTextareaTab === idTab;
 
-		// If popup is being closed, always render empty and destroy editor
 		if (!isPopupOpen) {
-			this.destroyCssEditor();
+			this.destroyTextEditor();
 			//: 		→ [uhtml].render	``
 			render(CPopup.elParent, html``);
 			if (LOGGING) console.groupEnd();
 			return;
 		}
 
-		// If Styles tab is active AND editor already exists, don’t re-render
-		if ( (isStyleTabActive && isEditorAlive) ) {
+		// If current tab has an editor and the correct editor already exists,
+		// do not re-render the popup, because that would destroy textarea state.
+		if (isEditorTabActive && isCorrectEditorAlive) {		// old: if ( (isStyleTabActive && isCorrectEditorAlive) ) {
 			if (LOGGING) console.groupEnd();
 			return;
 		}
 
-		// Otherwise, do declarative render (tab switches etc.)
+		// otherwise, do declarative render (tab switches etc.)
 		//: 		→ [uhtml].render:	Popup
 		render(CPopup.elParent, this.Templates.Popup());
 
-		// After render, wire up / tear down the editor island as needed
-		if (isStyleTabActive)
-			this.ensureCssEditor();
+		// after render, wire up / tear down the editor island as needed
+		if (isEditorTabActive)
+			this.ensureTextEditor(idTab);
 
 		else
-			this.destroyCssEditor();
+			this.destroyTextEditor();
 
 		if (LOGGING) console.groupEnd();
 	},
 
-	//:::	🔹 	ensureCssEditor()
-	ensureCssEditor() {
-		if (LOGGING) console.group('%c CPopup %c ensureCssEditor', LOG_MODULE, LOG_FUNCTION, LOG_ARGS, LOG_EXTRA);
-		if (CPopup.elTextarea) return
+	//:::	🔹 	ensureTextEditor()
+	ensureTextEditor(idTab) {
+		if (LOGGING) console.group('%c CPopup %c ensureTextEditor', LOG_MODULE, LOG_FUNCTION, LOG_ARGS, LOG_EXTRA);
 
-		const elTextarea = document.querySelector('#texteditorGlobalcss');
-		if (!elTextarea) return;
+		const oTabs = {
+			style: 	{idTextarea: '#texteditorGlobalcss',  keyModel: 'txtGlobalCss'},
+			defs: 	{idTextarea: '#texteditorGlobaldefs', keyModel: 'txtGlobalDefs'},
+		};
+		const info = oTabs[idTab];
+		const elTextarea = document.querySelector(info.idTextarea);
 
-		elTextarea.value = CModel.appstate.txtGlobalCss ?? '';
+		if (!elTextarea) {
+			if (LOGGING) console.groupEnd();
+			return;
+		}
+
+		elTextarea.value = CModel.appstate[info.keyModel] ?? '';
 
 		elTextarea.setAttribute('spellcheck', 'false');
 		elTextarea.setAttribute('autocomplete', 'off');
@@ -4042,19 +4121,21 @@ const CPopup = {
 		elTextarea.setAttribute('autocapitalize', 'off');
 		elTextarea.setAttribute('wrap', 'off');
 
-		CPopup.onInputDebounced = CPopup.debounce(() => CPopup.onInput(), 400);		// jk: define const for ms?
+		CPopup.onInputDebounced = CPopup.debounce(() => CPopup.onInput(), 400);		// ao: define const for ms?
 		CPopup.onKeydownHandler = (e) => CPopup.onKeydown(e);
 
-		elTextarea.addEventListener('input', 	CPopup.onInputDebounced);
-		elTextarea.addEventListener('keydown', 	CPopup.onKeydownHandler);
+		elTextarea.addEventListener('input', CPopup.onInputDebounced);
+		elTextarea.addEventListener('keydown', CPopup.onKeydownHandler);
 
 		CPopup.elTextarea = elTextarea;
+		CPopup.idTextareaTab = idTab;
 		if (LOGGING) console.groupEnd();
 	},
 
-	//:::	🔹 	destroyCssEditor()
-	destroyCssEditor() {
-		if (LOGGING) console.group('%c CPopup %c destroyCssEditor', LOG_MODULE, LOG_FUNCTION, LOG_ARGS, LOG_EXTRA);
+
+	//:::	🔹 	destroyTextEditor()
+	destroyTextEditor() {
+		if (LOGGING) console.group('%c CPopup %c destroyTextEditor', LOG_MODULE, LOG_FUNCTION, LOG_ARGS, LOG_EXTRA);
 		
 		const el = CPopup.elTextarea;
 		if (!el) return;
@@ -4065,6 +4146,7 @@ const CPopup = {
 		CPopup.elTextarea = null;
 		CPopup.onInputDebounced = null;
 		CPopup.onKeydownHandler = null;
+		CPopup.idTextareaTab = '';
 		if (LOGGING) console.groupEnd();
 	},
 
@@ -4186,12 +4268,14 @@ const CPopup = {
 	//:::	🔹 onInput()
 	async onInput () {
 		if (LOGGING) console.group('%c CPopup %c onInput', LOG_MODULE, LOG_FUNCTION, LOG_ARGS, LOG_EXTRA);
-		//if (LOGARGS) console.log(CPopup.elTextarea.value);
 
 		const caller = 'CPopup.onInput';
 
-		//:		→ App: dispatch				model.appstate.update: arrPathFilePinned
-		await App.dispatch({type: 'model.appstate.update', oUpdate: {txtGlobalCss: CPopup.elTextarea.value}, caller});
+		if (!CPopup.elTextarea) return;
+
+		//:		→ App: dispatch				model.appstate.update: txtGlobalCss | txtGlobalDefs
+		const oUpdate = CPopup.idTextareaTab === 'style' ? {txtGlobalCss: CPopup.elTextarea.value} : CPopup.idTextareaTab === 'defs' ? {txtGlobalDefs: CPopup.elTextarea.value} : {};
+		await App.dispatch({type: 'model.appstate.update', oUpdate, caller});
 
 		//:		→ App: dispatch				model.build.and.augment
 		await App.dispatch({type: 'model.build.and.augment', text: CTexteditor.value, caller});
@@ -4444,10 +4528,16 @@ const CPopup = {
 				res = await App.dispatch({type: 'model.filepath.unpin', pathFileToUnpin: args.pathFileToUnpin, caller});
 				break;					
 
-			//::		🔻 @click: btn.view.chart
-			case '@click: btn.view.chart':
+			//--::		🔻 @click: btn.view.chart
+			/*--case '@click: btn.view.chart':
 				//:			→ App: dispatch:			chart.view.select
 				res = await App.dispatch({type: 'chart.view.select', idxView: args.idxView, caller});
+				break; -*/
+
+			//::		🔻 @click: btn.ui.scale
+			case '@click: btn.ui.scale':
+				//:			→ App: dispatch:			framework.ui.scale
+				res = await App.dispatch({type: 'framework.ui.scale', isIn: args.isIn, isOut: args.isOut, isReset: args.isReset, caller});
 				break;
 
 			//::		🔻 @click: btn.theme.set
@@ -4561,6 +4651,7 @@ const CModel = {
 			pathFileLoaded: '',
 			arrPathFilePinned: [],
 			txtGlobalCss: ``,
+			txtGlobalDefs: ``,
 			pctGraphHeight: 50,
 			isDocdataSaved: true,
 		};
@@ -4576,7 +4667,7 @@ const CModel = {
 			return { ...appstateDefault, ...JSON.parse(raw) };
 		}
 		catch (e) {
-			console.warn('loadAppstate failed, using default', e);		// jk: log this?
+			console.warn('loadAppstate failed, using default', e);		// ao: log this?
 			if (LOGGING) console.groupEnd();
 			return appstateDefault;
 		}
@@ -4605,7 +4696,7 @@ const CModel = {
 			localStorage.setItem(key, JSON.stringify(this.appstate));
 		}
 		catch (e) {
-			console.warn('CModel: saveAppstate(): Save appstate to localStorage failed', e);		// jk: log this?
+			console.warn('CModel: saveAppstate(): Save appstate to localStorage failed', e);		// ao: log this?
 		}
 		if (LOGGING) console.groupEnd();
 	},
@@ -4624,6 +4715,8 @@ const CModel = {
 			pxTexteditorScrollTop: 0,
 			idxView: VIEWA,
 			linecount: COUNT_PART_LINES_INITIAL,
+			pxMarginPart: PX_MARGIN_PART_INITIAL,
+			isChartRoundingOn: true,
 		};
 
 		if (args.doLoadDefault) {
@@ -4642,7 +4735,7 @@ const CModel = {
 			return { ...docstateDefault, ...JSON.parse(raw) };
 		}
 		catch (e) {
-			console.warn('loadDocstate failed, using default', e);		// jk: log this?
+			console.warn('loadDocstate failed, using default', e);		// ao: log this?
 			if (LOGGING) console.groupEnd();
 			return docstateDefault;
 		}
@@ -4676,7 +4769,7 @@ const CModel = {
 			localStorage.setItem(key, JSON.stringify(this.docstate));
 		}
 		catch (e) {
-			console.warn('CModel: saveDocstate(): Save docstate to localStorage failed', e);		// jk: log this?
+			console.warn('CModel: saveDocstate(): Save docstate to localStorage failed', e);		// ao: log this?
 		}
 		if (LOGGING) console.groupEnd();
 	},
@@ -4703,7 +4796,7 @@ const CModel = {
 			return { ...logstateDefault, ...JSON.parse(raw) };
 		}
 		catch (e) {
-			console.warn('loadLogstate failed, using default', e);		// jk: log this?
+			console.warn('loadLogstate failed, using default', e);		// ao: log this?
 			if (LOGGING) console.groupEnd();
 			return logstateDefault;
 		}
@@ -4744,7 +4837,7 @@ const CModel = {
 			localStorage.setItem(key, JSON.stringify(this.logstate));
 		}
 		catch (e) {
-			console.warn('CModel: saveLogstate(): Save logstate to localStorage failed', e);		// jk: log this?
+			console.warn('CModel: saveLogstate(): Save logstate to localStorage failed', e);		// ao: log this?
 		}
 		if (LOGGING) console.groupEnd();
 	},
@@ -4866,7 +4959,7 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 
 			if (inFence) continue; 				// skip fenced content
 
-			if (!lineRaw.trim()) continue;
+			if (!lineRaw.trim()) continue;		// skip to next loop iteration if line is empty or contains only whitespace (spaces/tabs)
 
 
 			const countLeadingTabs = getLeadingTabCount(lineRaw);
@@ -4907,7 +5000,7 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 				arrSection.push(sectionCurrent);
 
 				chapterCurrent = null;
-				partCurrent = null;			// jk: make sure this is correct
+				partCurrent = null;
 			}
 
 			else if (countLeadingTabs === 1) {		// 'chapter'
@@ -4929,7 +5022,7 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 
 				sectionCurrent.arrIdxChapter.push(idxChapter);
 
-				partCurrent = null;			// jk: make sure this is correct
+				partCurrent = null;
 			}
 
 			else if (countLeadingTabs === 2) {		// 'part'
@@ -4969,19 +5062,23 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 				}
 			}
 
-			// add graphdata. will be added no matter the countLeadingTabs of the line
-			if (sectionCurrent || chapterCurrent) {
 
-				const idxChapter = !chapterCurrent ? arrChapter.length : arrChapter.indexOf(chapterCurrent);	// if line is new section (no chapter yet), point to first chapter in section (even though it is not created yet)
+			// add graphdata. will be added no matter the countLeadingTabs of the line
+			//-if (sectionCurrent || chapterCurrent) {
+			if (sectionCurrent && chapterCurrent && partCurrent) {
+			//-if (partCurrent) {
+
+				//-const idxChapter = !chapterCurrent ? arrChapter.length : arrChapter.indexOf(chapterCurrent);	// if line is new section (no chapter yet), point to first chapter in section (even though it is not created yet)
 				const arrEntryNumeric = Object.entries(metadata).filter(([key, value]) => typeof value === 'number');
-				const arrKeyIgnore = ['bold', 'saturation'];
+				const arrKeyIgnore = ['bold', 'saturation', 'strokewidth'];
+				const tag = partCurrent.tag;
 
 				arrEntryNumeric
 					.filter(([key]) => !arrKeyIgnore.includes(key))
 					.forEach(([key, value]) => {
 
 						const graphinfo = {
-							idxChapter,
+							idxChapter: chapterCurrent.idx, 	//- idxChapter,
 							value,
 							idxTextareaLine,
 						};
@@ -5061,7 +5158,7 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 		// Remove metadata tokens first, so values like:
 		// @fill #ff00aa
 		// @plot 20
-		// @code🥇
+		// @icon🥇
 		// do not contribute accidental tags
 		const lineWithoutMetadata = line.replace(
 			/(?:^|\s)@([A-Za-z0-9_-]+)(?:(?:\s*:\s*|\s+)(\S+)|(\S+))/g,
@@ -5076,7 +5173,7 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 	},
 
 	// Parses inline metadata like:
-	// "@weight 65.5kg", "@bmi: 21,", "@fill #ff0", "@code🥇", "@code:🥇"
+	// "@weight 65.5kg", "@bmi: 21,", "@fill #ff0", "@icon🥇", "@icon:🥇"
 	//:::	🔹	getMetadataFromline
 	getMetadataFromline(args) {
 		//if (LOGGING) console.log(...CUtil.logGroup('CModel', 'getMetadataFromline', CUtil.getArgsKeys(args), args.caller));
@@ -5087,14 +5184,14 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 		//   @key value
 		//   @key: value
 		//   @key:value
-		//   @keyvalue   (no separator)  -> optional support (for @code🥇)
+		//   @keyvalue   (no separator)  -> optional support (for @icon🥇)
 		//
 		// key:  [A-Za-z0-9_-]+
 		// value: next non-space token (one 'word')
 		//
 		// Group 1 = key
 		// Group 2 = value (if separated by space/colon)
-		// Group 3 = value (if immediately attached: @code🥇)
+		// Group 3 = value (if immediately attached: @icon🥇)
 		const re = /@([A-Za-z0-9_-]+)(?:(?:\s*:\s*|\s+)(\S+)|(\S+))/g;
 
 		let m;
@@ -5136,8 +5233,8 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 		for (const tag in this.docdata.alltags) {
 
 			//: 		→ this: getTagblockMetadataFromCss * 2
-			const metadataForSelectorFromGlobalCss   = this.getTagMetadataFromCss({txtCss: args.txtGlobalCss,   tag: tag, caller: 'global'});
-			const metadataForSelectorFromDocumentCss = this.getTagMetadataFromCss({txtCss: args.txtDocumentCss, tag: tag, caller: 'doc'});
+			const metadataForSelectorFromGlobalCss   = this.getTagMetadataFromCss({txtCss: args.txtGlobalCss,          tag: tag, caller: 'global'});
+			const metadataForSelectorFromDocumentCss = this.getTagMetadataFromCss({txtCss: args.txtDocumentCssAndDefs, tag: tag, caller: 'doc'});
 
 			this.docdata.alltags[tag].metadata = {
 				...metadataForSelectorFromGlobalCss,
@@ -5159,7 +5256,8 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 
 		// Match a line like:
 		// #gitte { ... }
-		const re = new RegExp(`^\\s*#${escapedTag}\\s*\\{([^}]*)\\}\\s*;?\\s*$`, 'm');
+		//-const re = new RegExp(`^\\s*#${escapedTag}\\s*\\{([^}]*)\\}\\s*;?\\s*$`, 'm');
+		const re = new RegExp(`^\\s*[#.]${escapedTag}\\s*\\{([^}]*)\\}\\s*;?\\s*$`, 'm');
 		const match = txtStyle.match(re);
 
 		if (match) {
@@ -5208,14 +5306,14 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 	},
 
 
-	//:::	🔹 setDocdataDefinitionsFromCss
-	setDocdataDefinitionsFromCss(args) {
-		if (LOGGING) console.group(...CUtil.logGroup('CModel', 'setDocdataDefinitionsFromCss', CUtil.getArgsKeys(args), args.caller));
+	//:::	🔹 setDocdataDefinitions
+	setDocdataDefinitions(args) {
+		if (LOGGING) console.group(...CUtil.logGroup('CModel', 'setDocdataDefinitions', CUtil.getArgsKeys(args), args.caller));
 		if (LOGARGS) console.log(args);
 
-		//: 		→ this: getDocdataDefinitionsFromCss * 2
-		const globalDefinitions = this.getDocdataDefinitionsFromCss({txtCss: args.txtGlobalCss, caller: 'globalDefinitions'});
-		const docDefinitions    = this.getDocdataDefinitionsFromCss({txtCss: args.txtDocumentCss, caller: 'docDefinitions'});
+		//: 		→ this: getDefinitionsFromText * 2
+		const globalDefinitions = this.getDefinitionsFromText({text: args.txtGlobalDefs, caller: 'globalDefinitions'});
+		const docDefinitions    = this.getDefinitionsFromText({text: args.txtDocumentCssAndDefs, caller: 'docDefinitions'});
 
 		this.docdata.definitions = {
 			...globalDefinitions,
@@ -5234,15 +5332,15 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 	 *   bmi:    { unit: 'bmi', min: 15, max: 30, target: 21 }
 	 * }
 	 */
-	//:::	🔹	getDocdataDefinitionsFromCss
-	getDocdataDefinitionsFromCss(args) {
-		if (LOGGING) console.group(...CUtil.logGroup('CModel', 'getDocdataDefinitionsFromCss', CUtil.getArgsKeys(args), args.caller));
+	//:::	🔹	getDefinitionsFromText
+	getDefinitionsFromText(args) {
+		if (LOGGING) console.group(...CUtil.logGroup('CModel', 'getDefinitionsFromText', CUtil.getArgsKeys(args), args.caller));
 		if (LOGARGS) console.log(args);
 		
 		const defs = {};
 
-		const fenceMatch = args.txtCss.match(/```(?:css|obx|txt)?\s*\n([\s\S]*?)\n```/i);
-		const src = fenceMatch ? fenceMatch[1] : args.txtCss;
+		const fenceMatch = args.text.match(/```(?:css|obx|txt)?\s*\n([\s\S]*?)\n```/i);
+		const src = fenceMatch ? fenceMatch[1] : args.text;
 
 		const defMatches = src.matchAll(/^\s*#def\s*\{([^}]*)\}\s*;?\s*$/gmi);
 
@@ -5378,6 +5476,22 @@ const App = {
 
 		switch (args.type) {
 
+			//::		🔻 wrapper.theme.set
+			case 'wrapper.theme.set': {
+
+				//: 			→ App: dispatch				model.appstate.update: idTheme
+				await App.dispatch({type: 'model.appstate.update', oUpdate: {idTheme: args.idTheme}, caller});
+
+				//:			→ CFramework: setTheme
+				CFramework.setTheme({mode: args.idTheme, caller});
+
+				//:			→ CWrapper: setMenuChecks
+				await CWrapper.setMenuChecks({idTheme: args.idTheme,caller});
+
+				if (LOGGING) console.groupEnd();
+				return {status: STATUS.OK, caller};
+			}
+
 			//::		🔻 wrapper.file.save
 			case 'wrapper.file.save': {
 
@@ -5392,8 +5506,8 @@ const App = {
 					const resSaveFile = await CWrapper.saveFileText({pathFileToSave: args.pathFileToSave, text: args.text, caller});
 
 					if (resSaveFile.status === STATUS.OK)
-						//:			→ CModel:			updateAppstate			[pathFileLoaded, isDocdataSaved]
-						CModel.updateAppstate({pathFileLoaded: args.pathFileToSave, isDocdataSaved: true, caller});
+						//: 			→ App: dispatch				model.appstate.update: pathFileLoaded, isDocdataSaved
+						await App.dispatch({type: 'model.appstate.update', oUpdate: {pathFileLoaded: args.pathFileToSave, isDocdataSaved: true}, caller});
 
 					if (LOGGING) console.groupEnd();
 					return resSaveFile;
@@ -5414,10 +5528,10 @@ const App = {
 					if (resFileSave.status === STATUS.OK) {
 
 						//:			→ CWrapper:			setWindowTitle	🟣 (test on res.status?)
-						await CWrapper.setWindowTitle({prefix: APPNAME, title: resFileDialog.pathFileSelected.split(/[\\/]/).pop(), caller});	// jk: 'technically' status from this should be checked
+						await CWrapper.setWindowTitle({prefix: APPNAME, title: resFileDialog.pathFileSelected.split(/[\\/]/).pop(), caller});	// ao: 'technically' status from this should be checked
 
 						//:			→ CWrapper:			startWatchFile	🟣 (test on res.status?)
-						await CWrapper.startWatchFile({pathFileToWatch: resFileDialog.pathFileSelected, caller});				// jk: 'technically' status from this should be checked
+						await CWrapper.startWatchFile({pathFileToWatch: resFileDialog.pathFileSelected, caller});				// ao: 'technically' status from this should be checked
 					}
 
 					if (LOGGING) console.groupEnd();
@@ -5451,6 +5565,7 @@ const App = {
 					}
 				}
 
+
 				if (args.source === SOURCE.OPENDIALOG) {
 					//:			→ CWrapper:			showOpenFileSystemDialog
 					const resFileDialog = await CWrapper.showOpenFileSystemDialog({caller});
@@ -5463,6 +5578,12 @@ const App = {
 						if (LOGGING) console.groupEnd();
 						return resFileDialog;
 					}
+				}
+
+				else if (args.source === SOURCE.NEWDOC) {
+					
+					if (!CModel.appstate.isSidebarVisible)	// make sure Editor is visible
+						await App.dispatch({type: 'framework.sidebar.visibility.set', isSidebarVisible: true, caller});
 				}
 
 				//:			→ App: dispatch:		model.docdata.load.execute
@@ -5502,8 +5623,8 @@ const App = {
 				const isTextIdentical = resLoadFileText.text === CTexteditor.value;
 
 				if (isTextIdentical && !isLoadingNewFilepath && !isCalledFromModelInit) {
-					if (LOGGING) console.log('NO LOAD - CONTENT IS THE SAME...');
-					if (LOGGING) console.groupEnd();
+					if (!LOGGING) console.log('NO LOAD - CONTENT IS THE SAME...');
+					if (!LOGGING) console.groupEnd();
 					return {status: STATUS.OK, caller};
 				}
 
@@ -5513,39 +5634,26 @@ const App = {
 				//:			→ CModel:		loadDocstate
 				CModel.docstate = CModel.loadDocstate({pathFile: args.pathFileToLoad, doLoadDefault: source === SOURCE.NEWDOC, caller});
 
-				//:				→ CFramework:	updateLookupConstants	[--pxColWidth, linecount]
-				CFramework.updateLookupConstants({linecount: CModel.docstate.linecount, caller});
+				//:				→ CFramework:	updateLookupConstants	[linecount]
+				CFramework.updateLookupConstants({linecount: CModel.docstate.linecount, pxMarginPart: CModel.docstate.pxMarginPart, caller});
 
-				//:				→ CModel:		updateAppstate			[pathFileLoaded, isDocdataSaved]
-				CModel.updateAppstate({
-					pathFileLoaded: args.pathFileToLoad,
-					isDocdataSaved: true,
-					caller,
-				});
+				//: 			→ App: dispatch				model.appstate.update: pathFileLoaded, isDocdataSaved
+				await App.dispatch({type: 'model.appstate.update', oUpdate: {pathFileLoaded: args.pathFileToLoad, isDocdataSaved: true}, caller});
 
 				//:					→ CFramework:	setAppUiClasses
 				CFramework.setAppUiClasses({caller});
 
 				//:					→ CWrapper: setMenuChecks
-				await CWrapper.setMenuChecks({idxView: CModel.docstate.idxView, caller});
+				await CWrapper.setMenuChecks({idxView: CModel.docstate.idxView, isChartRoundingOn: CModel.docstate.isChartRoundingOn, caller});
 
-				//-:			→ App: dispatch:	model.build.and.augment		🟣 (test on res?)
-				//-const resBuildAndAugment = await App.dispatch({type: 'model.build.and.augment', text: CTexteditor.value, caller});
+				//:			→ App: dispatch				model.build.and.augment		🟣 (test on res?)
+				const resBuildAndAugment = await App.dispatch({type: 'model.build.and.augment', text: CTexteditor.value, caller});
 
-				//-:			→ CChart:		renderSvg
-				//-CChart.renderSvg({typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
+				//:			→ App: dispatch				chart.render
+				await App.dispatch({type: 'chart.render', typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
 
-				//-:			→ CToolbar:		recreateButtons
-				//-CToolbar.recreateButtons({caller});
-
-		//:		→ App: dispatch				model.build.and.augment		🟣 (test on res?)
-		const resBuildAndAugment = await App.dispatch({type: 'model.build.and.augment', text: CTexteditor.value, caller});
-
-		//:		→ App: dispatch				chart.render
-		await App.dispatch({type: 'chart.render', typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
-
-		//:		→ App: dispatch				toolbar.buttons.recreate
-		await App.dispatch({type: 'toolbar.buttons.recreate', caller});
+				//:			→ App: dispatch				toolbar.buttons.recreate
+				await App.dispatch({type: 'toolbar.buttons.recreate', caller});
 
 
 				//:		?	→ [UI updates: CChart.elParent.scrollLeft), CTexteditor.elTextarea.scrollTop]
@@ -5560,10 +5668,6 @@ const App = {
 					await CWrapper.startWatchFile({pathFileToWatch: args.pathFileToLoad, caller});
 				}
 
-				//:			→ CPopup: renderPopup
-				if (CModel.appstate.isPopupOpen)
-					CPopup.renderPopup({caller});
-
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
 			}
@@ -5573,14 +5677,11 @@ const App = {
 
 				const pathToPin = CModel.appstate.pathFileLoaded;
 				const isAlreadyPinned = CModel.appstate.arrPathFilePinned.includes(pathToPin);
+				const arrPathFilePinnedNew = [...CModel.appstate.arrPathFilePinned, pathToPin];
 
 				if (!isAlreadyPinned && pathToPin !== '') {
-					//:			→ CModel: updateAppstate:		arrPathFilePinned
-					CModel.updateAppstate({arrPathFilePinned: [...CModel.appstate.arrPathFilePinned, pathToPin], caller});	// update array with copy plus added string 
-
-					//:			→ CPopup: renderPopup
-					if (CModel.appstate.isPopupOpen)
-						CPopup.renderPopup({caller});
+					//: 			→ App: dispatch				model.appstate.update: arrPathFilePinned
+					await App.dispatch({type: 'model.appstate.update', oUpdate: {arrPathFilePinned: arrPathFilePinnedNew}, caller});
 				}
 
 				if (LOGGING) console.groupEnd();
@@ -5589,13 +5690,11 @@ const App = {
 
 			//::		🔻 model.filepath.unpin
 			case 'model.filepath.unpin': {
-			
-				//:			→ CModel: updateAppstate:		arrPathFilePinned
-				CModel.updateAppstate({arrPathFilePinned: CModel.appstate.arrPathFilePinned.filter(pathPinned => pathPinned !== args.pathFileToUnpin), caller});
 
-				//:			→ CPopup: renderPopup
-				if (CModel.appstate.isPopupOpen)
-					CPopup.renderPopup({caller});
+				const arrPathFilePinnedNew = CModel.appstate.arrPathFilePinned.filter(pathPinned => pathPinned !== args.pathFileToUnpin);
+			
+				//: 			→ App: dispatch				model.appstate.update: arrPathFilePinned
+				await App.dispatch({type: 'model.appstate.update', oUpdate: {arrPathFilePinned: arrPathFilePinnedNew}, caller});
 
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
@@ -5604,27 +5703,28 @@ const App = {
 			//::		🔻 model.build.and.augment
 			case 'model.build.and.augment': {
 
-				//?:			→ CModel: extractFirstCssBlockFromText
+				//?:		→ CModel: extractFirstCssBlockFromText
 				const txtGlobalCss = CModel.appstate.txtGlobalCss;
-				const txtDocumentCss = CModel.extractFirstCssBlockFromText({text: args.text, caller});
+				const txtGlobalDefs = CModel.appstate.txtGlobalDefs;
+				const txtDocumentCssAndDefs = CModel.extractFirstCssBlockFromText({text: args.text, caller});
 
-				//:				→ CFramework: setCustomCss
-				CFramework.setCustomCss({txtCustomCss: txtGlobalCss,   idElStyle: 'style-from-settings', caller});	// jk: not all the time - just here for testing logic and flow
-				CFramework.setCustomCss({txtCustomCss: txtDocumentCss, idElStyle: 'style-from-doc', caller});		// jk: maybe only if css part has changed?
+				//:			→ CFramework: setCustomCss
+				CFramework.setCustomCss({txtCustomCss: txtGlobalCss, idElStyle: 'style-from-settings', caller});	// ao: not all the time - just here for testing logic and flow
+				CFramework.setCustomCss({txtCustomCss: txtDocumentCssAndDefs, idElStyle: 'style-from-doc', caller});		// ao: maybe only if css part has changed?
 				
 				//:			→ CModel: buildDocdataFromText
 				CModel.buildDocdataFromText({text: args.text, caller});
 
-				//:				→ CModel: setTagMetadataFromCss
-				CModel.setTagMetadataFromCss({txtGlobalCss, txtDocumentCss, caller});
+				//:			→ CModel: setTagMetadataFromCss
+				CModel.setTagMetadataFromCss({txtGlobalCss, txtDocumentCssAndDefs, caller});
 
-				//:				→ CModel: setDocdataDefinitionsFromCss
-				CModel.setDocdataDefinitionsFromCss({txtGlobalCss, txtDocumentCss, caller});
+				//:			→ CModel: setDocdataDefinitions
+				CModel.setDocdataDefinitions({txtGlobalDefs, txtDocumentCssAndDefs, caller});
 
-				//:				→ CModel: reapplyDocstate
+				//:			→ CModel: reapplyDocstate
 				CModel.reapplyDocstate({caller});
 
-				//:		→ CFramework:	updateCssFromLookupConstants
+				//:			→ CFramework:	updateCssFromLookupConstants
 				CFramework.updateCssFromLookupConstants({caller});
 
 				if (LOGGING) console.groupEnd();
@@ -5633,10 +5733,17 @@ const App = {
 
 			//::		🔻 model.appstate.update
 			case 'model.appstate.update': {
-			
+
 				//:			→ CModel: updateAppstate:			args.oUpdate
 				CModel.updateAppstate({...args.oUpdate, caller});
-				
+
+				const isPopupOpen = CModel.appstate.isPopupOpen;
+				const isOpeningOrClosingPopup = Object.hasOwn(args.oUpdate, 'isPopupOpen');
+
+				//:			→ CPopup: renderPopup		// new here
+				if (isPopupOpen || isOpeningOrClosingPopup)
+					CPopup.renderPopup({caller});
+
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
 			}
@@ -5679,37 +5786,17 @@ const App = {
 				// reorder tagblocks in docdata and render svg
 				CModel.docdata.arrTagblock.sort((a, b) => args.arrTagOrderNew.indexOf(a.id) - args.arrTagOrderNew.indexOf(b.id));
 
+				//:			→ CModel: updateDocstate				[arrTagOrder]
+				CModel.updateDocstate({arrTagOrder: CModel.docdata.arrTagblock.map(tb => tb.id), caller});
+
 				//:			→ CChart: renderSvg
 				CChart.renderSvg({typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
 
 				//:			→ CToolbar: recreateButtons
 				CToolbar.recreateButtons({caller});
 
-				//:			→ CModel: updateDocstate				[arrTagOrder]
-				CModel.updateDocstate({arrTagOrder: CModel.docdata.arrTagblock.map(tb => tb.id), caller});
-
-				// jk: fix: CChart.onTagblockHover(strTagDragged, true);
+				// ao: fix: CChart.onTagblockHover(strTagDragged, true);
 				
-				if (LOGGING) console.groupEnd();
-				return {status: STATUS.OK, caller};
-			}
-
-			//::		🔻 wrapper.theme.set
-			case 'wrapper.theme.set': {
-
-				//:			→ CModel: updateAppstate 
-				CModel.updateAppstate({idTheme: args.idTheme, caller});
-
-				//:			→ CFramework: setTheme
-				CFramework.setTheme({mode: args.idTheme, caller});
-
-				//:			→ CWrapper: setMenuChecks
-				await CWrapper.setMenuChecks({idTheme: args.idTheme,caller});
-
-				//:			→ CPopup: renderPopup
-				if (CModel.appstate.isPopupOpen)
-					CPopup.renderPopup({caller});
-
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
 			}
@@ -5717,22 +5804,14 @@ const App = {
 			//::		🔻 framework.sidebar.position.set
 			case 'framework.sidebar.position.set': {
 
-				//:			→ CModel: updateAppstate
-				CModel.updateAppstate({
-					idSidebarPosition: args.idSidebarPosition,
-					isSidebarVisible: true,
-					caller,
-				});
+				//: 			→ App: dispatch				model.appstate.update: idSidebarPosition, isSidebarVisible
+				await App.dispatch({type: 'model.appstate.update', oUpdate: {idSidebarPosition: args.idSidebarPosition, isSidebarVisible: true}, caller});
 
 				//:			→ CFramework: setAppUiClasses
 				CFramework.setAppUiClasses({caller});
 
 				//:			→ CWrapper: setMenuChecks
 				await CWrapper.setMenuChecks({idSidebarPosition: args.idSidebarPosition, caller});
-
-				//:			→ CPopup: renderPopup
-				if (CModel.appstate.isPopupOpen)
-					CPopup.renderPopup({caller});
 
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
@@ -5741,18 +5820,14 @@ const App = {
 			//::		🔻 framework.sidebar.visibility.set
 			case 'framework.sidebar.visibility.set': {
 
-				//:			→ CModel: updateAppstate
-				CModel.updateAppstate({isSidebarVisible: args.isSidebarVisible, caller});
+				//: 			→ App: dispatch				model.appstate.update: isSidebarVisible
+				await App.dispatch({type: 'model.appstate.update', oUpdate: {isSidebarVisible: args.isSidebarVisible}, caller});
 
 				//:			→ CFramework: setAppUiClasses
 				CFramework.setAppUiClasses({caller});
 
 				//:			→ CWrapper: setMenuChecks
 				await CWrapper.setMenuChecks({isSidebarVisible: args.isSidebarVisible, caller});
-
-				//:			→ CPopup: renderPopup
-				if (CModel.appstate.isPopupOpen)
-					CPopup.renderPopup({caller});
 
 				// nb: if textarea is not disabled, then it will still get keyboard input somehow (in a strange way)
 				CTexteditor.elTextarea.disabled = !args.isSidebarVisible;
@@ -5764,8 +5839,8 @@ const App = {
 			//::		🔻 framework.toolbar.visibility.set
 			case 'framework.toolbar.visibility.set': {
 
-				//:			→ CModel: updateAppstate
-				CModel.updateAppstate({isToolbarVisible: args.isToolbarVisible, caller});
+				//: 			→ App: dispatch				model.appstate.update: isToolbarVisible
+				await App.dispatch({type: 'model.appstate.update', oUpdate: {isToolbarVisible: args.isToolbarVisible}, caller});
 
 				//:			→ CFramework: setAppUiClasses
 				CFramework.setAppUiClasses({caller});
@@ -5773,10 +5848,36 @@ const App = {
 				//:			→ CWrapper: setMenuChecks
 				await CWrapper.setMenuChecks({isToolbarVisible: args.isToolbarVisible, caller});
 
-				//:			→ CPopup: renderPopup
-				if (CModel.appstate.isPopupOpen)
-					CPopup.renderPopup({caller});
+				if (LOGGING) console.groupEnd();
+				return {status: STATUS.OK, caller};
+			}
 
+			//::		🔻 framework.ui.scale
+			case 'framework.ui.scale': {
+
+				const arrPxUiBaseUnit = [8, 9, 10, 11, 12,  13,  14, 15, 16, 17, 18];
+				const pxBaseUnitNew = args.isReset ? PX_BASEUNIT_INITIAL : CUtil.getPrevNextValue(arrPxUiBaseUnit, CModel.appstate.pxBaseUnit, (args.isIn ? 1 : -1), PX_BASEUNIT_INITIAL, false);
+
+				// calculate factor of zoom
+				const zoomFactor 		= pxBaseUnitNew / PX_BASEUNIT;
+				const pxWorldCenterXOld	= CChart.elParent.scrollLeft + (CChart.elParent.clientWidth / 2);
+				const pxWorldCenterXNew	= pxWorldCenterXOld	* zoomFactor;
+
+				//:			→ App: dispatch				model.appstate.update: pxBaseUnit
+				await App.dispatch({type: 'model.appstate.update', oUpdate: {pxBaseUnit: pxBaseUnitNew}, caller});
+
+				//:			→ CFramework:				updateLookupConstants
+				CFramework.updateLookupConstants({pxBaseUnit: pxBaseUnitNew, caller});
+
+				//:			→ CChart: renderSvg
+				CChart.renderSvg({typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
+
+				// update scrollLeft - must be after renderSvg!
+				CChart.elParent.scrollLeft = pxWorldCenterXNew - (CChart.elParent.clientWidth / 2);
+
+				//:			→ CToolbar:					recreateButtons
+				CToolbar.recreateButtons({caller});
+				
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
 			}
@@ -5784,15 +5885,15 @@ const App = {
 			//::		🔻 chart.render
 			case 'chart.render': {
 
-				//:			→ CChart: renderSvg:	typeSvgUpdate
+				//:			→ CChart: renderSvg:			typeSvgUpdate
 				CChart.renderSvg({typeSvgUpdate: args.typeSvgUpdate, caller});
 				
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
 			}
 
-			//::		🔻 chart.zoom
-			case 'chart.zoom': {
+			//::		🔻 chart.normal.zoom
+			case 'chart.normal.zoom': {
 
 				const arrLinecountValues = [2, 3,   4,   5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
 				const linecountNew =  args.isReset ? COUNT_PART_LINES_INITIAL : CUtil.getPrevNextValue(arrLinecountValues, COUNT_PART_LINES, (args.isIn ? 1 : -1), COUNT_PART_LINES_INITIAL);
@@ -5819,32 +5920,36 @@ const App = {
 				return {status: STATUS.OK, caller};
 			}
 
-			//::		🔻 framework.zoom
-			case 'framework.zoom': {
+			//::		🔻 chart.margin.zoom
+			case 'chart.margin.zoom': {
 
-				const arrPxUiBaseUnit = [8, 9, 10, 11, 12,  13,  14, 15, 16, 17, 18];
-				const pxBaseUnitNew = args.isReset ? PX_BASEUNIT_INITIAL : CUtil.getPrevNextValue(arrPxUiBaseUnit, CModel.appstate.pxBaseUnit, (args.isIn ? 1 : -1), PX_BASEUNIT_INITIAL, false);
+				const arrPxMarginPartValues = [0, 1, 2, 3, 4,  5,  6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+				const pxMarginPartNew = args.isReset ? PX_MARGIN_PART_INITIAL : CUtil.getPrevNextValue(arrPxMarginPartValues, PX_MARGIN_PART, (args.isIn ? 1 : -1), PX_MARGIN_PART_INITIAL);
 
-				// calculate factor of zoom
-				const zoomFactor 		= pxBaseUnitNew / PX_BASEUNIT;
-				const pxWorldCenterXOld	= CChart.elParent.scrollLeft + (CChart.elParent.clientWidth / 2);
-				const pxWorldCenterXNew	= pxWorldCenterXOld	* zoomFactor;
+				//:			→ CModel: updateDocstate
+				CModel.updateDocstate({pxMarginPart: pxMarginPartNew,  caller});
 
-				//:			→ CModel:		updateAppstate
-				CModel.updateAppstate({pxBaseUnit: pxBaseUnitNew, caller});
-
-				//:			→ CFramework:	updateLookupConstants
-				CFramework.updateLookupConstants({pxBaseUnit: pxBaseUnitNew, caller});
+				CFramework.updateLookupConstants({pxMarginPart: pxMarginPartNew,  caller}); 
 
 				//:			→ CChart: renderSvg
 				CChart.renderSvg({typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
 
-				// update scrollLeft - must be after renderSvg!
-				CChart.elParent.scrollLeft = pxWorldCenterXNew - (CChart.elParent.clientWidth / 2);
+				if (LOGGING) console.groupEnd();
+				return {status: STATUS.OK, caller};
+			}
 
-				//:			→ CToolbar:		recreateButtons
-				CToolbar.recreateButtons({caller});
-				
+						//::		🔻 chart.rounding.toggle
+			case 'chart.rounding.toggle': {
+
+				//:			→ CModel: updateDocstate
+				CModel.updateDocstate({isChartRoundingOn: !CModel.docstate.isChartRoundingOn,  caller});
+
+				//:			→ CWrapper: setMenuChecks
+				await CWrapper.setMenuChecks({isChartRoundingOn: CModel.docstate.isChartRoundingOn, caller});
+
+				//:			→ CChart: renderSvg
+				CChart.renderSvg({typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
+
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
 			}
@@ -5861,12 +5966,15 @@ const App = {
 				//:			→ CWrapper: setMenuChecks
 				await CWrapper.setMenuChecks({idxView: args.idxView, caller});
 
-				//:			→ CChart: renderSvg:		SVG_UPDATE_RESIZE_ONLY
+				//:			→ CChart: renderSvg:			SVG_UPDATE_RESIZE_ONLY
 				CChart.renderSvg({typeSvgUpdate: SVG_UPDATE_RESIZE_ONLY, caller});
 
-				//:			→ CPopup: renderPopup
-				if (CModel.appstate.isPopupOpen)
-					CPopup.renderPopup({caller});
+				//:			→ CToolbar:					recreateButtons
+				CToolbar.recreateButtons({caller});
+
+				//--:			→ CPopup: renderPopup
+				//--if (CModel.appstate.isPopupOpen)
+				//--	CPopup.renderPopup({caller});
 
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
@@ -5875,18 +5983,14 @@ const App = {
 			//::		🔻 chart.graph.visibility.set
 			case 'chart.graph.visibility.set': {
 
-				//:			→ CModel: updateAppstate
-				CModel.updateAppstate({isGraphVisible: args.isGraphVisible, caller});
+				//: 			→ App: dispatch				model.appstate.update: isGraphVisible
+				await App.dispatch({type: 'model.appstate.update', oUpdate: {isGraphVisible: args.isGraphVisible}, caller});
 
 				//:			→ CWrapper: setMenuChecks
 				await CWrapper.setMenuChecks({isGraphVisible: args.isGraphVisible, caller});
 
-				//:			→ CChart: renderSvg:		SVG_UPDATE_FULL_RENDER
+				//:			→ CChart: renderSvg:			SVG_UPDATE_FULL_RENDER
 				CChart.renderSvg({typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
-
-				//:			→ CPopup: renderPopup
-				if (CModel.appstate.isPopupOpen)
-					CPopup.renderPopup({caller});
 
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
@@ -5895,18 +5999,14 @@ const App = {
 			//::		🔻 chart.graph.height.set
 			case 'chart.graph.height.set': {
 
-				//:			→ CModel: updateAppstate
-				CModel.updateAppstate({pctGraphHeight: args.pctGraphHeight, caller});
+				//: 			→ App: dispatch				model.appstate.update: pctGraphHeight
+				await App.dispatch({type: 'model.appstate.update', oUpdate: {pctGraphHeight: args.pctGraphHeight}, caller});
 				
 				//:			→ CWrapper: setMenuChecks
 				await CWrapper.setMenuChecks({pctGraphHeight: args.pctGraphHeight, caller});
 
-				//:			→ CChart: renderSvg:		SVG_UPDATE_RESIZE_ONLY
+				//:			→ CChart: renderSvg:			SVG_UPDATE_RESIZE_ONLY
 				CChart.renderSvg({typeSvgUpdate: SVG_UPDATE_RESIZE_ONLY, caller});
-
-				//:			→ CPopup: renderPopup
-				if (CModel.appstate.isPopupOpen)
-					CPopup.renderPopup({caller});
 
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
@@ -5938,11 +6038,8 @@ const App = {
 
 				const idTab = args.idTab || CModel.appstate.idTab;
 				
-				//:			→ CModel: updateAppstate
-				CModel.updateAppstate({isPopupOpen: true, idTab: idTab, caller});		// maybe make function - also to avoid all the calls to renderPopup()
-
-				//:			→ CPopup: renderPopup
-				CPopup.renderPopup({caller});
+				//: 			→ App: dispatch				model.appstate.update: isPopupOpen: true, idTab
+				await App.dispatch({type: 'model.appstate.update', oUpdate: {isPopupOpen: true, idTab: idTab}, caller});
 				
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
@@ -5957,11 +6054,8 @@ const App = {
 				if (CPopup.draginfo)
 					CPopup.cleanupDrag({caller});
 
-				//:			→ CModel: updateAppstate		isPopupOpen: false
-				CModel.updateAppstate({isPopupOpen: false, caller});
-
-				//:			→ CPopup: renderPopup
-				CPopup.renderPopup({caller});
+				//: 			→ App: dispatch				model.appstate.update: isPopupOpen: false
+				await App.dispatch({type: 'model.appstate.update', oUpdate: {isPopupOpen: false}, caller});
 				
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
@@ -5970,11 +6064,8 @@ const App = {
 			//::		🔻 popup.tab.select
 			case 'popup.tab.select': {
 
-				//:			→ CModel: updateAppstate:		idTab
-				CModel.updateAppstate({idTab: args.idTab, caller});
-
-				//:			→ CPopup: renderPopup
-				CPopup.renderPopup({caller});
+				//: 			→ App: dispatch				model.appstate.update: idTab
+				await App.dispatch({type: 'model.appstate.update', oUpdate: {idTab: args.idTab}, caller});
 
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
@@ -5983,10 +6074,10 @@ const App = {
 			//::		🔻 popup.status.log.copy
 			case 'popup.status.log.copy': {
 
-				//:			→ CModel:				getLogentriesAsString
+				//:			→ CModel:					getLogentriesAsString
 				const txtToCopy = 'Log from Owl\n\n' + CModel.getLogentriesAsString({caller});
 
-				//:			→ CWrapper:				copyStringToClipboard
+				//:			→ CWrapper:					copyStringToClipboard
 				await CWrapper.copyStringToClipboard({txtToCopy, caller});
 
 				/*+await CWrapper.showMessageDialog({
@@ -6003,7 +6094,7 @@ const App = {
 			//::		🔻 popup.status.log.clear
 			case 'popup.status.log.clear': {
 
-				//:			→ CWrapper:				showPromptDialog			['Clear log?']
+				//:			→ CWrapper:					showPromptDialog			['Clear log?']
 				const resPrompt = await CWrapper.showPromptDialog({type: 'ask', title: 'Clear log', message: 'Delete all log entries?\nThis cannot be undone.', kind: 'warning', okLabel: 'Clear', cancelLabel: 'Cancel', caller});
 
 				if (resPrompt.status === STATUS.OK) {
@@ -6035,7 +6126,7 @@ const App = {
 	//:::		→ App: init
 	App.init();
 
-	// jk: for debug in DevTools: remove!
+	// ao: for debug in DevTools: remove!
 	/*- window.App = App
 	window.CWrapper = CWrapper
 	window.CFramework = CFramework
