@@ -174,7 +174,7 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 
 	let new = MenuItem::with_id(app, "file.new", "New", true, Some("CmdOrCtrl+N"))?;
 	let open = MenuItem::with_id(app, "file.open", "Open…", true, Some("CmdOrCtrl+O"))?;
-	let saveas = MenuItem::with_id(app, "file.saveas", "Save as…", true, Some("CmdOrCtrl+Shift+S"))?; 
+	//let saveas = MenuItem::with_id(app, "file.saveas", "Save as…", true, Some("CmdOrCtrl+Shift+S"))?; 
 	let pincurrent = MenuItem::with_id(app, "file.pincurrent", "Pin current file", true, Some("CmdOrCtrl+Shift+P"))?; 
 	let settings_b = MenuItem::with_id(app, "file.settings", "Settings…", true, Some("CmdOrCtrl+,"))?;		// for Win+Linux only
 	let exit = MenuItem::with_id(app, "file.quit", "Exit", true, Some("Alt+F4"))?;		// for Win+Linux only
@@ -184,7 +184,7 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 		SubmenuBuilder::new(app, "File")
 			.item(&new)
 			.item(&open)
-			.item(&saveas)
+			//.item(&saveas)
 			.item(&pincurrent)
 			.build()?
 	}
@@ -193,7 +193,7 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 		SubmenuBuilder::new(app, "File")
 			.item(&new)
 			.item(&open)
-			.item(&saveas)
+			//.item(&saveas)
 			.item(&pincurrent)
 			.separator()
 			.item(&settings_b)
@@ -284,9 +284,9 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 // ---- View submenu ----
 
 		// UI scale submenu items
-		let zoom_ui_out = MenuItem::with_id(app, "view.scale.ui.out", "Smaller", true, Some("CmdOrCtrl+Alt+Shift+J"))?;
-		let zoom_ui_reset = MenuItem::with_id(app, "view.scale.ui.reset", "Normal", true, Some("CmdOrCtrl+Alt+Shift+K"))?;
-		let zoom_ui_in = MenuItem::with_id(app, "view.scale.ui.in", "Larger", true, Some("CmdOrCtrl+Alt+Shift+L"))?;
+		let zoom_ui_out = MenuItem::with_id(app, "view.scale.ui.out", "Smaller", true, Some("CmdOrCtrl+Shift+J"))?;
+		let zoom_ui_reset = MenuItem::with_id(app, "view.scale.ui.reset", "Normal", true, Some("CmdOrCtrl+Shift+K"))?;
+		let zoom_ui_in = MenuItem::with_id(app, "view.scale.ui.in", "Larger", true, Some("CmdOrCtrl+Shift+L"))?;
 
 		// Build the sub-submenu
 		let zoom_ui_submenu = SubmenuBuilder::new(app, "UI scale")

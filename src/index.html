@@ -6,7 +6,14 @@
 	<title>SVG App — Text + Preview (Light Theme)</title>
 	<style>
 
+	/*
+		Build info
 
+		- Find all 'BUILD SETTING' in this file and follow instruction there
+		- in tauri.conf.json: set "devtools": false
+
+
+	*/
 
 
 
@@ -37,8 +44,6 @@
 
 		--px-sidebar-size: 670px;	/* ao: 500px! 600 is for screenshots! */
 		--px-sidebar-min: 200px;
-
-		/*-  --px-col-margin: 11; -*/
 	}
 
 	:root.theme-light {
@@ -345,10 +350,6 @@
 	border-radius: inherit;
 }
 
-/*-.tablist__btn:hover::after {
-	background: transparent;
-}-*/
-
 
 /* Shared button typography */
 
@@ -637,7 +638,6 @@ button.unpin__btn {
 
 .pill-selected {
 	background: var(--col-hilite);
-	/*- border-color: var(--col-border); -*/
 }
 
 
@@ -649,7 +649,7 @@ button.unpin__btn {
 .body__item {
 	position: relative;
 	display: grid;
-	grid-template-columns: 3rem 1fr auto;
+	grid-template-columns: 4.5rem 1fr auto;
 	align-items: center;
 	column-gap: 12px;
 	padding: 10px 10px;
@@ -663,6 +663,9 @@ button.unpin__btn {
 	touch-action: none;
 }
 
+body.platform-mac .body__item  {grid-template-columns: 3.5rem 1fr auto; } /* on mac: show kbd shortcut on pinned files shorter, because of shorter text (symbols) */
+
+
 .body__item:hover {
 	background: var(--col-hover);
 }
@@ -672,9 +675,7 @@ button.unpin__btn {
 }
 
 .body__item.is-active {
-	/*-padding: 10px 10px;-*/
 	background: var(--col-hilite);
-	/*-box-shadow: inset 3px 0 0 0 Highlight;-*/
 }
 
 .body__item.is-dragging {
@@ -708,10 +709,6 @@ button.unpin__btn {
 	justify-self: end;
 	gap: 10px;
 }
-
-/*-.header__title {
-	font-weight: 600;
-}-*/
 
 
 /* Toggle switch */
@@ -826,7 +823,7 @@ button.unpin__btn {
 </head>
 
 <body>
-	<div id="app" class="toolbar-visible-yes sidebar-visible-yes sidebar-position-left chart-viewa">
+	<div id="app" class="">
 
 		<div id="layout" class="layout">
 
@@ -871,6 +868,11 @@ button.unpin__btn {
 
 //:::📙 CONSTANTS
 
+const PLATFORM = Object.freeze({
+	MAC: 'MAC',
+	WINDOWS: 'WINDOWS',
+	LINUX: 'LINUX',
+});
 
 const STATUS = Object.freeze({
 	OK: 'OK',
@@ -900,8 +902,8 @@ const SOURCE = Object.freeze({
 
 const APPNAME = 'TextToTile';
 
-const LOGGING = false, DETAILS = false;
-const LOGARGS = false;
+const LOGGING = true, DETAILS = false;
+const LOGARGS = true;
 const LOG_RED = 'color:#933;', LOG_BOLD = 'font-weight:700;';
 const LOG_MODULE = 'color:#777; background-color:#fff0da; font-weight:300 !important;', LOG_FUNCTION = 'color:#337;', LOG_ARGS = 'color:#7a7; font-weight:500; font-size:0.6rem;', LOG_EXTRA = 'color:#999; font-weight:300; font-size:0.6rem;';
 
@@ -1000,13 +1002,9 @@ const CUtil = {
 
 	//:::	🔹 formatShortcutForOS
 	formatShortcutForOS(str) {
-		const platform = navigator.platform.toUpperCase();
-		const isMac = platform.includes('MAC');			// ao: maybe set single state/const in init? (CModel.init): appstate.platform = ['mac', 'windows', 'linux']
-		const isWindows = platform.includes('WIN');
-		const isLinux = !isMac && !isWindows;
 
 		// Mac → return as-is
-		if (isMac) {
+		if (CWrapper.platform === PLATFORM.MAC) {
 			return str;
 		}
 
@@ -1034,9 +1032,9 @@ const CUtil = {
 		}
 
 		// Platform-specific modifier order
-		const order = isWindows
-			? ['Ctrl', 'Shift', 'Alt']
-			: ['Shift', 'Ctrl', 'Alt']; // Linux
+		const order = (CWrapper.platform === PLATFORM.WINDOWS)
+			? ['Ctrl', 'Shift', 'Alt']		// Windows
+			: ['Shift', 'Ctrl', 'Alt'];		// Linux
 
 		const sortedModifiers = order.filter(m => modifiers.includes(m));
 
@@ -1120,14 +1118,24 @@ const CWrapper = {
 	msTimestampWriteFileContent: 0,
 	msTimestampLastMenuEvent: 0,
 	payloadLast: '',
+	platform: '',
 	version_app: '0.0.0',
 
 	//:::	🔹 init
 	async init(args) {
 		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'init', CUtil.getArgsKeys(args), args.caller));
 
-		this.version_app = await window.__TAURI__.app.getVersion();
+		const strPlatform = navigator.platform.toUpperCase();
+		this.platform =
+			strPlatform.includes('MAC') ? PLATFORM.MAC :
+			strPlatform.includes('WIN') ? PLATFORM.WINDOWS :
+			PLATFORM.LINUX;
+		///this.platform = PLATFORM.WINDOWS; 		// used for testing
 
+		document.body.classList.add(`platform-${this.platform.toLowerCase()}`);
+
+
+		this.version_app = await window.__TAURI__.app.getVersion();
 
 		// listen for menu events from Rust
 		window.__TAURI__.event.listen('menu', (e) => {
@@ -1149,7 +1157,15 @@ const CWrapper = {
 
 		// prevent 'context' menu - when right clicking the webview (where 'Reload' and 'Inspect Element' are placed)
 		document.addEventListener('contextmenu', (event) => {
-			//+event.preventDefault();
+
+			return;	// BUILD SETTING: rem out for build
+
+			// allow normal context menu in textarea
+			if (event.target.closest('textarea')) {
+				return;		// allow popup menu on text area. // ao: maybe not in Status log?
+			}
+
+			event.preventDefault();
 		});
 
 		if (LOGGING) console.groupEnd();
@@ -1193,13 +1209,10 @@ const CWrapper = {
 		// menu: File
 		//::		🔻 file.new
 		//:			→ App: dispatch:				model.docdata.load
-		if (args.payload === 'file.new') 			res = await App.dispatch({type: 'model.docdata.load', source: SOURCE.NEWDOC, pathFileToLoad: '', caller});
+		if (args.payload === 'file.new') 			res = await App.dispatch({type: 'model.docdata.load', source: SOURCE.NEWDOC, caller});
 		//::		🔻 file.open
 		//:			→ App: dispatch:				model.docdata.load
-		if (args.payload === 'file.open') 			res = await App.dispatch({type: 'model.docdata.load', source: SOURCE.OPENDIALOG, pathFileToLoad: '', caller});
-		//::		🔻 file.saveas
-		//:			→ App: dispatch:				wrapper.dialog.saveas.show
-		if (args.payload === 'file.saveas') 		res = await App.dispatch({type: 'wrapper.dialog.saveas.show', caller});
+		if (args.payload === 'file.open') 			res = await App.dispatch({type: 'model.docdata.load', source: SOURCE.OPENDIALOG, caller});
 		//::		🔻 file.pincurrent
 		//:			→ App: dispatch:				model.filepath.pin
 		if (args.payload === 'file.pincurrent') 	res = await App.dispatch({type: 'model.filepath.pin', caller});
@@ -1310,13 +1323,13 @@ const CWrapper = {
 
 		//::		🔻 view.theme.system
 		//:			→ App: dispatch:				wrapper.theme.set:			system
-		if (args.payload === 'view.theme.system')	res = await App.dispatch({type: 'wrapper.theme.set', idTheme: 'system', caller});
+		if (args.payload === 'view.theme.system')	res = await App.dispatch({type: 'model.appstate.update', oUpdate: {idTheme: 'system'}, caller});
 		//::		🔻 view.theme.light
 		//:			→ App: dispatch:				wrapper.theme.set:			light
-		if (args.payload === 'view.theme.light')	res = await App.dispatch({type: 'wrapper.theme.set', idTheme: 'light', caller});
+		if (args.payload === 'view.theme.light')	res = await App.dispatch({type: 'model.appstate.update', oUpdate: {idTheme: 'light'}, caller});
 		//::		🔻 view.theme.dark
 		//:			→ App: dispatch:				wrapper.theme.set:			dark
-		if (args.payload === 'view.theme.dark')		res = await App.dispatch({type: 'wrapper.theme.set', idTheme: 'dark', caller});
+		if (args.payload === 'view.theme.dark')		res = await App.dispatch({type: 'model.appstate.update', oUpdate: {idTheme: 'dark'}, caller});
 
 		//::		🔻 help.docs
 		//:			→ this.openUrl:					https://www.dr.dk
@@ -1344,27 +1357,7 @@ const CWrapper = {
 	async requestQuit(args) {
 		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'requestQuit', '', args.caller));
 
-		const caller = 'CWrapper.requestQuit';
 		let res = {status: STATUS.OK, info: 'not set'};
-
-		if (CModel.appstate.isDocdataSaved) {
-			await window.__TAURI__.core.invoke('quit_app');
-			if (LOGGING) console.groupEnd();
-			return res;
-		}
-
-		const resPrompt = await CWrapper.showPromptDialog({type: 'ask', title: 'Unsaved edits', message: 'Save changes to this document?', kind: 'warning', okLabel: 'Save', cancelLabel: 'Don\'t Save', caller});
-
-		if (resPrompt.status === STATUS.OK) {		// 'Save'
-
-			//:				→ App: dispatch:		wrapper.dialog.saveas.show
-			const resSaveAs = await App.dispatch({type: 'wrapper.dialog.saveas.show', caller});
-
-			if (resSaveAs.status !== STATUS.OK) {	// 'Cancel'
-				if (LOGGING) console.groupEnd();
-				return resSaveAs;
-			}
-		}
 
 		await window.__TAURI__.core.invoke('quit_app');
 		return res;
@@ -1376,11 +1369,12 @@ const CWrapper = {
 		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'onFileChangedEvent', '(payload: ' + args.payload + ')', args.caller));
 		if (LOGARGS) console.log(args);
 
+		const caller = 'window.__TAURI__.event.listen(file-changed)';
 		const msBufferToPreventOpen = 600;
 		const msTimestampFileChanged = Date.now();
 		const msSinceWriteFileContent = msTimestampFileChanged - CWrapper.msTimestampWriteFileContent;
-		const changedPath = args.payload;
-		const isFileShouldReload = (changedPath === CModel.appstate.pathFileLoaded) && (msSinceWriteFileContent > msBufferToPreventOpen);
+		const pathChanged = args.payload;
+		const isFileShouldReload = (pathChanged === CModel.appstate.pathFileLoaded) && (msSinceWriteFileContent > msBufferToPreventOpen);
 		if (LOGARGS) console.log('Reload file: ' + (isFileShouldReload ? 'YES: ' : 'NO: ') + msSinceWriteFileContent + ' ms)');	// ao: test and fix
 		
 		if (isFileShouldReload) {
@@ -1389,12 +1383,12 @@ const CWrapper = {
 			if (CWrapper.reloadTimer) clearTimeout(CWrapper.reloadTimer);
 
 			CWrapper.reloadTimer = setTimeout(async () => {
-				if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'reloadTimer -> setTimeout finished', '(call: await App.dispatch: model.docdata.load.execute)', ''));
+				if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'reloadTimer -> setTimeout finished', '(call: await App.dispatch: model.docdata.load)', ''));
 				let res = {status: STATUS.OK, info: 'not set'};
 
 				try {
 					//:		→ App: dispatch:					model.docdata.load
-					res = await App.dispatch({type: 'model.docdata.load.execute', source: SOURCE.FILEPATH, pathFileToLoad: CModel.appstate.pathFileLoaded, caller: 'window.__TAURI__.event.listen(file-changed)'});
+					res = await App.dispatch({type: 'model.docdata.load', source: SOURCE.FILEPATH, pathFileToLoad: CModel.appstate.pathFileLoaded, caller});
 				}
 				catch (err) {
 					res = {status: STATUS.ERROR, code: CODE.ERROR_FILE_READ, err: String(err)};
@@ -1410,14 +1404,12 @@ const CWrapper = {
 	//:::	🔹 showOpenFileSystemDialog
 	async showOpenFileSystemDialog(args) {
 		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'showOpenFileSystemDialog', CUtil.getArgsKeys(args), args.caller));
-		const platform = navigator.platform.toUpperCase();
-		const isMac = platform.includes('MAC');			// ao: maybe set single state/const in init? (CModel.init): appstate.platform = ['mac', 'windows', 
 
 		//: 		→ window.__TAURI__.dialog:			open
 		const pathFileSelected = await window.__TAURI__.dialog.open({
 			multiple: false,
 			directory: false,
-			...(isMac ? {} : {
+			...(CWrapper.platform === PLATFORM.MAC ? {} : {
 				filters: [
 					{name: 'Text', extensions: ['md', 'txt']},
 					{name: 'All Files', extensions: ['*']},
@@ -1550,12 +1542,12 @@ Turn structured text into visual tiles and story maps.
 	async saveFileText(args) {
 		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'saveFileText', '(text: [see args], pathFileToSave: ' + args.pathFileToSave + ')', args.caller));
 		if (LOGARGS) console.log(args);
+		// nb: don't set CWrapper.msTimestampWriteFileContent = Date.now(); here! does not work
 		
 		try {
 			//: 		→ window.__TAURI__.fs:			writeTextFile
 			await window.__TAURI__.fs.writeTextFile(args.pathFileToSave, args.text);
 
-			CWrapper.msTimestampWriteFileContent = Date.now();
 			if (LOGGING) console.groupEnd();
 			return {status: STATUS.OK, err: null};
 		}
@@ -2067,13 +2059,14 @@ const CFramework = {
 	setTheme(args) {
 		if (LOGGING) console.group(...CUtil.logGroup('CFramework', 'setTheme', `(mode: ${args.mode})`, args.caller));
 		if (LOGARGS) console.log(args);
+		const caller = 'CFramework -> setTheme';
 
 		//:		→ this: applyThemeClass
-		this.applyThemeClass({mode: args.mode, caller: 'CFramework.setTheme'});
+		this.applyThemeClass({mode: args.mode, caller});
 		
 		// listen for OS changes only in system mode
 		if (args.mode === 'system') {
-			this.mql.onchange = () => this.applyThemeClass({mode: 'system', caller: 'CFramework.setTheme'});
+			this.mql.onchange = () => this.applyThemeClass({mode: 'system', caller});
 		}
 		
 		else {
@@ -2088,7 +2081,6 @@ const CFramework = {
 		if (LOGARGS) console.log('args, mql', args, this.mql);		
 
 		const root = document.documentElement;
-		const caller = 'CFramework.applyThemeClass';
 
 		root.classList.remove('theme-light', 'theme-dark');
 		
@@ -2101,18 +2093,6 @@ const CFramework = {
 		else if (args.mode === 'system') {
 			root.classList.add(this.mql.matches === true ? 'theme-dark' : 'theme-light');
 		}
-
-
-		// in order to fix fill colors based on Canvas (and more):
-
-		//:		→ App: dispatch				model.build.and.augment
-		await App.dispatch({type: 'model.build.and.augment', text: CTexteditor.value, caller});
-
-		//:		→ App: dispatch				chart.render
-		await App.dispatch({type: 'chart.render', typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
-
-		//:		→ App: dispatch				toolbar.buttons.recreate
-		await App.dispatch({type: 'toolbar.buttons.recreate', caller});
 		if (LOGGING) console.groupEnd();
 	},	
 
@@ -2121,18 +2101,23 @@ const CFramework = {
 		if (LOGGING) console.group(...CUtil.logGroup('CFramework', 'setAppUiClasses', CUtil.getArgsKeys(args), args.caller));
 		if (LOGARGS) console.log(args);
 
-		this.elApp.classList.toggle('sidebar-visible-yes', CModel.appstate.isSidebarVisible === true);
-		this.elApp.classList.toggle('sidebar-visible-no',  CModel.appstate.isSidebarVisible === false);
+		if (args.appstate) {
 
-		this.elApp.classList.toggle('toolbar-visible-yes', CModel.appstate.isToolbarVisible === true);
-		this.elApp.classList.toggle('toolbar-visible-no',  CModel.appstate.isToolbarVisible === false);
+			this.elApp.classList.toggle('sidebar-visible-yes', args.appstate.isSidebarVisible === true);
+			this.elApp.classList.toggle('sidebar-visible-no',  args.appstate.isSidebarVisible === false);
 
-		this.elApp.classList.remove(...['sidebar-position-left', 'sidebar-position-right', 'sidebar-position-top', 'sidebar-position-bottom']);
-		this.elApp.classList.add(CModel.appstate.idSidebarPosition);
+			this.elApp.classList.toggle('toolbar-visible-yes', args.appstate.isToolbarVisible === true);
+			this.elApp.classList.toggle('toolbar-visible-no',  args.appstate.isToolbarVisible === false);
 
-		this.elApp.classList.toggle('chart-viewa', CModel.docstate.idxView === VIEWA);
-		this.elApp.classList.toggle('chart-viewb', CModel.docstate.idxView === VIEWB);
+			this.elApp.classList.remove(...['sidebar-position-left', 'sidebar-position-right', 'sidebar-position-top', 'sidebar-position-bottom']);
+			this.elApp.classList.add(args.appstate.idSidebarPosition);
+		}
 
+		if (args.docstate) {
+
+			this.elApp.classList.toggle('chart-viewa', args.docstate.idxView === VIEWA);
+			this.elApp.classList.toggle('chart-viewb', args.docstate.idxView === VIEWB);
+		}
 		if (LOGGING) console.groupEnd();
 	},
 
@@ -2268,21 +2253,10 @@ const CFramework = {
 			res = await App.dispatch({type: 'chart.graph.height.set', pctGraphHeight: pctGraphHeightNew, caller});
 		}
 
-		//::		🔻 Cmd + Shift + 1 - 9
-		else if (isMetaKey && isShiftKey && arrNumberKey.includes(e.code)) {		// NB: using e.code instead of e.key
-			if (e.preventDefault) e.preventDefault();
-			const idx = Number(e.code.replace('Digit', '')) - 1;
-			const pathFilePinned = CModel.appstate.arrPathFilePinned[idx];
-
-			if (pathFilePinned) {
-				//:			→ App: dispatch:			model.docdata.load (pinned path)
-				res = await App.dispatch({type: 'model.docdata.load', source: SOURCE.FILEPATH, pathFileToLoad: pathFilePinned, caller});
-			}
-		}
-
 		//::		🔻 Ctrl + Tab, Ctrl + Shift + Tab
 		else if (isCtrlKey && e.key === 'Tab') {
 			if (e.preventDefault) e.preventDefault();
+			if (e.stopPropagation) e.stopPropagation();
 
 			const pathFallback = CModel.appstate.arrPathFilePinned[0];
 			const pathFilePinned = CUtil.getPrevNextValue(CModel.appstate.arrPathFilePinned, CModel.appstate.pathFileLoaded, isShiftKey ? -1 : 1, pathFallback, true);
@@ -2293,8 +2267,22 @@ const CFramework = {
 			}
 		}
 
+		//::		🔻 Cmd + Alt + 1 - 9
+		else if (isMetaKey && isAltKey && arrNumberKey.includes(e.code)) {		// NB: using e.code instead of e.key
+			if (e.preventDefault) e.preventDefault();
+			if (e.stopPropagation) e.stopPropagation();
+			
+			const idx = Number(e.code.replace('Digit', '')) - 1;
+			const pathFilePinned = CModel.appstate.arrPathFilePinned[idx];
+
+			if (pathFilePinned) {
+				//:			→ App: dispatch:			model.docdata.load (pinned path)
+				res = await App.dispatch({type: 'model.docdata.load', source: SOURCE.FILEPATH, pathFileToLoad: pathFilePinned, caller});
+			}
+		}
+
 		//::		🔻 Cmd/Alt + 1 - 9
-		else if ((isMetaKey || isAltKey) && !e.shiftKey && arrNumberKey.includes(e.code)) {		// NB: using e.code instead of e.key
+		else if ((isMetaKey || isAltKey) && arrNumberKey.includes(e.code)) {		// NB: using e.code instead of e.key
 			if (e.preventDefault) e.preventDefault();
 
 			const idxTagblock = arrNumberKey.indexOf(e.code);
@@ -2318,10 +2306,13 @@ const CFramework = {
 			else if ((e.key === 'ArrowRight' && idTab === 'files') || (e.key === 'ArrowLeft' && idTab === 'style'))
 				res = await App.dispatch({type: 'popup.tab.select', idTab: 'view', caller});
 			
-			else if ((e.key === 'ArrowRight' && idTab === 'view') || (e.key === 'ArrowLeft' && idTab === 'status'))
+			else if ((e.key === 'ArrowRight' && idTab === 'view') || (e.key === 'ArrowLeft' && idTab === 'defs'))
 				res = await App.dispatch({type: 'popup.tab.select', idTab: 'style', caller});
 			
-			else if (e.key === 'ArrowRight' && idTab === 'style')
+			else if ((e.key === 'ArrowRight' && idTab === 'style') || (e.key === 'ArrowLeft' && idTab === 'status'))
+				res = await App.dispatch({type: 'popup.tab.select', idTab: 'defs', caller});
+			
+			else if (e.key === 'ArrowRight' && idTab === 'defs')
 				res = await App.dispatch({type: 'popup.tab.select', idTab: 'status', caller});
 		}
 
@@ -2343,14 +2334,6 @@ const CFramework = {
 
 			//:			→ CWrapper: onMenuEvent:			file.open
 			CWrapper.onMenuEvent({payload: 'file.open', caller});
-		}
-
-		//::		🔻 Cmd + Shift + S
-		else if (isMetaKey && isShiftKey && e.key.toLowerCase() === 's') {
-			if (e.preventDefault) e.preventDefault();
-
-			//:			→ CWrapper: onMenuEvent:			fifile.saveas
-			CWrapper.onMenuEvent({payload: 'file.saveas', caller});
 		}
 
 		//::		🔻 Cmd + Shift + P
@@ -2474,8 +2457,8 @@ const CFramework = {
 			CWrapper.onMenuEvent({payload: 'view.chart.viewb', caller});
 		}
 
-		//::		🔻 Shift + Cmd + Alt + 'J/K/L'
-		else if ((isShiftKey && isMetaKey && isAltKey) && (e.key.toLowerCase() === 'j' || e.key.toLowerCase() === 'k' || e.key === 'l')) {
+		//::		🔻 Shift + Cmd + 'J/K/L'
+		else if ((isShiftKey && isMetaKey && !isAltKey) && (e.key.toLowerCase() === 'j' || e.key.toLowerCase() === 'k' || e.key === 'l')) {
 			if (e.preventDefault) e.preventDefault();
 
 			const isReset = (e.key === 'k');
@@ -2629,7 +2612,7 @@ const CChart = {
 					const strClassesText = ['header__text', 'header__text--chapter', ...chapter.arrTag].join(' ');
 
 					return svg` <rect class=${strClassesRect} style=${strExtraStyle} x=${pxX} y=${PX_LINE_HEIGHT * 2} width=${PX_COL_WIDTH}  rx=${PX_PADDING_NORMAL} @click=${e => CChart.onClick({src: 'chapter', e, idxTextareaLine: chapter.idxTextareaLine, caller: 'src: chapter'})} />
-								<text class=${strClassesText} style=${strExtraStyle} x=${pxX + PX_MARGIN_PART + PX_PADDING_SMALL} y=${PX_LINE_HEIGHT * 2.65}>${strCaption}</text>`;
+								<text class=${strClassesText} style=${strExtraStyle} x=${pxX + PX_MARGIN_PART + PX_PADDING_SMALL} y=${PX_LINE_HEIGHT * 2.70}>${strCaption}</text>`;
 				})
 			);
 
@@ -2723,7 +2706,6 @@ const CChart = {
 
 			else {
 				const definition = CModel.docdata.definitions?.[show];
-				//-const strLine0 = `${show} (${definition ? definition.unit : '?'})`;
 				const strLine0 = definition?.unit ? `${show} (${definition.unit})` : `${show}`;
 				const strLine1 = part.metadata?.[show] ?? '—';
 
@@ -3187,7 +3169,7 @@ const CTexteditor = {
 		elTextarea.setAttribute('autocorrect', 'off');
 		elTextarea.setAttribute('autocapitalize', 'off');
 		elTextarea.setAttribute('wrap', 'off');
-		elTextarea.setAttribute('placeholder', 'off sdfh dsfh sdfh sdfhdsfh\n\tLine 2');
+		elTextarea.setAttribute('placeholder', '');
 
 		this.onInputDebounced = this.debounce(() => this.onInput(), 400);		// ao: define const for ms?
 
@@ -3397,9 +3379,6 @@ const CTexteditor = {
 		const caller = 'CTexteditor.onInput';
 
 		this.value = this.elTextarea.value;
-
-		//:		→ App: dispatch:		model.appstate.update:			[isDocdataSaved: false]
-		await App.dispatch({type: 'model.appstate.update', oUpdate: {isDocdataSaved: false}, caller});
 
 		//:		→ App: dispatch:		model.build.and.augment
 		await App.dispatch({type: 'model.build.and.augment', text: this.value, caller});
@@ -3733,17 +3712,12 @@ const CPopup = {
 
 					<button class="btn" @click=${e => CPopup.onClick({src: '@click: btn.new.file'})} title=${`New file\n(${CUtil.formatShortcutForOS('⌘ N')})`}>
 						<span class="kbd">${CUtil.formatShortcutForOS('⌘ N')}</span>
-						<span class="btn__label">New</span>
+						<span class="btn__label">New file…</span>
 					</button>
 
 					<button class="btn" @click=${e => CPopup.onClick({src: '@click: btn.open.file'})} title=${`Open file\n(${CUtil.formatShortcutForOS('⌘ O')})`}>
 						<span class="kbd">${CUtil.formatShortcutForOS('⌘ O')}</span>
 						<span class="btn__label">Open file…</span>
-					</button>
-
-					<button class="btn" @click=${e => CPopup.onClick({src: '@click: btn.save.as.file'})} title=${`Save file as\n(${CUtil.formatShortcutForOS('⇧ ⌘ S')})`}>
-						<span class="kbd">${CUtil.formatShortcutForOS('⇧ ⌘ S')}</span>
-						<span class="btn__label">Save as…</span>
 					</button>
 
 					<button class="btn" @click=${e => CPopup.onClick({src: '@click: btn.pin.current.file'})} title=${`Pin file\n(${CUtil.formatShortcutForOS('⇧ ⌘ P')})`}>
@@ -3752,42 +3726,26 @@ const CPopup = {
 					</button>
 				</div>
 
-				<div class="content__section">
-					<div class="section__head">
-						<span>Pinned files</span>
-						<span class="hint">Drag to reorder · Click to load · Unpin to remove from list.</span>
-						<div class="section__actions"></div>
+				${appstate.arrPathFilePinned.length > 0 ? html`
+					<div class="content__section">
+						<div class="section__head">
+							<span>Pinned files</span>
+							<span class="hint">Drag to reorder · Click to load · Unpin to remove from list.</span>
+							<div class="section__actions"></div>
+						</div>
+						<div class="section__body draggable-list">
+							${appstate.arrPathFilePinned.map((pathFilePinned, idx) => CPopup.Templates.BodyItem_PinnedFile({pathFilePinned, isActive: pathFilePinned === appstate.pathFileLoaded, idx}))}
+						</div>
+					</div>` : html`
+
+					<div class="content__empty">
+						<!--No pinned files yet.<br>
+						Create a new file or open an existing file to begin.-->
 					</div>
-					<div class="section__body draggable-list">
-						${appstate.arrPathFilePinned.map((pathFilePinned, idx) => CPopup.Templates.BodyItem_PinnedFile({pathFilePinned, isActive: pathFilePinned === appstate.pathFileLoaded, idx}))}
-					</div>
-				</div>
+				`}
 			`;
 		},
-/*
 
-				<div class="content__section">
-					<div class="section__head">
-						<span>Chart view</span>
-						<span class="hint">Select chart view</span>
-						<div class="section__actions"></div>
-					</div>
-					<div class="section__body">
-						<div class="body__item-plain">
-							<div class="pillbar">
-								<button class=${['pill', docstate.idxView === VIEWA ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.view.chart', idxView: VIEWA})} title="View chart as Structure\n(F1)">
-									<span class="kbd">F1</span>
-									<span class="btn__label">Structure</span>
-								</button>
-								<button class=${['pill', docstate.idxView === VIEWB ? 'pill-selected' : ''].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.view.chart', idxView: VIEWB})} title="View chart grouped by Tags\n(F2)">
-									<span class="kbd">F2</span>
-									<span class="btn__label">Tags</span>
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-*/
 		//::		☐ TabView()
 		//:			→ @click: this.onClick
 		TabView() {
@@ -3993,9 +3951,9 @@ const CPopup = {
 		BodyItem_PinnedFile(args) {
 			if (LOGGING) console.log('%c CPopup %c Template: %c BodyItem_PinnedFile %c (args)', LOG_MODULE, LOG_RED, LOG_FUNCTION+LOG_BOLD, LOG_ARGS);
 			const filenameShort = args.pathFilePinned.split(/[\\/]/).pop();
-			const kbd = args.idx < 9 ? CUtil.formatShortcutForOS(`⇧ ⌘ ${args.idx + 1}`) : "—";
+			const kbd = args.idx < 9 ? CUtil.formatShortcutForOS(`⌥ ⌘ ${args.idx + 1}`) : "—";
 			const shortcut = args.idx < 9 ? kbd : 'No keyboard shortcut';
-			const path = args.pathFilePinned.replace('jakobkristiansen', 'aowagner');		// ao: remove 'hack' for screenshots
+			const path = args.pathFilePinned.replace('jakobkristiansen', 'aowagner');		// BUILD SETTING:  remove 'hack' for screenshots
 
 			return html`
 				<div
@@ -4501,19 +4459,13 @@ const CPopup = {
 			//::		🔻 @click: btn.new.file
 			case '@click: btn.new.file':
 				//:			→ App: dispatch:			model.docdata.load
-				res = await App.dispatch({type: 'model.docdata.load', source: SOURCE.NEWDOC, pathFileToLoad: '', caller});
+				res = await App.dispatch({type: 'model.docdata.load', source: SOURCE.NEWDOC, caller});
 				break;
 
 			//::		🔻 @click: btn.open.file
 			case '@click: btn.open.file':
 				//:			→ App: dispatch:			model.docdata.load
 				res = await App.dispatch({type: 'model.docdata.load', source: SOURCE.OPENDIALOG, caller});
-				break;
-
-			//::		🔻 @click: btn.save.as.file
-			case '@click: btn.save.as.file':
-				//:			→ App: dispatch:			wrapper.dialog.saveas.show
-				res = await App.dispatch({type: 'wrapper.dialog.saveas.show', caller});
 				break;
 
 			//::		🔻 @click: btn.pin.current.file
@@ -4528,12 +4480,6 @@ const CPopup = {
 				res = await App.dispatch({type: 'model.filepath.unpin', pathFileToUnpin: args.pathFileToUnpin, caller});
 				break;					
 
-			//--::		🔻 @click: btn.view.chart
-			/*--case '@click: btn.view.chart':
-				//:			→ App: dispatch:			chart.view.select
-				res = await App.dispatch({type: 'chart.view.select', idxView: args.idxView, caller});
-				break; -*/
-
 			//::		🔻 @click: btn.ui.scale
 			case '@click: btn.ui.scale':
 				//:			→ App: dispatch:			framework.ui.scale
@@ -4543,7 +4489,7 @@ const CPopup = {
 			//::		🔻 @click: btn.theme.set
 			case '@click: btn.theme.set':
 				//:			→ App: dispatch:			wrapper.theme.set
-				res = await App.dispatch({type: 'wrapper.theme.set', idTheme: args.idTheme, caller});
+				res = await App.dispatch({type: 'model.appstate.update', oUpdate: {idTheme: args.idTheme}, caller});
 				break;
 
 			//::		🔻 @click: btn.graph.height.set
@@ -4573,7 +4519,7 @@ const CPopup = {
 			//::		🔻 @click: item.open.pinned.file
 			case '@click: item.open.pinned.file':
 				//:			→ App: dispatch:			model.docdata.load
-				res = await App.dispatch({type: 'model.docdata.load', source: SOURCE.FILEPATH, pathFileToLoad: args.pathFileToLoad, caller: '@click: item.open.pinned.file', caller});
+				res = await App.dispatch({type: 'model.docdata.load', source: SOURCE.FILEPATH, pathFileToLoad: args.pathFileToLoad, caller});
 				break;
 
 			//::		🔻 @click: item.toggle.setting
@@ -4599,6 +4545,7 @@ const CModel = {
 	docstate: null,
 	docdata: null,
 	logstate: null,
+	isLoadingFile: false,
 
 	//:::	🔹 init
 	async init(args) {
@@ -4606,30 +4553,48 @@ const CModel = {
 
 		const caller = 'CModel.init';
 
-		//:		→ this:			loadLogstate
+		//:		→ this:				loadLogstate
 		this.logstate = this.loadLogstate({caller});
 
-		//:		→ this:			loadAppstate
+		//:		→ this:				loadAppstate
 		this.appstate = this.loadAppstate({caller});
 
-		//:		→ this:			loadDocstate				[load defaults. a bit redundant, but safer]
-		this.docstate = this.loadDocstate({doLoadDefault: true, pathFile: '', caller});
-
-		//:		→ CFramework:	setTheme
-		CFramework.setTheme({mode: this.appstate.idTheme, caller});
-
-		//:		→ CFramework:	updateLookupConstants	[pxBaseUnit]
-		CFramework.updateLookupConstants({pxBaseUnit: this.appstate.pxBaseUnit, caller});
-
-		//:		→ CFramework:	setAppUiClasses
-		CFramework.setAppUiClasses({caller});
-
-		//:		→ CWrapper:		setMenuChecks
+		//:		→ CWrapper:			setMenuChecks
 		await CWrapper.setMenuChecks({...this.appstate, caller});
 
-		//:		→ App: dispatch:	model.docdata.load.execute		[if pathFileLoaded = '', a 'blank' docdata is created]
-		const source = this.appstate.pathFileLoaded !== '' ? SOURCE.FILEPATH : SOURCE.NEWDOC;
-		await App.dispatch({type: 'model.docdata.load.execute', source: source, pathFileToLoad: CModel.appstate.pathFileLoaded, caller});
+		//:		→ CFramework:		setTheme
+		CFramework.setTheme({mode: this.appstate.idTheme, caller});
+
+		//:		→ CFramework:		setAppUiClasses
+		CFramework.setAppUiClasses({appstate: this.appstate, caller});
+
+		//:		→ CFramework:		updateLookupConstants	[pxBaseUnit]
+		CFramework.updateLookupConstants({pxBaseUnit: this.appstate.pxBaseUnit, caller});
+
+		if (this.appstate.pathFileLoaded === ''         || true) {
+
+			this.appstate.pathFileLoaded = '';		// nb: for testing! Remove when || true is removed above
+
+			//:		→ CWrapper:			setWindowTitle
+			await CWrapper.setWindowTitle({prefix: APPNAME, title: 'No file loaded', caller});
+
+			//:		→ App: dispatch		framework.sidebar.visibility.set: false
+			await App.dispatch({type: 'framework.sidebar.visibility.set', isSidebarVisible: false, caller});
+
+			//:		→ App: dispatch		popup.settings.open
+			await App.dispatch({type: 'popup.settings.open', idTab: 'files', caller});
+		}
+
+		else {
+			
+			// small 'fix': on init, appstate.pathFileLoaded points to a file that is actually not loaded, but must be loaded. So it is set to '', 
+			// but 'model.docdata.load' is still called with correct path to file to *actually* load (which will also set appstate.pathFileLoaded again)
+			const pathFileToLoad = this.appstate.pathFileLoaded;
+			this.appstate.pathFileLoaded = '';
+			
+			//:		→ App: dispatch:		model.docdata.load
+			await App.dispatch({type: 'model.docdata.load', source: SOURCE.FILEPATH, pathFileToLoad, caller});
+		}
 		if (LOGGING) console.groupEnd();
 	},
 
@@ -4653,7 +4618,6 @@ const CModel = {
 			txtGlobalCss: ``,
 			txtGlobalDefs: ``,
 			pctGraphHeight: 50,
-			isDocdataSaved: true,
 		};
 
 		try {
@@ -4718,11 +4682,6 @@ const CModel = {
 			pxMarginPart: PX_MARGIN_PART_INITIAL,
 			isChartRoundingOn: true,
 		};
-
-		if (args.doLoadDefault) {
-			if (LOGGING) console.groupEnd();
-			return docstateDefault;
-		}
 
 		try {
 			const key = 'docstate:' + encodeURIComponent(args.pathFile);
@@ -4928,7 +4887,6 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 		let partCurrent = null;
 
 		const objGraphs = {};
-		//-const objPartTags = {};
 
 		const txtMarkdown = args.text;
 		const linesParsed = txtMarkdown.split(/\r?\n/);
@@ -5064,11 +5022,8 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 
 
 			// add graphdata. will be added no matter the countLeadingTabs of the line
-			//-if (sectionCurrent || chapterCurrent) {
 			if (sectionCurrent && chapterCurrent && partCurrent) {
-			//-if (partCurrent) {
 
-				//-const idxChapter = !chapterCurrent ? arrChapter.length : arrChapter.indexOf(chapterCurrent);	// if line is new section (no chapter yet), point to first chapter in section (even though it is not created yet)
 				const arrEntryNumeric = Object.entries(metadata).filter(([key, value]) => typeof value === 'number');
 				const arrKeyIgnore = ['bold', 'saturation', 'strokewidth'];
 				const tag = partCurrent.tag;
@@ -5078,7 +5033,7 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 					.forEach(([key, value]) => {
 
 						const graphinfo = {
-							idxChapter: chapterCurrent.idx, 	//- idxChapter,
+							idxChapter: chapterCurrent.idx,
 							value,
 							idxTextareaLine,
 						};
@@ -5256,7 +5211,6 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 
 		// Match a line like:
 		// #gitte { ... }
-		//-const re = new RegExp(`^\\s*#${escapedTag}\\s*\\{([^}]*)\\}\\s*;?\\s*$`, 'm');
 		const re = new RegExp(`^\\s*[#.]${escapedTag}\\s*\\{([^}]*)\\}\\s*;?\\s*$`, 'm');
 		const match = txtStyle.match(re);
 
@@ -5476,17 +5430,56 @@ const App = {
 
 		switch (args.type) {
 
-			//::		🔻 wrapper.theme.set
-			case 'wrapper.theme.set': {
+			//::		🔻 model.appstate.update
+			case 'model.appstate.update': {
 
-				//: 			→ App: dispatch				model.appstate.update: idTheme
-				await App.dispatch({type: 'model.appstate.update', oUpdate: {idTheme: args.idTheme}, caller});
+				//:			→ CModel: 		updateAppstate:			args.oUpdate
+				CModel.updateAppstate({...args.oUpdate, caller});
 
-				//:			→ CFramework: setTheme
-				CFramework.setTheme({mode: args.idTheme, caller});
+				//:			→ CWrapper: 		setMenuChecks
+				await CWrapper.setMenuChecks({...args.oUpdate, caller});
 
-				//:			→ CWrapper: setMenuChecks
-				await CWrapper.setMenuChecks({idTheme: args.idTheme,caller});
+				//:			→ CFramework:	setAppUiClasses
+				if (args.oUpdate.isSidebarVisible !== undefined || args.oUpdate.isToolbarVisible !== undefined || args.oUpdate.idSidebarPosition !== undefined)
+					CFramework.setAppUiClasses({appstate: CModel.appstate, caller});
+				
+				//:			→ CFramework: 	updateLookupConstants
+				if (args.oUpdate.pxBaseUnit !== undefined)
+					CFramework.updateLookupConstants({...args.oUpdate,  caller});
+
+				//?const is = ['pxMarginPart', 'pxBaseUnit', 'linecount'].some(field => field in args.oUpdate);
+
+				//:			→ CFramework: 	setTheme
+				if (args.oUpdate.idTheme !== undefined)
+					CFramework.setTheme({mode: args.oUpdate.idTheme, caller});
+
+				//:			→ CPopup: 		renderPopup 		[since appstate is reflected in View tab, which docstate is not]
+				const isPopupOpen = CModel.appstate.isPopupOpen;
+				const isOpeningOrClosingPopup = Object.hasOwn(args.oUpdate, 'isPopupOpen');
+
+				if (isPopupOpen || isOpeningOrClosingPopup)
+					CPopup.renderPopup({caller});
+
+				if (LOGGING) console.groupEnd();
+				return {status: STATUS.OK, caller};
+			}
+
+			//::		🔻 model.docstate.update
+			case 'model.docstate.update': {
+
+				//:			→ CModel:		updateDocstate
+				CModel.updateDocstate({...args.oUpdate, caller});
+
+				//:			→ CWrapper:		setMenuChecks
+				await CWrapper.setMenuChecks({...args.oUpdate, caller});
+
+				//:			→ CFramework:	setAppUiClasses
+				if (args.oUpdate.idxView !== undefined)
+					CFramework.setAppUiClasses({docstate: CModel.docstate, caller});
+
+				//:			→ CFramework:	updateLookupConstants
+				if (args.oUpdate.linecount !== undefined || args.oUpdate.pxMarginPart !== undefined)
+					CFramework.updateLookupConstants({...args.oUpdate,  caller});
 
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
@@ -5495,182 +5488,142 @@ const App = {
 			//::		🔻 wrapper.file.save
 			case 'wrapper.file.save': {
 
-				if (args.pathFileToSave === '') {
-					if (LOGGING) console.groupEnd();
-					return {status: STATUS.CANCEL, code: CODE.FILE_PATH_NOT_SET};
-				}
+				CWrapper.msTimestampWriteFileContent = Date.now();
 
-				else {
+				//:			→ CWrapper:			saveFileText
+				const resSaveFile = await CWrapper.saveFileText({pathFileToSave: args.pathFileToSave, text: args.text, caller});
 
-					//:			→ CWrapper:			saveFileText
-					const resSaveFile = await CWrapper.saveFileText({pathFileToSave: args.pathFileToSave, text: args.text, caller});
-
-					if (resSaveFile.status === STATUS.OK)
-						//: 			→ App: dispatch				model.appstate.update: pathFileLoaded, isDocdataSaved
-						await App.dispatch({type: 'model.appstate.update', oUpdate: {pathFileLoaded: args.pathFileToSave, isDocdataSaved: true}, caller});
-
-					if (LOGGING) console.groupEnd();
-					return resSaveFile;
-				}
+				if (LOGGING) console.groupEnd();
+				return resSaveFile;
+				///}
 			}
 
-			//::		🔻 wrapper.dialog.saveas.show
-			case 'wrapper.dialog.saveas.show': {
 
-				//:			→ CWrapper: 			showSaveFileSystemDialog
-				const resFileDialog = await CWrapper.showSaveFileSystemDialog({caller});
 
-				if (resFileDialog.status === STATUS.OK) {
-
-					//:			→ App: dispatch:		wrapper.file.save
-					const resFileSave = await App.dispatch({type: 'wrapper.file.save', pathFileToSave: resFileDialog.pathFileSelected, text: CTexteditor.value, caller});
-
-					if (resFileSave.status === STATUS.OK) {
-
-						//:			→ CWrapper:			setWindowTitle	🟣 (test on res.status?)
-						await CWrapper.setWindowTitle({prefix: APPNAME, title: resFileDialog.pathFileSelected.split(/[\\/]/).pop(), caller});	// ao: 'technically' status from this should be checked
-
-						//:			→ CWrapper:			startWatchFile	🟣 (test on res.status?)
-						await CWrapper.startWatchFile({pathFileToWatch: resFileDialog.pathFileSelected, caller});				// ao: 'technically' status from this should be checked
-					}
-
-					if (LOGGING) console.groupEnd();
-					return resFileSave;
-				}
-				else {
-					if (LOGGING) console.groupEnd();
-					return resFileDialog;
-				}
-			}
 
 			//::		🔻 model.docdata.load
 			case 'model.docdata.load': {
 
-				if (CModel.appstate.isDocdataSaved === false) {
-					//:			→ CWrapper:			showPromptDialog			['save changes?']
-					const resPrompt = await CWrapper.showPromptDialog({type: 'ask', title: 'Unsaved edits', message: 'Save changes to this document?', kind: 'warning', okLabel: 'Save', cancelLabel: 'Don\'t Save', caller});
-					
-					if (resPrompt.status === STATUS.OK) {		// 'Save'
-
-						//:				→ App: dispatch:		wrapper.dialog.saveas.show
-						const resSaveAs = await App.dispatch({type: 'wrapper.dialog.saveas.show', caller});
-
-						if (resSaveAs.status !== STATUS.OK) {	// 'Cancel'
-							if (LOGGING) console.groupEnd();
-							return resSaveAs;
-						}
-					}
-					else {										// 'Don't Save'
-						// continue load
-					}
+				if (CModel.isLoadingFile) {
+					console.log('######## model.docdata.load aborted - CModel.isLoadingFile already true');
+					return {status: STATUS.CANCEL, caller};
 				}
 
 
-				if (args.source === SOURCE.OPENDIALOG) {
+				if (args.source === SOURCE.FILEPATH) {
+					// args.pathFileToLoad specified in call - no change required
+				}
+
+				else if (args.source === SOURCE.OPENDIALOG) {
 					//:			→ CWrapper:			showOpenFileSystemDialog
 					const resFileDialog = await CWrapper.showOpenFileSystemDialog({caller});
 
-					if (resFileDialog.status === STATUS.OK) {	// file selected
-						args.source = SOURCE.FILEPATH;
-						args.pathFileToLoad = resFileDialog.pathFileSelected;
-					}
-					else {								// 'Cancel'
-						if (LOGGING) console.groupEnd();
+					if (resFileDialog.status !== STATUS.OK) 		// file not selected
 						return resFileDialog;
-					}
+
+					args.pathFileToLoad = resFileDialog.pathFileSelected;
+					CModel.appstate.pathFileLoaded = '';
 				}
 
 				else if (args.source === SOURCE.NEWDOC) {
 					
+					//:			→ CWrapper:			showSaveFileSystemDialog
+					const resFileDialog = await CWrapper.showSaveFileSystemDialog({caller});
+
+					if (resFileDialog.status !== STATUS.OK)			// file name for save not selected
+						return resFileDialog;
+
+					//:			→ App: dispatch:		wrapper.file.save
+					const resFileSave = await App.dispatch({type: 'wrapper.file.save', pathFileToSave: resFileDialog.pathFileSelected, text: '', caller});  // ao: test on res?
+
 					if (!CModel.appstate.isSidebarVisible)	// make sure Editor is visible
 						await App.dispatch({type: 'framework.sidebar.visibility.set', isSidebarVisible: true, caller});
+
+					args.pathFileToLoad = resFileDialog.pathFileSelected;
+					CModel.appstate.pathFileLoaded = '';
 				}
 
-				//:			→ App: dispatch:		model.docdata.load.execute
-				const resLoadExecute = await App.dispatch({type: 'model.docdata.load.execute', source: args.source, pathFileToLoad: args.pathFileToLoad, caller});
-				if (LOGGING) console.groupEnd();
-				return resLoadExecute;
-			}
 
-			//::		🔻 model.docdata.load.execute
-			case 'model.docdata.load.execute': {
+				CModel.isLoadingFile = true;	// must be *after* ('modeless') dialog-flows above (since the current file can be changed externally, when onFileChangedEvent calls load
 
-				const source = args.source === SOURCE.NEWDOC ? SOURCE.NEWDOC : SOURCE.FILEPATH;
-				const isLoadingNewFilepath = args.pathFileToLoad !== CModel.appstate.pathFileLoaded;
-				const isCalledFromModelInit = args.caller === 'CModel.init';
+				try {
+					const isLoadingNewFilepath = args.pathFileToLoad !== CModel.appstate.pathFileLoaded;
 
-				//:			→ CModel:		updateDocstate		[update Docstate for doc, before loading new doc, or re-loading current doc]
-				if (!isCalledFromModelInit) {
-					CModel.updateDocstate({
-						pxWorkspaceScrollLeft: CChart.elParent.scrollLeft,
-						pxTexteditorScrollTop: CTexteditor.elTextarea.scrollTop,
-						caller,
-					});
-				}
+					//:			→ CWrapper:			stopWatchFile
+					if (isLoadingNewFilepath)
+						await CWrapper.stopWatchFile({caller});
 
-				if (isLoadingNewFilepath) {
-					//:			→ CWrapper:		stopWatchFile
-					await CWrapper.stopWatchFile({caller});
-				}
+					//:			→ CModel:			updateDocstate		[update Docstate for doc, before loading new doc, or re-loading current doc]
+					if (CModel.appstate.pathFileLoaded !== '') {
+						CModel.updateDocstate({
+							pxWorkspaceScrollLeft: CChart.elParent.scrollLeft,
+							pxTexteditorScrollTop: CTexteditor.elTextarea.scrollTop,
+							caller,
+						});
+					}
 
-				//:			→ CWrapper:		loadFileText
-				const resLoadFileText = source === SOURCE.FILEPATH ? await CWrapper.loadFileText({pathFileToLoad: args.pathFileToLoad, caller}) : {status: STATUS.OK, text: ''};
-				if (resLoadFileText.status !== STATUS.OK) {
-					if (LOGGING) console.groupEnd();
-					return resLoadFileText;
-				}
+					//:			→ CWrapper:			loadFileText
+					const resLoadFileText = await CWrapper.loadFileText({pathFileToLoad: args.pathFileToLoad, caller});
+					if (resLoadFileText.status !== STATUS.OK) {
+						return resLoadFileText;
+					}
 
-				const isTextIdentical = resLoadFileText.text === CTexteditor.value;
+					// if model.docdata.load is called from CWrapper.onFileChangedEvent (in cases where the msBufferToPreventOpen is too short)
+					const isTextIdentical = resLoadFileText.text === CTexteditor.value;
+					if (isTextIdentical && !isLoadingNewFilepath) {
+						if (LOGGING) console.log('NO LOAD - CONTENT IS THE SAME...');
+						return {status: STATUS.OK, caller};
+					}
 
-				if (isTextIdentical && !isLoadingNewFilepath && !isCalledFromModelInit) {
-					if (!LOGGING) console.log('NO LOAD - CONTENT IS THE SAME...');
-					if (!LOGGING) console.groupEnd();
+					//:			→ CTexteditor:		setText
+					CTexteditor.setText({txt: resLoadFileText.text, caller});
+
+					//:			→ CModel:			loadDocstate
+					CModel.docstate = CModel.loadDocstate({pathFile: args.pathFileToLoad, caller});
+
+					//:			→ App: dispatch		model.appstate.update: pathFileLoaded
+					await App.dispatch({type: 'model.appstate.update', oUpdate: {pathFileLoaded: args.pathFileToLoad}, caller});
+
+					//:			→ App: dispatch		model.docstate.update: idxView, isChartRoundingOn, linecount, pxMarginPart
+					await App.dispatch({type: 'model.docstate.update', oUpdate: {
+						idxView: CModel.docstate.idxView,
+						isChartRoundingOn: CModel.docstate.isChartRoundingOn,
+						linecount: CModel.docstate.linecount,
+						pxMarginPart: CModel.docstate.pxMarginPart,
+					}, caller});
+
+					//:			→ App: dispatch		model.build.and.augment		🟣 (test on res?)
+					const resBuildAndAugment = await App.dispatch({type: 'model.build.and.augment', text: CTexteditor.value, caller});
+
+					//:			→ App: dispatch		chart.render
+					await App.dispatch({type: 'chart.render', typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
+
+					//:			→ App: dispatch		toolbar.buttons.recreate
+					await App.dispatch({type: 'toolbar.buttons.recreate', caller});
+
+
+					//:		?	→ [UI updates: 		CChart.elParent.scrollLeft), CTexteditor.elTextarea.scrollTop]
+					CChart.elParent.scrollLeft = CModel.docstate.pxWorkspaceScrollLeft; 		// these 2 lines must be *after* renderSvg, and only here since it will not change on same doc edits
+					CTexteditor.elTextarea.scrollTop = CModel.docstate.pxTexteditorScrollTop;
+
+					//:			→ CWrapper:			setWindowTitle
+					await CWrapper.setWindowTitle({prefix: APPNAME, title: args.pathFileToLoad.split(/[\\/]/).pop(), caller});
+
+					//:			→ CWrapper:			startWatchFile
+					if (isLoadingNewFilepath)
+						await CWrapper.startWatchFile({pathFileToWatch: args.pathFileToLoad, caller});
+
 					return {status: STATUS.OK, caller};
 				}
-
-				//:			→ CTexteditor:	setText
-				CTexteditor.setText({txt: resLoadFileText.text, caller});
-
-				//:			→ CModel:		loadDocstate
-				CModel.docstate = CModel.loadDocstate({pathFile: args.pathFileToLoad, doLoadDefault: source === SOURCE.NEWDOC, caller});
-
-				//:				→ CFramework:	updateLookupConstants	[linecount]
-				CFramework.updateLookupConstants({linecount: CModel.docstate.linecount, pxMarginPart: CModel.docstate.pxMarginPart, caller});
-
-				//: 			→ App: dispatch				model.appstate.update: pathFileLoaded, isDocdataSaved
-				await App.dispatch({type: 'model.appstate.update', oUpdate: {pathFileLoaded: args.pathFileToLoad, isDocdataSaved: true}, caller});
-
-				//:					→ CFramework:	setAppUiClasses
-				CFramework.setAppUiClasses({caller});
-
-				//:					→ CWrapper: setMenuChecks
-				await CWrapper.setMenuChecks({idxView: CModel.docstate.idxView, isChartRoundingOn: CModel.docstate.isChartRoundingOn, caller});
-
-				//:			→ App: dispatch				model.build.and.augment		🟣 (test on res?)
-				const resBuildAndAugment = await App.dispatch({type: 'model.build.and.augment', text: CTexteditor.value, caller});
-
-				//:			→ App: dispatch				chart.render
-				await App.dispatch({type: 'chart.render', typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
-
-				//:			→ App: dispatch				toolbar.buttons.recreate
-				await App.dispatch({type: 'toolbar.buttons.recreate', caller});
-
-
-				//:		?	→ [UI updates: CChart.elParent.scrollLeft), CTexteditor.elTextarea.scrollTop]
-				CChart.elParent.scrollLeft = CModel.docstate.pxWorkspaceScrollLeft; 		// these 2 lines must be *after* renderSvg, and only here since it will not change on same doc edits
-				CTexteditor.elTextarea.scrollTop = CModel.docstate.pxTexteditorScrollTop;
-
-				//:			→ CWrapper:		setWindowTitle
-				await CWrapper.setWindowTitle({prefix: APPNAME, title: source === SOURCE.FILEPATH ? args.pathFileToLoad.split(/[\\/]/).pop() : 'New document', caller});
-
-				if (source === SOURCE.FILEPATH) {
-					//:			→ CWrapper:		startWatchFile				🟣 (only if NEWDOC?)
-					await CWrapper.startWatchFile({pathFileToWatch: args.pathFileToLoad, caller});
+				finally {
+					console.log('## finally: set CModel.isLoadingFile = false');
+					CModel.isLoadingFile = false;		// called even if early return inside try { ... }
+					if (LOGGING) console.groupEnd();
 				}
-
-				if (LOGGING) console.groupEnd();
-				return {status: STATUS.OK, caller};
 			}
+
+
+
 
 			//::		🔻 model.filepath.pin
 			case 'model.filepath.pin': {
@@ -5703,6 +5656,12 @@ const App = {
 			//::		🔻 model.build.and.augment
 			case 'model.build.and.augment': {
 
+				if (CModel.appstate.pathFileLoaded === '') {
+					console.log(`%c # # # EXIT: model.build.and.augment: CModel.appstate.pathFileLoaded === ''`, LOG_RED + LOG_BOLD);
+					if (LOGGING) console.groupEnd();
+					return;
+				}
+
 				//?:		→ CModel: extractFirstCssBlockFromText
 				const txtGlobalCss = CModel.appstate.txtGlobalCss;
 				const txtGlobalDefs = CModel.appstate.txtGlobalDefs;
@@ -5724,25 +5683,8 @@ const App = {
 				//:			→ CModel: reapplyDocstate
 				CModel.reapplyDocstate({caller});
 
-				//:			→ CFramework:	updateCssFromLookupConstants
-				CFramework.updateCssFromLookupConstants({caller});
-
-				if (LOGGING) console.groupEnd();
-				return {status: STATUS.OK, caller};
-			}
-
-			//::		🔻 model.appstate.update
-			case 'model.appstate.update': {
-
-				//:			→ CModel: updateAppstate:			args.oUpdate
-				CModel.updateAppstate({...args.oUpdate, caller});
-
-				const isPopupOpen = CModel.appstate.isPopupOpen;
-				const isOpeningOrClosingPopup = Object.hasOwn(args.oUpdate, 'isPopupOpen');
-
-				//:			→ CPopup: renderPopup		// new here
-				if (isPopupOpen || isOpeningOrClosingPopup)
-					CPopup.renderPopup({caller});
+				//:		→ CFramework:	updateLookupConstants
+				CFramework.updateLookupConstants({caller});			// no args - just to call CFramework.updateCssFromLookupConstants
 
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
@@ -5767,14 +5709,14 @@ const App = {
 					args.tagblock.isActive = !args.tagblock.isActive;
 				}
 
-				//:			→ CModel: updateDocstate
-				CModel.updateDocstate({oTagblockState: Object.fromEntries(CModel.docdata.arrTagblock.map(tagblock => [tagblock.id, {isActive: tagblock.isActive}])), caller});
+				//: 			→ App: dispatch				model.docstate.update: oTagblockState
+				await App.dispatch({type: 'model.docstate.update', oUpdate: {oTagblockState: Object.fromEntries(CModel.docdata.arrTagblock.map(tagblock => [tagblock.id, {isActive: tagblock.isActive}]))}, caller});
 
-				//:			→ CChart: renderSvg
-				CChart.renderSvg({typeSvgUpdate: SVG_UPDATE_RESIZE_ONLY, caller});
+				//:			→ App: dispatch:		chart.render		SVG_UPDATE_RESIZE_ONLY
+				await App.dispatch({type: 'chart.render', typeSvgUpdate: SVG_UPDATE_RESIZE_ONLY, caller});
 
-				//:			→ CToolbar: recreateButtons
-				CToolbar.recreateButtons({caller});
+				//:			→ App: dispatch		toolbar.buttons.recreate
+				await App.dispatch({type: 'toolbar.buttons.recreate', caller});
 				
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
@@ -5785,15 +5727,15 @@ const App = {
 
 				// reorder tagblocks in docdata and render svg
 				CModel.docdata.arrTagblock.sort((a, b) => args.arrTagOrderNew.indexOf(a.id) - args.arrTagOrderNew.indexOf(b.id));
+				
+				//: 			→ App: dispatch				model.docstate.update: arrTagOrder
+				await App.dispatch({type: 'model.docstate.update', oUpdate: {arrTagOrder: CModel.docdata.arrTagblock.map(tb => tb.id)}, caller});
 
-				//:			→ CModel: updateDocstate				[arrTagOrder]
-				CModel.updateDocstate({arrTagOrder: CModel.docdata.arrTagblock.map(tb => tb.id), caller});
+				//:			→ App: dispatch:		chart.render
+				await App.dispatch({type: 'chart.render', typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
 
-				//:			→ CChart: renderSvg
-				CChart.renderSvg({typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
-
-				//:			→ CToolbar: recreateButtons
-				CToolbar.recreateButtons({caller});
+				//:			→ App: dispatch		toolbar.buttons.recreate
+				await App.dispatch({type: 'toolbar.buttons.recreate', caller});
 
 				// ao: fix: CChart.onTagblockHover(strTagDragged, true);
 				
@@ -5807,12 +5749,6 @@ const App = {
 				//: 			→ App: dispatch				model.appstate.update: idSidebarPosition, isSidebarVisible
 				await App.dispatch({type: 'model.appstate.update', oUpdate: {idSidebarPosition: args.idSidebarPosition, isSidebarVisible: true}, caller});
 
-				//:			→ CFramework: setAppUiClasses
-				CFramework.setAppUiClasses({caller});
-
-				//:			→ CWrapper: setMenuChecks
-				await CWrapper.setMenuChecks({idSidebarPosition: args.idSidebarPosition, caller});
-
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
 			}
@@ -5822,12 +5758,6 @@ const App = {
 
 				//: 			→ App: dispatch				model.appstate.update: isSidebarVisible
 				await App.dispatch({type: 'model.appstate.update', oUpdate: {isSidebarVisible: args.isSidebarVisible}, caller});
-
-				//:			→ CFramework: setAppUiClasses
-				CFramework.setAppUiClasses({caller});
-
-				//:			→ CWrapper: setMenuChecks
-				await CWrapper.setMenuChecks({isSidebarVisible: args.isSidebarVisible, caller});
 
 				// nb: if textarea is not disabled, then it will still get keyboard input somehow (in a strange way)
 				CTexteditor.elTextarea.disabled = !args.isSidebarVisible;
@@ -5841,12 +5771,6 @@ const App = {
 
 				//: 			→ App: dispatch				model.appstate.update: isToolbarVisible
 				await App.dispatch({type: 'model.appstate.update', oUpdate: {isToolbarVisible: args.isToolbarVisible}, caller});
-
-				//:			→ CFramework: setAppUiClasses
-				CFramework.setAppUiClasses({caller});
-
-				//:			→ CWrapper: setMenuChecks
-				await CWrapper.setMenuChecks({isToolbarVisible: args.isToolbarVisible, caller});
 
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
@@ -5866,17 +5790,14 @@ const App = {
 				//:			→ App: dispatch				model.appstate.update: pxBaseUnit
 				await App.dispatch({type: 'model.appstate.update', oUpdate: {pxBaseUnit: pxBaseUnitNew}, caller});
 
-				//:			→ CFramework:				updateLookupConstants
-				CFramework.updateLookupConstants({pxBaseUnit: pxBaseUnitNew, caller});
-
-				//:			→ CChart: renderSvg
-				CChart.renderSvg({typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
+				//:			→ App: dispatch:		chart.render		SVG_UPDATE_FULL_RENDER
+				await App.dispatch({type: 'chart.render', typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
 
 				// update scrollLeft - must be after renderSvg!
 				CChart.elParent.scrollLeft = pxWorldCenterXNew - (CChart.elParent.clientWidth / 2);
 
-				//:			→ CToolbar:					recreateButtons
-				CToolbar.recreateButtons({caller});
+				//:			→ App: dispatch		toolbar.buttons.recreate
+				await App.dispatch({type: 'toolbar.buttons.recreate', caller});
 				
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
@@ -5885,6 +5806,12 @@ const App = {
 			//::		🔻 chart.render
 			case 'chart.render': {
 
+				if (CModel.docdata === null) {
+					console.log(`%c # # # EXIT: chart.render: CModel.docdata === null`, LOG_RED + LOG_BOLD);
+					if (LOGGING) console.groupEnd();
+					return;
+				}
+				
 				//:			→ CChart: renderSvg:			typeSvgUpdate
 				CChart.renderSvg({typeSvgUpdate: args.typeSvgUpdate, caller});
 				
@@ -5904,14 +5831,11 @@ const App = {
 				const pxWorldCenterXOld	= CChart.elParent.scrollLeft + (CChart.elParent.clientWidth / 2);
 				const pxWorldCenterXNew	= pxWorldCenterXOld	* zoomFactor;
 
-				//:			→ CModel: updateDocstate
-				CModel.updateDocstate({linecount: linecountNew,  caller});
+				//: 			→ App: dispatch				model.docstate.update: linecount
+				await App.dispatch({type: 'model.docstate.update', oUpdate: {linecount: linecountNew}, caller});
 
-				//:			→ CFramework: updateLookupConstants
-				CFramework.updateLookupConstants({linecount: linecountNew,  caller});
-
-				//:			→ CChart: renderSvg
-				CChart.renderSvg({typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
+				//:			→ App: dispatch:		chart.render		SVG_UPDATE_FULL_RENDER
+				await App.dispatch({type: 'chart.render', typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
 
 				// update scrollLeft - must be after renderSvg!
 				CChart.elParent.scrollLeft = pxWorldCenterXNew - (CChart.elParent.clientWidth / 2);
@@ -5926,13 +5850,11 @@ const App = {
 				const arrPxMarginPartValues = [0, 1, 2, 3, 4,  5,  6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
 				const pxMarginPartNew = args.isReset ? PX_MARGIN_PART_INITIAL : CUtil.getPrevNextValue(arrPxMarginPartValues, PX_MARGIN_PART, (args.isIn ? 1 : -1), PX_MARGIN_PART_INITIAL);
 
-				//:			→ CModel: updateDocstate
-				CModel.updateDocstate({pxMarginPart: pxMarginPartNew,  caller});
+				//: 			→ App: dispatch				model.docstate.update: pxMarginPart
+				await App.dispatch({type: 'model.docstate.update', oUpdate: {pxMarginPart: pxMarginPartNew}, caller});
 
-				CFramework.updateLookupConstants({pxMarginPart: pxMarginPartNew,  caller}); 
-
-				//:			→ CChart: renderSvg
-				CChart.renderSvg({typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
+				//:			→ App: dispatch:		chart.render		SVG_UPDATE_FULL_RENDER
+				await App.dispatch({type: 'chart.render', typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
 
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
@@ -5941,14 +5863,11 @@ const App = {
 						//::		🔻 chart.rounding.toggle
 			case 'chart.rounding.toggle': {
 
-				//:			→ CModel: updateDocstate
-				CModel.updateDocstate({isChartRoundingOn: !CModel.docstate.isChartRoundingOn,  caller});
+				//: 			→ App: dispatch				model.docstate.update: isChartRoundingOn
+				await App.dispatch({type: 'model.docstate.update', oUpdate: {isChartRoundingOn: !CModel.docstate.isChartRoundingOn}, caller});
 
-				//:			→ CWrapper: setMenuChecks
-				await CWrapper.setMenuChecks({isChartRoundingOn: CModel.docstate.isChartRoundingOn, caller});
-
-				//:			→ CChart: renderSvg
-				CChart.renderSvg({typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
+				//:			→ App: dispatch:		chart.render		SVG_UPDATE_FULL_RENDER
+				await App.dispatch({type: 'chart.render', typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
 
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
@@ -5957,24 +5876,14 @@ const App = {
 			//::		🔻 chart.view.select
 			case 'chart.view.select': {
 
-				//:			→ CModel: updateDocstate
-				CModel.updateDocstate({idxView: args.idxView, caller});
+				//: 			→ App: dispatch				model.docstate.update: idxView
+				await App.dispatch({type: 'model.docstate.update', oUpdate: {idxView: args.idxView}, caller});
 
-				//:			→ CFramework: setAppUiClasses
-				CFramework.setAppUiClasses({caller});
+				//:			→ App: dispatch:		chart.render		SVG_UPDATE_RESIZE_ONLY
+				await App.dispatch({type: 'chart.render', typeSvgUpdate: SVG_UPDATE_RESIZE_ONLY, caller});
 
-				//:			→ CWrapper: setMenuChecks
-				await CWrapper.setMenuChecks({idxView: args.idxView, caller});
-
-				//:			→ CChart: renderSvg:			SVG_UPDATE_RESIZE_ONLY
-				CChart.renderSvg({typeSvgUpdate: SVG_UPDATE_RESIZE_ONLY, caller});
-
-				//:			→ CToolbar:					recreateButtons
-				CToolbar.recreateButtons({caller});
-
-				//--:			→ CPopup: renderPopup
-				//--if (CModel.appstate.isPopupOpen)
-				//--	CPopup.renderPopup({caller});
+				//:			→ App: dispatch		toolbar.buttons.recreate
+				await App.dispatch({type: 'toolbar.buttons.recreate', caller});
 
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
@@ -5986,11 +5895,8 @@ const App = {
 				//: 			→ App: dispatch				model.appstate.update: isGraphVisible
 				await App.dispatch({type: 'model.appstate.update', oUpdate: {isGraphVisible: args.isGraphVisible}, caller});
 
-				//:			→ CWrapper: setMenuChecks
-				await CWrapper.setMenuChecks({isGraphVisible: args.isGraphVisible, caller});
-
-				//:			→ CChart: renderSvg:			SVG_UPDATE_FULL_RENDER
-				CChart.renderSvg({typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
+				//:			→ App: dispatch:		chart.render		SVG_UPDATE_FULL_RENDER
+				await App.dispatch({type: 'chart.render', typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
 
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
@@ -6001,12 +5907,9 @@ const App = {
 
 				//: 			→ App: dispatch				model.appstate.update: pctGraphHeight
 				await App.dispatch({type: 'model.appstate.update', oUpdate: {pctGraphHeight: args.pctGraphHeight}, caller});
-				
-				//:			→ CWrapper: setMenuChecks
-				await CWrapper.setMenuChecks({pctGraphHeight: args.pctGraphHeight, caller});
 
-				//:			→ CChart: renderSvg:			SVG_UPDATE_RESIZE_ONLY
-				CChart.renderSvg({typeSvgUpdate: SVG_UPDATE_RESIZE_ONLY, caller});
+				//:			→ App: dispatch:		chart.render		SVG_UPDATE_RESIZE_ONLY
+				await App.dispatch({type: 'chart.render', typeSvgUpdate: SVG_UPDATE_RESIZE_ONLY, caller});
 
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
@@ -6024,6 +5927,13 @@ const App = {
 
 			//::		🔻 toolbar.buttons.recreate
 			case 'toolbar.buttons.recreate': {
+
+				if (CModel.docdata === null) {
+					console.log(`%c # # # EXIT: toolbar.buttons.recreate: CModel.docdata === null`, LOG_RED + LOG_BOLD);
+					if (LOGGING) console.groupEnd();
+					return;
+				}
+
 				//:			→ CToolbar: recreateButtons
 				CToolbar.recreateButtons({caller});	
 
@@ -6126,7 +6036,7 @@ const App = {
 	//:::		→ App: init
 	App.init();
 
-	// ao: for debug in DevTools: remove!
+	// ao: for debug in DevTools: remove!  // BUILD SETTING
 	/*- window.App = App
 	window.CWrapper = CWrapper
 	window.CFramework = CFramework
