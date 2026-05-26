@@ -151,7 +151,7 @@
 		.button--inactive	{opacity: 0.33; }
 		.button-draggable 	{cursor: grab; touch-action: none; }
 
-		.toolbarTags	.button-draggable.is-dragging 	{background: CanvasText !important; color: Canvas; }
+		.toolbarTags	.button-draggable.is-dragging 	{background: CanvasText !important; color: Canvas;    opacity: 1; }
 
 		.toolbarTags 	.toolbar__button 			{background: transparent; font-weight: var(--bold-button); z-index: 1; }
 		.toolbarTags 	.toolbar__button.is-hover 	{border: 1px solid CanvasText; }
@@ -209,10 +209,10 @@
 	.header__rect--section			{height: 100%; fill: var(--fill); }
 	.header__rect--section-odd		{opacity: calc(var(--saturation) / 100); }
 	.header__rect--section-even		{opacity: calc(var(--saturation) / 150); }	/* nb: will only produce opacity between 0 and 0.8. This is to 'interchange' the background between odd and even sections */
-	.header__text--section			{fill: var(--text); font-size: calc(var(--px-font-size) * 1.25); font-weight: var(--bold); pointer-events: none; dominant-baseline: middle; }
+	.header__text--section			{fill: var(--text); font-size: 1.25em; font-weight: var(--bold); pointer-events: none; dominant-baseline: middle; }
 
 	.header__rect--chapter			{height: calc(100% - ((var(--px-line-height) * 2))); fill: var(--fill); opacity: calc(var(--saturation) / 100); stroke: Canvas; stroke-width: 1; }
-	.header__text--chapter			{fill: var(--text); font-size: calc(var(--px-font-size) * 1.00); font-weight: var(--bold); pointer-events: none; dominant-baseline: middle; }
+	.header__text--chapter			{fill: var(--text); font-size: 1em; font-weight: var(--bold); pointer-events: none; dominant-baseline: middle; }
 
 						.graphs-bg-rect {transform: translateY(var(--px-header-height)); fill: Canvas; opacity: 0.25; pointer-events: none; }
 		.chart-viewb	.graphs-bg-rect {display: none; }
@@ -229,7 +229,7 @@
 
 
 	/* tagblock - bg rect */
-											.tagblock__bg-rect {fill: var(--fill); opacity: 0.1; stroke: var(--fill-bg); stroke-width: calc(var(--px-base-unit) * 0.15); vector-effect: non-scaling-stroke; pointer-events: none; transition: opacity var(--ms-transition) ease-out, height var(--ms-transition) ease-out }
+											.tagblock__bg-rect {fill: var(--fill); opacity: 0.1; stroke: var(--fill-bg); stroke-width: 0.15em; vector-effect: non-scaling-stroke; pointer-events: none; transition: opacity var(--ms-transition) ease-out, height var(--ms-transition) ease-out }
 	.chart-viewa       						.tagblock__bg-rect {height: 0px; opacity: 0; pointer-events: none; /* needed since pointer-events are still active in the not-scaled area. this is an error in the browser-engine */ }
 	.chart-viewb							.tagblock__bg-rect {}
 	.chart-viewb  		.tagblock--active   .tagblock__bg-rect {height: calc((var(--px-line-height) * var(--count-rows)) + 10px); }
@@ -269,11 +269,14 @@
 	.chart-viewa	.tb-part--special	.line2 {font-size: 175%; font-weight: 600; fill: var(--text); }
 
 					.tb-part__symbol	{transition: transform var(--ms-transition) ease-out; }
-	.chart-viewa	.tb-part__symbol	{transform: translate(var(--x), var(--y)); }
-	.chart-viewb	.tb-part__symbol	{transform: translate(10px, calc(var(--px-line-height) * 0.5)); }
+	.chart-viewa	.tb-part__symbol	{transform: translate(var(--x), calc(var(--y) + var(--px-line-height) * 0.3) ); }
+	.chart-viewb	.tb-part__symbol	{transform: translate(10px, calc(var(--px-line-height) * 0.58)); }
 
-	.chart-viewa	.tb-part__symbol	text	{font-size: calc(var(--px-line-height) * 1.5);	dominant-baseline: ideographic;    text-anchor: end; }
-	.chart-viewb	.tb-part__symbol	text	{font-size: calc(var(--px-line-height) * 1.0); 	dominant-baseline: central;    text-anchor: end; }
+	.chart-viewa	.tb-part__symbol	text	{font-size: calc(var(--px-line-height) * 1.5);	dominant-baseline: middle;    text-anchor: end; }
+	.chart-viewb	.tb-part__symbol	text	{font-size: calc(var(--px-line-height) * 1.0); 	dominant-baseline: middle;    text-anchor: end; }
+
+
+
 
 
 
@@ -297,10 +300,10 @@
 	.chart-viewb	.tagblocks--graphs	.tagblock--inactive		{opacity: 0;	pointer-events: none; }
 
 	.tagblock-polyline		{fill: none; stroke: var(--fill); stroke-width: 1.0; pointer-events: none; }
-	.tagblock-circle 		{r: calc(var(--px-base-unit) / 2); fill: var(--fill); opacity: calc(var(--saturation) / 100);  stroke: var(--fill);  stroke-width: 1.0; }
-	.tagblock-circle-bg 	{r: calc(var(--px-base-unit) / 2); fill: Canvas;  stroke: var(--fill); stroke-width: 1.0; }
+	.tagblock-circle 		{r: 0.5em; fill: var(--fill); opacity: calc(var(--saturation) / 100);  stroke: var(--fill);  stroke-width: 1.0; }
+	.tagblock-circle-bg 	{r: 0.5em; fill: Canvas;  stroke: var(--fill); stroke-width: 1.0; }
 	
-						.tagblock-circle-text 			{opacity: 0; fill: CanvasText; font-weight:200; transform: translate(16px, 1px); pointer-events: none;  dominant-baseline: middle; }
+						.tagblock-circle-text 			{opacity: 0; fill: CanvasText; transform: translate(var(--px-base-unit), 1px); pointer-events: none;  dominant-baseline: middle; }
 	.tagblock--active	.tagblock-circle-text.is-hover 	{opacity: 1; }
 
 	/* .tagblock--inactive		.graph	{opacity: 0.5; pointer-events: none; } */
@@ -353,13 +356,13 @@
 
 /* Shared button typography */
 
-button.btn,
-button.pill,
-button.tablist__btn,
-button.close__btn,
-button.unpin__btn {
+.btn,
+.pill,
+.tablist__btn,
+.close__btn,
+.unpin__btn {
 	font-family: var(--fontfamily);
-	font-size: var(--px-font-size);
+	font-size: 1em;
 	font-weight: var(--bold);
 }
 
@@ -372,10 +375,11 @@ button.unpin__btn {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 18px;
+	padding: 1em;
 	background: rgba(0,0,0,.28);
 	z-index: 10;
 	overscroll-behavior: contain;
+	-webkit-overflow-scrolling: touch;
 	touch-action: none;
 }
 
@@ -389,7 +393,7 @@ button.unpin__btn {
 	min-height: 0;
 	background: var(--popup-bg);
 	border: 1px solid var(--col-border);
-	border-radius: 12px;
+	border-radius: 1em;
 	box-shadow: 0 12px 40px rgba(0,0,0,.18);
 	overflow: hidden;
 	touch-action: auto;
@@ -404,8 +408,8 @@ button.unpin__btn {
 	z-index: 1;
 	align-items: center;
 	justify-content: space-between;
-	gap: 10px;
-	padding: 12px 16px 0 16px;
+	gap: 0.5em;
+	padding: 0.8em 0.8em 0 0.8em;
 	background: var(--popup-panel-bg);
 	border-bottom: none;
 	min-height: 0;
@@ -423,12 +427,12 @@ button.unpin__btn {
 	display: flex;
 	flex: 0 0 auto;
 	align-items: center;
-	gap: 8px;
-	padding: 8px 40px;
+	gap: 0.5em;
+	padding: 0.5em 2.0em;
 	margin: 0px;
 	background: transparent;
 	border: 0;
-	border-radius: 10px 10px 0 0;
+	border-radius: 0.75em 0.75em 0 0;
 	color: var(--popup-fg);
 	cursor: pointer;
 	user-select: none;
@@ -445,10 +449,10 @@ button.unpin__btn {
 
 .close__btn {
 	flex: 0 0 auto;
-	padding: 6px 10px;
+	padding: 0.5em 2.0em;
 	background: transparent;
 	border: none;
-	border-radius: 10px;
+	border-radius: 0.75em 0.75em 0 0;
 	color: var(--popup-fg);
 	cursor: pointer;
 	opacity: 0.5;
@@ -466,7 +470,7 @@ button.unpin__btn {
 	z-index: 2;
 	flex: 1 1 auto;
 	min-height: 0;
-	padding: 18px;
+	padding: 1em;
 	overflow: auto;
 	overscroll-behavior: contain;
 	-webkit-overflow-scrolling: touch;
@@ -475,13 +479,10 @@ button.unpin__btn {
 
 .main__content {
 	display: grid;
-	gap: 30px;
+	gap: 1.5em;
 	align-content: start;
 	min-height: 0;
 }
-					.main__content {
-						gap: 22px;  /* ao: remove */
-					}
 
 
 /* Generic content sections. Default: natural height */
@@ -495,11 +496,13 @@ button.unpin__btn {
 .section__head {
 	display: flex;
 	flex: 0 0 auto;
-	align-items: center;
-	gap: 8px;
+	align-items: baseline; /*- center */
+	gap: 0.5em;
 	min-height: 2rem;
-	margin-bottom: 4px;
+	margin-bottom: 0.25em;
 	font-weight: 600;
+	user-select: none;
+	-webkit-user-select: none;
 }
 
 					.section__head {
@@ -508,12 +511,11 @@ button.unpin__btn {
 
 .section__body {
 	display: grid;
-	gap: 6px;
+	gap: 0.3em;
 	padding: 0;
 }
 
 .hint {
-	padding-left: 6px;
 	font-size: 0.8em;
 	font-weight: 400;
 	opacity: 0.5;
@@ -537,7 +539,7 @@ button.unpin__btn {
 	flex-direction: column;
 	flex: 1 1 auto;
 	min-height: 0;
-	gap: 30px;
+	gap: 2em;
 }
 
 .popup.tab-style .content__section,
@@ -563,10 +565,10 @@ button.unpin__btn {
 /* Keyboard shortcut labels */
 
 .kbd {
-	padding: 1px 5px;
+	padding: 0.15em 0.4em;
 	border: 1px solid var(--col-border);
-	border-bottom-width: 2px;
-	border-radius: 8px;
+	border-bottom-width: 0.2em;
+	border-radius: 0.5em;
 	white-space: nowrap;
 	opacity: 0.5;
 	font-size: 0.8em;
@@ -585,17 +587,17 @@ button.unpin__btn {
 .content__actions {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 5px;
+	gap: 0.3em;
 }
 
 .btn {
 	display: inline-flex;
 	align-items: center;
-	gap: 10px;
-	padding: 8px 10px;
+	gap: 0.5em;
+	padding: 0.5em 0.5em;
 	background: var(--col-button);
 	border: 1px solid var(--col-border);
-	border-radius: 10px;
+	border-radius: 0.5em;
 	color: var(--popup-fg);
 	cursor: pointer;
 	user-select: none;
@@ -607,22 +609,22 @@ button.unpin__btn {
 }
 
 .btn-small {
-	padding: 4px 8px;
-	font-size: 12px;
+	padding: 0.25em 0.5em;
+	font-size: 0.75em;
 }
 
 .pillbar {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 8px;
+	gap: 0.5em;
 }
 
 .pill {
 	position: relative;
 	display: inline-flex;
 	align-items: center;
-	gap: 8px;
-	padding: 6px 10px;
+	gap: 0.5em;
+	padding: 0.3em 0.6em;
 	background: var(--col-button);
 	border: 1px solid var(--col-border);
 	border-radius: 999px;
@@ -651,12 +653,12 @@ button.unpin__btn {
 	display: grid;
 	grid-template-columns: 4.5rem 1fr auto;
 	align-items: center;
-	column-gap: 12px;
-	padding: 10px 10px;
+	column-gap: 0.5em;
+	padding: 0.5em;
 	background: transparent;
 	border: none;
 	border-top: 1px solid var(--col-border);
-	border-radius: 8px;
+	border-radius: 0.5em;
 	cursor: pointer;
 	user-select: none;
 	-webkit-user-select: none;
@@ -696,18 +698,18 @@ body.platform-mac .body__item  {grid-template-columns: 3.5rem 1fr auto; } /* on 
 }
 
 .item__desc {
-	font-size: 12px;
+	font-size: 0.8em;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	opacity: 0.72;
+	opacity: 0.5;
 }
 
 .item__right {
 	display: inline-flex;
 	align-items: center;
 	justify-self: end;
-	gap: 10px;
+	gap: 0.5em;
 }
 
 
@@ -715,8 +717,8 @@ body.platform-mac .body__item  {grid-template-columns: 3.5rem 1fr auto; } /* on 
 
 .switch {
 	position: relative;
-	width: 44px;
-	height: 26px;
+	width: 3.25em;
+	height: 1.75em;
 	background: var(--col-border);
 	border: 1px solid var(--col-border);
 	border-radius: 999px;
@@ -726,10 +728,10 @@ body.platform-mac .body__item  {grid-template-columns: 3.5rem 1fr auto; } /* on 
 .switch::after {
 	content: '';
 	position: absolute;
-	top: 3px;
-	left: 3px;
-	width: 20px;
-	height: 20px;
+	top: 1px;
+	left: 1px;
+	width: calc(1.75em - 4px);
+	height: calc(1.75em - 4px);
 	background: var(--popup-bg);
 	border: 1px solid var(--col-border);
 	border-radius: 999px;
@@ -741,17 +743,17 @@ body.platform-mac .body__item  {grid-template-columns: 3.5rem 1fr auto; } /* on 
 }
 
 .toggle-on .switch::after {
-	transform: translateX(18px);
+	transform: translateX(1.5em);
 }
 
 
 /* Secondary row actions */
 
 .unpin__btn {
-	padding: 4px 6px;
+	padding: 0.25em 0.4em;
 	background: transparent;
 	border: none;
-	border-radius: 10px;
+	border-radius: 0.5em;
 	color: var(--popup-fg);
 	cursor: pointer;
 	opacity: 0.7;
@@ -769,7 +771,7 @@ body.platform-mac .body__item  {grid-template-columns: 3.5rem 1fr auto; } /* on 
 	left: 0;
 	top: 0;
 	box-sizing: border-box;
-	padding: 10px 10px;
+	padding: 0.5em 0.5em;
 	background: var(--popup-bg) !important;
 	border: 1px solid var(--col-border);
 	border-radius: 10px;
@@ -791,7 +793,7 @@ body.platform-mac .body__item  {grid-template-columns: 3.5rem 1fr auto; } /* on 
 	min-height: 0;
 	box-sizing: border-box;
 	border: 1px solid var(--col-border);
-	border-radius: 10px;
+	border-radius: 0.5em;
 	resize: none;
 }
 
@@ -810,7 +812,7 @@ body.platform-mac .body__item  {grid-template-columns: 3.5rem 1fr auto; } /* on 
 	margin-left: auto;
 	display: flex;
 	align-items: center;
-	gap: 6px;
+	gap: 0.5em;
 	flex: 0 0 auto;
 }
 
@@ -902,8 +904,7 @@ const SOURCE = Object.freeze({
 
 const APPNAME = 'TextToTile';
 
-const LOGGING = true, DETAILS = false;
-const LOGARGS = true;
+const LOGGING = false, LOGARGS = false, DETAILS = false;		// BUILD SETTING: all 3 must be false
 const LOG_RED = 'color:#933;', LOG_BOLD = 'font-weight:700;';
 const LOG_MODULE = 'color:#777; background-color:#fff0da; font-weight:300 !important;', LOG_FUNCTION = 'color:#337;', LOG_ARGS = 'color:#7a7; font-weight:500; font-size:0.6rem;', LOG_EXTRA = 'color:#999; font-weight:300; font-size:0.6rem;';
 
@@ -1331,12 +1332,12 @@ const CWrapper = {
 		//:			→ App: dispatch:				wrapper.theme.set:			dark
 		if (args.payload === 'view.theme.dark')		res = await App.dispatch({type: 'model.appstate.update', oUpdate: {idTheme: 'dark'}, caller});
 
-		//::		🔻 help.docs
-		//:			→ this.openUrl:					https://www.dr.dk
-		if (args.payload === 'help.docs') 			res = await CWrapper.openUrl({url: 'https://www.dr.dk', caller});
+		//-::		🔻 help.docs
+		//-:			→ this.openUrl:					https://aowagner.github.io/texttotile/
+		//-if (args.payload === 'help.docs') 			res = await CWrapper.openUrl({url: 'https://aowagner.github.io/texttotile/', caller});
 		//::		🔻 help.website
-		//:			→ this.openUrl:					https://www.youtube.dk
-		if (args.payload === 'help.website') 		res = await CWrapper.openUrl({url: 'https://www.youtube.dk', caller});
+		//:			→ this.openUrl:					https://aowagner.github.io/texttotile/
+		if (args.payload === 'help.website') 		res = await CWrapper.openUrl({url: 'https://aowagner.github.io/texttotile/', caller});
 
 		res.context = caller;
 		await CFramework.handleResult(res);
@@ -1493,7 +1494,7 @@ const CWrapper = {
 		if (LOGARGS) console.log(args);
 
 		const message = `
-TextToTile
+${APPNAME}
 
 Version ${CWrapper.version_app}
 
@@ -1503,7 +1504,7 @@ Turn structured text into visual tiles and story maps.
 		`;
 
 		const resPrompt = await CWrapper.showMessageDialog({
-			title: 'TextToTile',
+			title: APPNAME,
 			message,
 			kind: 'info',
 			okLabel: 'OK',
@@ -2134,7 +2135,7 @@ const CFramework = {
 			// Convert tag selectors: #gitte { ... } -> .gitte { ... }  - only when #tag is followed by {
 			.replace(/(^|\n)(\s*)#([a-zA-Z_][\w-]*)\s*(?=\{)/g, '$1$2.$3 ')
 
-			// Convert TextToTile custom properties: @fill -> --fill
+			// Convert custom properties: @fill -> --fill
 			.replace(/@([a-zA-Z_][\w-]*)\s*:/g, '--$1:');
 
 		const elStyleSettings = document.querySelector(`#${args.idElStyle}`);
@@ -2344,8 +2345,9 @@ const CFramework = {
 			CWrapper.onMenuEvent({payload: 'file.pincurrent', caller});
 		}
 
-		//::		🔻 Alt + ,
-		else if (isMetaKey && e.key.toLowerCase() === ',') {
+		//::		🔻 Cmd + ,
+		//-else if (isMetaKey && e.key.toLowerCase() === ',') {
+		else if (!isAltKey && isMetaKey && e.code === 'Comma') {
 			if (e.preventDefault) e.preventDefault();
 
 			//:			→ CWrapper: onMenuEvent:			file.settings
@@ -2359,7 +2361,6 @@ const CFramework = {
 			//:			→ CWrapper: onMenuEvent:			file.quit
 			CWrapper.onMenuEvent({payload: 'file.quit', caller});
 		}
-
 
 		//::		🔻 Cmd + X
 		else if (isMetaKey && e.key.toLowerCase() === 'x') {
@@ -2457,15 +2458,19 @@ const CFramework = {
 			CWrapper.onMenuEvent({payload: 'view.chart.viewb', caller});
 		}
 
-		//::		🔻 Shift + Cmd + 'J/K/L'
-		else if ((isShiftKey && isMetaKey && !isAltKey) && (e.key.toLowerCase() === 'j' || e.key.toLowerCase() === 'k' || e.key === 'l')) {
+		//::		🔻 Cmd + Alt + 'Comma'/'Period'
+		//---else if ((isShiftKey && isMetaKey && !isAltKey) && (e.key.toLowerCase() === 'j' || e.key.toLowerCase() === 'k' || e.key === 'l')) {
+		else if (isMetaKey && isAltKey && (e.code === 'Comma' || e.code === 'Period')) {
 			if (e.preventDefault) e.preventDefault();
 
-			const isReset = (e.key === 'k');
-			const isIn = (e.key.toLowerCase() === 'l');
-			const isOut = !(isReset || isIn);
-			const payload = isOut ? 'view.scale.ui.out' : isIn ? 'view.scale.ui.in' : 'view.scale.ui.reset';
-			
+			console.log(e.code);
+
+			//--const isReset = (e.key === 'k');
+			//const isIn = (e.code === 'Comma'); 		//--(e.key.toLowerCase() === 'l');
+			//const isOut = (e.code === 'Period'); 	//--!(isReset || isIn);
+			//--const payload = isOut ? 'view.scale.ui.out' : isIn ? 'view.scale.ui.in' : 'view.scale.ui.reset';
+			const payload = (e.code === 'Period') ? 'view.scale.ui.in' : 'view.scale.ui.out';
+
 			//:			→ CWrapper: onMenuEvent:			view.scale.ui.out|in|reset
 			CWrapper.onMenuEvent({payload, caller});
 		}
@@ -2724,12 +2729,12 @@ const CChart = {
 			<rect class="tb-part__rect" x=${PX_MARGIN_PART} y="0" width=${pxWidthRect} rx=${pxChartRounding}/>
 			<text class="tb-part__text-viewa">
 				${arrObjTextline.map((objTextline, idx) => svg`
-					<tspan data-idxlinesub=${objTextline.idxTextareaLine} class=${[...objTextline.classes, 'line', 'line' + (idx+1)].join(' ')} style="${objTextline.style}" x=${PX_MARGIN_PART + PX_PADDING_SMALL * 1} dy=${objTextline.dy}>${objTextline.caption}</tspan>
+					<tspan data-idxlinesub=${objTextline.idxTextareaLine} class=${[...objTextline.classes, 'line', 'line' + (idx+1)].join(' ')} style="${objTextline.style}" x=${PX_MARGIN_PART + PX_PADDING_SMALL} dy=${objTextline.dy}>${objTextline.caption}</tspan>
 				`)}
 			</text>
-			<text class="tb-part__text-viewb top" x=${PX_PADDING_NORMAL} y=${PX_LINE_HEIGHT * 0.5}>${part.caption}</text> 
+			<text class="tb-part__text-viewb top" x=${PX_MARGIN_PART + PX_PADDING_SMALL} y=${PX_LINE_HEIGHT * 0.5}>${part.caption}</text> 
 
-			${icon ? svg`<g class="tb-part__symbol" style=${`--x:${PX_COL_WIDTH - 1}px; --y:${PX_COL_WIDTH - PX_MARGIN_PART}px;`}><text x="0" y="0">${icon}</text></g>` : ''}
+			${icon ? svg`<g class="tb-part__symbol" style=${`--x:${PX_COL_WIDTH - 1}px; --y:${(PX_COL_WIDTH - PX_MARGIN_PART) - PX_LINE_HEIGHT}px;`}><text x="0" y="0">${icon}</text></g>` : ''}
 		</g>`;
 		},
 
@@ -3404,7 +3409,8 @@ const CToolbar = {
 	elParent: null,
 	elToolbar: null,
 	draginfo: null,          // { el, startX, startY, pxOffset, wasDragging, pointerId }
-	DRAG_THRESHOLD: 6,	
+	DRAG_THRESHOLD: 6,
+	isLastActionDrag: false,
 
 	//:::	🔹 init
 	init(args) {
@@ -3433,7 +3439,8 @@ const CToolbar = {
 		const elBtn = e.target.closest('button.button-draggable');
 		if (elBtn) {
 
-			elBtn.classList.add('is-dragging');
+			elBtn.classList.add('is-dragging');		// will be removed after drag, when buttons are recreated
+			CToolbar.isLastActionDrag = false;
 
 			const pxX = Number(elBtn.dataset.pxx) || 0;		// record intent, but DO NOT start dragging yet
 
@@ -3465,6 +3472,7 @@ const CToolbar = {
 		if (!CToolbar.draginfo.wasDragging) {
 			if (Math.hypot(dx, dy) < this.DRAG_THRESHOLD) return;
 
+			CToolbar.isLastActionDrag = true;
 			CToolbar.draginfo.wasDragging = true;
 
 			CToolbar.draginfo.elBtn.style.setProperty('z-index', 10);
@@ -3611,7 +3619,9 @@ const CToolbar = {
 			//:			→ App: dispatch:			model.tagblock.active.set
 			onClick: async (e) => {
 				e.stopPropagation();
-				await App.dispatch({type: 'model.tagblock.active.set', tagblock: tagblock, isActive: tagblock.isActive, isAltKey: e.altKey})
+				
+				if (!CToolbar.isLastActionDrag)
+					await App.dispatch({type: 'model.tagblock.active.set', tagblock: tagblock, isActive: tagblock.isActive, isAltKey: e.altKey})
 			}
 		}));
 
@@ -3780,16 +3790,12 @@ const CPopup = {
 					<div class="section__body">
 						<div class="body__item-plain">
 							<div class="pillbar">
-								<button class=${['pill'].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.ui.scale', isIn: false, isOut: true, isReset: false})} title=${`Make text and interface elements smaller\n(${CUtil.formatShortcutForOS('⌥ ⇧ ⌘ J')})`}>
-									<span class="kbd">${CUtil.formatShortcutForOS('⌥ ⇧ ⌘ J')}</span>
+								<button class=${['pill'].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.ui.scale', isIn: false, isOut: true, isReset: false})} title=${`Make text and interface elements smaller\n(${CUtil.formatShortcutForOS('⌥ ⌘ ,')})`}>
+									<span class="kbd">${CUtil.formatShortcutForOS('⌥ ⌘ ,')}</span>
 									<span class="btn__label">Smaller</span>
 								</button>
-								<button class=${['pill'].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.ui.scale', isIn: false, isOut: false, isReset: true})} title=${`Reset text and interface elements to default size\n(${CUtil.formatShortcutForOS('⌥ ⇧ ⌘ K')})`}>
-									<span class="kbd">${CUtil.formatShortcutForOS('⌥ ⇧ ⌘ K')}</span>
-									<span class="btn__label">Normal</span>
-								</button>
-								<button class=${['pill'].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.ui.scale', isIn: true, isOut: false, isReset: false})} title=${`Make text and interface elements larger\n(${CUtil.formatShortcutForOS('⌥ ⇧ ⌘ L')})`}>
-									<span class="kbd">${CUtil.formatShortcutForOS('⌥ ⇧ ⌘ L')}</span>
+								<button class=${['pill'].join(' ')} @click=${e => CPopup.onClick({src: '@click: btn.ui.scale', isIn: true, isOut: false, isReset: false})} title=${`Make text and interface elements larger\n(${CUtil.formatShortcutForOS('⌥ ⌘ .')})`}>
+									<span class="kbd">${CUtil.formatShortcutForOS('⌥ ⌘ .')}</span>
 									<span class="btn__label">Larger</span>
 								</button>
 							</div>
@@ -4571,9 +4577,9 @@ const CModel = {
 		//:		→ CFramework:		updateLookupConstants	[pxBaseUnit]
 		CFramework.updateLookupConstants({pxBaseUnit: this.appstate.pxBaseUnit, caller});
 
-		if (this.appstate.pathFileLoaded === ''         || true) {
+		if (this.appstate.pathFileLoaded === ''         || false) {
 
-			this.appstate.pathFileLoaded = '';		// nb: for testing! Remove when || true is removed above
+			//+this.appstate.pathFileLoaded = '';		// nb: for testing! Remove when || true is removed above
 
 			//:		→ CWrapper:			setWindowTitle
 			await CWrapper.setWindowTitle({prefix: APPNAME, title: 'No file loaded', caller});
@@ -5467,6 +5473,12 @@ const App = {
 			//::		🔻 model.docstate.update
 			case 'model.docstate.update': {
 
+				if (CModel.docstate === null) {
+					console.log(`%c # # # EXIT: model.docstate.update: CModel.docstate === null`, LOG_RED + LOG_BOLD);
+					if (LOGGING) console.groupEnd();
+					return;
+				}
+
 				//:			→ CModel:		updateDocstate
 				CModel.updateDocstate({...args.oUpdate, caller});
 
@@ -5616,7 +5628,6 @@ const App = {
 					return {status: STATUS.OK, caller};
 				}
 				finally {
-					console.log('## finally: set CModel.isLoadingFile = false');
 					CModel.isLoadingFile = false;		// called even if early return inside try { ... }
 					if (LOGGING) console.groupEnd();
 				}

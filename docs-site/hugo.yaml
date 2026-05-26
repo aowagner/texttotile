@@ -51,19 +51,19 @@ menu:
         icon: home
 
     - name: "Concept"
-      url: "/docs/10-concept"
+      url: "/docs/concept"
       weight: 10
 
     - name: "Basics"
-      url: "/docs/30-basics"
+      url: "/docs/basics"
       weight: 30
 
     - name: "Faq"
-      url: "/docs/50-faq"
+      url: "/docs/faq"
       weight: 50
 
     - name: "Download"
-      url: "/docs/70-download"
+      url: "/docs/download"
       weight: 70
 
     - name: "Documentation"

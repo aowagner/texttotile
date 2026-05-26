@@ -2,34 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/docs/10-concept/</loc>
+    <loc>http://localhost:1313/docs/concept/</loc>
     <lastmod>2026-02-28T11:09:51+01:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/docs/12-showcase/</loc>
+    <loc>http://localhost:1313/docs/showcase/</loc>
     <lastmod>2026-02-28T11:09:51+01:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/docs/14-philosophy/</loc>
+    <loc>http://localhost:1313/docs/philosophy/</loc>
     <lastmod>2026-02-28T11:09:51+01:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/docs/30-basics/</loc>
+    <loc>http://localhost:1313/docs/basics/</loc>
     <lastmod>2026-02-28T11:09:51+01:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/docs/34-graphs/</loc>
+    <loc>http://localhost:1313/docs/graphs/</loc>
     <lastmod>2026-02-28T11:09:51+01:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/docs/36-styles/</loc>
+    <loc>http://localhost:1313/docs/styles/</loc>
     <lastmod>2026-02-28T11:09:51+01:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/docs/50-faq/</loc>
+    <loc>http://localhost:1313/docs/faq/</loc>
     <lastmod>2026-02-28T11:09:51+01:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/docs/52-advanced/</loc>
+    <loc>http://localhost:1313/docs/advanced/</loc>
     <lastmod>2026-02-28T11:09:51+01:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/docs/56-ai-integration/</loc>
+    <loc>http://localhost:1313/docs/ai-integration/</loc>
     <lastmod>2026-02-28T11:09:51+01:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/docs/70-download/</loc>
+    <loc>http://localhost:1313/docs/download/</loc>
     <lastmod>2026-02-28T11:09:51+01:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/</loc>

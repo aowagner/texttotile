@@ -28,9 +28,9 @@ aside.hextra-sidebar-container li > .hextra-sidebar-children {
 }
 */
 
-aside.hextra-sidebar-container li:has(a[href*="/docs/30-basics/"]),
-aside.hextra-sidebar-container li:has(a[href*="/docs/50-faq/"]),
-aside.hextra-sidebar-container li:has(a[href*="/docs/70-download/"]) {
+aside.hextra-sidebar-container li:has(a[href*="/docs/basics/"]),
+aside.hextra-sidebar-container li:has(a[href*="/docs/faq/"]),
+aside.hextra-sidebar-container li:has(a[href*="/docs/download/"]) {
   margin-top: 1.25rem;
 }
 
@@ -68,12 +68,6 @@ img[alt="hextra-zoom-init"] {
 }
 
 
-/*?
-.theme-figure img {
-	width: 100%;
-	height: auto;
-}
-*/
 
 
 /* make sidebar use full height, after theme selector has been hidden in hugo.yaml (params: theme: displayToggle: false) */

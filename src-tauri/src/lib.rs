@@ -284,14 +284,14 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 // ---- View submenu ----
 
 		// UI scale submenu items
-		let zoom_ui_out = MenuItem::with_id(app, "view.scale.ui.out", "Smaller", true, Some("CmdOrCtrl+Shift+J"))?;
-		let zoom_ui_reset = MenuItem::with_id(app, "view.scale.ui.reset", "Normal", true, Some("CmdOrCtrl+Shift+K"))?;
-		let zoom_ui_in = MenuItem::with_id(app, "view.scale.ui.in", "Larger", true, Some("CmdOrCtrl+Shift+L"))?;
+		let zoom_ui_out = MenuItem::with_id(app, "view.scale.ui.out", "Smaller", true, Some("CmdOrCtrl+Alt+,"))?;
+		//let zoom_ui_reset = MenuItem::with_id(app, "view.scale.ui.reset", "Normal", true, Some("CmdOrCtrl+Shift+K"))?;
+		let zoom_ui_in = MenuItem::with_id(app, "view.scale.ui.in", "Larger", true, Some("CmdOrCtrl+Alt+."))?;
 
 		// Build the sub-submenu
 		let zoom_ui_submenu = SubmenuBuilder::new(app, "UI scale")
 			.item(&zoom_ui_out)
-			.item(&zoom_ui_reset)
+			//.item(&zoom_ui_reset)
 			.item(&zoom_ui_in)
 			.build()?;			
 
@@ -368,7 +368,7 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 
 
 // ---- Help submenu ----
-	let docs = MenuItem::with_id(app, "help.docs", "Documentation…", true, None::<&str>)?;
+	//let docs = MenuItem::with_id(app, "help.docs", "Documentation…", true, None::<&str>)?;
 	let website = MenuItem::with_id(app, "help.website", "Website…", true, None::<&str>)?;
 	let about_b = MenuItem::with_id(app, "app.about", "About TextToTile", true, None::<&str>)?;
 
@@ -380,14 +380,14 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 	let help_submenu = if cfg!(target_os = "macos") {
 		// macOS
 		SubmenuBuilder::new(app, "Help")
-			.item(&docs)
+			//.item(&docs)
 			.item(&website)
 			.build()?
 	}
 	else {
 		// Windows/Linux
 		SubmenuBuilder::new(app, "Help")
-			.item(&docs)
+			//.item(&docs)
 			.item(&website)
 			.separator()
 			.item(&about_b)
