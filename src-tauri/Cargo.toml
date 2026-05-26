@@ -1,9 +1,12 @@
 [package]
 name = "texttotile"
-version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+version = "0.2.0-beta.1"
+description = "Visualize and navigate structured plain-text outlines."
+authors = ["A. O. Wagner"]
 edition = "2021"
+license = "MIT"
+repository = "https://github.com/aowagner/texttotile"
+homepage = "https://aowagner.github.io/texttotile/"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -11,7 +14,7 @@ edition = "2021"
 # The `_lib` suffix may seem redundant but it is necessary
 # to make the lib name unique and wouldn't conflict with the bin name.
 # This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
-name = "tauri_app_lib"
+name = "texttotile_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]

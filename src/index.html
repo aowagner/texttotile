@@ -1159,7 +1159,7 @@ const CWrapper = {
 		// prevent 'context' menu - when right clicking the webview (where 'Reload' and 'Inspect Element' are placed)
 		document.addEventListener('contextmenu', (event) => {
 
-			return;	// BUILD SETTING: rem out for build
+			//+return;	// BUILD SETTING: rem out for build
 
 			// allow normal context menu in textarea
 			if (event.target.closest('textarea')) {
@@ -3959,7 +3959,7 @@ const CPopup = {
 			const filenameShort = args.pathFilePinned.split(/[\\/]/).pop();
 			const kbd = args.idx < 9 ? CUtil.formatShortcutForOS(`⌥ ⌘ ${args.idx + 1}`) : "—";
 			const shortcut = args.idx < 9 ? kbd : 'No keyboard shortcut';
-			const path = args.pathFilePinned.replace('jakobkristiansen', 'aowagner');		// BUILD SETTING:  remove 'hack' for screenshots
+			//+const path = args.pathFilePinned.replace('realname', 'aowagner');		// BUILD SETTING:  remove 'hack' for screenshots
 
 			return html`
 				<div
@@ -6054,8 +6054,8 @@ const App = {
 	window.CChart = CChart
 	window.CTexteditor = CTexteditor
 	window.CToolbar = CToolbar
-	window.CPopup = CPopup -*/
-	window.CModel = CModel
+	window.CPopup = CPopup
+	window.CModel = CModel -*/
 })();
 
 	</script>
