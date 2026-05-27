@@ -1187,7 +1187,7 @@ const CWrapper = {
 		// prevent 'context' menu - when right clicking the webview (where 'Reload' and 'Inspect Element' are placed)
 		document.addEventListener('contextmenu', (event) => {
 
-			//return;	// BUILD SETTING: rem out for build
+			return;	// BUILD SETTING: rem out for build
 
 			// allow normal context menu in textarea
 			if (event.target.closest('textarea')) {
