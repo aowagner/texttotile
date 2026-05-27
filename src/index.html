@@ -1127,13 +1127,13 @@ const CUtil = {
 		return pathFile.slice(0, idx);
 	},
 
-	//:::	🔹 ensureTextFileExtension
-	ensureTextFileExtension(pathFile) {
+	//--:::	🔹 ensureTextFileExtension
+	/*-----ensureTextFileExtension(pathFile) {
 		if (/\.(md|txt)$/i.test(pathFile))
 			return pathFile;
 
 		return pathFile + '.md';
-	},
+	},---*/
 
 
 
@@ -1462,7 +1462,7 @@ const CWrapper = {
 	async showSaveFileSystemDialog(args) {
 		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'showSaveFileSystemDialog', CUtil.getArgsKeys(args), args.caller));
 
-		const pathDefault = CUtil.getDirectoryPath(CModel.appstate.pathFileLoaded) ?? await window.__TAURI__.path.documentDir();
+		const pathDefault = (CUtil.getDirectoryPath(CModel.appstate.pathFileLoaded) ?? await window.__TAURI__.path.documentDir()) + '/Untitled.md';
 
 		//: 		→ window.__TAURI__.dialog:			save
 		const pathFileSelected = await window.__TAURI__.dialog.save({
@@ -5581,13 +5581,14 @@ const App = {
 						return resFileDialog;
 
 					//:			→ App: dispatch:		wrapper.file.save
-					const pathFileToSave = CUtil.ensureTextFileExtension(resFileDialog.pathFileSelected);
-					const resFileSave = await App.dispatch({type: 'wrapper.file.save', pathFileToSave, text: '', caller});  // ao: test on res?
+					//---const pathFileToSave = CUtil.ensureTextFileExtension(resFileDialog.pathFileSelected);
+					//---console.log('pathFileToSave', pathFileToSave);
+					const resFileSave = await App.dispatch({type: 'wrapper.file.save', pathFileToSave: resFileDialog.pathFileSelected, text: '', caller});  // ao: test on res?
 
 					if (!CModel.appstate.isSidebarVisible)	// make sure Editor is visible
 						await App.dispatch({type: 'framework.sidebar.visibility.set', isSidebarVisible: true, caller});
 
-					args.pathFileToLoad = pathFileToSave;
+					args.pathFileToLoad = resFileDialog.pathFileSelected;
 					CModel.appstate.pathFileLoaded = '';
 				}
 
