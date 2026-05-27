@@ -455,10 +455,11 @@
 
 .close__btn {
 	flex: 0 0 auto;
-	padding: 0.5em 2.0em;
+	/* padding: 0.5em 2.0em; */
+	padding: 0.3em 2.0em;		/* 0.3em = 'hack' for WebKit on old Intel Mac monterey. Else white 'space' under other tab buttons if higher value */
 	background: transparent;
 	border: none;
-	border-radius: 0.75em 0.75em 0 0;
+	border-radius: 0.75em;
 	color: var(--popup-fg);
 	cursor: pointer;
 	opacity: 0.5;
@@ -1192,7 +1193,7 @@ const CWrapper = {
 		// prevent 'context' menu - when right clicking the webview (where 'Reload' and 'Inspect Element' are placed)
 		document.addEventListener('contextmenu', (event) => {
 
-			return;	// BUILD SETTING: rem out for build
+			//return;	// BUILD SETTING: rem out for build
 
 			// allow normal context menu in textarea
 			if (event.target.closest('textarea')) {
