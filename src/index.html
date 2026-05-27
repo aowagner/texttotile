@@ -943,7 +943,7 @@ let PX_GRAPHS_SPACE_BOTTOM = PX_PADDING_NORMAL * 2;
 let COUNT_PART_LINES = COUNT_PART_LINES_INITIAL;
 
 //::	☐ tagblock
-const COUNT_ROWS_FOR_GRAPH_HEIGHT = 6;	// ao: must be 10!!!
+const COUNT_ROWS_FOR_GRAPH_HEIGHT = 10;
 
 //::	☐ canvas - for measuring and splitting text
 const CANVAS_FOR_TEXT_MEASURE = document.createElement('canvas');
@@ -1109,6 +1109,23 @@ const CUtil = {
 		}
 	},
 
+	//:::	🔹 getDirectoryPath
+	getDirectoryPath(pathFile) {
+
+		if (!pathFile || typeof pathFile !== 'string')
+			return null;
+
+		const idx = Math.max(
+			pathFile.lastIndexOf('/'),
+			pathFile.lastIndexOf('\\')
+		);
+
+		if (idx === -1)
+			return null;
+
+		return pathFile.slice(0, idx);
+	},	
+
 }
 
 
@@ -1159,7 +1176,7 @@ const CWrapper = {
 		// prevent 'context' menu - when right clicking the webview (where 'Reload' and 'Inspect Element' are placed)
 		document.addEventListener('contextmenu', (event) => {
 
-			//+return;	// BUILD SETTING: rem out for build
+			//return;	// BUILD SETTING: rem out for build
 
 			// allow normal context menu in textarea
 			if (event.target.closest('textarea')) {
@@ -1406,8 +1423,11 @@ const CWrapper = {
 	async showOpenFileSystemDialog(args) {
 		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'showOpenFileSystemDialog', CUtil.getArgsKeys(args), args.caller));
 
+		const pathDefault = CUtil.getDirectoryPath(CModel.appstate.pathFileLoaded) ?? await window.__TAURI__.path.documentDir();
+
 		//: 		→ window.__TAURI__.dialog:			open
 		const pathFileSelected = await window.__TAURI__.dialog.open({
+			defaultPath: pathDefault,
 			multiple: false,
 			directory: false,
 			...(CWrapper.platform === PLATFORM.MAC ? {} : {
@@ -1431,9 +1451,12 @@ const CWrapper = {
 	async showSaveFileSystemDialog(args) {
 		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'showSaveFileSystemDialog', CUtil.getArgsKeys(args), args.caller));
 
+		const pathDefault = CUtil.getDirectoryPath(CModel.appstate.pathFileLoaded) ?? await window.__TAURI__.path.documentDir();
+
 		//: 		→ window.__TAURI__.dialog:			save
 		const pathFileSelected = await window.__TAURI__.dialog.save({
-			filters: [{ name: 'Text', extensions: ['md', 'txt', 'json'] }],
+			defaultPath: pathDefault,
+			filters: [{ name: 'Text', extensions: ['md', 'txt'] }],
 		});
 
 		const resFileDialog = {
@@ -1498,7 +1521,7 @@ ${APPNAME}
 
 Version ${CWrapper.version_app}
 
-Turn structured text into visual tiles and story maps.
+View structured text as visual tiles and charts.
 
 © 2026 A. O. Wagner
 		`;
@@ -1597,8 +1620,8 @@ Turn structured text into visual tiles and story maps.
 		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'setWindowTitle', `(title: ${args.title})`, args.caller));
 		if (LOGARGS) console.log(args);
 
-		if (args.title.indexOf('Tracking') === 0)
-			args.title = 'Tracking';		// ao: remove line!
+		//-if (args.title.indexOf('Tracking') === 0)
+		//-	args.title = 'Tracking';		// ao: remove line!
 		
 		//: 		→  window.__TAURI__.window:		setTitle
 		await window.__TAURI__.window.getCurrentWindow().setTitle(args.title + ' — ' + args.prefix);
@@ -2734,7 +2757,7 @@ const CChart = {
 			</text>
 			<text class="tb-part__text-viewb top" x=${PX_MARGIN_PART + PX_PADDING_SMALL} y=${PX_LINE_HEIGHT * 0.5}>${part.caption}</text> 
 
-			${icon ? svg`<g class="tb-part__symbol" style=${`--x:${PX_COL_WIDTH - 1}px; --y:${(PX_COL_WIDTH - PX_MARGIN_PART) - PX_LINE_HEIGHT}px;`}><text x="0" y="0">${icon}</text></g>` : ''}
+			${icon ? svg`<g class="tb-part__symbol" style=${`--x:${PX_COL_WIDTH}px; --y:${(PX_COL_WIDTH - PX_MARGIN_PART) - PX_LINE_HEIGHT}px;`}><text x="0" y="0">${icon}</text></g>` : ''}
 		</g>`;
 		},
 
@@ -3959,7 +3982,7 @@ const CPopup = {
 			const filenameShort = args.pathFilePinned.split(/[\\/]/).pop();
 			const kbd = args.idx < 9 ? CUtil.formatShortcutForOS(`⌥ ⌘ ${args.idx + 1}`) : "—";
 			const shortcut = args.idx < 9 ? kbd : 'No keyboard shortcut';
-			//+const path = args.pathFilePinned.replace('realname', 'aowagner');		// BUILD SETTING:  remove 'hack' for screenshots
+			const path = args.pathFilePinned; //.replace('realname', 'aowagner');		// BUILD SETTING:  remove 'hack' for screenshots
 
 			return html`
 				<div
@@ -5996,7 +6019,7 @@ const App = {
 			case 'popup.status.log.copy': {
 
 				//:			→ CModel:					getLogentriesAsString
-				const txtToCopy = 'Log from Owl\n\n' + CModel.getLogentriesAsString({caller});
+				const txtToCopy = 'Log from TextToTile\n\n' + CModel.getLogentriesAsString({caller});
 
 				//:			→ CWrapper:					copyStringToClipboard
 				await CWrapper.copyStringToClipboard({txtToCopy, caller});
@@ -6048,14 +6071,14 @@ const App = {
 	App.init();
 
 	// ao: for debug in DevTools: remove!  // BUILD SETTING
-	/*- window.App = App
-	window.CWrapper = CWrapper
-	window.CFramework = CFramework
-	window.CChart = CChart
-	window.CTexteditor = CTexteditor
-	window.CToolbar = CToolbar
-	window.CPopup = CPopup
-	window.CModel = CModel -*/
+	/*- window.App = App;
+	window.CWrapper = CWrapper;
+	window.CFramework = CFramework;
+	window.CChart = CChart;
+	window.CTexteditor = CTexteditor;
+	window.CToolbar = CToolbar;
+	window.CPopup = CPopup; -*/
+	window.CModel = CModel;
 })();
 
 	</script>
