@@ -1,6 +1,6 @@
 [package]
 name = "texttotile"
-version = "0.2.0-beta.1"
+version = "0.2.1"
 description = "Visualize and navigate structured plain-text outlines."
 authors = ["A. O. Wagner"]
 edition = "2021"
