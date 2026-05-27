@@ -36,6 +36,7 @@
 		--px-line-height:	0px;
 		--px-font-size:		0px;
 		--px-header-height:	0px;
+		--px-part-margin:	0px;
 		--count-part-lines:	0;
 
 		/* other */
@@ -265,12 +266,12 @@
 	.chart-viewb	.tb-part__text-viewa tspan	{fill: transparent; pointer-events: none; }
 
 
-	.chart-viewa	.tb-part--special	.line1 {font-size: 75%; /* fill: #777; */ opacity: 0.5; }
+	.chart-viewa	.tb-part--special	.line1 {font-size: 75%; opacity: 0.5; }
 	.chart-viewa	.tb-part--special	.line2 {font-size: 175%; font-weight: 600; fill: var(--text); }
 
 					.tb-part__symbol	{transition: transform var(--ms-transition) ease-out; }
 	.chart-viewa	.tb-part__symbol	{transform: translate(var(--x), calc(var(--y) + var(--px-line-height) * 0.3) ); }
-	.chart-viewb	.tb-part__symbol	{transform: translate(10px, calc(var(--px-line-height) * 0.58)); }
+	.chart-viewb	.tb-part__symbol	{transform: translate(var(--px-part-margin), calc(var(--px-line-height) * 0.58)); }
 
 	.chart-viewa	.tb-part__symbol	text	{font-size: calc(var(--px-line-height) * 1.5);	dominant-baseline: middle;    text-anchor: end; }
 	.chart-viewb	.tb-part__symbol	text	{font-size: calc(var(--px-line-height) * 1.0); 	dominant-baseline: middle;    text-anchor: end; }
@@ -930,7 +931,7 @@ const PX_VIEVBOX_MIN_H = 400;
 //::	☐ chapter columns
 const COUNT_PART_LINES_INITIAL = 8;
 const PX_BASEUNIT_INITIAL = 13;
-const PX_MARGIN_PART_INITIAL = 5;
+const PX_PART_MARGIN_INITIAL = 5;
 
 let PX_COL_WIDTH = 0;
 
@@ -938,7 +939,7 @@ let PX_BASEUNIT = PX_BASEUNIT_INITIAL;
 let PX_HEADER_HEIGHT = 0;
 let PX_LINE_HEIGHT = 0;
 let PX_FONT_SIZE = 0;
-let PX_MARGIN_PART = 0;
+let PX_PART_MARGIN = 0;
 let PX_GRAPHS_SPACE_BOTTOM = PX_PADDING_NORMAL * 2;
 let COUNT_PART_LINES = COUNT_PART_LINES_INITIAL;
 
@@ -1124,7 +1125,17 @@ const CUtil = {
 			return null;
 
 		return pathFile.slice(0, idx);
-	},	
+	},
+
+	//:::	🔹 ensureTextFileExtension
+	ensureTextFileExtension(pathFile) {
+		if (/\.(md|txt)$/i.test(pathFile))
+			return pathFile;
+
+		return pathFile + '.md';
+	},
+
+
 
 }
 
@@ -2172,13 +2183,13 @@ const CFramework = {
 
 		PX_BASEUNIT			= args.pxBaseUnit ?? PX_BASEUNIT;
 		COUNT_PART_LINES	= args.linecount  ?? COUNT_PART_LINES;
-		PX_MARGIN_PART		= args.pxMarginPart ?? PX_MARGIN_PART;
+		PX_PART_MARGIN		= args.pxMarginPart ?? PX_PART_MARGIN;
 
 		PX_FONT_SIZE		= CUtil.roundN(PX_BASEUNIT * 1.0, 2);
 		PX_LINE_HEIGHT		= CUtil.roundN(PX_BASEUNIT * 1.4, 2);
 		PX_HEADER_HEIGHT	= CUtil.roundN(PX_LINE_HEIGHT * 3.25, 2);								// ao: make constant or rule for '3.25'
 
-		PX_COL_WIDTH = (PX_LINE_HEIGHT * COUNT_PART_LINES) + (PX_MARGIN_PART * 2);
+		PX_COL_WIDTH = (PX_LINE_HEIGHT * COUNT_PART_LINES) + (PX_PART_MARGIN * 2);
 
 		if (LOGARGS) console.log({PX_BASEUNIT, PX_COL_WIDTH, COUNT_PART_LINES,  PX_FONT_SIZE, PX_LINE_HEIGHT, PX_HEADER_HEIGHT});
 
@@ -2197,6 +2208,7 @@ const CFramework = {
 		root.style.setProperty('--px-line-height', 		PX_LINE_HEIGHT.toString() + 'px');
 		root.style.setProperty('--px-font-size',		PX_FONT_SIZE.toString() + 'px');
 		root.style.setProperty('--px-header-height',	PX_HEADER_HEIGHT.toString() + 'px');
+		root.style.setProperty('--px-part-margin',		PX_PART_MARGIN.toString() + 'px');
 		root.style.setProperty('--count-part-lines',	COUNT_PART_LINES.toString());
 
 		// setup fonts for text measuring
@@ -2623,7 +2635,7 @@ const CChart = {
 					const strClassesText = ['header__text', 'header__text--section', ...section.arrTag].join(' ');
 
 					return svg`	<rect class=${strClassesRect} style=${strExtraStyle} x=${pxX} y=${0} width=${pxWidth} rx=${PX_PADDING_NORMAL * 1.5}  @click=${e => CChart.onClick({src: 'section', e, idxTextareaLine: section.idxTextareaLine, caller: 'src: section'})} />
-								<text class=${strClassesText} style=${strExtraStyle} x=${pxX + PX_MARGIN_PART + PX_PADDING_SMALL} y=${PX_LINE_HEIGHT * 1.2}>${strCaption}</text>`;
+								<text class=${strClassesText} style=${strExtraStyle} x=${pxX + PX_PART_MARGIN + PX_PADDING_SMALL} y=${PX_LINE_HEIGHT * 1.2}>${strCaption}</text>`;
 				})
 			);
 
@@ -2640,7 +2652,7 @@ const CChart = {
 					const strClassesText = ['header__text', 'header__text--chapter', ...chapter.arrTag].join(' ');
 
 					return svg` <rect class=${strClassesRect} style=${strExtraStyle} x=${pxX} y=${PX_LINE_HEIGHT * 2} width=${PX_COL_WIDTH}  rx=${PX_PADDING_NORMAL} @click=${e => CChart.onClick({src: 'chapter', e, idxTextareaLine: chapter.idxTextareaLine, caller: 'src: chapter'})} />
-								<text class=${strClassesText} style=${strExtraStyle} x=${pxX + PX_MARGIN_PART + PX_PADDING_SMALL} y=${PX_LINE_HEIGHT * 2.70}>${strCaption}</text>`;
+								<text class=${strClassesText} style=${strExtraStyle} x=${pxX + PX_PART_MARGIN + PX_PADDING_SMALL} y=${PX_LINE_HEIGHT * 2.70}>${strCaption}</text>`;
 				})
 			);
 
@@ -2695,9 +2707,9 @@ const CChart = {
 			const icon = [part.metadata.icon, ...arrTagMetadata.map(metadata => metadata.icon)].filter(Boolean).join('');
 			const show = part.metadata.show ?? arrTagMetadata.find(metadata => metadata.show)?.show ?? 'normal';
 
-			const pxWidthRect = PX_COL_WIDTH - (PX_MARGIN_PART * 2);
+			const pxWidthRect = PX_COL_WIDTH - (PX_PART_MARGIN * 2);
 			const pxX = PX_MARGIN_LEFT_W + (PX_COL_WIDTH * part.idxChapter);
-			const pxYa = (((PX_LINE_HEIGHT * COUNT_PART_LINES) + (PX_MARGIN_PART * 2)) * part.idxOrderInChapter) + PX_MARGIN_PART;
+			const pxYa = (((PX_LINE_HEIGHT * COUNT_PART_LINES) + (PX_PART_MARGIN * 2)) * part.idxOrderInChapter) + PX_PART_MARGIN;
 			const pxYb = (PX_LINE_HEIGHT * part.idxRow) + PX_PADDING_SMALL;
 			const strBaseStyle = `--x:${pxX}px; --ya:${pxYa}px; --yb:${pxYb}px; `;
 			const strExtraStyle = CChart.getStyleFromMetadata(part.metadata);			// nb: must be *part* metadata only (*not* arrTagMetadata from css (see above))
@@ -2748,16 +2760,16 @@ const CChart = {
 
 			return svg`
 		<g class=${strClasses} style=${strBaseStyle + strExtraStyle} data-idxline=${'x' + part.idxTextareaLine} @click=${e => CChart.onClick({src: 'part', e, idxTextareaLine: part.idxTextareaLine, caller: 'src: part'})} >
-			<rect class="tb-part__rect tb-part__rect-bg" x=${PX_MARGIN_PART} y="0" width=${pxWidthRect} rx=${pxChartRounding}/>
-			<rect class="tb-part__rect" x=${PX_MARGIN_PART} y="0" width=${pxWidthRect} rx=${pxChartRounding}/>
+			<rect class="tb-part__rect tb-part__rect-bg" x=${PX_PART_MARGIN} y="0" width=${pxWidthRect} rx=${pxChartRounding}/>
+			<rect class="tb-part__rect" x=${PX_PART_MARGIN} y="0" width=${pxWidthRect} rx=${pxChartRounding}/>
 			<text class="tb-part__text-viewa">
 				${arrObjTextline.map((objTextline, idx) => svg`
-					<tspan data-idxlinesub=${objTextline.idxTextareaLine} class=${[...objTextline.classes, 'line', 'line' + (idx+1)].join(' ')} style="${objTextline.style}" x=${PX_MARGIN_PART + PX_PADDING_SMALL} dy=${objTextline.dy}>${objTextline.caption}</tspan>
+					<tspan data-idxlinesub=${objTextline.idxTextareaLine} class=${[...objTextline.classes, 'line', 'line' + (idx+1)].join(' ')} style="${objTextline.style}" x=${PX_PART_MARGIN + PX_PADDING_SMALL} dy=${objTextline.dy}>${objTextline.caption}</tspan>
 				`)}
 			</text>
-			<text class="tb-part__text-viewb top" x=${PX_MARGIN_PART + PX_PADDING_SMALL} y=${PX_LINE_HEIGHT * 0.5}>${part.caption}</text> 
+			<text class="tb-part__text-viewb top" x=${PX_PART_MARGIN + PX_PADDING_SMALL} y=${PX_LINE_HEIGHT * 0.5}>${part.caption}</text> 
 
-			${icon ? svg`<g class="tb-part__symbol" style=${`--x:${PX_COL_WIDTH}px; --y:${(PX_COL_WIDTH - PX_MARGIN_PART) - PX_LINE_HEIGHT}px;`}><text x="0" y="0">${icon}</text></g>` : ''}
+			${icon ? svg`<g class="tb-part__symbol" style=${`--x:${PX_COL_WIDTH}px; --y:${(PX_COL_WIDTH - PX_PART_MARGIN) - PX_LINE_HEIGHT}px;`}><text x="0" y="0">${icon}</text></g>` : ''}
 		</g>`;
 		},
 
@@ -4708,7 +4720,7 @@ const CModel = {
 			pxTexteditorScrollTop: 0,
 			idxView: VIEWA,
 			linecount: COUNT_PART_LINES_INITIAL,
-			pxMarginPart: PX_MARGIN_PART_INITIAL,
+			pxMarginPart: PX_PART_MARGIN_INITIAL,
 			isChartRoundingOn: true,
 		};
 
@@ -5569,12 +5581,13 @@ const App = {
 						return resFileDialog;
 
 					//:			→ App: dispatch:		wrapper.file.save
-					const resFileSave = await App.dispatch({type: 'wrapper.file.save', pathFileToSave: resFileDialog.pathFileSelected, text: '', caller});  // ao: test on res?
+					const pathFileToSave = CUtil.ensureTextFileExtension(resFileDialog.pathFileSelected);
+					const resFileSave = await App.dispatch({type: 'wrapper.file.save', pathFileToSave, text: '', caller});  // ao: test on res?
 
 					if (!CModel.appstate.isSidebarVisible)	// make sure Editor is visible
 						await App.dispatch({type: 'framework.sidebar.visibility.set', isSidebarVisible: true, caller});
 
-					args.pathFileToLoad = resFileDialog.pathFileSelected;
+					args.pathFileToLoad = pathFileToSave;
 					CModel.appstate.pathFileLoaded = '';
 				}
 
@@ -5882,7 +5895,7 @@ const App = {
 			case 'chart.margin.zoom': {
 
 				const arrPxMarginPartValues = [0, 1, 2, 3, 4,  5,  6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
-				const pxMarginPartNew = args.isReset ? PX_MARGIN_PART_INITIAL : CUtil.getPrevNextValue(arrPxMarginPartValues, PX_MARGIN_PART, (args.isIn ? 1 : -1), PX_MARGIN_PART_INITIAL);
+				const pxMarginPartNew = args.isReset ? PX_PART_MARGIN_INITIAL : CUtil.getPrevNextValue(arrPxMarginPartValues, PX_PART_MARGIN, (args.isIn ? 1 : -1), PX_PART_MARGIN_INITIAL);
 
 				//: 			→ App: dispatch				model.docstate.update: pxMarginPart
 				await App.dispatch({type: 'model.docstate.update', oUpdate: {pxMarginPart: pxMarginPartNew}, caller});
