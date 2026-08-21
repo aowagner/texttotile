@@ -11,12 +11,9 @@
 
 		- Find all 'BUILD SETTING' in this file and follow instruction there
 		- in tauri.conf.json: set "devtools": false
-
-		- in Cargo.toml: remove "devtools" here::
+		- in Cargo.toml: remove "devtools" here:
 				[dependencies]
 				tauri = { version = "2", features = ["devtools"] }
-
-
 
 	*/
 
@@ -873,7 +870,7 @@ body.platform-mac .body__item  {grid-template-columns: 3.5rem 1fr auto; } /* on 
 
 
 	<script type="module">
-		import { html, svg, render } from './assets/uhtml/+esm.js';			// keep: import { html, svg, render } from 'https://esm.run/uhtml';		// https://github.com/WebReflection/uhtml
+		import { html, svg, render } from './assets/uhtml/+esm.js';			// https://github.com/WebReflection/uhtml
 
 //:::📙 CONSTANTS
 
@@ -895,6 +892,7 @@ const CODE = Object.freeze({
 	ERROR_UNHANDLED_PROMISE: 'ERROR_UNHANDLED_PROMISE',
 	ERROR_FILE_SCOPE: 'ERROR_FILE_SCOPE',
 	ERROR_FILE_READ: 'ERROR_FILE_READ',
+	ERROR_FILE_NOT_TEXT: 'ERROR_FILE_NOT_TEXT',
 	ERROR_FILE_WRITE: 'ERROR_FILE_WRITE',
 	FILE_PATH_NOT_SET: 'FILE_PATH_NOT_SET',
 	TEXTAREA_NOT_FOCUSED: 'TEXTAREA_NOT_FOCUSED',
@@ -909,6 +907,7 @@ const SOURCE = Object.freeze({
 });
 
 
+
 const APPNAME = 'TextToTile';
 
 const LOGGING = false, LOGARGS = false, DETAILS = false;		// BUILD SETTING: all 3 must be false
@@ -921,6 +920,9 @@ const PX_MARGIN_RIGHT_W = 35;
 
 const VIEWA = 0;
 const VIEWB = 1;
+
+const PARSEMODE_OUTLINE = 0;
+const PARSEMODE_HEADINGS = 1;
 
 const [ZOOM_ALL, ZOOM_HORIZONTAL, ZOOM_LINECOUNT] = [0, 1, 2];
 
@@ -1132,17 +1134,6 @@ const CUtil = {
 
 		return pathFile.slice(0, idx);
 	},
-
-	//--:::	🔹 ensureTextFileExtension
-	/*-----ensureTextFileExtension(pathFile) {
-		if (/\.(md|txt)$/i.test(pathFile))
-			return pathFile;
-
-		return pathFile + '.md';
-	},---*/
-
-
-
 }
 
 
@@ -1193,7 +1184,7 @@ const CWrapper = {
 		// prevent 'context' menu - when right clicking the webview (where 'Reload' and 'Inspect Element' are placed)
 		document.addEventListener('contextmenu', (event) => {
 
-			//return;	// BUILD SETTING: rem out for build
+			return;	// BUILD SETTING: rem out for build
 
 			// allow normal context menu in textarea
 			if (event.target.closest('textarea')) {
@@ -1231,6 +1222,7 @@ const CWrapper = {
 			if (LOGGING) console.log('Call probably NOT duplicate. msSinceLastCall, payload:', msSinceLastCall, args.payload);
 
 		// menu: App (Mac only)
+
 		//::		🔻 app.about
 		//:			→ this: showMessageDialogAbout
 		if (args.payload === 'app.about') 			res = await CWrapper.showMessageDialogAbout({caller});
@@ -1242,6 +1234,7 @@ const CWrapper = {
 		if (args.payload === 'app.quit') 			res = await CWrapper.requestQuit({caller});
 
 		// menu: File
+
 		//::		🔻 file.new
 		//:			→ App: dispatch:				model.docdata.load
 		if (args.payload === 'file.new') 			res = await App.dispatch({type: 'model.docdata.load', source: SOURCE.NEWDOC, caller});
@@ -1259,6 +1252,7 @@ const CWrapper = {
 		if (args.payload === 'file.quit') 			res = await CWrapper.requestQuit({caller});
 
 		// menu: Edit
+
 		//::		🔻 edit.cut
 		//:			→ this.editCut
 		if (args.payload === 'edit.cut') 			res = await CWrapper.editCut({caller});
@@ -1278,16 +1272,14 @@ const CWrapper = {
 		//:			→ this.editSelectAll
 		if (args.payload === 'edit.selectall') 		res = await CWrapper.editSelectAll({caller});
 
-		// menu: View
-		//::		🔻 view.sidebar.toggle
-		//:			→ App: dispatch:				framework.sidebar.visibility.set:	!isSidebarVisible
-		if (args.payload === 'view.sidebar.toggle')	res = await App.dispatch({type: 'framework.sidebar.visibility.set', isSidebarVisible: !CModel.appstate.isSidebarVisible, caller});
-		//::		🔻 view.toolbar.toggle
-		//:			→ App: dispatch:				framework.toolbar.visibility.set	!isToolbarVisible
-		if (args.payload === 'view.toolbar.toggle')	res = await App.dispatch({type: 'framework.toolbar.visibility.set', isToolbarVisible: !CModel.appstate.isToolbarVisible, caller});
-		//::		🔻 view.graph.toggle
-		//:			→ App: dispatch:				framework.toolbar.visibility.set	!isToolbarVisible
-		if (args.payload === 'view.graph.toggle')	res = await App.dispatch({type: 'chart.graph.visibility.set', isGraphVisible: !CModel.appstate.isGraphVisible, caller});
+		// menu: Document
+
+		//::		🔻 view.parsemode.outline
+		//:			→ App: dispatch:				model.parsemode.select:				idxParseMode: PARSEMODE_OUTLINE
+		if (args.payload === 'view.parsemode.outline')	res = await App.dispatch({type: 'model.parsemode.select', idxParseMode: PARSEMODE_OUTLINE, caller});
+		//::		🔻 view.parsemode.headings
+		//:			→ App: dispatch:				model.parsemode.select				idxParseMode: PARSEMODE_HEADINGS
+		if (args.payload === 'view.parsemode.headings')	res = await App.dispatch({type: 'model.parsemode.select', idxParseMode: PARSEMODE_HEADINGS, caller});
 
 		//::		🔻 view.chart.viewa
 		//:			→ App: dispatch:				chart.view.select:				idxView: VIEWA
@@ -1306,6 +1298,22 @@ const CWrapper = {
 		//:			→ App: dispatch:				chart.normal.zoom:					isReset
 		if (args.payload === 'view.zoom.linecount.reset')	res = await App.dispatch({type: 'chart.normal.zoom', isIn: false, isOut: false, isReset: true, caller});
 
+		//::		🔻 view.zoom.margin.reset
+		//:			→ App: dispatch:				chart.margin.zoom:			isReset
+		if (args.payload === 'menu.chart.rounding.toggle')	res = await App.dispatch({type: 'chart.rounding.toggle', caller});
+
+		// menu: View
+
+		//::		🔻 view.sidebar.toggle
+		//:			→ App: dispatch:				framework.sidebar.visibility.set:	!isSidebarVisible
+		if (args.payload === 'view.sidebar.toggle')	res = await App.dispatch({type: 'framework.sidebar.visibility.set', isSidebarVisible: !CModel.appstate.isSidebarVisible, caller});
+		//::		🔻 view.toolbar.toggle
+		//:			→ App: dispatch:				framework.toolbar.visibility.set	!isToolbarVisible
+		if (args.payload === 'view.toolbar.toggle')	res = await App.dispatch({type: 'framework.toolbar.visibility.set', isToolbarVisible: !CModel.appstate.isToolbarVisible, caller});
+		//::		🔻 view.graph.toggle
+		//:			→ App: dispatch:				framework.toolbar.visibility.set	!isToolbarVisible
+		if (args.payload === 'view.graph.toggle')	res = await App.dispatch({type: 'chart.graph.visibility.set', isGraphVisible: !CModel.appstate.isGraphVisible, caller});
+
 		//::		🔻 view.zoom.margin.in
 		//:			→ App: dispatch:				chart.margin.zoom:			isIn
 		if (args.payload === 'view.zoom.margin.in')	res = await App.dispatch({type: 'chart.margin.zoom', isIn: true, isOut:  false, isReset: false, caller});
@@ -1315,10 +1323,6 @@ const CWrapper = {
 		//::		🔻 view.zoom.margin.reset
 		//:			→ App: dispatch:				chart.margin.zoom:			isReset
 		if (args.payload === 'view.zoom.margin.reset')	res = await App.dispatch({type: 'chart.margin.zoom', isIn: false, isOut: false, isReset: true, caller});
-
-		//::		🔻 view.zoom.margin.reset
-		//:			→ App: dispatch:				chart.margin.zoom:			isReset
-		if (args.payload === 'menu.chart.rounding.toggle')	res = await App.dispatch({type: 'chart.rounding.toggle', caller});
 
 		//::		🔻 view.scale.ui.in
 		//:			→ App: dispatch:				framework.ui.scale:			isIn
@@ -1366,9 +1370,8 @@ const CWrapper = {
 		//:			→ App: dispatch:				wrapper.theme.set:			dark
 		if (args.payload === 'view.theme.dark')		res = await App.dispatch({type: 'model.appstate.update', oUpdate: {idTheme: 'dark'}, caller});
 
-		//-::		🔻 help.docs
-		//-:			→ this.openUrl:					https://aowagner.github.io/texttotile/
-		//-if (args.payload === 'help.docs') 			res = await CWrapper.openUrl({url: 'https://aowagner.github.io/texttotile/', caller});
+		// menu: Help
+
 		//::		🔻 help.website
 		//:			→ this.openUrl:					https://aowagner.github.io/texttotile/
 		if (args.payload === 'help.website') 		res = await CWrapper.openUrl({url: 'https://aowagner.github.io/texttotile/', caller});
@@ -1462,6 +1465,21 @@ const CWrapper = {
 
 		if (LOGGING) console.groupEnd();
 		return resFileDialog;
+	},
+
+	//:::	🔹 testFileAllowed
+	testFileAllowed(args) {
+		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'testFileAllowed', '(pathFileToTest: ' + args.pathFileToTest + ')', args.caller));
+
+		// Plain text may be one line. Reject only binary control characters; tab, CR, and LF are normal text characters.
+		const hasBinaryControlCharacters = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/.test(args.textToTest);
+		if (hasBinaryControlCharacters) {
+			if (LOGGING) console.groupEnd();
+			return {status: STATUS.ERROR, code: CODE.ERROR_FILE_NOT_TEXT, pathFileToTest: args.pathFileToTest};
+		}
+
+		if (LOGGING) console.groupEnd();
+		return {status: STATUS.OK};
 	},
 
 	//:::	🔹 showSaveFileSystemDialog
@@ -1565,6 +1583,13 @@ View structured text as visual tiles and charts.
 			try {
 				//: 		→ window.__TAURI__.fs:			readTextFile
 				const text = await window.__TAURI__.fs.readTextFile(args.pathFileToLoad);
+
+				//:			→ CWrapper:			testFileAllowed
+				const resAllowed = CWrapper.testFileAllowed({textToTest: text, pathFileToTest: args.pathFileToLoad, caller: args.caller});
+				if (resAllowed.status !== STATUS.OK) {
+					if (LOGGING) console.groupEnd();
+					return resAllowed;
+				}
 				
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, err: null, text};
@@ -1620,6 +1645,8 @@ View structured text as visual tiles and charts.
 			{idMenu: 'view.graph.height.d',			key: 'pctGraphHeight', val: 100},
 			{idMenu: 'view.chart.viewa',			key: 'idxView', val: VIEWA},
 			{idMenu: 'view.chart.viewb',			key: 'idxView', val: VIEWB},
+			{idMenu: 'view.parsemode.outline',		key: 'idxParseMode', val: PARSEMODE_OUTLINE},
+			{idMenu: 'view.parsemode.headings',		key: 'idxParseMode', val: PARSEMODE_HEADINGS},
 			{idMenu: 'menu.chart.rounding.toggle',	key: 'isChartRoundingOn', val: true},
 		];
 
@@ -1637,8 +1664,8 @@ View structured text as visual tiles and charts.
 		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'setWindowTitle', `(title: ${args.title})`, args.caller));
 		if (LOGARGS) console.log(args);
 
-		//-if (args.title.indexOf('Tracking') === 0)
-		//-	args.title = 'Tracking';		// ao: remove line!
+		if (args.title.indexOf('Tracking') === 0)
+			args.title = 'Tracking';		// ao: remove line!
 		
 		//: 		→  window.__TAURI__.window:		setTitle
 		await window.__TAURI__.window.getCurrentWindow().setTitle(args.title + ' — ' + args.prefix);
@@ -2054,6 +2081,13 @@ const CFramework = {
 				suggestion: 'Try opening the file again.',
 			});
 		}
+		else if (args.code === CODE.ERROR_FILE_NOT_TEXT) {
+			Object.assign(logentry, {
+				title: 'Plain-text file required',
+				message: 'TextToTile can open UTF-8 plain-text files only.',
+				suggestion: 'Choose a plain-text or Markdown file instead.',
+			});
+		}
 		else if (args.code === CODE.ERROR_FILE_WRITE) {
 			Object.assign(logentry, {
 				title: 'File write error',
@@ -2387,7 +2421,6 @@ const CFramework = {
 		}
 
 		//::		🔻 Cmd + ,
-		//-else if (isMetaKey && e.key.toLowerCase() === ',') {
 		else if (!isAltKey && isMetaKey && e.code === 'Comma') {
 			if (e.preventDefault) e.preventDefault();
 
@@ -2500,16 +2533,9 @@ const CFramework = {
 		}
 
 		//::		🔻 Cmd + Alt + 'Comma'/'Period'
-		//---else if ((isShiftKey && isMetaKey && !isAltKey) && (e.key.toLowerCase() === 'j' || e.key.toLowerCase() === 'k' || e.key === 'l')) {
 		else if (isMetaKey && isAltKey && (e.code === 'Comma' || e.code === 'Period')) {
 			if (e.preventDefault) e.preventDefault();
 
-			console.log(e.code);
-
-			//--const isReset = (e.key === 'k');
-			//const isIn = (e.code === 'Comma'); 		//--(e.key.toLowerCase() === 'l');
-			//const isOut = (e.code === 'Period'); 	//--!(isReset || isIn);
-			//--const payload = isOut ? 'view.scale.ui.out' : isIn ? 'view.scale.ui.in' : 'view.scale.ui.reset';
 			const payload = (e.code === 'Period') ? 'view.scale.ui.in' : 'view.scale.ui.out';
 
 			//:			→ CWrapper: onMenuEvent:			view.scale.ui.out|in|reset
@@ -3215,7 +3241,7 @@ const CTexteditor = {
 		elTextarea.setAttribute('autocorrect', 'off');
 		elTextarea.setAttribute('autocapitalize', 'off');
 		elTextarea.setAttribute('wrap', 'off');
-		elTextarea.setAttribute('placeholder', '');
+		elTextarea.setAttribute('placeholder', 'Write your outline here...');
 
 		this.onInputDebounced = this.debounce(() => this.onInput(), 400);		// ao: define const for ms?
 
@@ -4618,9 +4644,9 @@ const CModel = {
 		//:		→ CFramework:		updateLookupConstants	[pxBaseUnit]
 		CFramework.updateLookupConstants({pxBaseUnit: this.appstate.pxBaseUnit, caller});
 
-		if (this.appstate.pathFileLoaded === ''         || false) {
+		///this.appstate.pathFileLoaded = '';		// nb: for testing! 		// BUILD SETTING: rem out
 
-			//+this.appstate.pathFileLoaded = '';		// nb: for testing! Remove when || true is removed above
+		if (this.appstate.pathFileLoaded === '') {
 
 			//:		→ CWrapper:			setWindowTitle
 			await CWrapper.setWindowTitle({prefix: APPNAME, title: 'No file loaded', caller});
@@ -4728,6 +4754,7 @@ const CModel = {
 			linecount: COUNT_PART_LINES_INITIAL,
 			pxMarginPart: PX_PART_MARGIN_INITIAL,
 			isChartRoundingOn: true,
+			idxParseMode: PARSEMODE_OUTLINE,
 		};
 
 		try {
@@ -4888,7 +4915,58 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 		return m ? m[1] : '';
 	},
 
-	//:::
+	//:::	🔹 preparseHeadingOutlineText
+	preparseHeadingOutlineText(args) {
+		if (LOGGING) console.group(...CUtil.logGroup('CModel', 'preparseHeadingOutlineText', CUtil.getArgsKeys(args), args.caller));
+
+		const lines = args.text.split(/\r?\n/);
+		let currentHeadingLevel = 0;
+		let inYamlFrontMatter = false;
+		let yamlDone = false;
+		let inFence = false;
+
+		const linesPreparsed = lines.map((line, idxLine) => {
+			const lineTrim = line.trim();
+
+			if (!yamlDone && idxLine === 0 && lineTrim === '---') {
+				inYamlFrontMatter = true;
+				return line;
+			}
+
+			if (inYamlFrontMatter) {
+				if (lineTrim === '---') {
+					inYamlFrontMatter = false;
+					yamlDone = true;
+				}
+				return line;
+			}
+
+			if (lineTrim.startsWith('```')) {
+				inFence = !inFence;
+				return line;
+			}
+
+			if (inFence || lineTrim === '')
+				return line;
+
+			const matchHeading = line.match(/^(#{1,6})\s+(.+)$/);
+			if (matchHeading) {
+				currentHeadingLevel = matchHeading[1].length;
+				return '\t'.repeat(currentHeadingLevel - 1) + matchHeading[2];
+			}
+
+			const isPartContent = currentHeadingLevel >= 3;
+
+			if (!isPartContent)
+				return '';
+
+			return '\t'.repeat(currentHeadingLevel) + line.trimStart();
+		});
+
+		if (LOGGING) console.groupEnd();
+		return linesPreparsed.join('\n');
+	},
+
 	//:::	🔹 buildDocdataFromText
 	buildDocdataFromText(args) {
 		if (LOGGING) console.group(...CUtil.logGroup('CModel', 'buildDocdataFromText', CUtil.getArgsKeys(args), args.caller));
@@ -4917,6 +4995,7 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 							return line.trim().replace(/\s+/g, ' ');
 						};
 
+		const textPreparsed = this.docstate.idxParseMode === 1 ? this.preparseHeadingOutlineText({text: args.text, caller: args.caller}) : args.text;
 		const caller = 'CModel.buildDocdataFromText';
 		const NOTAG = 'notag';
 
@@ -4935,7 +5014,7 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 
 		const objGraphs = {};
 
-		const txtMarkdown = args.text;
+		const txtMarkdown = textPreparsed;
 		const linesParsed = txtMarkdown.split(/\r?\n/);
 
 		for (let idxTextareaLine = 0; idxTextareaLine < linesParsed.length; idxTextareaLine++) {
@@ -5092,7 +5171,6 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 					});
 			}
 		};
-
 
 		// make arrTagblock
 		const arrTagblock = Object.entries(objGraphs)
@@ -5558,7 +5636,7 @@ const App = {
 			case 'model.docdata.load': {
 
 				if (CModel.isLoadingFile) {
-					console.log('######## model.docdata.load aborted - CModel.isLoadingFile already true');
+					console.warn('model.docdata.load aborted - CModel.isLoadingFile already true');
 					return {status: STATUS.CANCEL, caller};
 				}
 
@@ -5575,7 +5653,6 @@ const App = {
 						return resFileDialog;
 
 					args.pathFileToLoad = resFileDialog.pathFileSelected;
-					CModel.appstate.pathFileLoaded = '';
 				}
 
 				else if (args.source === SOURCE.NEWDOC) {
@@ -5587,21 +5664,25 @@ const App = {
 						return resFileDialog;
 
 					//:			→ App: dispatch:		wrapper.file.save
-					//---const pathFileToSave = CUtil.ensureTextFileExtension(resFileDialog.pathFileSelected);
-					//---console.log('pathFileToSave', pathFileToSave);
 					const resFileSave = await App.dispatch({type: 'wrapper.file.save', pathFileToSave: resFileDialog.pathFileSelected, text: '', caller});  // ao: test on res?
 
 					if (!CModel.appstate.isSidebarVisible)	// make sure Editor is visible
 						await App.dispatch({type: 'framework.sidebar.visibility.set', isSidebarVisible: true, caller});
 
 					args.pathFileToLoad = resFileDialog.pathFileSelected;
-					CModel.appstate.pathFileLoaded = '';
 				}
 
 
 				CModel.isLoadingFile = true;	// must be *after* ('modeless') dialog-flows above (since the current file can be changed externally, when onFileChangedEvent calls load
 
 				try {
+					// Read and validate the candidate before altering the currently loaded document or its watcher.
+					//:			→ CWrapper:			loadFileText
+					const resLoadFileText = await CWrapper.loadFileText({pathFileToLoad: args.pathFileToLoad, caller});
+					if (resLoadFileText.status !== STATUS.OK) {
+						return resLoadFileText;
+					}
+
 					const isLoadingNewFilepath = args.pathFileToLoad !== CModel.appstate.pathFileLoaded;
 
 					//:			→ CWrapper:			stopWatchFile
@@ -5615,12 +5696,6 @@ const App = {
 							pxTexteditorScrollTop: CTexteditor.elTextarea.scrollTop,
 							caller,
 						});
-					}
-
-					//:			→ CWrapper:			loadFileText
-					const resLoadFileText = await CWrapper.loadFileText({pathFileToLoad: args.pathFileToLoad, caller});
-					if (resLoadFileText.status !== STATUS.OK) {
-						return resLoadFileText;
 					}
 
 					// if model.docdata.load is called from CWrapper.onFileChangedEvent (in cases where the msBufferToPreventOpen is too short)
@@ -5641,6 +5716,7 @@ const App = {
 
 					//:			→ App: dispatch		model.docstate.update: idxView, isChartRoundingOn, linecount, pxMarginPart
 					await App.dispatch({type: 'model.docstate.update', oUpdate: {
+						idxParseMode: CModel.docstate.idxParseMode,
 						idxView: CModel.docstate.idxView,
 						isChartRoundingOn: CModel.docstate.isChartRoundingOn,
 						linecount: CModel.docstate.linecount,
@@ -5737,7 +5813,7 @@ const App = {
 				//:			→ CModel: reapplyDocstate
 				CModel.reapplyDocstate({caller});
 
-				//:		→ CFramework:	updateLookupConstants
+				//:			→ CFramework:	updateLookupConstants
 				CFramework.updateLookupConstants({caller});			// no args - just to call CFramework.updateCssFromLookupConstants
 
 				if (LOGGING) console.groupEnd();
@@ -5861,7 +5937,6 @@ const App = {
 			case 'chart.render': {
 
 				if (CModel.docdata === null) {
-					console.log(`%c # # # EXIT: chart.render: CModel.docdata === null`, LOG_RED + LOG_BOLD);
 					if (LOGGING) console.groupEnd();
 					return;
 				}
@@ -5922,6 +5997,25 @@ const App = {
 
 				//:			→ App: dispatch:		chart.render		SVG_UPDATE_FULL_RENDER
 				await App.dispatch({type: 'chart.render', typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
+
+				if (LOGGING) console.groupEnd();
+				return {status: STATUS.OK, caller};
+			}
+
+			//::		🔻 model.parsemode.select
+			case 'model.parsemode.select': {			// idxParseMode: PARSEMODE_OUTLINE or PARSEMODE_HEADINGS
+
+				//: 			→ App: dispatch				model.docstate.update: idxParseMode
+				await App.dispatch({type: 'model.docstate.update', oUpdate: {idxParseMode: args.idxParseMode}, caller});
+
+				//:			→ App: dispatch		model.build.and.augment		🟣 (test on res?)
+				const resBuildAndAugment = await App.dispatch({type: 'model.build.and.augment', text: CTexteditor.value, caller});
+
+				//:			→ App: dispatch		chart.render
+				await App.dispatch({type: 'chart.render', typeSvgUpdate: SVG_UPDATE_FULL_RENDER, caller});
+
+				//:			→ App: dispatch		toolbar.buttons.recreate
+				await App.dispatch({type: 'toolbar.buttons.recreate', caller});
 
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
@@ -6090,15 +6184,6 @@ const App = {
 	//:::		→ App: init
 	App.init();
 
-	// ao: for debug in DevTools: remove!  // BUILD SETTING
-	/*- window.App = App;
-	window.CWrapper = CWrapper;
-	window.CFramework = CFramework;
-	window.CChart = CChart;
-	window.CTexteditor = CTexteditor;
-	window.CToolbar = CToolbar;
-	window.CPopup = CPopup;
-	window.CModel = CModel; -*/
 })();
 
 	</script>

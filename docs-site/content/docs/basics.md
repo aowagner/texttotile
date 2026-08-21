@@ -23,7 +23,7 @@ You can place the editor on the left, right, top, or bottom of the screen — wh
 
 {{< details title="Full text from screenshot above" closed="true" >}}
 
-```markdown
+```text
 Week 22
 
 	Monday
@@ -65,11 +65,21 @@ Week 23
 ```
 {{< /details >}}
 
+{{< callout type="info" >}}
+These examples uses indentation without Markdown list markers (`-`) and includes blank lines to make the structure easier to read on this page. TextToTile does not require Markdown; indentation alone defines the hierarchy.
+
+In a working outline, you may prefer conventional Markdown lists. Many editors use the `-` markers to provide list commands, such as moving a section or branch up and down. The best approach depends on your preferred editor and workflow.
+{{< /callout >}}
+
 
 
 ## Works with your regular editor
 
 You do not have to use the built-in editor at all. TextToTile can also be used as a dedicated chart view alongside your preferred writing environment — such as Obsidian, VS Code, or any plain text editor working with local files.
+
+For larger or ongoing work, a dedicated editor is often the better place to maintain the text. It offers fuller editing tools, such as undo and redo, search and replace, version control, and editor-specific features. When you use TextToTile only as a chart view, it remains read-only and never writes to your file.
+
+The built-in editor is still perfectly suitable for quick changes and focused work. You can also combine both approaches: edit primarily in another application, then use TextToTile’s editor whenever it is the most convenient place to make a change.
 
 When the file changes, the visualization updates automatically. Some apps save continuously, while others require a manual save (`Cmd/Ctrl+S`), but the result is the same: your chart stays synchronized with the text.
 
@@ -98,7 +108,7 @@ You decide which tags you want to create, and how many - and simply adding `#` a
 
 {{< details title="Full text from screenshot above" closed="true" >}}
 
-````markdown
+````text
 ```css
 #metrics	{@fill: darkorange; }
 #exercise	{@fill: seagreen; }
@@ -198,8 +208,8 @@ Sometimes it can be useful to view the chart ordered by tag groups rather than o
 By selecting `View → Chart view → Tag Groups`, the same outline can be viewed grouped by tags instead of by writing order. 
 
 {{< theme-figure
-  light="/img/texttotile-tracking2b-light.png"
-  dark="/img/texttotile-tracking2b-dark.png"
+  light="/img/texttotile-tracking3-light.png"
+  dark="/img/texttotile-tracking3-dark.png"
   alt="In Tag Groups View, all parts are grouped according to their primary tag"
   title="In Tag Groups View, all parts are grouped according to their primary tag (click to zoom)"
 >}}
@@ -228,8 +238,8 @@ Holding Alt while clicking a tag button will solo that tag group by setting all 
 The same actions can also be performed using keyboard shortcuts. For example, typing Cmd/Ctrl + 1 toggles the first tag group shown in the Ribbon between active and passive, while Alt + 1 solos that tag group.
 
 {{< theme-figure
-  light="/img/texttotile-tracking2c-light.png"
-  dark="/img/texttotile-tracking2c-dark.png"
+  light="/img/texttotile-tracking4-light.png"
+  dark="/img/texttotile-tracking4-dark.png"
   alt="Only tag group #2 is active, the other two are passive"
   title="Only tag group #2 is active, the other two are passive"
 >}}
@@ -274,8 +284,8 @@ Zooming only changes how many lines of text are shown inside each part. It does 
 In practice, chart zoom is something you will often adjust dynamically depending on the amount of detail you want to inspect.
 
 {{< theme-figure
-  light="/img/texttotile-tracking-zoom-light.png"
-  dark="/img/texttotile-tracking-zoom-dark.png"
+  light="/img/texttotile-tracking5-light.png"
+  dark="/img/texttotile-tracking5-dark.png"
   alt="Zooming in on the chart for more details"
   title="Zooming in on the chart for more details (click to zoom)"
 >}}

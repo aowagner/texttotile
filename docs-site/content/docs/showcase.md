@@ -15,8 +15,8 @@ The examples below are only a small sample of possible uses. The same principles
 ## Example 1 - Kanban Board
 
 {{< theme-figure
-  light="/img/texttotile-kanban1-light.png"
-  dark="/img/texttotile-kanban1-dark.png"
+  light="/img/texttotile-showcase1-light.png"
+  dark="/img/texttotile-showcase1-dark.png"
   alt="Simple Kanban board with custom symbols"
   title="Simple Kanban board with custom symbols (click to zoom)"
 >}}
@@ -132,8 +132,8 @@ The outline shown above is edited in Obsidian, demonstrating how TextToTile can 
 Many outline-based editors provide additional editing features such as collapsing sections, moving blocks, restructuring hierarchies, or applying custom styling. TextToTile focuses on visualization and overview while remaining synchronized with the underlying text.
 
 {{< theme-figure
-  light="/img/texttotile-kanban2-light.png"
-  dark="/img/texttotile-kanban2-dark.png"
+  light="/img/texttotile-showcase2-light.png"
+  dark="/img/texttotile-showcase2-dark.png"
   alt="The text outline for the Kanban board edited in Obsidian"
   title="The text outline for the Kanban board edited in Obsidian (click to zoom)"
 >}}
@@ -152,8 +152,8 @@ Placing the main structural tag at the start of the line can make outlines easie
 ## Example 2 - Complete Novel
 
 {{< theme-figure
-  light="/img/texttotile-showcase1a-light.png"
-  dark="/img/texttotile-showcase1a-dark.png"
+  light="/img/texttotile-showcase3-light.png"
+  dark="/img/texttotile-showcase3-dark.png"
   alt="Overview a full novel in Structure View"
   title="Overview a full novel in Structure View (click to zoom)"
 >}}
@@ -165,8 +165,8 @@ This example shows the complete outline of A. O. Wagner’s novel The Karma Ubiq
 The screenshot above uses `Structure View`, which emphasizes hierarchy and chapter flow. The screenshot below uses `Tag Groups View`, where story arcs, themes, characters, and metadata become easier to follow across the entire novel.
 
 {{< theme-figure
-  light="/img/texttotile-showcase1b-light.png"
-  dark="/img/texttotile-showcase1b-dark.png"
+  light="/img/texttotile-showcase4-light.png"
+  dark="/img/texttotile-showcase4-dark.png"
   alt="Same outline but in Tag Groups View"
   title="Same outline but in Tag Groups View (click to zoom)"
 >}}
@@ -180,8 +180,8 @@ Graph points can also display additional information such as type and unit value
 With the editor enabled and the zoom level increased, the chart becomes detailed enough to navigate and inspect individual scenes, notes, and structural relationships directly inside the outline.
 
 {{< theme-figure
-  light="/img/texttotile-showcase1c-light.png"
-  dark="/img/texttotile-showcase1c-dark.png"
+  light="/img/texttotile-showcase5-light.png"
+  dark="/img/texttotile-showcase5-dark.png"
   alt="Zooming in on the chart and viewing/editing the novel text in Editor"
   title="Zooming in on the chart and viewing/editing the novel text in Editor (click to zoom)"
 >}}
@@ -191,8 +191,8 @@ With the editor enabled and the zoom level increased, the chart becomes detailed
 ### A Single Source of Truth
 
 {{< theme-figure
-  light="/img/texttotile-showcase1d-light.png"
-  dark="/img/texttotile-showcase1d-dark.png"
+  light="/img/texttotile-showcase6-light.png"
+  dark="/img/texttotile-showcase6-dark.png"
   alt="Same novel being edited in Obsidian"
   title="Same novel being edited in Obsidian (click to zoom)"
 >}}
@@ -219,8 +219,8 @@ TextToTile was created to bridge these phases visually — allowing the same str
 ## Example 3 - Travel ideas
 
 {{< theme-figure
-  light="/img/texttotile-travelideas-light.png"
-  dark="/img/texttotile-travelideas-dark.png"
+  light="/img/texttotile-showcase7-light.png"
+  dark="/img/texttotile-showcase7-dark.png"
   alt="Plotting ideas for a trip"
   title="Plotting ideas for a trip (click to zoom)"
 >}}

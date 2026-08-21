@@ -7,63 +7,93 @@ weight: 50
 
 
 {{< details title="Who is the app for?" closed="true" >}}
-- The app was originally built for personal use (writing articles and novels)
-- I had used other methods before, but was missing a tool that preserved a visual overview—even while restructuring, editing, and refining details
-- During the process, I realized the app could be useful for others with similar needs—and possibly for creating structure and overview in areas I haven’t even considered yet
-{{< /details >}}
+TextToTile is for anyone who works with structured text and wants to keep the whole structure visible while working. It began as a tool for writing articles and novels, but it can also support planning, research, personal tracking, Kanban-style boards, travel ideas, and other text-based workflows.
 
+It is especially useful when an outline is too large to hold in your head, but you still want to edit the original text directly.
+{{< /details >}}
 
 {{< details title="Why was the app created?" closed="true" >}}
-- The app was created to solve a personal need: maintaining a clear visual overview while working with structured text
-- Existing tools either focused on writing or planning, but rarely supported both in a simple and consistent way
-- The goal was to combine simplicity, structure, and flexibility in one place
+TextToTile was created to solve a simple problem: how to maintain a clear visual overview while restructuring, editing, and refining structured text.
+
+Many tools focus primarily on either writing or planning. TextToTile keeps the information in a simple text file while providing a visual layer for seeing hierarchy, relationships, progress, and patterns.
 {{< /details >}}
 
+{{< details title="What file formats are supported?" closed="true" >}}
+TextToTile works with ordinary plain-text and Markdown files, including `.txt` and `.md` files. Markdown is optional: indentation alone can define the hierarchy, while Markdown list markers can make an outline easier to read in other editors.
 
-{{< details title="Does the app use AI?" closed="true" >}}
-- There is no AI built into the app
-- However, it is well suited for integration with AI tools (e.g. Claude Code or similar)
-- AI can be used to read and maintain data in plain text files, which is much simpler than interacting with multiple complex graphical tools
-- Many platforms for managing personal data are online systems, which you may not want to share your data with—and may not want AI systems to access or control
-- No user accounts, no backend, no network calls
+Because the files remain ordinary text, you can also open and edit them in your preferred text editor.
 {{< /details >}}
 
+{{< details title="Can I use TextToTile with Obsidian?" closed="true" >}}
+Yes. Obsidian is a note-taking application built around Markdown files. TextToTile can open the same local text or Markdown files and act as a dedicated visual overview alongside Obsidian.
 
-{{< details title="What about security?" closed="true" >}}
-- Strong focus on security and privacy
-- The app only has access to files and folders explicitly opened by the user
-- No background access to your system or data
+When the file changes in Obsidian, TextToTile updates its chart automatically. The same approach also works with VS Code and other text editors.
 {{< /details >}}
 
-
-{{< details title="What platform is the app built on?" closed="true" >}}
-- Built with Tauri (designed for strong security and minimal system access)
-- The app has no network access and does not send or receive any data
-- All graphics are rendered as SVG
-- Text input (along with the toolbar and settings popup) is built using HTML
+{{< details title="Does TextToTile modify my files?" closed="true" >}}
+TextToTile saves changes automatically whenever you edit text in its built-in editor. If you use TextToTile only as a chart view alongside another editor, it does not modify the file.
 {{< /details >}}
 
+{{< details title="Why doesn't the built-in editor have undo and redo?" closed="true" >}}
+Undo and redo are not available in the built-in editor at the moment. For substantial editing, we recommend maintaining your outline in your usual text editor, which will typically provide a fuller set of editing tools and features than TextToTile’s minimal editor.
 
-{{< details title="Are there more views coming?" closed="true" >}}
-- Currently includes Structure view and Tag group view
-- Additional views are possible, such as a monthly calendar or other ways to visualize structured text
-- Future development will likely be guided by practical needs—especially replacing existing tools where simple text-based management is sufficient
+TextToTile can then remain a dedicated, read-only chart view of the same file. If undo and redo would be important to your workflow, please share that feedback in [TextToTile Discussions](https://github.com/aowagner/texttotile/discussions). It may be added in a future version based on user needs.
 {{< /details >}}
 
+{{< details title="What are tags and metadata?" closed="true" >}}
+Tags are words prefixed with `#`, such as `#work` or `#research`. They can group related parts of an outline and control how those parts appear in the chart.
 
-{{< details title="You mention Obsidian a lot - what is it?" closed="true" >}}
-- explain here
+Metadata is a value written with an `@` prefix, such as `@sleep 8.5h` or `@write 900`. TextToTile can turn matching values into graphs. Read more on the [Basics](/docs/basics/) and [Graphs](/docs/graphs/) pages.
 {{< /details >}}
-
 
 {{< details title="What is CSS?" closed="true" >}}
-- explain here
+CSS is a simple language for describing visual appearance. In TextToTile, you can use a small CSS-style block to assign colors, icons, borders, and text styling to tags or individual parts.
+
+You do not need to use CSS to get started. It is an optional way to make a chart fit your own workflow. See [Styling with Tags](/docs/styles/) for examples.
 {{< /details >}}
 
+{{< details title="Does the app use AI?" closed="true" >}}
+No. TextToTile has no built-in AI, user accounts, backend, or network calls.
 
-{{< details title="How can I give feedback?" closed="true" >}}
-- Feedback and suggestions are very welcome
-- Please share your ideas, use cases, or feature requests via GitHub Discussions or the project repository
+Because its information lives in ordinary text files, you can choose to work on those files with AI tools if that suits your workflow. That is separate from TextToTile itself: you remain in control of which tools can access your files.
+{{< /details >}}
+
+{{< details title="What about privacy and security?" closed="true" >}}
+TextToTile is designed to keep your information on your own computer. It only accesses files and folders that you explicitly open, and it does not have background access to the rest of your system.
+
+The app has no network access and does not send or receive your text—or any other data.
+{{< /details >}}
+
+{{< details title="Where are settings stored?" closed="true" >}}
+Settings are stored locally in TextToTile’s application-data folder on your computer. This includes preferences and information such as pinned files and their view settings.
+
+These settings are not stored in a cloud account or sent to a server.
+{{< /details >}}
+
+{{< details title="What platform is the app built on?" closed="true" >}}
+TextToTile is built with Tauri, a framework designed for small, secure desktop applications with limited system access. The chart is rendered as SVG, while the editor, toolbar, and settings interface use standard web technologies.
+{{< /details >}}
+
+{{< details title="Are more views planned?" closed="true" >}}
+TextToTile currently includes Structure View and Tag Groups View. Additional views are possible, including calendar-like views and other ways to visualize structured text.
+
+Future development will be guided by practical use cases—especially where a simple text-based workflow can replace a more complex tool.
+{{< /details >}}
+
+{{< details title="Why does Windows SmartScreen appear during installation?" closed="true" >}}
+The current beta installer is not code-signed yet. Windows SmartScreen may therefore show a warning because it cannot verify the publisher’s reputation in the usual way; this does not mean that SmartScreen has found malware.
+
+If you downloaded the installer from the official TextToTile release page, select **More info** and then **Run anyway**. See the [Download page](/docs/download/) for the current installation guidance.
+{{< /details >}}
+
+{{< details title="Why does macOS warn when opening the app for the first time?" closed="true" >}}
+The current beta app is not code-signed or notarized yet, so macOS cannot verify it automatically. This is why macOS may say that the app cannot be verified.
+
+If you downloaded the app from the official TextToTile release page, open **System Settings** → **Privacy & Security** and choose **Open Anyway**. See the [Download page](/docs/download/) for the full steps.
+{{< /details >}}
+
+{{< details title="How can I ask questions and give feedback?" closed="true" >}}
+Questions, ideas, bug reports, workflow examples, and installation feedback are all welcome. The best place to share them is [TextToTile Discussions](https://github.com/aowagner/texttotile/discussions).
 {{< /details >}}
 
 

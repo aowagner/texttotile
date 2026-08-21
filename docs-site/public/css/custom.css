@@ -43,7 +43,7 @@ nav a[href$="/docs"] {
 
 
 img.theme-figure__img {
-	/* border: 1px solid #eee !important;   */
+	/* border: 1px solid #eee  !important; */
 	border-radius: 8px !important;
 	box-shadow: #999 3px 3px 7px !important;
 }
@@ -80,5 +80,41 @@ img[alt="hextra-zoom-init"] {
 
 
 .language-markdown .line .cl .err {color: unset; background-color: unset; }
+
+
+/* some 'fixes' for showing code better */
+
+.highlight .chroma .s1,
+.highlight .chroma .ss,
+.highlight .chroma .m,
+.highlight .chroma .mb,
+.highlight .chroma .mf,
+.highlight .chroma .mh,
+.highlight .chroma .mi,
+.highlight .chroma .il,
+.highlight .chroma .mo,
+.highlight .chroma .kc,
+.highlight .chroma .k,
+.highlight .chroma .kd, 
+.highlight .chroma .kn,
+.highlight .chroma .kp,
+.highlight .chroma .kr {color: unset !important; font-weight: unset !important; }
+
+
+
+
+
+
+
+/* to prevent '--fill' (in normal text - not in code blocks) to line wrap with '--' at end of one line, and 'fill' at start of next line */
+p code {
+  white-space: pre;
+}
+
+
+
+/* landing page */
+
+
 
 

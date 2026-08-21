@@ -7,8 +7,8 @@ weight: 10
 ## The Basic Principle
 
 {{< theme-figure
-  light="/img/texttotile-flow-light.png"
-  dark="/img/texttotile-flow-dark.png"
+  light="/img/texttotile-concept1-light.png"
+  dark="/img/texttotile-concept1-dark.png"
   alt="The structural relation between the text outline and the chart"
   title="The structural relation between the text outline and the chart (click to zoom)"
 >}}

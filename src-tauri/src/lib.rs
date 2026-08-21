@@ -227,14 +227,25 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 
 
 
-// ---- Chart submenu ----
+// ---- Document submenu ----
+
+	// submenu parse mode ('Outline', 'Headings')
+	let menuitem_parsemode_a = CheckMenuItem::with_id(app, "view.parsemode.outline", "Outline", true, true, None::<&str>, )?;
+	let menuitem_parsemode_b = CheckMenuItem::with_id(app, "view.parsemode.headings", "Markdown headings", true, false, None::<&str>, )?;
+
+	// Build the parse-mode sub-submenu
+	let submenu_parsemode = SubmenuBuilder::new(app, "Parse mode")
+		.item(&menuitem_parsemode_a)
+		.item(&menuitem_parsemode_b)
+		.build()?;
+
 
 	// submenu chart view ('structure', 'tag groups')
 	let menuitem_chartview_a = CheckMenuItem::with_id(app, "view.chart.viewa", "Structure", true, true, Some("F1"), )?;
 	let menuitem_chartview_b = CheckMenuItem::with_id(app, "view.chart.viewb", "Tag Groups", true, false, Some("F2"), )?;
 
 	// Build the sub-submenu
-	let submenu_chartview = SubmenuBuilder::new(app, "Chart mode")
+	let submenu_chartview = SubmenuBuilder::new(app, "Chart layout")
 		.item(&menuitem_chartview_a)
 		.item(&menuitem_chartview_b)
 		.build()?;
@@ -270,7 +281,8 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 
 
 
-	let chart_submenu = SubmenuBuilder::new(app, "Chart")
+	let document_submenu = SubmenuBuilder::new(app, "Document")
+		.item(&submenu_parsemode)
 		.item(&submenu_chartview)
 		.item(&zoom_normal_submenu)
 		.item(&zoom_margin_submenu)
@@ -346,12 +358,8 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 		.item(&toggle_ribbon)
 		.item(&toggle_graph)
 		.separator()
-		//-.item(&zoom_normal_submenu)
-		//-.item(&zoom_margin_submenu)
-		//-.separator()
 		.item(&zoom_ui_submenu)
 		//?.separator()
-		//-.item(&submenu_chartview)
 		.item(&graph_height_submenu)
 		.item(&sidebar_position_submenu)
 		.item(&theme_submenu);
@@ -368,14 +376,8 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 
 
 // ---- Help submenu ----
-	//let docs = MenuItem::with_id(app, "help.docs", "Documentation…", true, None::<&str>)?;
 	let website = MenuItem::with_id(app, "help.website", "Website…", true, None::<&str>)?;
 	let about_b = MenuItem::with_id(app, "app.about", "About TextToTile", true, None::<&str>)?;
-
-	/*-let help_submenu = SubmenuBuilder::new(app, "Help")
-		.item(&docs)
-		.item(&website)
-		.build()?;-*/
 
 	let help_submenu = if cfg!(target_os = "macos") {
 		// macOS
@@ -403,7 +405,7 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 				&app_submenu,
 				&file_submenu,
 				&edit_submenu,
-				&chart_submenu,
+				&document_submenu,
 				&view_submenu,
 				&help_submenu,
 			])
@@ -413,7 +415,7 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 			.items(&[
 				&file_submenu,
 				&edit_submenu,
-				&chart_submenu,
+				&document_submenu,
 				&view_submenu,
 				&help_submenu,
 			])

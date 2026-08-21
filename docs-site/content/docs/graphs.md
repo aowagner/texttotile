@@ -23,8 +23,8 @@ For readability, units can be written directly after the value — such as `@sle
 You can also include multiple `@key value` entries on the same line, allowing multiple metrics to be tracked for that part.
 
 {{< theme-figure
-  light="/img/texttotile-tracking3-light.png"
-  dark="/img/texttotile-tracking3-dark.png"
+  light="/img/texttotile-tracking6-light.png"
+  dark="/img/texttotile-tracking6-dark.png"
   alt="Structured values shown as graphs"
   title="Structured values turn your outline into visual graphs (click to zoom)"
 >}}

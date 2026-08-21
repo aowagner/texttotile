@@ -32,8 +32,8 @@ A text file created today will still be understandable many years from now — e
 In contrast to the traditional app-centric way of working with data, TextToTile does not “own” your information. It simply helps you see it more clearly.
 
 {{< theme-figure
-  light="/img/texttotile-illustration06-light.png"
-  dark="/img/texttotile-illustration06-light.png"
+  light="/img/texttotile-philosophy1-light.png"
+  dark="/img/texttotile-philosophy1-light.png"
   alt="Apps change. Text survives"
   title="Apps change. Text survives (click to zoom)"
 >}}

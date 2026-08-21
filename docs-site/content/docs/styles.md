@@ -15,8 +15,8 @@ In the screenshot below, the entries from the [Graphs page](/docs/34-graphs/) â€
 This makes it possible to style individual parts with distinct colors, icons, and highlighted values.
 
 {{< theme-figure
-  light="/img/texttotile-tracking4-light.png"
-  dark="/img/texttotile-tracking4-dark.png"
+  light="/img/texttotile-tracking7-light.png"
+  dark="/img/texttotile-tracking7-dark.png"
   alt="Additional tags allow more detailed styling and categorization"
   title="Additional tags allow more detailed styling and categorization (click to zoom)"
 >}}
@@ -243,8 +243,8 @@ Week 23
 
 
 {{< theme-figure
-  light="/img/texttotile-tracking4b-light.png"
-  dark="/img/texttotile-tracking4b-dark.png"
+  light="/img/texttotile-tracking8-light.png"
+  dark="/img/texttotile-tracking8-dark.png"
   alt="The same outline in Tag Groups View"
   title="The same outline in Tag Groups View (click to zoom)"
 >}}

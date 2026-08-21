@@ -28,7 +28,7 @@
     &lt;a href=&#34;#the-basic-principle&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;figure class=&#34;theme-figure&#34;&gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--light&#34;
-    src=&#34;http://localhost:1313/img/texttotile-flow-light.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-concept1-light.png&#34;
     alt=&#34;The structural relation between the text outline and the chart&#34;
     title=&#34;The structural relation between the text outline and the chart (click to zoom)&#34;
     data-zoomable
@@ -36,7 +36,7 @@
   &gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--dark&#34;
-    src=&#34;http://localhost:1313/img/texttotile-flow-dark.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-concept1-dark.png&#34;
     alt=&#34;The structural relation between the text outline and the chart&#34;
     title=&#34;The structural relation between the text outline and the chart (click to zoom)&#34;
     data-zoomable
@@ -142,7 +142,7 @@
     &lt;a href=&#34;#example-1---kanban-board&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;figure class=&#34;theme-figure&#34;&gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--light&#34;
-    src=&#34;http://localhost:1313/img/texttotile-kanban1-light.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-showcase1-light.png&#34;
     alt=&#34;Simple Kanban board with custom symbols&#34;
     title=&#34;Simple Kanban board with custom symbols (click to zoom)&#34;
     data-zoomable
@@ -150,7 +150,7 @@
   &gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--dark&#34;
-    src=&#34;http://localhost:1313/img/texttotile-kanban1-dark.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-showcase1-dark.png&#34;
     alt=&#34;Simple Kanban board with custom symbols&#34;
     title=&#34;Simple Kanban board with custom symbols (click to zoom)&#34;
     data-zoomable
@@ -277,7 +277,7 @@
 &lt;figure class=&#34;theme-figure&#34;&gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--light&#34;
-    src=&#34;http://localhost:1313/img/texttotile-kanban2-light.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-showcase2-light.png&#34;
     alt=&#34;The text outline for the Kanban board edited in Obsidian&#34;
     title=&#34;The text outline for the Kanban board edited in Obsidian (click to zoom)&#34;
     data-zoomable
@@ -285,7 +285,7 @@
   &gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--dark&#34;
-    src=&#34;http://localhost:1313/img/texttotile-kanban2-dark.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-showcase2-dark.png&#34;
     alt=&#34;The text outline for the Kanban board edited in Obsidian&#34;
     title=&#34;The text outline for the Kanban board edited in Obsidian (click to zoom)&#34;
     data-zoomable
@@ -303,7 +303,7 @@
     &lt;a href=&#34;#example-2---complete-novel&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;figure class=&#34;theme-figure&#34;&gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--light&#34;
-    src=&#34;http://localhost:1313/img/texttotile-showcase1a-light.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-showcase3-light.png&#34;
     alt=&#34;Overview a full novel in Structure View&#34;
     title=&#34;Overview a full novel in Structure View (click to zoom)&#34;
     data-zoomable
@@ -311,7 +311,7 @@
   &gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--dark&#34;
-    src=&#34;http://localhost:1313/img/texttotile-showcase1a-dark.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-showcase3-dark.png&#34;
     alt=&#34;Overview a full novel in Structure View&#34;
     title=&#34;Overview a full novel in Structure View (click to zoom)&#34;
     data-zoomable
@@ -327,7 +327,7 @@
 &lt;figure class=&#34;theme-figure&#34;&gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--light&#34;
-    src=&#34;http://localhost:1313/img/texttotile-showcase1b-light.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-showcase4-light.png&#34;
     alt=&#34;Same outline but in Tag Groups View&#34;
     title=&#34;Same outline but in Tag Groups View (click to zoom)&#34;
     data-zoomable
@@ -335,7 +335,7 @@
   &gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--dark&#34;
-    src=&#34;http://localhost:1313/img/texttotile-showcase1b-dark.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-showcase4-dark.png&#34;
     alt=&#34;Same outline but in Tag Groups View&#34;
     title=&#34;Same outline but in Tag Groups View (click to zoom)&#34;
     data-zoomable
@@ -352,7 +352,7 @@
 &lt;figure class=&#34;theme-figure&#34;&gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--light&#34;
-    src=&#34;http://localhost:1313/img/texttotile-showcase1c-light.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-showcase5-light.png&#34;
     alt=&#34;Zooming in on the chart and viewing/editing the novel text in Editor&#34;
     title=&#34;Zooming in on the chart and viewing/editing the novel text in Editor (click to zoom)&#34;
     data-zoomable
@@ -360,7 +360,7 @@
   &gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--dark&#34;
-    src=&#34;http://localhost:1313/img/texttotile-showcase1c-dark.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-showcase5-dark.png&#34;
     alt=&#34;Zooming in on the chart and viewing/editing the novel text in Editor&#34;
     title=&#34;Zooming in on the chart and viewing/editing the novel text in Editor (click to zoom)&#34;
     data-zoomable
@@ -374,7 +374,7 @@
     &lt;a href=&#34;#a-single-source-of-truth&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;figure class=&#34;theme-figure&#34;&gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--light&#34;
-    src=&#34;http://localhost:1313/img/texttotile-showcase1d-light.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-showcase6-light.png&#34;
     alt=&#34;Same novel being edited in Obsidian&#34;
     title=&#34;Same novel being edited in Obsidian (click to zoom)&#34;
     data-zoomable
@@ -382,7 +382,7 @@
   &gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--dark&#34;
-    src=&#34;http://localhost:1313/img/texttotile-showcase1d-dark.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-showcase6-dark.png&#34;
     alt=&#34;Same novel being edited in Obsidian&#34;
     title=&#34;Same novel being edited in Obsidian (click to zoom)&#34;
     data-zoomable
@@ -404,7 +404,7 @@
     &lt;a href=&#34;#example-3---travel-ideas&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;figure class=&#34;theme-figure&#34;&gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--light&#34;
-    src=&#34;http://localhost:1313/img/texttotile-travelideas-light.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-showcase7-light.png&#34;
     alt=&#34;Plotting ideas for a trip&#34;
     title=&#34;Plotting ideas for a trip (click to zoom)&#34;
     data-zoomable
@@ -412,7 +412,7 @@
   &gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--dark&#34;
-    src=&#34;http://localhost:1313/img/texttotile-travelideas-dark.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-showcase7-dark.png&#34;
     alt=&#34;Plotting ideas for a trip&#34;
     title=&#34;Plotting ideas for a trip (click to zoom)&#34;
     data-zoomable
@@ -629,7 +629,7 @@
 &lt;figure class=&#34;theme-figure&#34;&gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--light&#34;
-    src=&#34;http://localhost:1313/img/texttotile-illustration06-light.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-philosophy1-light.png&#34;
     alt=&#34;Apps change. Text survives&#34;
     title=&#34;Apps change. Text survives (click to zoom)&#34;
     data-zoomable
@@ -637,7 +637,7 @@
   &gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--dark&#34;
-    src=&#34;http://localhost:1313/img/texttotile-illustration06-light.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-philosophy1-light.png&#34;
     alt=&#34;Apps change. Text survives&#34;
     title=&#34;Apps change. Text survives (click to zoom)&#34;
     data-zoomable
@@ -724,7 +724,7 @@
   &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
     &lt;div class=&#34;hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code&#34;&gt;
 
-&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-markdown&#34; data-lang=&#34;markdown&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Week 22
+&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Week 22
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	Monday
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Weight 79.8 kg
@@ -777,8 +777,20 @@
   &lt;/div&gt;
 &lt;/details&gt;
 
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;svg height=1.2em class=&#34;hx:inline-block hx:align-middle&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34; fill=&#34;none&#34; viewBox=&#34;0 0 24 24&#34; stroke-width=&#34;2&#34; stroke=&#34;currentColor&#34; aria-hidden=&#34;true&#34;&gt;&lt;path stroke-linecap=&#34;round&#34; stroke-linejoin=&#34;round&#34; d=&#34;M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z&#34;/&gt;&lt;/svg&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;p&gt;These examples uses indentation without Markdown list markers (&lt;code&gt;-&lt;/code&gt;) and includes blank lines to make the structure easier to read on this page. TextToTile does not require Markdown; indentation alone defines the hierarchy.&lt;/p&gt;
+&lt;p&gt;In a working outline, you may prefer conventional Markdown lists. Many editors use the &lt;code&gt;-&lt;/code&gt; markers to provide list commands, such as moving a section or branch up and down. The best approach depends on your preferred editor and workflow.&lt;/p&gt;
+&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
 &lt;h2&gt;Works with your regular editor&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;works-with-your-regular-editor&#34;&gt;&lt;/span&gt;
     &lt;a href=&#34;#works-with-your-regular-editor&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;You do not have to use the built-in editor at all. TextToTile can also be used as a dedicated chart view alongside your preferred writing environment — such as Obsidian, VS Code, or any plain text editor working with local files.&lt;/p&gt;
+&lt;p&gt;For larger or ongoing work, a dedicated editor is often the better place to maintain the text. It offers fuller editing tools, such as undo and redo, search and replace, version control, and editor-specific features. When you use TextToTile only as a chart view, it remains read-only and never writes to your file.&lt;/p&gt;
+&lt;p&gt;The built-in editor is still perfectly suitable for quick changes and focused work. You can also combine both approaches: edit primarily in another application, then use TextToTile’s editor whenever it is the most convenient place to make a change.&lt;/p&gt;
 &lt;p&gt;When the file changes, the visualization updates automatically. Some apps save continuously, while others require a manual save (&lt;code&gt;Cmd/Ctrl+S&lt;/code&gt;), but the result is the same: your chart stays synchronized with the text.&lt;/p&gt;
 &lt;p&gt;You can also click sections, columns, or parts in the chart to jump directly to the corresponding line in the built-in editor, making navigation easier in larger outlines.&lt;/p&gt;
 &lt;h2&gt;Tags and Colors&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;tags-and-colors&#34;&gt;&lt;/span&gt;
@@ -828,70 +840,70 @@
   &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
     &lt;div class=&#34;hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code&#34;&gt;
 
-&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-markdown&#34; data-lang=&#34;markdown&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;```css
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;#&lt;/span&gt;&lt;span class=&#34;nn&#34;&gt;metrics&lt;/span&gt;	&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;@&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;fill&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;darkorange&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;#&lt;/span&gt;&lt;span class=&#34;nn&#34;&gt;exercise&lt;/span&gt;	&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;@&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;fill&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;seagreen&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;#&lt;/span&gt;&lt;span class=&#34;nn&#34;&gt;work&lt;/span&gt;		&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;@&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;fill&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;steelblue&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;```css
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;#metrics	{@fill: darkorange; }
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;#exercise	{@fill: seagreen; }
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;#work		{@fill: steelblue; }
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;#&lt;/span&gt;&lt;span class=&#34;nn&#34;&gt;weekend&lt;/span&gt; 	&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;@&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;fill&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;dodgerblue&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;```&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;#weekend 	{@fill: dodgerblue; }
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;```
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Week 22
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	Monday
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Weight 79.8 kg		// &lt;span class=&#34;ni&#34;&gt;#metrics&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		BMI 20.5			// &lt;span class=&#34;ni&#34;&gt;#metrics&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Sleep 8.5 hours		// &lt;span class=&#34;ni&#34;&gt;#metrics&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Weight 79.8 kg		// #metrics
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		BMI 20.5			// #metrics
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Sleep 8.5 hours		// #metrics
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			Apparently I needed it :-)
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Energy 70%			// &lt;span class=&#34;ni&#34;&gt;#metrics&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Run 1.5 km			// &lt;span class=&#34;ni&#34;&gt;#exercise&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Swim 800 meter		// &lt;span class=&#34;ni&#34;&gt;#exercise&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Energy 70%			// #metrics
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Run 1.5 km			// #exercise
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Swim 800 meter		// #exercise
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Write 900 words		// &lt;span class=&#34;ni&#34;&gt;#work&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			Editing main plot lines	// &lt;span class=&#34;ni&#34;&gt;#work&lt;/span&gt; &lt;span class=&#34;ni&#34;&gt;#novel&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Write 900 words		// #work
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			Editing main plot lines	// #work #novel
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Read 1.5 hours		// &lt;span class=&#34;ni&#34;&gt;#work&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			Anathem: Chapter 7	// &lt;span class=&#34;ni&#34;&gt;#novel&lt;/span&gt; &lt;span class=&#34;ni&#34;&gt;#stephenson&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Read 1.5 hours		// #work
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			Anathem: Chapter 7	// #novel #stephenson
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;				Interesting shift in pace — more philosophical than earlier chapters
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;				Still getting used to the terminology, but the world is starting to make more sense
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			Medium: Articles on coding	// &lt;span class=&#34;ni&#34;&gt;#coding&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			Medium: Articles on coding	// #coding
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;				A few solid takeaways — especially about keeping code readable
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	Tuesday
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;ni&#34;&gt;#void&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;ni&#34;&gt;#void&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Sleep 6.5 hours		// &lt;span class=&#34;ni&#34;&gt;#metrics&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Energy 80%			// &lt;span class=&#34;ni&#34;&gt;#metrics&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Run 2.0 km			// &lt;span class=&#34;ni&#34;&gt;#exercise&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Swim 1200 meter		// &lt;span class=&#34;ni&#34;&gt;#exercise&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Write 1100 words	// &lt;span class=&#34;ni&#34;&gt;#work&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Read 2.5 hours		// &lt;span class=&#34;ni&#34;&gt;#work&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			Anathem: Chapter 8+9	// &lt;span class=&#34;ni&#34;&gt;#novel&lt;/span&gt; &lt;span class=&#34;ni&#34;&gt;#stephenson&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		#void
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		#void
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Sleep 6.5 hours		// #metrics
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Energy 80%			// #metrics
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Run 2.0 km			// #exercise
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Swim 1200 meter		// #exercise
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Write 1100 words	// #work
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Read 2.5 hours		// #work
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			Anathem: Chapter 8+9	// #novel #stephenson
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	Wednesday
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;ni&#34;&gt;#void&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;ni&#34;&gt;#void&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Sleep 6.2 hours		// &lt;span class=&#34;ni&#34;&gt;#metrics&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Energy 70%			// &lt;span class=&#34;ni&#34;&gt;#metrics&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;ni&#34;&gt;#void&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;ni&#34;&gt;#void&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Write 850 words		// &lt;span class=&#34;ni&#34;&gt;#work&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Read 2.2 hours		// &lt;span class=&#34;ni&#34;&gt;#work&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		#void
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		#void
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Sleep 6.2 hours		// #metrics
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Energy 70%			// #metrics
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		#void
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		#void
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Write 850 words		// #work
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Read 2.2 hours		// #work
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	Thursday
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;ni&#34;&gt;#void&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;ni&#34;&gt;#void&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Sleep 5.6 hours		// &lt;span class=&#34;ni&#34;&gt;#metrics&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Energy 60%			// &lt;span class=&#34;ni&#34;&gt;#metrics&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Run 1.8 km			// &lt;span class=&#34;ni&#34;&gt;#exercise&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Swim 900 meter		// &lt;span class=&#34;ni&#34;&gt;#exercise&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Write 950 words		// &lt;span class=&#34;ni&#34;&gt;#work&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Read 2.4 hours		// &lt;span class=&#34;ni&#34;&gt;#work&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		#void
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		#void
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Sleep 5.6 hours		// #metrics
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Energy 60%			// #metrics
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Run 1.8 km			// #exercise
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Swim 900 meter		// #exercise
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Write 950 words		// #work
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		Read 2.4 hours		// #work
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	Friday
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	Saturday	// &lt;span class=&#34;ni&#34;&gt;#weekend&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	Sunday		// &lt;span class=&#34;ni&#34;&gt;#weekend&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	Saturday	// #weekend
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	Sunday		// #weekend
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Week 23
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
@@ -900,8 +912,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	Wednesday
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	Thursday
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	Friday
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	Saturday	// &lt;span class=&#34;ni&#34;&gt;#weekend&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	Sunday		// &lt;span class=&#34;ni&#34;&gt;#weekend&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	Saturday	// #weekend
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	Sunday		// #weekend&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0&#34;&gt;
   &lt;button
     class=&#34;hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50&#34;
     title=&#34;Copy code&#34;
@@ -935,7 +947,7 @@
 &lt;figure class=&#34;theme-figure&#34;&gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--light&#34;
-    src=&#34;http://localhost:1313/img/texttotile-tracking2b-light.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-tracking3-light.png&#34;
     alt=&#34;In Tag Groups View, all parts are grouped according to their primary tag&#34;
     title=&#34;In Tag Groups View, all parts are grouped according to their primary tag (click to zoom)&#34;
     data-zoomable
@@ -943,7 +955,7 @@
   &gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--dark&#34;
-    src=&#34;http://localhost:1313/img/texttotile-tracking2b-dark.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-tracking3-dark.png&#34;
     alt=&#34;In Tag Groups View, all parts are grouped according to their primary tag&#34;
     title=&#34;In Tag Groups View, all parts are grouped according to their primary tag (click to zoom)&#34;
     data-zoomable
@@ -967,7 +979,7 @@
 &lt;figure class=&#34;theme-figure&#34;&gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--light&#34;
-    src=&#34;http://localhost:1313/img/texttotile-tracking2c-light.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-tracking4-light.png&#34;
     alt=&#34;Only tag group #2 is active, the other two are passive&#34;
     title=&#34;Only tag group #2 is active, the other two are passive&#34;
     data-zoomable
@@ -975,7 +987,7 @@
   &gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--dark&#34;
-    src=&#34;http://localhost:1313/img/texttotile-tracking2c-dark.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-tracking4-dark.png&#34;
     alt=&#34;Only tag group #2 is active, the other two are passive&#34;
     title=&#34;Only tag group #2 is active, the other two are passive&#34;
     data-zoomable
@@ -1026,7 +1038,7 @@
 &lt;figure class=&#34;theme-figure&#34;&gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--light&#34;
-    src=&#34;http://localhost:1313/img/texttotile-tracking-zoom-light.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-tracking5-light.png&#34;
     alt=&#34;Zooming in on the chart for more details&#34;
     title=&#34;Zooming in on the chart for more details (click to zoom)&#34;
     data-zoomable
@@ -1034,7 +1046,7 @@
   &gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--dark&#34;
-    src=&#34;http://localhost:1313/img/texttotile-tracking-zoom-dark.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-tracking5-dark.png&#34;
     alt=&#34;Zooming in on the chart for more details&#34;
     title=&#34;Zooming in on the chart for more details (click to zoom)&#34;
     data-zoomable
@@ -1132,7 +1144,7 @@
 &lt;figure class=&#34;theme-figure&#34;&gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--light&#34;
-    src=&#34;http://localhost:1313/img/texttotile-tracking3-light.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-tracking6-light.png&#34;
     alt=&#34;Structured values shown as graphs&#34;
     title=&#34;Structured values turn your outline into visual graphs (click to zoom)&#34;
     data-zoomable
@@ -1140,7 +1152,7 @@
   &gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--dark&#34;
-    src=&#34;http://localhost:1313/img/texttotile-tracking3-dark.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-tracking6-dark.png&#34;
     alt=&#34;Structured values shown as graphs&#34;
     title=&#34;Structured values turn your outline into visual graphs (click to zoom)&#34;
     data-zoomable
@@ -1439,7 +1451,7 @@
 &lt;figure class=&#34;theme-figure&#34;&gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--light&#34;
-    src=&#34;http://localhost:1313/img/texttotile-tracking4-light.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-tracking7-light.png&#34;
     alt=&#34;Additional tags allow more detailed styling and categorization&#34;
     title=&#34;Additional tags allow more detailed styling and categorization (click to zoom)&#34;
     data-zoomable
@@ -1447,7 +1459,7 @@
   &gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--dark&#34;
-    src=&#34;http://localhost:1313/img/texttotile-tracking4-dark.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-tracking7-dark.png&#34;
     alt=&#34;Additional tags allow more detailed styling and categorization&#34;
     title=&#34;Additional tags allow more detailed styling and categorization (click to zoom)&#34;
     data-zoomable
@@ -1710,7 +1722,7 @@
 &lt;figure class=&#34;theme-figure&#34;&gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--light&#34;
-    src=&#34;http://localhost:1313/img/texttotile-tracking4b-light.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-tracking8-light.png&#34;
     alt=&#34;The same outline in Tag Groups View&#34;
     title=&#34;The same outline in Tag Groups View (click to zoom)&#34;
     data-zoomable
@@ -1718,7 +1730,7 @@
   &gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--dark&#34;
-    src=&#34;http://localhost:1313/img/texttotile-tracking4b-dark.png&#34;
+    src=&#34;http://localhost:1313/img/texttotile-tracking8-dark.png&#34;
     alt=&#34;The same outline in Tag Groups View&#34;
     title=&#34;The same outline in Tag Groups View (click to zoom)&#34;
     data-zoomable
@@ -2075,11 +2087,8 @@
     &lt;strong class=&#34;hx:text-lg&#34;&gt;Who is the app for?&lt;/strong&gt;
   &lt;/summary&gt;
   &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
-    &lt;ul&gt;
-&lt;li&gt;The app was originally built for personal use (writing articles and novels)&lt;/li&gt;
-&lt;li&gt;I had used other methods before, but was missing a tool that preserved a visual overview—even while restructuring, editing, and refining details&lt;/li&gt;
-&lt;li&gt;During the process, I realized the app could be useful for others with similar needs—and possibly for creating structure and overview in areas I haven’t even considered yet&lt;/li&gt;
-&lt;/ul&gt;
+    &lt;p&gt;TextToTile is for anyone who works with structured text and wants to keep the whole structure visible while working. It began as a tool for writing articles and novels, but it can also support planning, research, personal tracking, Kanban-style boards, travel ideas, and other text-based workflows.&lt;/p&gt;
+&lt;p&gt;It is especially useful when an outline is too large to hold in your head, but you still want to edit the original text directly.&lt;/p&gt;
 
   &lt;/div&gt;
 &lt;/details&gt;
@@ -2089,82 +2098,61 @@
     &lt;strong class=&#34;hx:text-lg&#34;&gt;Why was the app created?&lt;/strong&gt;
   &lt;/summary&gt;
   &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
-    &lt;ul&gt;
-&lt;li&gt;The app was created to solve a personal need: maintaining a clear visual overview while working with structured text&lt;/li&gt;
-&lt;li&gt;Existing tools either focused on writing or planning, but rarely supported both in a simple and consistent way&lt;/li&gt;
-&lt;li&gt;The goal was to combine simplicity, structure, and flexibility in one place&lt;/li&gt;
-&lt;/ul&gt;
+    &lt;p&gt;TextToTile was created to solve a simple problem: how to maintain a clear visual overview while restructuring, editing, and refining structured text.&lt;/p&gt;
+&lt;p&gt;Many tools focus primarily on either writing or planning. TextToTile keeps the information in a simple text file while providing a visual layer for seeing hierarchy, relationships, progress, and patterns.&lt;/p&gt;
 
   &lt;/div&gt;
 &lt;/details&gt;
 
 &lt;details class=&#34;hx:last-of-type:mb-0 hx:rounded-lg hx:bg-neutral-50 hx:dark:bg-neutral-800 hx:p-2 hx:mt-4 hx:group&#34; &gt;
   &lt;summary class=&#34;hx:flex hx:items-center hx:cursor-pointer hx:select-none hx:list-none hx:p-1 hx:rounded-sm hx:transition-colors hx:hover:bg-gray-100 hx:dark:hover:bg-neutral-800 hx:before:mr-1 hx:before:inline-block hx:before:transition-transform hx:before:content-[&#39;&#39;] hx:dark:before:invert hx:rtl:before:rotate-180 hx:group-open:before:rotate-90&#34;&gt;
-    &lt;strong class=&#34;hx:text-lg&#34;&gt;Does the app use AI?&lt;/strong&gt;
+    &lt;strong class=&#34;hx:text-lg&#34;&gt;What file formats are supported?&lt;/strong&gt;
   &lt;/summary&gt;
   &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
-    &lt;ul&gt;
-&lt;li&gt;There is no AI built into the app&lt;/li&gt;
-&lt;li&gt;However, it is well suited for integration with AI tools (e.g. Claude Code or similar)&lt;/li&gt;
-&lt;li&gt;AI can be used to read and maintain data in plain text files, which is much simpler than interacting with multiple complex graphical tools&lt;/li&gt;
-&lt;li&gt;Many platforms for managing personal data are online systems, which you may not want to share your data with—and may not want AI systems to access or control&lt;/li&gt;
-&lt;li&gt;No user accounts, no backend, no network calls&lt;/li&gt;
-&lt;/ul&gt;
+    &lt;p&gt;TextToTile works with ordinary plain-text and Markdown files, including &lt;code&gt;.txt&lt;/code&gt; and &lt;code&gt;.md&lt;/code&gt; files. Markdown is optional: indentation alone can define the hierarchy, while Markdown list markers can make an outline easier to read in other editors.&lt;/p&gt;
+&lt;p&gt;Because the files remain ordinary text, you can also open and edit them in your preferred text editor.&lt;/p&gt;
 
   &lt;/div&gt;
 &lt;/details&gt;
 
 &lt;details class=&#34;hx:last-of-type:mb-0 hx:rounded-lg hx:bg-neutral-50 hx:dark:bg-neutral-800 hx:p-2 hx:mt-4 hx:group&#34; &gt;
   &lt;summary class=&#34;hx:flex hx:items-center hx:cursor-pointer hx:select-none hx:list-none hx:p-1 hx:rounded-sm hx:transition-colors hx:hover:bg-gray-100 hx:dark:hover:bg-neutral-800 hx:before:mr-1 hx:before:inline-block hx:before:transition-transform hx:before:content-[&#39;&#39;] hx:dark:before:invert hx:rtl:before:rotate-180 hx:group-open:before:rotate-90&#34;&gt;
-    &lt;strong class=&#34;hx:text-lg&#34;&gt;What about security?&lt;/strong&gt;
+    &lt;strong class=&#34;hx:text-lg&#34;&gt;Can I use TextToTile with Obsidian?&lt;/strong&gt;
   &lt;/summary&gt;
   &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
-    &lt;ul&gt;
-&lt;li&gt;Strong focus on security and privacy&lt;/li&gt;
-&lt;li&gt;The app only has access to files and folders explicitly opened by the user&lt;/li&gt;
-&lt;li&gt;No background access to your system or data&lt;/li&gt;
-&lt;/ul&gt;
+    &lt;p&gt;Yes. Obsidian is a note-taking application built around Markdown files. TextToTile can open the same local text or Markdown files and act as a dedicated visual overview alongside Obsidian.&lt;/p&gt;
+&lt;p&gt;When the file changes in Obsidian, TextToTile updates its chart automatically. The same approach also works with VS Code and other text editors.&lt;/p&gt;
 
   &lt;/div&gt;
 &lt;/details&gt;
 
 &lt;details class=&#34;hx:last-of-type:mb-0 hx:rounded-lg hx:bg-neutral-50 hx:dark:bg-neutral-800 hx:p-2 hx:mt-4 hx:group&#34; &gt;
   &lt;summary class=&#34;hx:flex hx:items-center hx:cursor-pointer hx:select-none hx:list-none hx:p-1 hx:rounded-sm hx:transition-colors hx:hover:bg-gray-100 hx:dark:hover:bg-neutral-800 hx:before:mr-1 hx:before:inline-block hx:before:transition-transform hx:before:content-[&#39;&#39;] hx:dark:before:invert hx:rtl:before:rotate-180 hx:group-open:before:rotate-90&#34;&gt;
-    &lt;strong class=&#34;hx:text-lg&#34;&gt;What platform is the app built on?&lt;/strong&gt;
+    &lt;strong class=&#34;hx:text-lg&#34;&gt;Does TextToTile modify my files?&lt;/strong&gt;
   &lt;/summary&gt;
   &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
-    &lt;ul&gt;
-&lt;li&gt;Built with Tauri (designed for strong security and minimal system access)&lt;/li&gt;
-&lt;li&gt;The app has no network access and does not send or receive any data&lt;/li&gt;
-&lt;li&gt;All graphics are rendered as SVG&lt;/li&gt;
-&lt;li&gt;Text input (along with the toolbar and settings popup) is built using HTML&lt;/li&gt;
-&lt;/ul&gt;
+    TextToTile saves changes automatically whenever you edit text in its built-in editor. If you use TextToTile only as a chart view alongside another editor, it does not modify the file.
+  &lt;/div&gt;
+&lt;/details&gt;
+
+&lt;details class=&#34;hx:last-of-type:mb-0 hx:rounded-lg hx:bg-neutral-50 hx:dark:bg-neutral-800 hx:p-2 hx:mt-4 hx:group&#34; &gt;
+  &lt;summary class=&#34;hx:flex hx:items-center hx:cursor-pointer hx:select-none hx:list-none hx:p-1 hx:rounded-sm hx:transition-colors hx:hover:bg-gray-100 hx:dark:hover:bg-neutral-800 hx:before:mr-1 hx:before:inline-block hx:before:transition-transform hx:before:content-[&#39;&#39;] hx:dark:before:invert hx:rtl:before:rotate-180 hx:group-open:before:rotate-90&#34;&gt;
+    &lt;strong class=&#34;hx:text-lg&#34;&gt;Why doesn&amp;rsquo;t the built-in editor have undo and redo?&lt;/strong&gt;
+  &lt;/summary&gt;
+  &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
+    &lt;p&gt;Undo and redo are not available in the built-in editor at the moment. For substantial editing, we recommend maintaining your outline in your usual text editor, which will typically provide a fuller set of editing tools and features than TextToTile’s minimal editor.&lt;/p&gt;
+&lt;p&gt;TextToTile can then remain a dedicated, read-only chart view of the same file. If undo and redo would be important to your workflow, please share that feedback in &lt;a href=&#34;https://github.com/aowagner/texttotile/discussions&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;TextToTile Discussions&lt;/a&gt;. It may be added in a future version based on user needs.&lt;/p&gt;
 
   &lt;/div&gt;
 &lt;/details&gt;
 
 &lt;details class=&#34;hx:last-of-type:mb-0 hx:rounded-lg hx:bg-neutral-50 hx:dark:bg-neutral-800 hx:p-2 hx:mt-4 hx:group&#34; &gt;
   &lt;summary class=&#34;hx:flex hx:items-center hx:cursor-pointer hx:select-none hx:list-none hx:p-1 hx:rounded-sm hx:transition-colors hx:hover:bg-gray-100 hx:dark:hover:bg-neutral-800 hx:before:mr-1 hx:before:inline-block hx:before:transition-transform hx:before:content-[&#39;&#39;] hx:dark:before:invert hx:rtl:before:rotate-180 hx:group-open:before:rotate-90&#34;&gt;
-    &lt;strong class=&#34;hx:text-lg&#34;&gt;Are there more views coming?&lt;/strong&gt;
+    &lt;strong class=&#34;hx:text-lg&#34;&gt;What are tags and metadata?&lt;/strong&gt;
   &lt;/summary&gt;
   &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
-    &lt;ul&gt;
-&lt;li&gt;Currently includes Structure view and Tag group view&lt;/li&gt;
-&lt;li&gt;Additional views are possible, such as a monthly calendar or other ways to visualize structured text&lt;/li&gt;
-&lt;li&gt;Future development will likely be guided by practical needs—especially replacing existing tools where simple text-based management is sufficient&lt;/li&gt;
-&lt;/ul&gt;
-
-  &lt;/div&gt;
-&lt;/details&gt;
-
-&lt;details class=&#34;hx:last-of-type:mb-0 hx:rounded-lg hx:bg-neutral-50 hx:dark:bg-neutral-800 hx:p-2 hx:mt-4 hx:group&#34; &gt;
-  &lt;summary class=&#34;hx:flex hx:items-center hx:cursor-pointer hx:select-none hx:list-none hx:p-1 hx:rounded-sm hx:transition-colors hx:hover:bg-gray-100 hx:dark:hover:bg-neutral-800 hx:before:mr-1 hx:before:inline-block hx:before:transition-transform hx:before:content-[&#39;&#39;] hx:dark:before:invert hx:rtl:before:rotate-180 hx:group-open:before:rotate-90&#34;&gt;
-    &lt;strong class=&#34;hx:text-lg&#34;&gt;You mention Obsidian a lot - what is it?&lt;/strong&gt;
-  &lt;/summary&gt;
-  &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
-    &lt;ul&gt;
-&lt;li&gt;explain here&lt;/li&gt;
-&lt;/ul&gt;
+    &lt;p&gt;Tags are words prefixed with &lt;code&gt;#&lt;/code&gt;, such as &lt;code&gt;#work&lt;/code&gt; or &lt;code&gt;#research&lt;/code&gt;. They can group related parts of an outline and control how those parts appear in the chart.&lt;/p&gt;
+&lt;p&gt;Metadata is a value written with an &lt;code&gt;@&lt;/code&gt; prefix, such as &lt;code&gt;@sleep 8.5h&lt;/code&gt; or &lt;code&gt;@write 900&lt;/code&gt;. TextToTile can turn matching values into graphs. Read more on the &lt;a href=&#34;http://localhost:1313/docs/basics/&#34;&gt;Basics&lt;/a&gt; and &lt;a href=&#34;http://localhost:1313/docs/graphs/&#34;&gt;Graphs&lt;/a&gt; pages.&lt;/p&gt;
 
   &lt;/div&gt;
 &lt;/details&gt;
@@ -2174,23 +2162,93 @@
     &lt;strong class=&#34;hx:text-lg&#34;&gt;What is CSS?&lt;/strong&gt;
   &lt;/summary&gt;
   &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
-    &lt;ul&gt;
-&lt;li&gt;explain here&lt;/li&gt;
-&lt;/ul&gt;
+    &lt;p&gt;CSS is a simple language for describing visual appearance. In TextToTile, you can use a small CSS-style block to assign colors, icons, borders, and text styling to tags or individual parts.&lt;/p&gt;
+&lt;p&gt;You do not need to use CSS to get started. It is an optional way to make a chart fit your own workflow. See &lt;a href=&#34;http://localhost:1313/docs/styles/&#34;&gt;Styling with Tags&lt;/a&gt; for examples.&lt;/p&gt;
 
   &lt;/div&gt;
 &lt;/details&gt;
 
 &lt;details class=&#34;hx:last-of-type:mb-0 hx:rounded-lg hx:bg-neutral-50 hx:dark:bg-neutral-800 hx:p-2 hx:mt-4 hx:group&#34; &gt;
   &lt;summary class=&#34;hx:flex hx:items-center hx:cursor-pointer hx:select-none hx:list-none hx:p-1 hx:rounded-sm hx:transition-colors hx:hover:bg-gray-100 hx:dark:hover:bg-neutral-800 hx:before:mr-1 hx:before:inline-block hx:before:transition-transform hx:before:content-[&#39;&#39;] hx:dark:before:invert hx:rtl:before:rotate-180 hx:group-open:before:rotate-90&#34;&gt;
-    &lt;strong class=&#34;hx:text-lg&#34;&gt;How can I give feedback?&lt;/strong&gt;
+    &lt;strong class=&#34;hx:text-lg&#34;&gt;Does the app use AI?&lt;/strong&gt;
   &lt;/summary&gt;
   &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
-    &lt;ul&gt;
-&lt;li&gt;Feedback and suggestions are very welcome&lt;/li&gt;
-&lt;li&gt;Please share your ideas, use cases, or feature requests via GitHub Discussions or the project repository&lt;/li&gt;
-&lt;/ul&gt;
+    &lt;p&gt;No. TextToTile has no built-in AI, user accounts, backend, or network calls.&lt;/p&gt;
+&lt;p&gt;Because its information lives in ordinary text files, you can choose to work on those files with AI tools if that suits your workflow. That is separate from TextToTile itself: you remain in control of which tools can access your files.&lt;/p&gt;
 
+  &lt;/div&gt;
+&lt;/details&gt;
+
+&lt;details class=&#34;hx:last-of-type:mb-0 hx:rounded-lg hx:bg-neutral-50 hx:dark:bg-neutral-800 hx:p-2 hx:mt-4 hx:group&#34; &gt;
+  &lt;summary class=&#34;hx:flex hx:items-center hx:cursor-pointer hx:select-none hx:list-none hx:p-1 hx:rounded-sm hx:transition-colors hx:hover:bg-gray-100 hx:dark:hover:bg-neutral-800 hx:before:mr-1 hx:before:inline-block hx:before:transition-transform hx:before:content-[&#39;&#39;] hx:dark:before:invert hx:rtl:before:rotate-180 hx:group-open:before:rotate-90&#34;&gt;
+    &lt;strong class=&#34;hx:text-lg&#34;&gt;What about privacy and security?&lt;/strong&gt;
+  &lt;/summary&gt;
+  &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
+    &lt;p&gt;TextToTile is designed to keep your information on your own computer. It only accesses files and folders that you explicitly open, and it does not have background access to the rest of your system.&lt;/p&gt;
+&lt;p&gt;The app has no network access and does not send or receive your text—or any other data.&lt;/p&gt;
+
+  &lt;/div&gt;
+&lt;/details&gt;
+
+&lt;details class=&#34;hx:last-of-type:mb-0 hx:rounded-lg hx:bg-neutral-50 hx:dark:bg-neutral-800 hx:p-2 hx:mt-4 hx:group&#34; &gt;
+  &lt;summary class=&#34;hx:flex hx:items-center hx:cursor-pointer hx:select-none hx:list-none hx:p-1 hx:rounded-sm hx:transition-colors hx:hover:bg-gray-100 hx:dark:hover:bg-neutral-800 hx:before:mr-1 hx:before:inline-block hx:before:transition-transform hx:before:content-[&#39;&#39;] hx:dark:before:invert hx:rtl:before:rotate-180 hx:group-open:before:rotate-90&#34;&gt;
+    &lt;strong class=&#34;hx:text-lg&#34;&gt;Where are settings stored?&lt;/strong&gt;
+  &lt;/summary&gt;
+  &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
+    &lt;p&gt;Settings are stored locally in TextToTile’s application-data folder on your computer. This includes preferences and information such as pinned files and their view settings.&lt;/p&gt;
+&lt;p&gt;These settings are not stored in a cloud account or sent to a server.&lt;/p&gt;
+
+  &lt;/div&gt;
+&lt;/details&gt;
+
+&lt;details class=&#34;hx:last-of-type:mb-0 hx:rounded-lg hx:bg-neutral-50 hx:dark:bg-neutral-800 hx:p-2 hx:mt-4 hx:group&#34; &gt;
+  &lt;summary class=&#34;hx:flex hx:items-center hx:cursor-pointer hx:select-none hx:list-none hx:p-1 hx:rounded-sm hx:transition-colors hx:hover:bg-gray-100 hx:dark:hover:bg-neutral-800 hx:before:mr-1 hx:before:inline-block hx:before:transition-transform hx:before:content-[&#39;&#39;] hx:dark:before:invert hx:rtl:before:rotate-180 hx:group-open:before:rotate-90&#34;&gt;
+    &lt;strong class=&#34;hx:text-lg&#34;&gt;What platform is the app built on?&lt;/strong&gt;
+  &lt;/summary&gt;
+  &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
+    TextToTile is built with Tauri, a framework designed for small, secure desktop applications with limited system access. The chart is rendered as SVG, while the editor, toolbar, and settings interface use standard web technologies.
+  &lt;/div&gt;
+&lt;/details&gt;
+
+&lt;details class=&#34;hx:last-of-type:mb-0 hx:rounded-lg hx:bg-neutral-50 hx:dark:bg-neutral-800 hx:p-2 hx:mt-4 hx:group&#34; &gt;
+  &lt;summary class=&#34;hx:flex hx:items-center hx:cursor-pointer hx:select-none hx:list-none hx:p-1 hx:rounded-sm hx:transition-colors hx:hover:bg-gray-100 hx:dark:hover:bg-neutral-800 hx:before:mr-1 hx:before:inline-block hx:before:transition-transform hx:before:content-[&#39;&#39;] hx:dark:before:invert hx:rtl:before:rotate-180 hx:group-open:before:rotate-90&#34;&gt;
+    &lt;strong class=&#34;hx:text-lg&#34;&gt;Are more views planned?&lt;/strong&gt;
+  &lt;/summary&gt;
+  &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
+    &lt;p&gt;TextToTile currently includes Structure View and Tag Groups View. Additional views are possible, including calendar-like views and other ways to visualize structured text.&lt;/p&gt;
+&lt;p&gt;Future development will be guided by practical use cases—especially where a simple text-based workflow can replace a more complex tool.&lt;/p&gt;
+
+  &lt;/div&gt;
+&lt;/details&gt;
+
+&lt;details class=&#34;hx:last-of-type:mb-0 hx:rounded-lg hx:bg-neutral-50 hx:dark:bg-neutral-800 hx:p-2 hx:mt-4 hx:group&#34; &gt;
+  &lt;summary class=&#34;hx:flex hx:items-center hx:cursor-pointer hx:select-none hx:list-none hx:p-1 hx:rounded-sm hx:transition-colors hx:hover:bg-gray-100 hx:dark:hover:bg-neutral-800 hx:before:mr-1 hx:before:inline-block hx:before:transition-transform hx:before:content-[&#39;&#39;] hx:dark:before:invert hx:rtl:before:rotate-180 hx:group-open:before:rotate-90&#34;&gt;
+    &lt;strong class=&#34;hx:text-lg&#34;&gt;Why does Windows SmartScreen appear during installation?&lt;/strong&gt;
+  &lt;/summary&gt;
+  &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
+    &lt;p&gt;The current beta installer is not code-signed yet. Windows SmartScreen may therefore show a warning because it cannot verify the publisher’s reputation in the usual way; this does not mean that SmartScreen has found malware.&lt;/p&gt;
+&lt;p&gt;If you downloaded the installer from the official TextToTile release page, select &lt;strong&gt;More info&lt;/strong&gt; and then &lt;strong&gt;Run anyway&lt;/strong&gt;. See the &lt;a href=&#34;http://localhost:1313/docs/download/&#34;&gt;Download page&lt;/a&gt; for the current installation guidance.&lt;/p&gt;
+
+  &lt;/div&gt;
+&lt;/details&gt;
+
+&lt;details class=&#34;hx:last-of-type:mb-0 hx:rounded-lg hx:bg-neutral-50 hx:dark:bg-neutral-800 hx:p-2 hx:mt-4 hx:group&#34; &gt;
+  &lt;summary class=&#34;hx:flex hx:items-center hx:cursor-pointer hx:select-none hx:list-none hx:p-1 hx:rounded-sm hx:transition-colors hx:hover:bg-gray-100 hx:dark:hover:bg-neutral-800 hx:before:mr-1 hx:before:inline-block hx:before:transition-transform hx:before:content-[&#39;&#39;] hx:dark:before:invert hx:rtl:before:rotate-180 hx:group-open:before:rotate-90&#34;&gt;
+    &lt;strong class=&#34;hx:text-lg&#34;&gt;Why does macOS warn when opening the app for the first time?&lt;/strong&gt;
+  &lt;/summary&gt;
+  &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
+    &lt;p&gt;The current beta app is not code-signed or notarized yet, so macOS cannot verify it automatically. This is why macOS may say that the app cannot be verified.&lt;/p&gt;
+&lt;p&gt;If you downloaded the app from the official TextToTile release page, open &lt;strong&gt;System Settings&lt;/strong&gt; → &lt;strong&gt;Privacy &amp;amp; Security&lt;/strong&gt; and choose &lt;strong&gt;Open Anyway&lt;/strong&gt;. See the &lt;a href=&#34;http://localhost:1313/docs/download/&#34;&gt;Download page&lt;/a&gt; for the full steps.&lt;/p&gt;
+
+  &lt;/div&gt;
+&lt;/details&gt;
+
+&lt;details class=&#34;hx:last-of-type:mb-0 hx:rounded-lg hx:bg-neutral-50 hx:dark:bg-neutral-800 hx:p-2 hx:mt-4 hx:group&#34; &gt;
+  &lt;summary class=&#34;hx:flex hx:items-center hx:cursor-pointer hx:select-none hx:list-none hx:p-1 hx:rounded-sm hx:transition-colors hx:hover:bg-gray-100 hx:dark:hover:bg-neutral-800 hx:before:mr-1 hx:before:inline-block hx:before:transition-transform hx:before:content-[&#39;&#39;] hx:dark:before:invert hx:rtl:before:rotate-180 hx:group-open:before:rotate-90&#34;&gt;
+    &lt;strong class=&#34;hx:text-lg&#34;&gt;How can I ask questions and give feedback?&lt;/strong&gt;
+  &lt;/summary&gt;
+  &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
+    Questions, ideas, bug reports, workflow examples, and installation feedback are all welcome. The best place to share them is &lt;a href=&#34;https://github.com/aowagner/texttotile/discussions&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;TextToTile Discussions&lt;/a&gt;.
   &lt;/div&gt;
 &lt;/details&gt;
 
@@ -2209,31 +2267,82 @@
       <description>
         
         
-        &lt;h3&gt;Content coming soon&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;content-coming-soon&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#content-coming-soon&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;!-- TODO!
+        &lt;h2&gt;Styling the app&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;styling-the-app&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#styling-the-app&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Tags control how the content of an outline appears. In &lt;code&gt;Settings → Style&lt;/code&gt;, you can also customize the overall appearance of TextToTile itself: its fonts, background, text color, outlines, and more.&lt;/p&gt;
+&lt;p&gt;These are global styles, so they apply across all outlines. Changes take effect immediately.&lt;/p&gt;
+&lt;figure class=&#34;theme-figure&#34;&gt;
+  &lt;img
+    class=&#34;theme-figure__img theme-figure__img--light&#34;
+    src=&#34;http://localhost:1313/img/texttotile-advanced1-light.png&#34;
+    alt=&#34;Adjusting UI elements&#34;
+    title=&#34;Adjusting UI elements (click to zoom)&#34;
+    data-zoomable
+    loading=&#34;lazy&#34;
+  &gt;
+  &lt;img
+    class=&#34;theme-figure__img theme-figure__img--dark&#34;
+    src=&#34;http://localhost:1313/img/texttotile-advanced1-dark.png&#34;
+    alt=&#34;Adjusting UI elements&#34;
+    title=&#34;Adjusting UI elements (click to zoom)&#34;
+    data-zoomable
+    loading=&#34;lazy&#34;
+  &gt;
+  
+    &lt;figcaption&gt;Adjusting UI elements (click to zoom)&lt;/figcaption&gt;
+  
+&lt;/figure&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;svg height=1.2em class=&#34;hx:inline-block hx:align-middle&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34; fill=&#34;none&#34; viewBox=&#34;0 0 24 24&#34; stroke-width=&#34;2&#34; stroke=&#34;currentColor&#34; aria-hidden=&#34;true&#34;&gt;&lt;path stroke-linecap=&#34;round&#34; stroke-linejoin=&#34;round&#34; d=&#34;M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z&#34;/&gt;&lt;/svg&gt;&lt;/div&gt;
 
-## App Styling
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;Use the theme toggle in the documentation navigation to view this example in both light and dark mode.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
 
+&lt;h2&gt;Global style defaults&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;global-style-defaults&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#global-style-defaults&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;The &lt;code&gt;:root&lt;/code&gt; rule sets defaults shared by both themes. The &lt;code&gt;:root.theme-light&lt;/code&gt; and &lt;code&gt;:root.theme-dark&lt;/code&gt; rules then set values only for the active theme.&lt;/p&gt;
+&lt;p&gt;In the example above, &lt;code&gt;--fontfamily&lt;/code&gt; changes the app’s general font to &lt;code&gt;verdana&lt;/code&gt;, while &lt;code&gt;--fontfamily-texteditor&lt;/code&gt; changes the editor font to &lt;code&gt;courier&lt;/code&gt;. The color values for &lt;code&gt;--fill&lt;/code&gt;, &lt;code&gt;--text&lt;/code&gt;, and &lt;code&gt;--stroke&lt;/code&gt; differ between the light and dark themes.&lt;/p&gt;
+&lt;div class=&#34;hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code&#34;&gt;
 
+&lt;div class=&#34;hextra-code-filename not-prose&#34; dir=&#34;auto&#34;&gt;Settings → Style&lt;/div&gt;&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-css&#34; data-lang=&#34;css&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;nd&#34;&gt;root&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nv&#34;&gt;--fontfamily&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;verdana&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nv&#34;&gt;--fontfamily-texteditor&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;courier&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nv&#34;&gt;--strokewidth&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;nd&#34;&gt;root&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nc&#34;&gt;theme-light&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nv&#34;&gt;--fill&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mh&#34;&gt;#f0f8ff&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nv&#34;&gt;--text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;darkblue&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nv&#34;&gt;--stroke&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;white&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;nd&#34;&gt;root&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nc&#34;&gt;theme-dark&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nv&#34;&gt;--fill&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mh&#34;&gt;#800&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nv&#34;&gt;--text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;yellow&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nv&#34;&gt;--stroke&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;black&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-8&#34;&gt;
+  &lt;button
+    class=&#34;hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50&#34;
+    title=&#34;Copy code&#34;
+    aria-label=&#34;Copy code&#34;
+    data-copied-label=&#34;Copied!&#34;
+  &gt;
+    &lt;div class=&#34;hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+&lt;div class=&#34;hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;--fill&lt;/code&gt; sets the overall background color of the app, &lt;code&gt;--text&lt;/code&gt; sets the default text color, and &lt;code&gt;--stroke&lt;/code&gt; and &lt;code&gt;--strokewidth&lt;/code&gt; control outlines. You can use any valid CSS color name or hex color value.&lt;/p&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;svg height=1.2em class=&#34;hx:inline-block hx:align-middle&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34; fill=&#34;none&#34; viewBox=&#34;0 0 24 24&#34; stroke-width=&#34;2&#34; stroke=&#34;currentColor&#34; aria-hidden=&#34;true&#34;&gt;&lt;path stroke-linecap=&#34;round&#34; stroke-linejoin=&#34;round&#34; d=&#34;M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z&#34;/&gt;&lt;/svg&gt;&lt;/div&gt;
 
-UI kontrol med Style. Eg. fill bg. (to Styles page?)
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;p&gt;Global styles establish the default appearance. Tag styles and inline styling remain more specific, so they continue to override the defaults where they apply.&lt;/p&gt;
+&lt;p&gt;Place your &lt;code&gt;:root&lt;/code&gt; and theme rules at the top of &lt;code&gt;Settings → Style&lt;/code&gt;, followed by tag-specific rules. This keeps the order and priority of your styles predictable. See &lt;a href=&#34;http://localhost:1313/docs/styles/&#34;&gt;Styling with Tags&lt;/a&gt; for tag and inline styling examples.&lt;/p&gt;
+&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
 
-
-Use of real css, and explanation of &#39;substitutions&#39;: # -&gt; .   and @ -&gt; --
-
-example with styling the whole app blue
-
-example with styling the textarea?
-
-
---&gt;
-&lt;!-- later
-
-## Global Styling for Specific Documents
-
-First: make the code for extracting cssclasses from frontmatter and setting on body
-
---&gt;
 &lt;!-- invisible image required to trigger Hextra’s medium-zoom initialization, enabling zoom on shortcode-rendered images --&gt;
 &lt;p&gt;&lt;img src=&#34;http://localhost:1313/img/transparent.png&#34; alt=&#34;hextra-zoom-init&#34;  data-zoomable loading=&#34;lazy&#34; /&gt;&lt;/p&gt;
 

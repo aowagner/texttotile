@@ -49,7 +49,7 @@ TextToTile starts with something simple: writing structured text.
   <meta itemprop="description" content="Editor Changes to the text is shown in real-time as a chart (click to zoom) TextToTile starts with something simple: writing structured text.">
   <meta itemprop="datePublished" content="2026-02-28T11:09:51+01:00">
   <meta itemprop="dateModified" content="2026-02-28T11:09:51+01:00">
-  <meta itemprop="wordCount" content="1881">
+  <meta itemprop="wordCount" content="2046">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Basics">
   <meta name="twitter:description" content="Editor Changes to the text is shown in real-time as a chart (click to zoom) TextToTile starts with something simple: writing structured text.">
@@ -637,7 +637,7 @@ TextToTile starts with something simple: writing structured text.
   <div class="hx:p-2 hx:overflow-hidden">
     <div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
 
-<div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl">Week 22
+<div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Week 22
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	Monday
 </span></span><span class="line"><span class="cl">		Weight 79.8 kg
@@ -690,8 +690,20 @@ TextToTile starts with something simple: writing structured text.
   </div>
 </details>
 
+<div class="hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200">
+  <div class="hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2"><svg height=1.2em class="hx:inline-block hx:align-middle" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+
+  <div class="hx:w-full hx:min-w-0 hx:leading-7">
+    <div class="hx:mt-6 hx:leading-7 hx:first:mt-0"><p>These examples uses indentation without Markdown list markers (<code>-</code>) and includes blank lines to make the structure easier to read on this page. TextToTile does not require Markdown; indentation alone defines the hierarchy.</p>
+<p>In a working outline, you may prefer conventional Markdown lists. Many editors use the <code>-</code> markers to provide list commands, such as moving a section or branch up and down. The best approach depends on your preferred editor and workflow.</p>
+</div>
+  </div>
+</div>
+
 <h2>Works with your regular editor<span class="hx:absolute hx:-mt-20" id="works-with-your-regular-editor"></span>
     <a href="#works-with-your-regular-editor" class="subheading-anchor" aria-label="Permalink for this section"></a></h2><p>You do not have to use the built-in editor at all. TextToTile can also be used as a dedicated chart view alongside your preferred writing environment — such as Obsidian, VS Code, or any plain text editor working with local files.</p>
+<p>For larger or ongoing work, a dedicated editor is often the better place to maintain the text. It offers fuller editing tools, such as undo and redo, search and replace, version control, and editor-specific features. When you use TextToTile only as a chart view, it remains read-only and never writes to your file.</p>
+<p>The built-in editor is still perfectly suitable for quick changes and focused work. You can also combine both approaches: edit primarily in another application, then use TextToTile’s editor whenever it is the most convenient place to make a change.</p>
 <p>When the file changes, the visualization updates automatically. Some apps save continuously, while others require a manual save (<code>Cmd/Ctrl+S</code>), but the result is the same: your chart stays synchronized with the text.</p>
 <p>You can also click sections, columns, or parts in the chart to jump directly to the corresponding line in the built-in editor, making navigation easier in larger outlines.</p>
 <h2>Tags and Colors<span class="hx:absolute hx:-mt-20" id="tags-and-colors"></span>
@@ -741,70 +753,70 @@ TextToTile starts with something simple: writing structured text.
   <div class="hx:p-2 hx:overflow-hidden">
     <div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
 
-<div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl"><span class="s">```css
-</span></span></span><span class="line"><span class="cl"><span class="p">#</span><span class="nn">metrics</span>	<span class="p">{</span><span class="err">@</span><span class="k">fill</span><span class="p">:</span> <span class="kc">darkorange</span><span class="p">;</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">#</span><span class="nn">exercise</span>	<span class="p">{</span><span class="err">@</span><span class="k">fill</span><span class="p">:</span> <span class="kc">seagreen</span><span class="p">;</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">#</span><span class="nn">work</span>		<span class="p">{</span><span class="err">@</span><span class="k">fill</span><span class="p">:</span> <span class="kc">steelblue</span><span class="p">;</span> <span class="p">}</span>
+<div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">```css
+</span></span><span class="line"><span class="cl">#metrics	{@fill: darkorange; }
+</span></span><span class="line"><span class="cl">#exercise	{@fill: seagreen; }
+</span></span><span class="line"><span class="cl">#work		{@fill: steelblue; }
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="p">#</span><span class="nn">weekend</span> 	<span class="p">{</span><span class="err">@</span><span class="k">fill</span><span class="p">:</span> <span class="kc">dodgerblue</span><span class="p">;</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="s">```</span>
+</span></span><span class="line"><span class="cl">#weekend 	{@fill: dodgerblue; }
+</span></span><span class="line"><span class="cl">```
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">Week 22
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	Monday
-</span></span><span class="line"><span class="cl">		Weight 79.8 kg		// <span class="ni">#metrics</span>
-</span></span><span class="line"><span class="cl">		BMI 20.5			// <span class="ni">#metrics</span>
-</span></span><span class="line"><span class="cl">		Sleep 8.5 hours		// <span class="ni">#metrics</span>
+</span></span><span class="line"><span class="cl">		Weight 79.8 kg		// #metrics
+</span></span><span class="line"><span class="cl">		BMI 20.5			// #metrics
+</span></span><span class="line"><span class="cl">		Sleep 8.5 hours		// #metrics
 </span></span><span class="line"><span class="cl">			Apparently I needed it :-)
-</span></span><span class="line"><span class="cl">		Energy 70%			// <span class="ni">#metrics</span>
-</span></span><span class="line"><span class="cl">		Run 1.5 km			// <span class="ni">#exercise</span>
-</span></span><span class="line"><span class="cl">		Swim 800 meter		// <span class="ni">#exercise</span>
+</span></span><span class="line"><span class="cl">		Energy 70%			// #metrics
+</span></span><span class="line"><span class="cl">		Run 1.5 km			// #exercise
+</span></span><span class="line"><span class="cl">		Swim 800 meter		// #exercise
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">		Write 900 words		// <span class="ni">#work</span>
-</span></span><span class="line"><span class="cl">			Editing main plot lines	// <span class="ni">#work</span> <span class="ni">#novel</span>
+</span></span><span class="line"><span class="cl">		Write 900 words		// #work
+</span></span><span class="line"><span class="cl">			Editing main plot lines	// #work #novel
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">		Read 1.5 hours		// <span class="ni">#work</span>
-</span></span><span class="line"><span class="cl">			Anathem: Chapter 7	// <span class="ni">#novel</span> <span class="ni">#stephenson</span>
+</span></span><span class="line"><span class="cl">		Read 1.5 hours		// #work
+</span></span><span class="line"><span class="cl">			Anathem: Chapter 7	// #novel #stephenson
 </span></span><span class="line"><span class="cl">				Interesting shift in pace — more philosophical than earlier chapters
 </span></span><span class="line"><span class="cl">				Still getting used to the terminology, but the world is starting to make more sense
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">			Medium: Articles on coding	// <span class="ni">#coding</span>
+</span></span><span class="line"><span class="cl">			Medium: Articles on coding	// #coding
 </span></span><span class="line"><span class="cl">				A few solid takeaways — especially about keeping code readable
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	Tuesday
-</span></span><span class="line"><span class="cl">		<span class="ni">#void</span>
-</span></span><span class="line"><span class="cl">		<span class="ni">#void</span>
-</span></span><span class="line"><span class="cl">		Sleep 6.5 hours		// <span class="ni">#metrics</span>
-</span></span><span class="line"><span class="cl">		Energy 80%			// <span class="ni">#metrics</span>
-</span></span><span class="line"><span class="cl">		Run 2.0 km			// <span class="ni">#exercise</span>
-</span></span><span class="line"><span class="cl">		Swim 1200 meter		// <span class="ni">#exercise</span>
-</span></span><span class="line"><span class="cl">		Write 1100 words	// <span class="ni">#work</span>
-</span></span><span class="line"><span class="cl">		Read 2.5 hours		// <span class="ni">#work</span>
-</span></span><span class="line"><span class="cl">			Anathem: Chapter 8+9	// <span class="ni">#novel</span> <span class="ni">#stephenson</span>
+</span></span><span class="line"><span class="cl">		#void
+</span></span><span class="line"><span class="cl">		#void
+</span></span><span class="line"><span class="cl">		Sleep 6.5 hours		// #metrics
+</span></span><span class="line"><span class="cl">		Energy 80%			// #metrics
+</span></span><span class="line"><span class="cl">		Run 2.0 km			// #exercise
+</span></span><span class="line"><span class="cl">		Swim 1200 meter		// #exercise
+</span></span><span class="line"><span class="cl">		Write 1100 words	// #work
+</span></span><span class="line"><span class="cl">		Read 2.5 hours		// #work
+</span></span><span class="line"><span class="cl">			Anathem: Chapter 8+9	// #novel #stephenson
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	Wednesday
-</span></span><span class="line"><span class="cl">		<span class="ni">#void</span>
-</span></span><span class="line"><span class="cl">		<span class="ni">#void</span>
-</span></span><span class="line"><span class="cl">		Sleep 6.2 hours		// <span class="ni">#metrics</span>
-</span></span><span class="line"><span class="cl">		Energy 70%			// <span class="ni">#metrics</span>
-</span></span><span class="line"><span class="cl">		<span class="ni">#void</span>
-</span></span><span class="line"><span class="cl">		<span class="ni">#void</span>
-</span></span><span class="line"><span class="cl">		Write 850 words		// <span class="ni">#work</span>
-</span></span><span class="line"><span class="cl">		Read 2.2 hours		// <span class="ni">#work</span>
+</span></span><span class="line"><span class="cl">		#void
+</span></span><span class="line"><span class="cl">		#void
+</span></span><span class="line"><span class="cl">		Sleep 6.2 hours		// #metrics
+</span></span><span class="line"><span class="cl">		Energy 70%			// #metrics
+</span></span><span class="line"><span class="cl">		#void
+</span></span><span class="line"><span class="cl">		#void
+</span></span><span class="line"><span class="cl">		Write 850 words		// #work
+</span></span><span class="line"><span class="cl">		Read 2.2 hours		// #work
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	Thursday
-</span></span><span class="line"><span class="cl">		<span class="ni">#void</span>
-</span></span><span class="line"><span class="cl">		<span class="ni">#void</span>
-</span></span><span class="line"><span class="cl">		Sleep 5.6 hours		// <span class="ni">#metrics</span>
-</span></span><span class="line"><span class="cl">		Energy 60%			// <span class="ni">#metrics</span>
-</span></span><span class="line"><span class="cl">		Run 1.8 km			// <span class="ni">#exercise</span>
-</span></span><span class="line"><span class="cl">		Swim 900 meter		// <span class="ni">#exercise</span>
-</span></span><span class="line"><span class="cl">		Write 950 words		// <span class="ni">#work</span>
-</span></span><span class="line"><span class="cl">		Read 2.4 hours		// <span class="ni">#work</span>
+</span></span><span class="line"><span class="cl">		#void
+</span></span><span class="line"><span class="cl">		#void
+</span></span><span class="line"><span class="cl">		Sleep 5.6 hours		// #metrics
+</span></span><span class="line"><span class="cl">		Energy 60%			// #metrics
+</span></span><span class="line"><span class="cl">		Run 1.8 km			// #exercise
+</span></span><span class="line"><span class="cl">		Swim 900 meter		// #exercise
+</span></span><span class="line"><span class="cl">		Write 950 words		// #work
+</span></span><span class="line"><span class="cl">		Read 2.4 hours		// #work
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	Friday
-</span></span><span class="line"><span class="cl">	Saturday	// <span class="ni">#weekend</span>
-</span></span><span class="line"><span class="cl">	Sunday		// <span class="ni">#weekend</span>
+</span></span><span class="line"><span class="cl">	Saturday	// #weekend
+</span></span><span class="line"><span class="cl">	Sunday		// #weekend
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">Week 23
 </span></span><span class="line"><span class="cl">
@@ -813,8 +825,8 @@ TextToTile starts with something simple: writing structured text.
 </span></span><span class="line"><span class="cl">	Wednesday
 </span></span><span class="line"><span class="cl">	Thursday
 </span></span><span class="line"><span class="cl">	Friday
-</span></span><span class="line"><span class="cl">	Saturday	// <span class="ni">#weekend</span>
-</span></span><span class="line"><span class="cl">	Sunday		// <span class="ni">#weekend</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+</span></span><span class="line"><span class="cl">	Saturday	// #weekend
+</span></span><span class="line"><span class="cl">	Sunday		// #weekend</span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
   <button
     class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
     title="Copy code"
@@ -848,7 +860,7 @@ TextToTile starts with something simple: writing structured text.
 <figure class="theme-figure">
   <img
     class="theme-figure__img theme-figure__img--light"
-    src="http://localhost:1313/img/texttotile-tracking2b-light.png"
+    src="http://localhost:1313/img/texttotile-tracking3-light.png"
     alt="In Tag Groups View, all parts are grouped according to their primary tag"
     title="In Tag Groups View, all parts are grouped according to their primary tag (click to zoom)"
     data-zoomable
@@ -856,7 +868,7 @@ TextToTile starts with something simple: writing structured text.
   >
   <img
     class="theme-figure__img theme-figure__img--dark"
-    src="http://localhost:1313/img/texttotile-tracking2b-dark.png"
+    src="http://localhost:1313/img/texttotile-tracking3-dark.png"
     alt="In Tag Groups View, all parts are grouped according to their primary tag"
     title="In Tag Groups View, all parts are grouped according to their primary tag (click to zoom)"
     data-zoomable
@@ -880,7 +892,7 @@ TextToTile starts with something simple: writing structured text.
 <figure class="theme-figure">
   <img
     class="theme-figure__img theme-figure__img--light"
-    src="http://localhost:1313/img/texttotile-tracking2c-light.png"
+    src="http://localhost:1313/img/texttotile-tracking4-light.png"
     alt="Only tag group #2 is active, the other two are passive"
     title="Only tag group #2 is active, the other two are passive"
     data-zoomable
@@ -888,7 +900,7 @@ TextToTile starts with something simple: writing structured text.
   >
   <img
     class="theme-figure__img theme-figure__img--dark"
-    src="http://localhost:1313/img/texttotile-tracking2c-dark.png"
+    src="http://localhost:1313/img/texttotile-tracking4-dark.png"
     alt="Only tag group #2 is active, the other two are passive"
     title="Only tag group #2 is active, the other two are passive"
     data-zoomable
@@ -939,7 +951,7 @@ TextToTile starts with something simple: writing structured text.
 <figure class="theme-figure">
   <img
     class="theme-figure__img theme-figure__img--light"
-    src="http://localhost:1313/img/texttotile-tracking-zoom-light.png"
+    src="http://localhost:1313/img/texttotile-tracking5-light.png"
     alt="Zooming in on the chart for more details"
     title="Zooming in on the chart for more details (click to zoom)"
     data-zoomable
@@ -947,7 +959,7 @@ TextToTile starts with something simple: writing structured text.
   >
   <img
     class="theme-figure__img theme-figure__img--dark"
-    src="http://localhost:1313/img/texttotile-tracking-zoom-dark.png"
+    src="http://localhost:1313/img/texttotile-tracking5-dark.png"
     alt="Zooming in on the chart for more details"
     title="Zooming in on the chart for more details (click to zoom)"
     data-zoomable

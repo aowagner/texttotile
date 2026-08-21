@@ -16,7 +16,7 @@
         "height": 600,
 		"maximized": true,
 		"resizable": true,
-		"devtools": false
+		"devtools": true
       }
     ],
     "security": {
