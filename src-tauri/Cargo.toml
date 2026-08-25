@@ -1,6 +1,6 @@
 [package]
 name = "texttotile"
-version = "0.2.1"
+version = "0.9.0"
 description = "Visualize and navigate structured plain-text outlines."
 authors = ["A. O. Wagner"]
 edition = "2021"
@@ -21,7 +21,7 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 tauri-build = { version = "2", features = []   }
 
 [dependencies]
-tauri = { version = "2", features = ["devtools"] }
+tauri = { version = "2", features = [] }
 tauri-plugin-opener = "2"
 tauri-plugin-clipboard-manager = "2"
 tauri-plugin-dialog = "2.6.0"
