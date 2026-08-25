@@ -49,7 +49,7 @@ TextToTile starts with something simple: writing structured text.
   <meta itemprop="description" content="Editor Changes to the text is shown in real-time as a chart (click to zoom) TextToTile starts with something simple: writing structured text.">
   <meta itemprop="datePublished" content="2026-02-28T11:09:51+01:00">
   <meta itemprop="dateModified" content="2026-02-28T11:09:51+01:00">
-  <meta itemprop="wordCount" content="2046">
+  <meta itemprop="wordCount" content="2260">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Basics">
   <meta name="twitter:description" content="Editor Changes to the text is shown in real-time as a chart (click to zoom) TextToTile starts with something simple: writing structured text.">
@@ -338,9 +338,9 @@ TextToTile starts with something simple: writing structured text.
             </li>
           <li>
               <a
-                href="#tag-groups-view"
+                href="#tag-groups-layout"
                 class="hx:flex hx:rounded-sm hx:px-2 hx:py-1.5 hx:text-sm hx:transition-colors [word-break:break-word] hx:cursor-pointer [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] hx:contrast-more:border hx:gap-2 hx:before:opacity-25 hx:before:content-['#'] hx:text-gray-500 hx:hover:bg-gray-100 hx:hover:text-gray-900 hx:dark:text-neutral-400 hx:dark:hover:bg-primary-100/5 hx:dark:hover:text-gray-50 hx:contrast-more:text-gray-900 hx:contrast-more:dark:text-gray-50 hx:contrast-more:border-transparent hx:contrast-more:hover:border-gray-900 hx:contrast-more:dark:hover:border-gray-50"
-              >Tag Groups View</a>
+              >Tag Groups Layout</a>
             </li>
           <li>
               <a
@@ -551,6 +551,10 @@ TextToTile starts with something simple: writing structured text.
         </a>
       </li>
       <li class="hx:my-2 hx:scroll-my-6 hx:scroll-py-6">
+        <a class="hx:ltr:pl-4 hx:rtl:pr-4 hx:inline-block hx:rounded-sm hx:text-gray-500 hx:hover:text-gray-900 hx:dark:text-gray-400 hx:dark:hover:text-gray-300 hx:contrast-more:text-gray-900 hx:contrast-more:underline hx:contrast-more:dark:text-gray-50 hx:w-full hx:wrap-break-word hx:hextra-focus-visible-inset" href="#parse-mode">Parse mode
+        </a>
+      </li>
+      <li class="hx:my-2 hx:scroll-my-6 hx:scroll-py-6">
         <a class="hx:font-medium hx:inline-block hx:rounded-sm hx:text-gray-500 hx:hover:text-gray-900 hx:dark:text-gray-400 hx:dark:hover:text-gray-300 hx:contrast-more:text-gray-900 hx:contrast-more:underline hx:contrast-more:dark:text-gray-50 hx:w-full hx:wrap-break-word hx:hextra-focus-visible-inset" href="#works-with-your-regular-editor">Works with your regular editor
         </a>
       </li>
@@ -559,7 +563,7 @@ TextToTile starts with something simple: writing structured text.
         </a>
       </li>
       <li class="hx:my-2 hx:scroll-my-6 hx:scroll-py-6">
-        <a class="hx:font-medium hx:inline-block hx:rounded-sm hx:text-gray-500 hx:hover:text-gray-900 hx:dark:text-gray-400 hx:dark:hover:text-gray-300 hx:contrast-more:text-gray-900 hx:contrast-more:underline hx:contrast-more:dark:text-gray-50 hx:w-full hx:wrap-break-word hx:hextra-focus-visible-inset" href="#tag-groups-view">Tag Groups View
+        <a class="hx:font-medium hx:inline-block hx:rounded-sm hx:text-gray-500 hx:hover:text-gray-900 hx:dark:text-gray-400 hx:dark:hover:text-gray-300 hx:contrast-more:text-gray-900 hx:contrast-more:underline hx:contrast-more:dark:text-gray-50 hx:w-full hx:wrap-break-word hx:hextra-focus-visible-inset" href="#tag-groups-layout">Tag Groups Layout
         </a>
       </li>
       <li class="hx:my-2 hx:scroll-my-6 hx:scroll-py-6">
@@ -690,13 +694,61 @@ TextToTile starts with something simple: writing structured text.
   </div>
 </details>
 
+<h3>Parse mode<span class="hx:absolute hx:-mt-20" id="parse-mode"></span>
+    <a href="#parse-mode" class="subheading-anchor" aria-label="Permalink for this section"></a></h3><p>Each document uses one of two parse modes. Choose the mode that matches the file in <code>Document → Parse mode</code>:</p>
+<ul>
+<li><code>Outline</code> (the default) uses the original tab-indented outline notation. Markdown-style <code>- </code> list markers are optional.</li>
+<li><code>Markdown headings</code> uses Markdown heading levels to define the chart structure.</li>
+</ul>
+<p>TextToTile remembers the selected mode for each document, so make sure it matches the way the file is written. The following examples show how the same content could be structured in the two parse modes.</p>
+<div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+
+<div class="hextra-code-filename not-prose" dir="auto">Document notation in &#39;Outline&#39; parse mode</div><div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">- Section A
+</span></span><span class="line"><span class="cl">	- Chapter 1
+</span></span><span class="line"><span class="cl">		- Part i
+</span></span><span class="line"><span class="cl">			- Here is some content for this part
+</span></span><span class="line"><span class="cl">		- Part ii</span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-8">
+  <button
+    class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+    title="Copy code"
+    aria-label="Copy code"
+    data-copied-label="Copied!"
+  >
+    <div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"></div>
+<div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"></div>
+  </button>
+</div>
+</div>
+<div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+
+<div class="hextra-code-filename not-prose" dir="auto">Document notation in &#39;Markdown headings&#39; parse mode</div><div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl"># Section A
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">## Chapter 1
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">### Part i
+</span></span><span class="line"><span class="cl">Here is some content for this part
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">### Part ii</span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-8">
+  <button
+    class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+    title="Copy code"
+    aria-label="Copy code"
+    data-copied-label="Copied!"
+  >
+    <div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"></div>
+<div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"></div>
+  </button>
+</div>
+</div>
+<p>In <code>Outline</code> mode, a top-level line appears as a chart section only when it has indented content beneath it. Unindented text on its own is not shown in the chart.</p>
+<p>This lets you keep document titles, notes, and fenced CSS blocks before, after, or between several separate outlines in the same file. Start each outline on an unindented line, then indent its content beneath it.</p>
+<p>Blank lines make a document easier to read, but do not define its hierarchy. Outline mode does not require Markdown; indentation alone defines the structure.</p>
+<p>In a working outline, you may prefer conventional Markdown lists. Many editors use the <code>-</code> markers to provide list commands, such as moving a section or branch up and down. The best approach depends on your preferred editor and workflow.</p>
 <div class="hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200">
   <div class="hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2"><svg height=1.2em class="hx:inline-block hx:align-middle" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
 
   <div class="hx:w-full hx:min-w-0 hx:leading-7">
-    <div class="hx:mt-6 hx:leading-7 hx:first:mt-0"><p>These examples uses indentation without Markdown list markers (<code>-</code>) and includes blank lines to make the structure easier to read on this page. TextToTile does not require Markdown; indentation alone defines the hierarchy.</p>
-<p>In a working outline, you may prefer conventional Markdown lists. Many editors use the <code>-</code> markers to provide list commands, such as moving a section or branch up and down. The best approach depends on your preferred editor and workflow.</p>
-</div>
+    <div class="hx:mt-6 hx:leading-7 hx:first:mt-0">All examples in this documentation use the <code>Outline</code> parse mode with tab indentation. Some include standard Markdown <code>- </code> list markers, while others omit them.</div>
   </div>
 </div>
 
@@ -854,31 +906,31 @@ TextToTile starts with something simple: writing structured text.
   </div>
 </div>
 
-<h2>Tag Groups View<span class="hx:absolute hx:-mt-20" id="tag-groups-view"></span>
-    <a href="#tag-groups-view" class="subheading-anchor" aria-label="Permalink for this section"></a></h2><p>Sometimes it can be useful to view the chart ordered by tag groups rather than outline structure.</p>
-<p>By selecting <code>View → Chart view → Tag Groups</code>, the same outline can be viewed grouped by tags instead of by writing order.</p>
+<h2>Tag Groups Layout<span class="hx:absolute hx:-mt-20" id="tag-groups-layout"></span>
+    <a href="#tag-groups-layout" class="subheading-anchor" aria-label="Permalink for this section"></a></h2><p>Sometimes it can be useful to view the chart ordered by tag groups rather than outline structure.</p>
+<p>By selecting <code>Document → Chart layout → Tag groups</code>, the same outline can be viewed grouped by tags instead of by writing order.</p>
 <figure class="theme-figure">
   <img
     class="theme-figure__img theme-figure__img--light"
     src="http://localhost:1313/img/texttotile-tracking3-light.png"
-    alt="In Tag Groups View, all parts are grouped according to their primary tag"
-    title="In Tag Groups View, all parts are grouped according to their primary tag (click to zoom)"
+    alt="In Tag groups layout, all parts are grouped according to their primary tag"
+    title="In Tag groups layout, all parts are grouped according to their primary tag (click to zoom)"
     data-zoomable
     loading="lazy"
   >
   <img
     class="theme-figure__img theme-figure__img--dark"
     src="http://localhost:1313/img/texttotile-tracking3-dark.png"
-    alt="In Tag Groups View, all parts are grouped according to their primary tag"
-    title="In Tag Groups View, all parts are grouped according to their primary tag (click to zoom)"
+    alt="In Tag groups layout, all parts are grouped according to their primary tag"
+    title="In Tag groups layout, all parts are grouped according to their primary tag (click to zoom)"
     data-zoomable
     loading="lazy"
   >
   
-    <figcaption>In Tag Groups View, all parts are grouped according to their primary tag (click to zoom)</figcaption>
+    <figcaption>In Tag groups layout, all parts are grouped according to their primary tag (click to zoom)</figcaption>
   
 </figure>
-<p>This screenshot shows the exact same text outline as the screenshot before, just grouped by tags. Each column has exactly the same parts as shown in <code>Structure View</code> - they are just rearranged after which tag group they belong to.</p>
+<p>This screenshot shows the exact same text outline as the screenshot before, just grouped by tags. Each column has exactly the same parts as shown in <code>Structure</code> layout - they are just rearranged after which tag group they belong to.</p>
 <p>Each part in a tag group is displayed on its own line, making it possible to read longer texts extending beyond the right edge of the part. This becomes especially useful in larger outlines — such as the complete novel example shown on the <a href="http://localhost:1313/docs/12-showcase/#novel-tag-groups">Showcase page</a>.</p>
 <p>When a new <code>Section</code> begins, the layout resets and starts placing parts from the top again. This is to prevent a single tag group to take up the full height of the screen - allowing many tag groups to remain visible at the same time.</p>
 <p>Tag groups containing graphs automatically reserve additional vertical space to make the graphs easier to read.</p>
@@ -886,7 +938,7 @@ TextToTile starts with something simple: writing structured text.
     <a href="#visibility-and-sorting" class="subheading-anchor" aria-label="Permalink for this section"></a></h3><p>The Ribbon at the bottom of the chart shows a list of all tags used in the current outline. If a style has been created for a tag, the corresponding button will also use that color.</p>
 <p>Clicking a tag button switches the corresponding tag group between active and passive. This does not modify the text outline itself — only how the chart is displayed.</p>
 <p>Passive tag groups are dimmed, allowing active groups to stand out more clearly and making it easier to focus on specific parts of the outline.</p>
-<p>In Structure Mode, passive tag groups remain visible but dimmed. In Tag Groups Mode, passive groups are additionally collapsed to a single line.</p>
+<p>In <code>Structure</code> layout, passive tag groups remain visible but dimmed. In <code>Tag groups</code> layout, passive groups are additionally collapsed to a single line.</p>
 <p>Holding Alt while clicking a tag button will solo that tag group by setting all other groups to passive.</p>
 <p>The same actions can also be performed using keyboard shortcuts. For example, typing Cmd/Ctrl + 1 toggles the first tag group shown in the Ribbon between active and passive, while Alt + 1 solos that tag group.</p>
 <figure class="theme-figure">
@@ -910,7 +962,7 @@ TextToTile starts with something simple: writing structured text.
     <figcaption>Only tag group #2 is active, the other two are passive</figcaption>
   
 </figure>
-<p>You can change the order of tag groups by dragging the buttons in the Ribbon. Like switching groups between active and passive, this does not change the text itself — only the order in which tag groups are displayed in Tag Groups Mode.</p>
+<p>You can change the order of tag groups by dragging the buttons in the Ribbon. Like switching groups between active and passive, this does not change the text itself — only the order in which tag groups are displayed in Tag groups layout.</p>
 <p>The active/passive state of tag groups, along with their sorting order, is automatically restored when the file is reopened without changing the outline text itself.</p>
 <h2>View Settings<span class="hx:absolute hx:-mt-20" id="view-settings"></span>
     <a href="#view-settings" class="subheading-anchor" aria-label="Permalink for this section"></a></h2><p>In <code>Settings → View</code>, you can control which UI elements are visible and adjust how the chart is displayed.</p>

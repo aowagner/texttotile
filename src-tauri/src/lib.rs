@@ -242,7 +242,7 @@ fn build_app_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::
 
 	// submenu chart view ('structure', 'tag groups')
 	let menuitem_chartview_a = CheckMenuItem::with_id(app, "view.chart.viewa", "Structure", true, true, Some("F1"), )?;
-	let menuitem_chartview_b = CheckMenuItem::with_id(app, "view.chart.viewb", "Tag Groups", true, false, Some("F2"), )?;
+	let menuitem_chartview_b = CheckMenuItem::with_id(app, "view.chart.viewb", "Tag groups", true, false, Some("F2"), )?;
 
 	// Build the sub-submenu
 	let submenu_chartview = SubmenuBuilder::new(app, "Chart layout")

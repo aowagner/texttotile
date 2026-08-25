@@ -259,14 +259,14 @@ Definitions can also be written directly inside individual documents, but they a
 
 ## Setting Height of Graph Area
 
-In `Structure View`, graphs are aligned to the bottom of the chart area. Under `View → Graph Height`, you can choose how much vertical space the graphs should occupy — from 25% to 100%.
+In `Structure` layout, graphs are aligned to the bottom of the chart area. Under `View → Graph Height`, you can choose how much vertical space the graphs should occupy — from 25% to 100%.
 
 The ideal setting depends on:
 - screen size
 - number of visible parts
 - and how much detail you want to see
 
-In `Tag Groups View`, each tagblock displays its own graphs independently, making it easier to compare separate entities, themes, or categories side by side.
+In `Tag Groups` layout, each tagblock displays its own graphs independently, making it easier to compare separate entities, themes, or categories side by side.
 
 
 

@@ -46,8 +46,8 @@
     &lt;figcaption&gt;The structural relation between the text outline and the chart (click to zoom)&lt;/figcaption&gt;
   
 &lt;/figure&gt;
-&lt;h2&gt;See Your Text in a New Way&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;see-your-text-in-a-new-way&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#see-your-text-in-a-new-way&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;figure class=&#34;theme-figure&#34;&gt;
+&lt;h3&gt;See Your Text in a New Way&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;see-your-text-in-a-new-way&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#see-your-text-in-a-new-way&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;figure class=&#34;theme-figure&#34;&gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--light&#34;
     src=&#34;http://localhost:1313/img/texttotile-concept2-light.png&#34;
@@ -82,8 +82,8 @@
 &lt;li&gt;or something entirely your own&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;If information can be structured as text, TextToTile can visualize it.&lt;/p&gt;
-&lt;h2&gt;One Structure — Different Views&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;one-structure--different-views&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#one-structure--different-views&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;figure class=&#34;theme-figure&#34;&gt;
+&lt;h2&gt;One Structure — Different Layouts&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;one-structure--different-layouts&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#one-structure--different-layouts&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;figure class=&#34;theme-figure&#34;&gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--light&#34;
     src=&#34;http://localhost:1313/img/texttotile-concept3-light.png&#34;
@@ -104,7 +104,7 @@
     &lt;figcaption&gt;Same text as in screenshot above - but another way to view the content (click to zoom)&lt;/figcaption&gt;
   
 &lt;/figure&gt;
-&lt;p&gt;The same outline can be explored through different visual views. &lt;code&gt;Structure View&lt;/code&gt; focuses on hierarchy and flow, while &lt;code&gt;Tag group View&lt;/code&gt; highlights connections, themes, categories, and relationships across the same content.&lt;/p&gt;
+&lt;p&gt;The same outline can be explored through different visual layouts. The &lt;code&gt;Structure&lt;/code&gt; layout focuses on hierarchy and flow, while the &lt;code&gt;Tag group&lt;/code&gt; layout highlights connections, themes, categories, and relationships across the same content.&lt;/p&gt;
 &lt;p&gt;As your outline grows, zoom and scaling allow you to view your text as a timeline and scroll and zoom smoothly between high-level overviews, detailed structure, individual entries, and larger patterns without changing the underlying text itself.&lt;/p&gt;
 &lt;p&gt;The visualization changes — but the information remains the same.&lt;/p&gt;
 &lt;h2&gt;A Tool for Thinking Visually&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;a-tool-for-thinking-visually&#34;&gt;&lt;/span&gt;
@@ -304,48 +304,48 @@
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--light&#34;
     src=&#34;http://localhost:1313/img/texttotile-showcase3-light.png&#34;
-    alt=&#34;Overview a full novel in Structure View&#34;
-    title=&#34;Overview a full novel in Structure View (click to zoom)&#34;
+    alt=&#34;Overview a full novel in Structure layout&#34;
+    title=&#34;Overview a full novel in Structure layout (click to zoom)&#34;
     data-zoomable
     loading=&#34;lazy&#34;
   &gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--dark&#34;
     src=&#34;http://localhost:1313/img/texttotile-showcase3-dark.png&#34;
-    alt=&#34;Overview a full novel in Structure View&#34;
-    title=&#34;Overview a full novel in Structure View (click to zoom)&#34;
+    alt=&#34;Overview a full novel in Structure layout&#34;
+    title=&#34;Overview a full novel in Structure layout (click to zoom)&#34;
     data-zoomable
     loading=&#34;lazy&#34;
   &gt;
   
-    &lt;figcaption&gt;Overview a full novel in Structure View (click to zoom)&lt;/figcaption&gt;
+    &lt;figcaption&gt;Overview a full novel in Structure layout (click to zoom)&lt;/figcaption&gt;
   
 &lt;/figure&gt;
 &lt;p&gt;&lt;a id=&#34;novel-tag-groups&#34;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;This example shows the complete outline of A. O. Wagner’s novel The Karma Ubiquity.&lt;/p&gt;
-&lt;p&gt;The screenshot above uses &lt;code&gt;Structure View&lt;/code&gt;, which emphasizes hierarchy and chapter flow. The screenshot below uses &lt;code&gt;Tag Groups View&lt;/code&gt;, where story arcs, themes, characters, and metadata become easier to follow across the entire novel.&lt;/p&gt;
+&lt;p&gt;The screenshot above uses &lt;code&gt;Structure&lt;/code&gt; layout, which emphasizes hierarchy and chapter flow. The screenshot below uses &lt;code&gt;Tag groups&lt;/code&gt; layout, where story arcs, themes, characters, and metadata become easier to follow across the entire novel.&lt;/p&gt;
 &lt;figure class=&#34;theme-figure&#34;&gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--light&#34;
     src=&#34;http://localhost:1313/img/texttotile-showcase4-light.png&#34;
-    alt=&#34;Same outline but in Tag Groups View&#34;
-    title=&#34;Same outline but in Tag Groups View (click to zoom)&#34;
+    alt=&#34;Same outline but in Tag groups layout&#34;
+    title=&#34;Same outline but in Tag groups layout (click to zoom)&#34;
     data-zoomable
     loading=&#34;lazy&#34;
   &gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--dark&#34;
     src=&#34;http://localhost:1313/img/texttotile-showcase4-dark.png&#34;
-    alt=&#34;Same outline but in Tag Groups View&#34;
-    title=&#34;Same outline but in Tag Groups View (click to zoom)&#34;
+    alt=&#34;Same outline but in Tag groups layout&#34;
+    title=&#34;Same outline but in Tag groups layout (click to zoom)&#34;
     data-zoomable
     loading=&#34;lazy&#34;
   &gt;
   
-    &lt;figcaption&gt;Same outline but in Tag Groups View (click to zoom)&lt;/figcaption&gt;
+    &lt;figcaption&gt;Same outline but in Tag groups layout (click to zoom)&lt;/figcaption&gt;
   
 &lt;/figure&gt;
-&lt;p&gt;In &lt;code&gt;Tag Groups View&lt;/code&gt;, individual tag groups and graphs are separated visually, making it possible to track character development, emotional progression, themes, pacing, or other custom metadata throughout the story.&lt;/p&gt;
+&lt;p&gt;In &lt;code&gt;Tag groups&lt;/code&gt; layout, individual tag groups and graphs are separated visually, making it possible to track character development, emotional progression, themes, pacing, or other custom metadata throughout the story.&lt;/p&gt;
 &lt;p&gt;&lt;a id=&#34;novel-zoom&#34;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Graph points can also display additional information such as type and unit values on hover.&lt;/p&gt;
 &lt;p&gt;With the editor enabled and the zoom level increased, the chart becomes detailed enough to navigate and inspect individual scenes, notes, and structural relationships directly inside the outline.&lt;/p&gt;
@@ -777,13 +777,61 @@
   &lt;/div&gt;
 &lt;/details&gt;
 
+&lt;h3&gt;Parse mode&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;parse-mode&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#parse-mode&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Each document uses one of two parse modes. Choose the mode that matches the file in &lt;code&gt;Document → Parse mode&lt;/code&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Outline&lt;/code&gt; (the default) uses the original tab-indented outline notation. Markdown-style &lt;code&gt;- &lt;/code&gt; list markers are optional.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Markdown headings&lt;/code&gt; uses Markdown heading levels to define the chart structure.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;TextToTile remembers the selected mode for each document, so make sure it matches the way the file is written. The following examples show how the same content could be structured in the two parse modes.&lt;/p&gt;
+&lt;div class=&#34;hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code&#34;&gt;
+
+&lt;div class=&#34;hextra-code-filename not-prose&#34; dir=&#34;auto&#34;&gt;Document notation in &amp;#39;Outline&amp;#39; parse mode&lt;/div&gt;&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;- Section A
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	- Chapter 1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		- Part i
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			- Here is some content for this part
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		- Part ii&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-8&#34;&gt;
+  &lt;button
+    class=&#34;hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50&#34;
+    title=&#34;Copy code&#34;
+    aria-label=&#34;Copy code&#34;
+    data-copied-label=&#34;Copied!&#34;
+  &gt;
+    &lt;div class=&#34;hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+&lt;div class=&#34;hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code&#34;&gt;
+
+&lt;div class=&#34;hextra-code-filename not-prose&#34; dir=&#34;auto&#34;&gt;Document notation in &amp;#39;Markdown headings&amp;#39; parse mode&lt;/div&gt;&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# Section A
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;## Chapter 1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;### Part i
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Here is some content for this part
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;### Part ii&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-8&#34;&gt;
+  &lt;button
+    class=&#34;hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50&#34;
+    title=&#34;Copy code&#34;
+    aria-label=&#34;Copy code&#34;
+    data-copied-label=&#34;Copied!&#34;
+  &gt;
+    &lt;div class=&#34;hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+&lt;div class=&#34;hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;In &lt;code&gt;Outline&lt;/code&gt; mode, a top-level line appears as a chart section only when it has indented content beneath it. Unindented text on its own is not shown in the chart.&lt;/p&gt;
+&lt;p&gt;This lets you keep document titles, notes, and fenced CSS blocks before, after, or between several separate outlines in the same file. Start each outline on an unindented line, then indent its content beneath it.&lt;/p&gt;
+&lt;p&gt;Blank lines make a document easier to read, but do not define its hierarchy. Outline mode does not require Markdown; indentation alone defines the structure.&lt;/p&gt;
+&lt;p&gt;In a working outline, you may prefer conventional Markdown lists. Many editors use the &lt;code&gt;-&lt;/code&gt; markers to provide list commands, such as moving a section or branch up and down. The best approach depends on your preferred editor and workflow.&lt;/p&gt;
 &lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
   &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;svg height=1.2em class=&#34;hx:inline-block hx:align-middle&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34; fill=&#34;none&#34; viewBox=&#34;0 0 24 24&#34; stroke-width=&#34;2&#34; stroke=&#34;currentColor&#34; aria-hidden=&#34;true&#34;&gt;&lt;path stroke-linecap=&#34;round&#34; stroke-linejoin=&#34;round&#34; d=&#34;M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z&#34;/&gt;&lt;/svg&gt;&lt;/div&gt;
 
   &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
-    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;p&gt;These examples uses indentation without Markdown list markers (&lt;code&gt;-&lt;/code&gt;) and includes blank lines to make the structure easier to read on this page. TextToTile does not require Markdown; indentation alone defines the hierarchy.&lt;/p&gt;
-&lt;p&gt;In a working outline, you may prefer conventional Markdown lists. Many editors use the &lt;code&gt;-&lt;/code&gt; markers to provide list commands, such as moving a section or branch up and down. The best approach depends on your preferred editor and workflow.&lt;/p&gt;
-&lt;/div&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;All examples in this documentation use the &lt;code&gt;Outline&lt;/code&gt; parse mode with tab indentation. Some include standard Markdown &lt;code&gt;- &lt;/code&gt; list markers, while others omit them.&lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;
 
@@ -941,31 +989,31 @@
   &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;h2&gt;Tag Groups View&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;tag-groups-view&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#tag-groups-view&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Sometimes it can be useful to view the chart ordered by tag groups rather than outline structure.&lt;/p&gt;
-&lt;p&gt;By selecting &lt;code&gt;View → Chart view → Tag Groups&lt;/code&gt;, the same outline can be viewed grouped by tags instead of by writing order.&lt;/p&gt;
+&lt;h2&gt;Tag Groups Layout&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;tag-groups-layout&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#tag-groups-layout&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Sometimes it can be useful to view the chart ordered by tag groups rather than outline structure.&lt;/p&gt;
+&lt;p&gt;By selecting &lt;code&gt;Document → Chart layout → Tag groups&lt;/code&gt;, the same outline can be viewed grouped by tags instead of by writing order.&lt;/p&gt;
 &lt;figure class=&#34;theme-figure&#34;&gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--light&#34;
     src=&#34;http://localhost:1313/img/texttotile-tracking3-light.png&#34;
-    alt=&#34;In Tag Groups View, all parts are grouped according to their primary tag&#34;
-    title=&#34;In Tag Groups View, all parts are grouped according to their primary tag (click to zoom)&#34;
+    alt=&#34;In Tag groups layout, all parts are grouped according to their primary tag&#34;
+    title=&#34;In Tag groups layout, all parts are grouped according to their primary tag (click to zoom)&#34;
     data-zoomable
     loading=&#34;lazy&#34;
   &gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--dark&#34;
     src=&#34;http://localhost:1313/img/texttotile-tracking3-dark.png&#34;
-    alt=&#34;In Tag Groups View, all parts are grouped according to their primary tag&#34;
-    title=&#34;In Tag Groups View, all parts are grouped according to their primary tag (click to zoom)&#34;
+    alt=&#34;In Tag groups layout, all parts are grouped according to their primary tag&#34;
+    title=&#34;In Tag groups layout, all parts are grouped according to their primary tag (click to zoom)&#34;
     data-zoomable
     loading=&#34;lazy&#34;
   &gt;
   
-    &lt;figcaption&gt;In Tag Groups View, all parts are grouped according to their primary tag (click to zoom)&lt;/figcaption&gt;
+    &lt;figcaption&gt;In Tag groups layout, all parts are grouped according to their primary tag (click to zoom)&lt;/figcaption&gt;
   
 &lt;/figure&gt;
-&lt;p&gt;This screenshot shows the exact same text outline as the screenshot before, just grouped by tags. Each column has exactly the same parts as shown in &lt;code&gt;Structure View&lt;/code&gt; - they are just rearranged after which tag group they belong to.&lt;/p&gt;
+&lt;p&gt;This screenshot shows the exact same text outline as the screenshot before, just grouped by tags. Each column has exactly the same parts as shown in &lt;code&gt;Structure&lt;/code&gt; layout - they are just rearranged after which tag group they belong to.&lt;/p&gt;
 &lt;p&gt;Each part in a tag group is displayed on its own line, making it possible to read longer texts extending beyond the right edge of the part. This becomes especially useful in larger outlines — such as the complete novel example shown on the &lt;a href=&#34;http://localhost:1313/docs/12-showcase/#novel-tag-groups&#34;&gt;Showcase page&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;When a new &lt;code&gt;Section&lt;/code&gt; begins, the layout resets and starts placing parts from the top again. This is to prevent a single tag group to take up the full height of the screen - allowing many tag groups to remain visible at the same time.&lt;/p&gt;
 &lt;p&gt;Tag groups containing graphs automatically reserve additional vertical space to make the graphs easier to read.&lt;/p&gt;
@@ -973,7 +1021,7 @@
     &lt;a href=&#34;#visibility-and-sorting&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;The Ribbon at the bottom of the chart shows a list of all tags used in the current outline. If a style has been created for a tag, the corresponding button will also use that color.&lt;/p&gt;
 &lt;p&gt;Clicking a tag button switches the corresponding tag group between active and passive. This does not modify the text outline itself — only how the chart is displayed.&lt;/p&gt;
 &lt;p&gt;Passive tag groups are dimmed, allowing active groups to stand out more clearly and making it easier to focus on specific parts of the outline.&lt;/p&gt;
-&lt;p&gt;In Structure Mode, passive tag groups remain visible but dimmed. In Tag Groups Mode, passive groups are additionally collapsed to a single line.&lt;/p&gt;
+&lt;p&gt;In &lt;code&gt;Structure&lt;/code&gt; layout, passive tag groups remain visible but dimmed. In &lt;code&gt;Tag groups&lt;/code&gt; layout, passive groups are additionally collapsed to a single line.&lt;/p&gt;
 &lt;p&gt;Holding Alt while clicking a tag button will solo that tag group by setting all other groups to passive.&lt;/p&gt;
 &lt;p&gt;The same actions can also be performed using keyboard shortcuts. For example, typing Cmd/Ctrl + 1 toggles the first tag group shown in the Ribbon between active and passive, while Alt + 1 solos that tag group.&lt;/p&gt;
 &lt;figure class=&#34;theme-figure&#34;&gt;
@@ -997,7 +1045,7 @@
     &lt;figcaption&gt;Only tag group #2 is active, the other two are passive&lt;/figcaption&gt;
   
 &lt;/figure&gt;
-&lt;p&gt;You can change the order of tag groups by dragging the buttons in the Ribbon. Like switching groups between active and passive, this does not change the text itself — only the order in which tag groups are displayed in Tag Groups Mode.&lt;/p&gt;
+&lt;p&gt;You can change the order of tag groups by dragging the buttons in the Ribbon. Like switching groups between active and passive, this does not change the text itself — only the order in which tag groups are displayed in Tag groups layout.&lt;/p&gt;
 &lt;p&gt;The active/passive state of tag groups, along with their sorting order, is automatically restored when the file is reopened without changing the outline text itself.&lt;/p&gt;
 &lt;h2&gt;View Settings&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;view-settings&#34;&gt;&lt;/span&gt;
     &lt;a href=&#34;#view-settings&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;In &lt;code&gt;Settings → View&lt;/code&gt;, you can control which UI elements are visible and adjust how the chart is displayed.&lt;/p&gt;
@@ -1420,14 +1468,14 @@
 &lt;/div&gt;
 
 &lt;h2&gt;Setting Height of Graph Area&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;setting-height-of-graph-area&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#setting-height-of-graph-area&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;In &lt;code&gt;Structure View&lt;/code&gt;, graphs are aligned to the bottom of the chart area. Under &lt;code&gt;View → Graph Height&lt;/code&gt;, you can choose how much vertical space the graphs should occupy — from 25% to 100%.&lt;/p&gt;
+    &lt;a href=&#34;#setting-height-of-graph-area&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;In &lt;code&gt;Structure&lt;/code&gt; layout, graphs are aligned to the bottom of the chart area. Under &lt;code&gt;View → Graph Height&lt;/code&gt;, you can choose how much vertical space the graphs should occupy — from 25% to 100%.&lt;/p&gt;
 &lt;p&gt;The ideal setting depends on:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;screen size&lt;/li&gt;
 &lt;li&gt;number of visible parts&lt;/li&gt;
 &lt;li&gt;and how much detail you want to see&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;In &lt;code&gt;Tag Groups View&lt;/code&gt;, each tagblock displays its own graphs independently, making it easier to compare separate entities, themes, or categories side by side.&lt;/p&gt;
+&lt;p&gt;In &lt;code&gt;Tag Groups&lt;/code&gt; layout, each tagblock displays its own graphs independently, making it easier to compare separate entities, themes, or categories side by side.&lt;/p&gt;
 &lt;!-- invisible image required to trigger Hextra’s medium-zoom initialization, enabling zoom on shortcode-rendered images --&gt;
 &lt;p&gt;&lt;img src=&#34;http://localhost:1313/img/transparent.png&#34; alt=&#34;hextra-zoom-init&#34;  data-zoomable loading=&#34;lazy&#34; /&gt;&lt;/p&gt;
 
@@ -1496,7 +1544,7 @@
 &lt;li&gt;&lt;code&gt;@icon&lt;/code&gt;, which specifies the icon shown for the part — usually any emoji symbol chosen by the user&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;@show&lt;/code&gt;, which controls which value should be highlighted inside the part&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;In &lt;code&gt;Structure View&lt;/code&gt;, icons are shown in the lower-right corner of each part. In &lt;code&gt;Tag Groups View&lt;/code&gt;, the icon is placed to the left of the text, leaving more space available for longer content.&lt;/p&gt;
+&lt;p&gt;In &lt;code&gt;Structure&lt;/code&gt; layout, icons are shown in the lower-right corner of each part. In &lt;code&gt;Tag groups&lt;/code&gt; layout, the icon is placed to the left of the text, leaving more space available for longer content.&lt;/p&gt;
 &lt;p&gt;To apply a specific style to sleep-related entries, it is enough to add the &lt;code&gt;#sleep&lt;/code&gt; tag to the relevant lines:&lt;/p&gt;
 &lt;div class=&#34;hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code&#34;&gt;
 
@@ -1723,24 +1771,24 @@
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--light&#34;
     src=&#34;http://localhost:1313/img/texttotile-tracking8-light.png&#34;
-    alt=&#34;The same outline in Tag Groups View&#34;
-    title=&#34;The same outline in Tag Groups View (click to zoom)&#34;
+    alt=&#34;The same outline in Tag groups layout&#34;
+    title=&#34;The same outline in Tag groups layout (click to zoom)&#34;
     data-zoomable
     loading=&#34;lazy&#34;
   &gt;
   &lt;img
     class=&#34;theme-figure__img theme-figure__img--dark&#34;
     src=&#34;http://localhost:1313/img/texttotile-tracking8-dark.png&#34;
-    alt=&#34;The same outline in Tag Groups View&#34;
-    title=&#34;The same outline in Tag Groups View (click to zoom)&#34;
+    alt=&#34;The same outline in Tag groups layout&#34;
+    title=&#34;The same outline in Tag groups layout (click to zoom)&#34;
     data-zoomable
     loading=&#34;lazy&#34;
   &gt;
   
-    &lt;figcaption&gt;The same outline in Tag Groups View (click to zoom)&lt;/figcaption&gt;
+    &lt;figcaption&gt;The same outline in Tag groups layout (click to zoom)&lt;/figcaption&gt;
   
 &lt;/figure&gt;
-&lt;p&gt;The screenshot above shows the same outline in &lt;code&gt;Tag Groups View&lt;/code&gt;. The parts still remain inside their original tag groups, while individual colors and icons make different types of information easier to distinguish visually.&lt;/p&gt;
+&lt;p&gt;The screenshot above shows the same outline in &lt;code&gt;Tag groups&lt;/code&gt; layout. The parts still remain inside their original tag groups, while individual colors and icons make different types of information easier to distinguish visually.&lt;/p&gt;
 &lt;p&gt;The added color variation also makes it easier to identify and follow values in the graphs.&lt;/p&gt;
 &lt;h2&gt;Show Highlighted Value&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;show-highlighted-value&#34;&gt;&lt;/span&gt;
     &lt;a href=&#34;#show-highlighted-value&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;In the screenshots above, individual parts display selected values prominently inside the chart.&lt;/p&gt;
@@ -2109,8 +2157,9 @@
     &lt;strong class=&#34;hx:text-lg&#34;&gt;What file formats are supported?&lt;/strong&gt;
   &lt;/summary&gt;
   &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
-    &lt;p&gt;TextToTile works with ordinary plain-text and Markdown files, including &lt;code&gt;.txt&lt;/code&gt; and &lt;code&gt;.md&lt;/code&gt; files. Markdown is optional: indentation alone can define the hierarchy, while Markdown list markers can make an outline easier to read in other editors.&lt;/p&gt;
+    &lt;p&gt;TextToTile works with ordinary plain-text and Markdown files, including &lt;code&gt;.txt&lt;/code&gt; and &lt;code&gt;.md&lt;/code&gt; files. For each document, choose &lt;code&gt;Document → Parse mode&lt;/code&gt;: &lt;code&gt;Outline&lt;/code&gt; uses tab indentation (with optional Markdown list markers), while &lt;code&gt;Markdown headings&lt;/code&gt; uses heading levels to define the chart structure.&lt;/p&gt;
 &lt;p&gt;Because the files remain ordinary text, you can also open and edit them in your preferred text editor.&lt;/p&gt;
+&lt;p&gt;See &lt;a href=&#34;http://localhost:1313/docs/basics/#parse-mode&#34;&gt;Basics: Parse mode&lt;/a&gt; for details on the different ways to structure a document.&lt;/p&gt;
 
   &lt;/div&gt;
 &lt;/details&gt;
@@ -2212,10 +2261,10 @@
 
 &lt;details class=&#34;hx:last-of-type:mb-0 hx:rounded-lg hx:bg-neutral-50 hx:dark:bg-neutral-800 hx:p-2 hx:mt-4 hx:group&#34; &gt;
   &lt;summary class=&#34;hx:flex hx:items-center hx:cursor-pointer hx:select-none hx:list-none hx:p-1 hx:rounded-sm hx:transition-colors hx:hover:bg-gray-100 hx:dark:hover:bg-neutral-800 hx:before:mr-1 hx:before:inline-block hx:before:transition-transform hx:before:content-[&#39;&#39;] hx:dark:before:invert hx:rtl:before:rotate-180 hx:group-open:before:rotate-90&#34;&gt;
-    &lt;strong class=&#34;hx:text-lg&#34;&gt;Are more views planned?&lt;/strong&gt;
+    &lt;strong class=&#34;hx:text-lg&#34;&gt;Are more chart layouts planned?&lt;/strong&gt;
   &lt;/summary&gt;
   &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
-    &lt;p&gt;TextToTile currently includes Structure View and Tag Groups View. Additional views are possible, including calendar-like views and other ways to visualize structured text.&lt;/p&gt;
+    &lt;p&gt;TextToTile currently includes &lt;code&gt;Structure&lt;/code&gt; layout and &lt;code&gt;Tag groups&lt;/code&gt; layout. Additional views are possible, including calendar-like views and other ways to visualize structured text.&lt;/p&gt;
 &lt;p&gt;Future development will be guided by practical use cases—especially where a simple text-based workflow can replace a more complex tool.&lt;/p&gt;
 
   &lt;/div&gt;

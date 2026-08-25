@@ -39,7 +39,7 @@ Like the earlier examples, these styles define a `@fill` value controlling the c
 * `@icon`, which specifies the icon shown for the part — usually any emoji symbol chosen by the user
 * `@show`, which controls which value should be highlighted inside the part
 
-In `Structure View`, icons are shown in the lower-right corner of each part. In `Tag Groups View`, the icon is placed to the left of the text, leaving more space available for longer content.
+In `Structure` layout, icons are shown in the lower-right corner of each part. In `Tag groups` layout, the icon is placed to the left of the text, leaving more space available for longer content.
 
 To apply a specific style to sleep-related entries, it is enough to add the `#sleep` tag to the relevant lines:
 
@@ -245,11 +245,11 @@ Week 23
 {{< theme-figure
   light="/img/texttotile-tracking8-light.png"
   dark="/img/texttotile-tracking8-dark.png"
-  alt="The same outline in Tag Groups View"
-  title="The same outline in Tag Groups View (click to zoom)"
+  alt="The same outline in Tag groups layout"
+  title="The same outline in Tag groups layout (click to zoom)"
 >}}
 
-The screenshot above shows the same outline in `Tag Groups View`. The parts still remain inside their original tag groups, while individual colors and icons make different types of information easier to distinguish visually.
+The screenshot above shows the same outline in `Tag groups` layout. The parts still remain inside their original tag groups, while individual colors and icons make different types of information easier to distinguish visually.
 
 The added color variation also makes it easier to identify and follow values in the graphs.
 

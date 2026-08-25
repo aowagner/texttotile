@@ -4920,7 +4920,6 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 		if (LOGGING) console.group(...CUtil.logGroup('CModel', 'preparseHeadingOutlineText', CUtil.getArgsKeys(args), args.caller));
 
 		const lines = args.text.split(/\r?\n/);
-		let currentHeadingLevel = 0;
 		let inYamlFrontMatter = false;
 		let yamlDone = false;
 		let inFence = false;
@@ -4951,16 +4950,12 @@ SOURCE: ${JSON.stringify(logentry.source ?? 'N/A')}
 
 			const matchHeading = line.match(/^(#{1,6})\s+(.+)$/);
 			if (matchHeading) {
-				currentHeadingLevel = matchHeading[1].length;
-				return '\t'.repeat(currentHeadingLevel - 1) + matchHeading[2];
+				const headingLevel = matchHeading[1].length;
+				return '\t'.repeat(headingLevel - 1) + matchHeading[2];
 			}
 
-			const isPartContent = currentHeadingLevel >= 3;
-
-			if (!isPartContent)
-				return '';
-
-			return '\t'.repeat(currentHeadingLevel) + line.trimStart();
+			// Preserve the source line position, but exclude non-heading content from the chart structure.
+			return '';
 		});
 
 		if (LOGGING) console.groupEnd();

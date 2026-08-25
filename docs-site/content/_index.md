@@ -18,7 +18,7 @@ layout: "hextra-home"
 
   {{< hextra/feature-card
       title="See hierarchy and flow"
-      subtitle="As you edit, see sections, chapters, and parts as a visual map."
+      subtitle="As you edit your text, see sections, chapters, and parts as a visual map."
 	  image="/img/texttotile-homepage1.png"
 	  imageClass="hx:absolute hx:max-w-none hx:top-[40%] hx:left-[24px] hx:w-[180%] hx:sm:w-[110%] hx:dark:opacity-80"
 

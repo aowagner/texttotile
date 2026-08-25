@@ -65,11 +65,47 @@ Week 23
 ```
 {{< /details >}}
 
-{{< callout type="info" >}}
-These examples uses indentation without Markdown list markers (`-`) and includes blank lines to make the structure easier to read on this page. TextToTile does not require Markdown; indentation alone defines the hierarchy.
+
+### Parse mode
+
+Each document uses one of two parse modes. Choose the mode that matches the file in `Document → Parse mode`:
+
+* `Outline` (the default) uses the original tab-indented outline notation. Markdown-style `- ` list markers are optional.
+* `Markdown headings` uses Markdown heading levels to define the chart structure.
+
+TextToTile remembers the selected mode for each document, so make sure it matches the way the file is written. The following examples show how the same content could be structured in the two parse modes.
+
+```text {filename="Document notation in 'Outline' parse mode"}
+- Section A
+	- Chapter 1
+		- Part i
+			- Here is some content for this part
+		- Part ii
+```
+
+```text {filename="Document notation in 'Markdown headings' parse mode"}
+# Section A
+
+## Chapter 1
+
+### Part i
+Here is some content for this part
+
+### Part ii
+```
+
+In `Outline` mode, a top-level line appears as a chart section only when it has indented content beneath it. Unindented text on its own is not shown in the chart.
+
+This lets you keep document titles, notes, and fenced CSS blocks before, after, or between several separate outlines in the same file. Start each outline on an unindented line, then indent its content beneath it.
+
+Blank lines make a document easier to read, but do not define its hierarchy. Outline mode does not require Markdown; indentation alone defines the structure.
 
 In a working outline, you may prefer conventional Markdown lists. Many editors use the `-` markers to provide list commands, such as moving a section or branch up and down. The best approach depends on your preferred editor and workflow.
+
+{{< callout type="info" >}}
+All examples in this documentation use the `Outline` parse mode with tab indentation. Some include standard Markdown `- ` list markers, while others omit them.
 {{< /callout >}}
+
 
 
 
@@ -201,20 +237,20 @@ Anything written after `//` (2 forward slash characters) is not shown as text in
 
 
 
-## Tag Groups View
+## Tag Groups Layout
 
 Sometimes it can be useful to view the chart ordered by tag groups rather than outline structure.
 
-By selecting `View → Chart view → Tag Groups`, the same outline can be viewed grouped by tags instead of by writing order. 
+By selecting `Document → Chart layout → Tag groups`, the same outline can be viewed grouped by tags instead of by writing order. 
 
 {{< theme-figure
   light="/img/texttotile-tracking3-light.png"
   dark="/img/texttotile-tracking3-dark.png"
-  alt="In Tag Groups View, all parts are grouped according to their primary tag"
-  title="In Tag Groups View, all parts are grouped according to their primary tag (click to zoom)"
+  alt="In Tag groups layout, all parts are grouped according to their primary tag"
+  title="In Tag groups layout, all parts are grouped according to their primary tag (click to zoom)"
 >}}
 
-This screenshot shows the exact same text outline as the screenshot before, just grouped by tags. Each column has exactly the same parts as shown in `Structure View` - they are just rearranged after which tag group they belong to.
+This screenshot shows the exact same text outline as the screenshot before, just grouped by tags. Each column has exactly the same parts as shown in `Structure` layout - they are just rearranged after which tag group they belong to.
 
 Each part in a tag group is displayed on its own line, making it possible to read longer texts extending beyond the right edge of the part. This becomes especially useful in larger outlines — such as the complete novel example shown on the [Showcase page](/docs/12-showcase/#novel-tag-groups).
 
@@ -231,7 +267,7 @@ Clicking a tag button switches the corresponding tag group between active and pa
 
 Passive tag groups are dimmed, allowing active groups to stand out more clearly and making it easier to focus on specific parts of the outline.
 
-In Structure Mode, passive tag groups remain visible but dimmed. In Tag Groups Mode, passive groups are additionally collapsed to a single line.
+In `Structure` layout, passive tag groups remain visible but dimmed. In `Tag groups` layout, passive groups are additionally collapsed to a single line.
 
 Holding Alt while clicking a tag button will solo that tag group by setting all other groups to passive.
 
@@ -244,7 +280,7 @@ The same actions can also be performed using keyboard shortcuts. For example, ty
   title="Only tag group #2 is active, the other two are passive"
 >}}
 
-You can change the order of tag groups by dragging the buttons in the Ribbon. Like switching groups between active and passive, this does not change the text itself — only the order in which tag groups are displayed in Tag Groups Mode.
+You can change the order of tag groups by dragging the buttons in the Ribbon. Like switching groups between active and passive, this does not change the text itself — only the order in which tag groups are displayed in Tag groups layout.
 
 The active/passive state of tag groups, along with their sorting order, is automatically restored when the file is reopened without changing the outline text itself.
 

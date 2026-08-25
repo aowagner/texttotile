@@ -15,7 +15,7 @@ weight: 10
 
 
 
-## See Your Text in a New Way
+### See Your Text in a New Way
 
 {{< theme-figure
   light="/img/texttotile-concept2-light.png"
@@ -43,7 +43,7 @@ If information can be structured as text, TextToTile can visualize it.
 
 
 
-## One Structure — Different Views
+## One Structure — Different Layouts
 
 {{< theme-figure
   light="/img/texttotile-concept3-light.png"
@@ -52,7 +52,7 @@ If information can be structured as text, TextToTile can visualize it.
   title="Same text as in screenshot above - but another way to view the content (click to zoom)"
 >}}
 
-The same outline can be explored through different visual views. `Structure View` focuses on hierarchy and flow, while `Tag group View` highlights connections, themes, categories, and relationships across the same content.
+The same outline can be explored through different visual layouts. The `Structure` layout focuses on hierarchy and flow, while the `Tag group` layout highlights connections, themes, categories, and relationships across the same content.
 
 As your outline grows, zoom and scaling allow you to view your text as a timeline and scroll and zoom smoothly between high-level overviews, detailed structure, individual entries, and larger patterns without changing the underlying text itself.
 

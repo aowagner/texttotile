@@ -19,9 +19,11 @@ Many tools focus primarily on either writing or planning. TextToTile keeps the i
 {{< /details >}}
 
 {{< details title="What file formats are supported?" closed="true" >}}
-TextToTile works with ordinary plain-text and Markdown files, including `.txt` and `.md` files. Markdown is optional: indentation alone can define the hierarchy, while Markdown list markers can make an outline easier to read in other editors.
+TextToTile works with ordinary plain-text and Markdown files, including `.txt` and `.md` files. For each document, choose `Document → Parse mode`: `Outline` uses tab indentation (with optional Markdown list markers), while `Markdown headings` uses heading levels to define the chart structure.
 
 Because the files remain ordinary text, you can also open and edit them in your preferred text editor.
+
+See [Basics: Parse mode](/docs/basics/#parse-mode) for details on the different ways to structure a document.
 {{< /details >}}
 
 {{< details title="Can I use TextToTile with Obsidian?" closed="true" >}}
@@ -74,8 +76,8 @@ These settings are not stored in a cloud account or sent to a server.
 TextToTile is built with Tauri, a framework designed for small, secure desktop applications with limited system access. The chart is rendered as SVG, while the editor, toolbar, and settings interface use standard web technologies.
 {{< /details >}}
 
-{{< details title="Are more views planned?" closed="true" >}}
-TextToTile currently includes Structure View and Tag Groups View. Additional views are possible, including calendar-like views and other ways to visualize structured text.
+{{< details title="Are more chart layouts planned?" closed="true" >}}
+TextToTile currently includes `Structure` layout and `Tag groups` layout. Additional views are possible, including calendar-like views and other ways to visualize structured text.
 
 Future development will be guided by practical use cases—especially where a simple text-based workflow can replace a more complex tool.
 {{< /details >}}

@@ -154,24 +154,24 @@ Placing the main structural tag at the start of the line can make outlines easie
 {{< theme-figure
   light="/img/texttotile-showcase3-light.png"
   dark="/img/texttotile-showcase3-dark.png"
-  alt="Overview a full novel in Structure View"
-  title="Overview a full novel in Structure View (click to zoom)"
+  alt="Overview a full novel in Structure layout"
+  title="Overview a full novel in Structure layout (click to zoom)"
 >}}
 
 <a id="novel-tag-groups"></a>
 
 This example shows the complete outline of A. O. Wagner’s novel The Karma Ubiquity.
 
-The screenshot above uses `Structure View`, which emphasizes hierarchy and chapter flow. The screenshot below uses `Tag Groups View`, where story arcs, themes, characters, and metadata become easier to follow across the entire novel.
+The screenshot above uses `Structure` layout, which emphasizes hierarchy and chapter flow. The screenshot below uses `Tag groups` layout, where story arcs, themes, characters, and metadata become easier to follow across the entire novel.
 
 {{< theme-figure
   light="/img/texttotile-showcase4-light.png"
   dark="/img/texttotile-showcase4-dark.png"
-  alt="Same outline but in Tag Groups View"
-  title="Same outline but in Tag Groups View (click to zoom)"
+  alt="Same outline but in Tag groups layout"
+  title="Same outline but in Tag groups layout (click to zoom)"
 >}}
 
-In `Tag Groups View`, individual tag groups and graphs are separated visually, making it possible to track character development, emotional progression, themes, pacing, or other custom metadata throughout the story.
+In `Tag groups` layout, individual tag groups and graphs are separated visually, making it possible to track character development, emotional progression, themes, pacing, or other custom metadata throughout the story.
 
 <a id="novel-zoom"></a>
 
