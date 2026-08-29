@@ -137,7 +137,12 @@ Questions, ideas, bug reports, and workflow discussions are very welcome.
 
 [Open TextToTile Discussions](https://github.com/aowagner/texttotile/discussions)
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D7E125V6O0)
 
-<!-- invisible image required to trigger Hextra’s medium-zoom initialization, enabling zoom on shortcode-rendered images -->
-![hextra-zoom-init](/img/transparent.png "")
+
+### Support
+
+If TextToTile is useful to you, you can support its continued development.
+
+<a href="https://ko-fi.com/D7E125V6O0" target="_blank">
+<img src="https://ko-fi.com/img/githubbutton_sm.svg">
+</a>
