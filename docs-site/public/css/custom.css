@@ -113,8 +113,22 @@ p code {
 
 
 
-/* landing page */
+/* install page */
 
+.img-install-mac-dialog img {
+	border: 1px solid #cccccc;
+	border-radius: 6%;
+	box-shadow: #ccc 3px 3px 7px !important
+}
 
+.img-install-mac-settings img {
+	border: 1px solid #cccccc;
+	border-radius: 0%;
+	box-shadow: #ccc 3px 3px 7px !important
+}
 
-
+.img-install-win-dialog img {
+	border: 1px solid #cccccc;
+	border-radius: 2%;
+	box-shadow: #ccc 3px 3px 7px !important
+}

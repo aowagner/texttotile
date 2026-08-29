@@ -1154,6 +1154,15 @@
 &lt;p&gt;The file-related actions are also available from the File menu.&lt;/p&gt;
 &lt;!-- invisible image required to trigger Hextra’s medium-zoom initialization, enabling zoom on shortcode-rendered images --&gt;
 &lt;p&gt;&lt;img src=&#34;http://localhost:1313/img/transparent.png&#34; alt=&#34;hextra-zoom-init&#34;  data-zoomable loading=&#34;lazy&#34; /&gt;&lt;/p&gt;
+&lt;script src=&#39;https://storage.ko-fi.com/cdn/scripts/overlay-widget.js&#39;&gt;&lt;/script&gt;
+&lt;script&gt;
+  kofiWidgetOverlay.draw(&#39;aowagner&#39;, {
+    &#39;type&#39;: &#39;floating-chat&#39;,
+    &#39;floating-chat.donateButton.text&#39;: &#39;Support me&#39;,
+    &#39;floating-chat.donateButton.background-color&#39;: &#39;#fcbf47&#39;,
+    &#39;floating-chat.donateButton.text-color&#39;: &#39;#323842&#39;
+  });
+&lt;/script&gt;
 
       </description>
     </item>
@@ -2435,42 +2444,100 @@
     &lt;a href=&#34;#beta-release&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;TextToTile is currently available as a public beta release for macOS, Windows, and Linux.&lt;/p&gt;
 &lt;p&gt;The current beta version is:&lt;/p&gt;
 &lt;blockquote&gt;
-  &lt;p&gt;&lt;strong&gt;Version 0.2.1 Beta&lt;/strong&gt;&lt;/p&gt;
+  &lt;p&gt;&lt;strong&gt;Version 0.9.0 Beta&lt;/strong&gt;&lt;/p&gt;
 
 &lt;/blockquote&gt;
 &lt;p&gt;This app is currently distributed as an unsigned beta application. Depending on your operating system, you may therefore need to manually confirm that you want to open or install the app.&lt;/p&gt;
 &lt;p&gt;This will become simpler in future releases once code signing and notarization have been added.&lt;/p&gt;
 &lt;h3&gt;macOS&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;macos&#34;&gt;&lt;/span&gt;
     &lt;a href=&#34;#macos&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Universal build for both Apple Silicon and Intel Macs.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/aowagner/texttotile/releases/download/v0.2.1-beta/TextToTile_0.2.1_universal.dmg&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Download TextToTile for macOS&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/aowagner/texttotile/releases/download/v0.9.0-beta/TextToTile_0.9.0_universal.dmg&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Download TextToTile for macOS&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;When opening the app for the first time, macOS may display a warning that the application cannot be verified.&lt;/p&gt;
+&lt;figure class=&#34;img-install-mac-dialog&#34;&gt;&lt;img src=&#34;http://localhost:1313/img/texttotile-install-mac-as1.png&#34;
+    alt=&#34;macOS warning that TextToTile cannot be verified&#34;&gt;&lt;figcaption&gt;
+      &lt;p&gt;On first launch, macOS blocks the unsigned app.&lt;/p&gt;
+    &lt;/figcaption&gt;
+&lt;/figure&gt;
+
 &lt;p&gt;To open the app:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Try opening the app normally once.&lt;/li&gt;
-&lt;li&gt;When the warning appears, click &lt;strong&gt;Done&lt;/strong&gt;.&lt;/li&gt;
-&lt;li&gt;Open &lt;strong&gt;System Settings&lt;/strong&gt; → &lt;strong&gt;Privacy &amp;amp; Security&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;When the warning (image above) appears, click &lt;code&gt;Done&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Open &lt;code&gt;System Settings&lt;/code&gt; → &lt;code&gt;Privacy &amp;amp; Security&lt;/code&gt;.&lt;/li&gt;
 &lt;li&gt;Scroll down to the security section near the bottom.&lt;/li&gt;
-&lt;li&gt;Click &lt;strong&gt;Open Anyway&lt;/strong&gt; for TextToTile.&lt;/li&gt;
-&lt;li&gt;Confirm that you want to open the application.&lt;/li&gt;
+&lt;li&gt;Click &lt;code&gt;Open Anyway&lt;/code&gt; for TextToTile.&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;On older macOS versions, the wording and layout may differ slightly.&lt;/p&gt;
+&lt;figure class=&#34;img-install-mac-settings&#34;&gt;&lt;img src=&#34;http://localhost:1313/img/texttotile-install-mac-as2.png&#34;
+    alt=&#34;Privacy &amp;amp; Security settings showing the Open Anyway button for TextToTile&#34;&gt;&lt;figcaption&gt;
+      &lt;p&gt;The &lt;code&gt;Open Anyway&lt;/code&gt; button in &lt;code&gt;System Settings&lt;/code&gt; → &lt;code&gt;Privacy &amp;amp; Security&lt;/code&gt;.&lt;/p&gt;
+    &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;ol start=&#34;6&#34;&gt;
+&lt;li&gt;In the confirmation dialog, click &lt;code&gt;Open Anyway&lt;/code&gt; again.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure class=&#34;img-install-mac-dialog&#34;&gt;&lt;img src=&#34;http://localhost:1313/img/texttotile-install-mac-as3.png&#34;
+    alt=&#34;Final macOS confirmation dialog with the Open Anyway button&#34;&gt;&lt;figcaption&gt;
+      &lt;p&gt;Confirm once more by clicking &lt;code&gt;Open Anyway&lt;/code&gt;.&lt;/p&gt;
+    &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;You normally need to complete these steps only once for each downloaded version of TextToTile.&lt;/p&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;svg height=1.2em class=&#34;hx:inline-block hx:align-middle&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34; fill=&#34;none&#34; viewBox=&#34;0 0 24 24&#34; stroke-width=&#34;2&#34; stroke=&#34;currentColor&#34; aria-hidden=&#34;true&#34;&gt;&lt;path stroke-linecap=&#34;round&#34; stroke-linejoin=&#34;round&#34; d=&#34;M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z&#34;/&gt;&lt;/svg&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;On older macOS versions, the wording and layout may differ slightly. The first warning may show &lt;code&gt;Cancel&lt;/code&gt; instead of &lt;code&gt;Done&lt;/code&gt;. Click &lt;code&gt;Cancel&lt;/code&gt;, then continue to &lt;code&gt;System Settings&lt;/code&gt; → &lt;code&gt;Privacy &amp;amp; Security&lt;/code&gt;, where the &lt;code&gt;Open Anyway&lt;/code&gt; option should appear.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
 &lt;h3&gt;Windows&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;windows&#34;&gt;&lt;/span&gt;
     &lt;a href=&#34;#windows&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;64-bit Windows installer.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/aowagner/texttotile/releases/download/v0.2.1-beta/TextToTile_0.2.1_x64_en-US.msi&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Download TextToTile for Windows&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/aowagner/texttotile/releases/download/v0.9.0-beta/TextToTile_0.9.0_x64_en-US.msi&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Download TextToTile for Windows&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Windows SmartScreen may display a warning when starting the installer.&lt;/p&gt;
+&lt;figure class=&#34;img-install-win-dialog&#34;&gt;&lt;img src=&#34;http://localhost:1313/img/texttotile-install-win1.png&#34;
+    alt=&#34;Microsoft Defender SmartScreen warning with a More info link&#34;&gt;&lt;figcaption&gt;
+      &lt;p&gt;The initial SmartScreen warning. Click &lt;code&gt;More info&lt;/code&gt; to continue.&lt;/p&gt;
+    &lt;/figcaption&gt;
+&lt;/figure&gt;
+
 &lt;p&gt;To continue:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;Click &lt;strong&gt;More info&lt;/strong&gt;.&lt;/li&gt;
-&lt;li&gt;Click &lt;strong&gt;Run anyway&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;Click &lt;code&gt;More info&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Click &lt;code&gt;Run anyway&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;In the TextToTile Setup window, click &lt;code&gt;Next&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Click &lt;code&gt;Install&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;If User Account Control asks whether you want to allow the installer to make changes to your device, click &lt;code&gt;Yes&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;When the installation is complete, click &lt;code&gt;Finish&lt;/code&gt;.&lt;/li&gt;
 &lt;/ol&gt;
+&lt;p&gt;You normally see these warnings only when running the installer for a newly downloaded version.&lt;/p&gt;
 &lt;h3&gt;Linux&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;linux&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#linux&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Portable AppImage build for Linux.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/aowagner/texttotile/releases/download/v0.2.1-beta/TextToTile_0.2.1_amd64.AppImage&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Download TextToTile for Linux&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;The Linux version is distributed as an AppImage.&lt;/p&gt;
+    &lt;a href=&#34;#linux&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;64-bit Linux builds are available as an AppImage or a Debian package.&lt;/p&gt;
+&lt;h4&gt;AppImage&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;appimage&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#appimage&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;The AppImage is portable and can be run without installation.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/aowagner/texttotile/releases/download/v0.9.0-beta/TextToTile_0.9.0_amd64.AppImage&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Download TextToTile AppImage&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;You may need to make the file executable before starting it:&lt;/p&gt;
 &lt;div class=&#34;hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code&#34;&gt;
 
-&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;chmod +x TextToTile_0.2.1_amd64.AppImage&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0&#34;&gt;
+&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;chmod +x TextToTile_0.9.0_amd64.AppImage&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0&#34;&gt;
+  &lt;button
+    class=&#34;hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50&#34;
+    title=&#34;Copy code&#34;
+    aria-label=&#34;Copy code&#34;
+    data-copied-label=&#34;Copied!&#34;
+  &gt;
+    &lt;div class=&#34;hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+&lt;div class=&#34;hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h4&gt;Debian package&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;debian-package&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#debian-package&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;The &lt;code&gt;.deb&lt;/code&gt; package can be installed on Debian, Ubuntu, and compatible 64-bit Linux distributions.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/aowagner/texttotile/releases/download/v0.9.0-beta/TextToTile_0.9.0_amd64.deb&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Download TextToTile Debian package&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Install it through your system’s graphical package installer or from a terminal:&lt;/p&gt;
+&lt;div class=&#34;hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code&#34;&gt;
+
+&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo apt install ./TextToTile_0.9.0_amd64.deb&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0&#34;&gt;
   &lt;button
     class=&#34;hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50&#34;
     title=&#34;Copy code&#34;
@@ -2488,6 +2555,7 @@
 &lt;h2&gt;Feedback&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;feedback&#34;&gt;&lt;/span&gt;
     &lt;a href=&#34;#feedback&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Questions, ideas, bug reports, and workflow discussions are very welcome.&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;https://github.com/aowagner/texttotile/discussions&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Open TextToTile Discussions&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://ko-fi.com/D7E125V6O0&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;img src=&#34;https://ko-fi.com/img/githubbutton_sm.svg&#34; alt=&#34;ko-fi&#34;  data-zoomable loading=&#34;lazy&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;!-- invisible image required to trigger Hextra’s medium-zoom initialization, enabling zoom on shortcode-rendered images --&gt;
 &lt;p&gt;&lt;img src=&#34;http://localhost:1313/img/transparent.png&#34; alt=&#34;hextra-zoom-init&#34;  data-zoomable loading=&#34;lazy&#34; /&gt;&lt;/p&gt;
 
