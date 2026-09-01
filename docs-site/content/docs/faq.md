@@ -60,6 +60,16 @@ No. TextToTile has no built-in AI, user accounts, backend, or network calls.
 Because its information lives in ordinary text files, you can choose to work on those files with AI tools if that suits your workflow. That is separate from TextToTile itself: you remain in control of which tools can access your files.
 {{< /details >}}
 
+{{< details title="Why not just create a site with AI instead?" closed="true" >}}
+You can — and for a focused, one-off visualization or a public interactive project, an AI-built site may be an excellent choice.
+
+TextToTile serves a different purpose. It provides a stable, live visual overview of ordinary local text files without turning each document into a separate website or software project. You can keep writing and organizing your text in the editor you already prefer, while TextToTile updates the chart as the file changes.
+
+The underlying information remains readable, portable, and under your control. There is no need to maintain a custom website, database, hosting setup, or application logic simply to keep an overview of an evolving outline.
+
+The two approaches can also work together: AI tools can help create, reorganize, or maintain structured text, while TextToTile provides a dedicated visual layer for exploring that structure. See [AI integration](/docs/ai-integration/) for more.
+{{< /details >}}
+
 {{< details title="What about privacy and security?" closed="true" >}}
 TextToTile is designed to keep your information on your own computer. It only accesses files and folders that you explicitly open, and it does not have background access to the rest of your system.
 
@@ -96,6 +106,17 @@ If you downloaded the app from the official TextToTile release page, open **Syst
 
 {{< details title="How can I ask questions and give feedback?" closed="true" >}}
 Questions, ideas, bug reports, workflow examples, and installation feedback are all welcome. The best place to share them is [TextToTile Discussions](https://github.com/aowagner/texttotile/discussions).
+{{< /details >}}
+
+{{< details title="How can the app be free?" closed="true" >}}
+TextToTile began as a tool I made for my own writing and planning. I am sharing it freely because I believe it can be useful to others too.
+
+Its development is currently funded by my own time. If TextToTile becomes useful to you, you can support me through [Ko-fi](https://ko-fi.com/D7E125V6O0), helping me make improvements and add new features.
+
+<a href="https://ko-fi.com/D7E125V6O0" target="_blank">
+<img src="https://ko-fi.com/img/githubbutton_sm.svg">
+</a>
+
 {{< /details >}}
 
 

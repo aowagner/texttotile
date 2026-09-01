@@ -495,6 +495,41 @@
     </div></footer>
     
     <script defer src="http://localhost:1313/js/main.js" integrity=""></script>
-<script defer src="http://localhost:1313/js/flexsearch.9f5b5908f93ae86f1ecd4b043b799f580c2d1654e703dd9357d568ac41b2547a.js" integrity="sha256-n1tZCPk66G8ezUsEO3mfWAwtFlTnA92TV9VorEGyVHo=" crossorigin="anonymous"></script><script defer src="http://localhost:1313/en.search.js" integrity=""></script>
+<script defer src="http://localhost:1313/js/flexsearch.9f5b5908f93ae86f1ecd4b043b799f580c2d1654e703dd9357d568ac41b2547a.js" integrity="sha256-n1tZCPk66G8ezUsEO3mfWAwtFlTnA92TV9VorEGyVHo=" crossorigin="anonymous"></script><script defer src="http://localhost:1313/en.search.js" integrity=""></script><script defer src="http://localhost:1313/js/medium-zoom.600f3d306436e64441fb815e11be6d6a3f74149a227bc63fb5f5954da0d075c2.js" integrity="sha256-YA89MGQ25kRB&#43;4FeEb5taj90FJoie8Y/tfWVTaDQdcI=" crossorigin="anonymous"></script><script>
+  document.addEventListener("DOMContentLoaded", () => {
+    if (!window.mediumZoom) {
+      return;
+    }
+
+    const getOverlay = () => {
+      return document.documentElement.classList.contains("dark")
+        ? "rgba(17, 17, 17, 0.98)"
+        : "rgba(255, 255, 255, 0.98)";
+    };
+
+    const zoom = window.mediumZoom("[data-zoomable]", {
+      background: getOverlay(),
+    });
+
+    const style = document.createElement("style");
+    style.textContent = `
+      .medium-zoom-overlay {
+        z-index: 1000;
+      }
+      .medium-zoom-image--opened {
+        z-index: 1001;
+      }
+    `;
+    document.head.appendChild(style);
+
+    new MutationObserver(() => {
+      zoom.update({ background: getOverlay() });
+    }).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+  });
+</script>
+
   </body>
 </html>

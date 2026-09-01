@@ -45,7 +45,7 @@ See the [Download page](https://aowagner.github.io/texttotile/docs/download/) fo
 
 Questions, ideas, bug reports, workflow examples, and installation experiences are very welcome. [GitHub Discussions](https://github.com/aowagner/texttotile/discussions) is the main place to share them.
 
-## Support
+### Support
 
 If TextToTile is useful to you, you can support its continued development.
 

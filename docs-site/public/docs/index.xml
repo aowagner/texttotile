@@ -2230,6 +2230,19 @@
 
 &lt;details class=&#34;hx:last-of-type:mb-0 hx:rounded-lg hx:bg-neutral-50 hx:dark:bg-neutral-800 hx:p-2 hx:mt-4 hx:group&#34; &gt;
   &lt;summary class=&#34;hx:flex hx:items-center hx:cursor-pointer hx:select-none hx:list-none hx:p-1 hx:rounded-sm hx:transition-colors hx:hover:bg-gray-100 hx:dark:hover:bg-neutral-800 hx:before:mr-1 hx:before:inline-block hx:before:transition-transform hx:before:content-[&#39;&#39;] hx:dark:before:invert hx:rtl:before:rotate-180 hx:group-open:before:rotate-90&#34;&gt;
+    &lt;strong class=&#34;hx:text-lg&#34;&gt;Why not just create a site with AI instead?&lt;/strong&gt;
+  &lt;/summary&gt;
+  &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
+    &lt;p&gt;You can — and for a focused, one-off visualization or a public interactive project, an AI-built site may be an excellent choice.&lt;/p&gt;
+&lt;p&gt;TextToTile serves a different purpose. It provides a stable, live visual overview of ordinary local text files without turning each document into a separate website or software project. You can keep writing and organizing your text in the editor you already prefer, while TextToTile updates the chart as the file changes.&lt;/p&gt;
+&lt;p&gt;The underlying information remains readable, portable, and under your control. There is no need to maintain a custom website, database, hosting setup, or application logic simply to keep an overview of an evolving outline.&lt;/p&gt;
+&lt;p&gt;The two approaches can also work together: AI tools can help create, reorganize, or maintain structured text, while TextToTile provides a dedicated visual layer for exploring that structure. See &lt;a href=&#34;http://localhost:1313/docs/ai-integration/&#34;&gt;AI integration&lt;/a&gt; for more.&lt;/p&gt;
+
+  &lt;/div&gt;
+&lt;/details&gt;
+
+&lt;details class=&#34;hx:last-of-type:mb-0 hx:rounded-lg hx:bg-neutral-50 hx:dark:bg-neutral-800 hx:p-2 hx:mt-4 hx:group&#34; &gt;
+  &lt;summary class=&#34;hx:flex hx:items-center hx:cursor-pointer hx:select-none hx:list-none hx:p-1 hx:rounded-sm hx:transition-colors hx:hover:bg-gray-100 hx:dark:hover:bg-neutral-800 hx:before:mr-1 hx:before:inline-block hx:before:transition-transform hx:before:content-[&#39;&#39;] hx:dark:before:invert hx:rtl:before:rotate-180 hx:group-open:before:rotate-90&#34;&gt;
     &lt;strong class=&#34;hx:text-lg&#34;&gt;What about privacy and security?&lt;/strong&gt;
   &lt;/summary&gt;
   &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
@@ -2298,6 +2311,20 @@
   &lt;/summary&gt;
   &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
     Questions, ideas, bug reports, workflow examples, and installation feedback are all welcome. The best place to share them is &lt;a href=&#34;https://github.com/aowagner/texttotile/discussions&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;TextToTile Discussions&lt;/a&gt;.
+  &lt;/div&gt;
+&lt;/details&gt;
+
+&lt;details class=&#34;hx:last-of-type:mb-0 hx:rounded-lg hx:bg-neutral-50 hx:dark:bg-neutral-800 hx:p-2 hx:mt-4 hx:group&#34; &gt;
+  &lt;summary class=&#34;hx:flex hx:items-center hx:cursor-pointer hx:select-none hx:list-none hx:p-1 hx:rounded-sm hx:transition-colors hx:hover:bg-gray-100 hx:dark:hover:bg-neutral-800 hx:before:mr-1 hx:before:inline-block hx:before:transition-transform hx:before:content-[&#39;&#39;] hx:dark:before:invert hx:rtl:before:rotate-180 hx:group-open:before:rotate-90&#34;&gt;
+    &lt;strong class=&#34;hx:text-lg&#34;&gt;How can the app be free?&lt;/strong&gt;
+  &lt;/summary&gt;
+  &lt;div class=&#34;hx:p-2 hx:overflow-hidden&#34;&gt;
+    &lt;p&gt;TextToTile began as a tool I made for my own writing and planning. I am sharing it freely because I believe it can be useful to others too.&lt;/p&gt;
+&lt;p&gt;Its development is currently funded by my own time. If TextToTile becomes useful to you, you can support me through &lt;a href=&#34;https://ko-fi.com/D7E125V6O0&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Ko-fi&lt;/a&gt;, helping me make improvements and add new features.&lt;/p&gt;
+&lt;a href=&#34;https://ko-fi.com/D7E125V6O0&#34; target=&#34;_blank&#34;&gt;
+&lt;img src=&#34;https://ko-fi.com/img/githubbutton_sm.svg&#34;&gt;
+&lt;/a&gt;
+
   &lt;/div&gt;
 &lt;/details&gt;
 

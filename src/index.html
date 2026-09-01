@@ -15,7 +15,7 @@
 				[dependencies]
 				tauri = { version = "2", features = ["devtools"] }
 
-	*/
+	*/ 
 
 
 
@@ -45,7 +45,7 @@
 		--ms-transition: 0.4s;
 		--ms-transition-quick: 0.15s;
 
-		--px-sidebar-size: 670px;	/* ao: 500px! 600 is for screenshots! */
+		--px-sidebar-size: 500px;	/* use 670px is for screenshots */
 		--px-sidebar-min: 200px;
 	}
 
@@ -509,10 +509,6 @@
 	-webkit-user-select: none;
 }
 
-					.section__head {
-						min-height: 1.65rem;  /* ao: remove */
-					}
-
 .section__body {
 	display: grid;
 	gap: 0.3em;
@@ -933,8 +929,9 @@ const SVG_UPDATE_RESIZE_ONLY = 1;
 const PX_PADDING_NORMAL = 10;
 const PX_PADDING_SMALL = 5;
 
-
 const PX_VIEVBOX_MIN_H = 400;
+
+const MS_INPUT_DEBOUNCE = 400;
 
 //::	☐ chapter columns
 const COUNT_PART_LINES_INITIAL = 8;
@@ -1184,11 +1181,11 @@ const CWrapper = {
 		// prevent 'context' menu - when right clicking the webview (where 'Reload' and 'Inspect Element' are placed)
 		document.addEventListener('contextmenu', (event) => {
 
-			//return;	// BUILD SETTING: rem out for build
+			///return;	// BUILD SETTING: rem out for build - else context menu will be shown on right click
 
-			// allow normal context menu in textarea
+			// allow popup menu on all textarea elements
 			if (event.target.closest('textarea')) {
-				return;		// allow popup menu on text area. // ao: maybe not in Status log?
+				return;		
 			}
 
 			event.preventDefault();
@@ -1205,7 +1202,8 @@ const CWrapper = {
 		const caller = 'CWrapper: onMenuEvent: ' + args.payload + ' (' + args.caller + ')';
 		let res = {status: STATUS.OK, info: 'not set'};
 
-		// deduper		// ao: explain logic with both 'routes': required on Windows, but active on Mac+Linux too
+		// deduper: onMenuEvent also gets called from CFramework.onKeyDown: logic with both 'routes' is required on Windows, but active on Mac+Linux too
+		//			In CFramework.onKeyDown the 'accelerator' keys are actually handled, and onMenuEvent called: fix for missing feature in Tauri on Windows. Active for all os's, but only 'really' needed for Windows (see 'deduper' in onMenuEvent)
 		const msTimestampNow = Date.now();
 		const msSinceLastCall = msTimestampNow - CWrapper.msTimestampLastMenuEvent;
 		const isProbablyDuplicateEvent = (msSinceLastCall < 80) && (args.payload === CWrapper.payloadLast);
@@ -1413,8 +1411,8 @@ const CWrapper = {
 		const msSinceWriteFileContent = msTimestampFileChanged - CWrapper.msTimestampWriteFileContent;
 		const pathChanged = args.payload;
 		const isFileShouldReload = (pathChanged === CModel.appstate.pathFileLoaded) && (msSinceWriteFileContent > msBufferToPreventOpen);
-		if (LOGARGS) console.log('Reload file: ' + (isFileShouldReload ? 'YES: ' : 'NO: ') + msSinceWriteFileContent + ' ms)');	// ao: test and fix
-		
+		if (LOGARGS) console.log('Reload file: ' + (isFileShouldReload ? 'YES: ' : 'NO: ') + msSinceWriteFileContent + ' ms)');
+
 		if (isFileShouldReload) {
 			
 			// debounce and add a small delay (helps with atomic saves: replace-then-write)
@@ -1663,9 +1661,6 @@ View structured text as visual tiles and charts.
 	setWindowTitle: async (args) => {	
 		if (LOGGING) console.group(...CUtil.logGroup('CWrapper', 'setWindowTitle', `(title: ${args.title})`, args.caller));
 		if (LOGARGS) console.log(args);
-
-		if (args.title.indexOf('Tracking') === 0)
-			args.title = 'Tracking';		// ao: remove line!
 		
 		//: 		→  window.__TAURI__.window:		setTitle
 		await window.__TAURI__.window.getCurrentWindow().setTitle(args.title + ' — ' + args.prefix);
@@ -2221,13 +2216,17 @@ const CFramework = {
 		if (LOGGING) console.group(...CUtil.logGroup('CFramework', 'updateLookupConstants', CUtil.getArgsKeys(args), args.caller));
 		if (LOGARGS) console.log(args);
 
+		const FACTOR_FONT_SIZE = 1.0;
+		const FACTOR_LINE_HEIGHT = 1.4;
+		const FACTOR_HEADER_HEIGHT = 3.25;
+
 		PX_BASEUNIT			= args.pxBaseUnit ?? PX_BASEUNIT;
 		COUNT_PART_LINES	= args.linecount  ?? COUNT_PART_LINES;
 		PX_PART_MARGIN		= args.pxMarginPart ?? PX_PART_MARGIN;
 
-		PX_FONT_SIZE		= CUtil.roundN(PX_BASEUNIT * 1.0, 2);
-		PX_LINE_HEIGHT		= CUtil.roundN(PX_BASEUNIT * 1.4, 2);
-		PX_HEADER_HEIGHT	= CUtil.roundN(PX_LINE_HEIGHT * 3.25, 2);								// ao: make constant or rule for '3.25'
+		PX_FONT_SIZE		= CUtil.roundN(PX_BASEUNIT * FACTOR_FONT_SIZE, 2);
+		PX_LINE_HEIGHT		= CUtil.roundN(PX_BASEUNIT * FACTOR_LINE_HEIGHT, 2);
+		PX_HEADER_HEIGHT	= CUtil.roundN(PX_LINE_HEIGHT * FACTOR_HEADER_HEIGHT, 2);
 
 		PX_COL_WIDTH = (PX_LINE_HEIGHT * COUNT_PART_LINES) + (PX_PART_MARGIN * 2);
 
@@ -2965,7 +2964,7 @@ const CChart = {
 	},
 
 	//:::	🔹		updateTagblockGraphs(tagblock)
-	updateTagblockGraphs(tagblock, definitions, elTagblock) {		// ao: maybe make this function 'safer'
+	updateTagblockGraphs(tagblock, definitions, elTagblock) {
 		if (LOGGING) console.group('%c CChart %c updateTagblockGraphs %c (' + tagblock.id + ')', LOG_MODULE, LOG_FUNCTION, LOG_ARGS, LOG_EXTRA);
 		if (LOGARGS) console.log(tagblock, definitions);
 
@@ -3043,7 +3042,7 @@ const CChart = {
 				circle.setAttribute('cy', point.pxY);
 				circle.style.display = '';
 
-				circletexts[idx].setAttribute('x', point.pxX);	// ao: could be 'safer' here?
+				circletexts[idx].setAttribute('x', point.pxX);
 				circletexts[idx].setAttribute('y', point.pxY);
 
 				circlesBg[idx].setAttribute('cx', point.pxX);
@@ -3243,7 +3242,7 @@ const CTexteditor = {
 		elTextarea.setAttribute('wrap', 'off');
 		elTextarea.setAttribute('placeholder', 'Write your outline here...');
 
-		this.onInputDebounced = this.debounce(() => this.onInput(), 400);		// ao: define const for ms?
+		this.onInputDebounced = this.debounce(() => this.onInput(), MS_INPUT_DEBOUNCE);
 
 		elTextarea.addEventListener('input', this.onInputDebounced);
 		elTextarea.addEventListener('keydown', e => this.onKeydown(e));
@@ -4026,7 +4025,7 @@ const CPopup = {
 			const filenameShort = args.pathFilePinned.split(/[\\/]/).pop();
 			const kbd = args.idx < 9 ? CUtil.formatShortcutForOS(`⌥ ⌘ ${args.idx + 1}`) : "—";
 			const shortcut = args.idx < 9 ? kbd : 'No keyboard shortcut';
-			const path = args.pathFilePinned; //.replace('realname', 'aowagner');		// BUILD SETTING:  remove 'hack' for screenshots
+			const path = args.pathFilePinned;				//.replace('realname', 'aowagner');		// BUILD SETTING: rem out replace - used for screenshots
 
 			return html`
 				<div
@@ -4152,7 +4151,7 @@ const CPopup = {
 		elTextarea.setAttribute('autocapitalize', 'off');
 		elTextarea.setAttribute('wrap', 'off');
 
-		CPopup.onInputDebounced = CPopup.debounce(() => CPopup.onInput(), 400);		// ao: define const for ms?
+		CPopup.onInputDebounced = CPopup.debounce(() => CPopup.onInput(), MS_INPUT_DEBOUNCE);
 		CPopup.onKeydownHandler = (e) => CPopup.onKeydown(e);
 
 		elTextarea.addEventListener('input', CPopup.onInputDebounced);
@@ -4644,7 +4643,7 @@ const CModel = {
 		//:		→ CFramework:		updateLookupConstants	[pxBaseUnit]
 		CFramework.updateLookupConstants({pxBaseUnit: this.appstate.pxBaseUnit, caller});
 
-		///this.appstate.pathFileLoaded = '';		// nb: for testing! 		// BUILD SETTING: rem out
+		///this.appstate.pathFileLoaded = '';		// BUILD SETTING: rem out line used for testing
 
 		if (this.appstate.pathFileLoaded === '') {
 
@@ -4704,7 +4703,7 @@ const CModel = {
 			return { ...appstateDefault, ...JSON.parse(raw) };
 		}
 		catch (e) {
-			console.warn('loadAppstate failed, using default', e);		// ao: log this?
+			if (LOGGING) console.warn('loadAppstate failed, using default', e);
 			if (LOGGING) console.groupEnd();
 			return appstateDefault;
 		}
@@ -4733,7 +4732,7 @@ const CModel = {
 			localStorage.setItem(key, JSON.stringify(this.appstate));
 		}
 		catch (e) {
-			console.warn('CModel: saveAppstate(): Save appstate to localStorage failed', e);		// ao: log this?
+			if (LOGGING) console.warn('CModel: saveAppstate(): Save appstate to localStorage failed', e);
 		}
 		if (LOGGING) console.groupEnd();
 	},
@@ -4768,7 +4767,7 @@ const CModel = {
 			return { ...docstateDefault, ...JSON.parse(raw) };
 		}
 		catch (e) {
-			console.warn('loadDocstate failed, using default', e);		// ao: log this?
+			if (LOGGING) console.warn('loadDocstate failed, using default', e);
 			if (LOGGING) console.groupEnd();
 			return docstateDefault;
 		}
@@ -4802,7 +4801,7 @@ const CModel = {
 			localStorage.setItem(key, JSON.stringify(this.docstate));
 		}
 		catch (e) {
-			console.warn('CModel: saveDocstate(): Save docstate to localStorage failed', e);		// ao: log this?
+			if (LOGGING) console.warn('CModel: saveDocstate(): Save docstate to localStorage failed', e);
 		}
 		if (LOGGING) console.groupEnd();
 	},
@@ -4829,7 +4828,7 @@ const CModel = {
 			return { ...logstateDefault, ...JSON.parse(raw) };
 		}
 		catch (e) {
-			console.warn('loadLogstate failed, using default', e);		// ao: log this?
+			if (LOGGING) console.warn('loadLogstate failed, using default', e);
 			if (LOGGING) console.groupEnd();
 			return logstateDefault;
 		}
@@ -4870,7 +4869,7 @@ const CModel = {
 			localStorage.setItem(key, JSON.stringify(this.logstate));
 		}
 		catch (e) {
-			console.warn('CModel: saveLogstate(): Save logstate to localStorage failed', e);		// ao: log this?
+			if (LOGGING) console.warn('CModel: saveLogstate(): Save logstate to localStorage failed', e);
 		}
 		if (LOGGING) console.groupEnd();
 	},
@@ -5659,7 +5658,7 @@ const App = {
 						return resFileDialog;
 
 					//:			→ App: dispatch:		wrapper.file.save
-					const resFileSave = await App.dispatch({type: 'wrapper.file.save', pathFileToSave: resFileDialog.pathFileSelected, text: '', caller});  // ao: test on res?
+					const resFileSave = await App.dispatch({type: 'wrapper.file.save', pathFileToSave: resFileDialog.pathFileSelected, text: '', caller});  // idea: test on res
 
 					if (!CModel.appstate.isSidebarVisible)	// make sure Editor is visible
 						await App.dispatch({type: 'framework.sidebar.visibility.set', isSidebarVisible: true, caller});
@@ -5793,9 +5792,9 @@ const App = {
 				const txtDocumentCssAndDefs = CModel.extractFirstCssBlockFromText({text: args.text, caller});
 
 				//:			→ CFramework: setCustomCss
-				CFramework.setCustomCss({txtCustomCss: txtGlobalCss, idElStyle: 'style-from-settings', caller});	// ao: not all the time - just here for testing logic and flow
-				CFramework.setCustomCss({txtCustomCss: txtDocumentCssAndDefs, idElStyle: 'style-from-doc', caller});		// ao: maybe only if css part has changed?
-				
+				CFramework.setCustomCss({txtCustomCss: txtGlobalCss, idElStyle: 'style-from-settings', caller});		// idea: only when changed in Settings -> Style 
+				CFramework.setCustomCss({txtCustomCss: txtDocumentCssAndDefs, idElStyle: 'style-from-doc', caller});	// idea: only if css part has changed
+
 				//:			→ CModel: buildDocdataFromText
 				CModel.buildDocdataFromText({text: args.text, caller});
 
@@ -5861,8 +5860,6 @@ const App = {
 
 				//:			→ App: dispatch		toolbar.buttons.recreate
 				await App.dispatch({type: 'toolbar.buttons.recreate', caller});
-
-				// ao: fix: CChart.onTagblockHover(strTagDragged, true);
 				
 				if (LOGGING) console.groupEnd();
 				return {status: STATUS.OK, caller};
