@@ -141,7 +141,7 @@ Questions, ideas, bug reports, and workflow discussions are very welcome.
 
 ### Support
 
-If TextToTile is useful to you, you can support its continued development.
+If TextToTile is useful to you, you can support its continued development. 
 
 <a href="https://ko-fi.com/D7E125V6O0" target="_blank">
 <img src="https://ko-fi.com/img/githubbutton_sm.svg">
