@@ -111,9 +111,9 @@ Questions, ideas, bug reports, workflow examples, and installation feedback are 
 {{< details title="How can the app be free?" closed="true" >}}
 TextToTile began as a tool I made for my own writing and planning. I am sharing it freely because I believe it can be useful to others too.
 
-Its development is currently funded by my own time. If TextToTile becomes useful to you, you can support me through [Ko-fi](https://ko-fi.com/D7E125V6O0), helping me make improvements and add new features.
+Its development is currently funded by my own time. If TextToTile becomes useful to you, you can support me through [Ko-fi](https://ko-fi.com/aowagner), helping me make improvements and add new features.
 
-<a href="https://ko-fi.com/D7E125V6O0" target="_blank">
+<a href="https://ko-fi.com/aowagner" target="_blank">
 <img src="https://ko-fi.com/img/githubbutton_sm.svg">
 </a>
 
